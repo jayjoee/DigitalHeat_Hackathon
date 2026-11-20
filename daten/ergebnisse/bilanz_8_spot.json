@@ -24,6 +24,9 @@
  "break_even_chf_pro_server_h": 0.2261,
  "rechenpreis_chf_pro_server_h": 1.058,
  "max_hardware_chf_pro_server_jahr": 3775,
+ "hardware_chf_pro_server_jahr": 6720,
+ "ergebnis_mit_hardware_chf": -23556,
+ "noetiger_rechenpreis_mit_hardware_chf_pro_server_h": 1.7075,
  "ankuenfte": {
   "jobs_a_pro_tag": null,
   "jobs_b_pro_tag": 39.97

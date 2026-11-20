@@ -41,7 +41,31 @@ Diese Preise enthalten Plattform, Marge und Mengenrabatte. Sie gelten pro Ergebn
 - Strom pro Serverstunde: 1 kWh × 0,3325 CHF = **0,33 CHF**
 - Wärmewert, wenn alles genutzt wird: 0,8 kWh × 0,133 CHF = **0,11 CHF**
 - Energetischer Break-even: ≈ **0,23 CHF pro Serverstunde**, wenn die Wärme vollständig genutzt wird. Wird die Wärme abgeführt, steigt er auf 0,33 CHF.
-- Folgerung: Der Strom ist nicht der Engpass, die Spot-Preise liegen etwa 5- bis 15-mal darüber. Entscheidend sind Hardwarekosten, Abschreibung und Auslastung. Ein H100-Server kostet ein Vielfaches seines Stroms. Diese Zahl fehlt noch und gehört in die Bilanz, sonst ist die Aussage «rechnet sich» nicht belastbar.
+- Folgerung: Der Strom ist nicht der Engpass, die Spot-Preise liegen etwa 5- bis 15-mal darüber. Entscheidend sind Hardwarekosten, Abschreibung und Auslastung. Ein H100-Server kostet ein Vielfaches seines Stroms. Diese Zahl steht deshalb jetzt in der Bilanz (nächster Abschnitt).
+
+## Hardware (Recherche 20.11.2026)
+
+| Grösse | Wert | Quelle |
+|---|---|---|
+| H100 NVL 94 GB, PNY-Karte | 32'382.99 $, Stand 21.09.2026, als «Discontinued» markiert | CDW-Listing, zitiert auf gpuperhour.com |
+| H100 NVL 94 GB | ab 24'500 $ pro GPU (2026, ohne Datum) | fluence.network |
+| H100 PCIe 80 GB | 25'000–30'000 $, Marktpreise oft 30'000–38'000 $ | fluence.network, jarvislabs.ai |
+| Abschreibung Server | Amazon 5 Jahre, Microsoft und Alphabet 6 Jahre, Meta 5,5 Jahre | Geschäftsberichte, zitiert bei fortune.com (15.04.2026) und siliconangle.com (22.11.2025) |
+
+NVIDIA veröffentlicht keine Listenpreise, die Händlerpreise streuen. **Im Modell:** 25'000 $ pro GPU (untere Spanne), 1,6 GPU pro 1-kW-Server, 0,84 CHF/$, 5 Jahre. Das ergibt
+
+**25'000 × 1,6 × 0,84 ÷ 5 = 6'720 CHF pro Server und Jahr.**
+
+Nicht eingerechnet sind Host (CPU, RAM, Netzteil), Flüssigkühlung und Wärmetauscher, Wartung, Internetanschluss und Kapitalkosten. Die echte Zahl liegt also eher höher. 5 statt 6 Jahre, weil eine GPU-Generation heute nach 2–3 Jahren überholt ist (siehe die Debatte bei fortune.com).
+
+Folge für 8 Server (Spot, 36'290 Server-h): Nötig sind **(Strom − Wärmewert + Hardware) ÷ Server-h = (12'066 − 3'861 + 8 × 6'720) ÷ 36'290 = 1,71 CHF pro Server-h**, also 1,27 $ pro H100-Stunde. Das liegt in der Spot-Spanne (0,79–2,50 $), aber über dem günstigsten Preis, mit dem bisher gerechnet wurde (0,79 $).
+
+Quellen:
+- https://gpuperhour.com/blog/nvidia-h100-price
+- https://www.fluence.network/blog/nvidia-h100-deep-dive/
+- https://jarvislabs.ai/blog/h100-price
+- https://fortune.com/2026/04/15/data-centers-hyperscalers-spending-billions-on-hardware-thats-worthless-in-3-years/
+- https://siliconangle.com/2025/11/22/resetting-gpu-depreciation-ai-factories-bend-dont-break-useful-life-assumptions/
 
 ## Quellen
 - https://www.thundercompute.com/blog/ec2-gpu-instances

@@ -64,6 +64,7 @@ h2 { font-size: 17px; margin: 0 0 2px; }
 .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
 .grid3 { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; margin-bottom: 16px; }
 @media (max-width: 860px) { .grid2, .grid3 { grid-template-columns: 1fr; } }
+.tage3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-bottom: 16px; }
 .legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 13px; color: var(--ink-2); margin: 6px 0 4px; }
 .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
 svg { display: block; width: 100%; height: auto; overflow: visible; }
@@ -124,8 +125,8 @@ details summary { cursor: pointer; font-weight: 600; }
       <div class="range"><input id="pStrom" type="range" min="10" max="60" step="0.25" value="33.25"><output id="pStromOut"></output></div></div>
     <div class="ctl"><label for="pRechen">Rechenpreis pro Server-Stunde</label>
       <div class="range"><input id="pRechen" type="range" min="0" max="5" step="0.01" value="1.06"><output id="pRechenOut"></output></div></div>
-    <div class="ctl"><label for="pHw">Hardware pro Server und Jahr</label>
-      <div class="range"><input id="pHw" type="range" min="0" max="15000" step="250" value="0"><output id="pHwOut"></output></div></div>
+    <div class="ctl"><label for="pHw">Hardware pro Server und Jahr (Abschreibung)</label>
+      <div class="range"><input id="pHw" type="range" min="0" max="15000" step="10" value="0"><output id="pHwOut"></output></div></div>
   </div>
 
   <section class="card" style="margin-bottom:16px">
@@ -159,11 +160,23 @@ details summary { cursor: pointer; font-weight: 600; }
     <div id="chServer"></div>
   </section>
 
-  <div class="grid2">
+  <section class="card" style="margin-bottom:16px">
+    <h2>Lohnt sich ein Server mehr?</h2>
+    <div class="note" id="nGrenz"></div>
+    <div class="legend"><span><i style="background:var(--s1)"></i>Zusätzliches Ergebnis dieses Servers pro Jahr (ohne Hardware)</span>
+      <span><i style="background:var(--s2)"></i>Hardware pro Server und Jahr</span></div>
+    <div id="chGrenz"></div>
+  </section>
+
+  <div class="tage3">
     <section class="card"><h2 id="tJan">Ein Januartag</h2><div class="note" id="nJan"></div>
       <div class="legend"><span><i style="background:var(--s2)"></i>Wärmebedarf</span>
         <span><i style="background:var(--s1)"></i>Serverwärme</span></div>
       <div id="chJan"></div><div class="note">Speicher (kWh)</div><div id="spJan"></div></section>
+    <section class="card"><h2 id="tUeb">Ein Übergangstag</h2><div class="note" id="nUeb"></div>
+      <div class="legend"><span><i style="background:var(--s2)"></i>Wärmebedarf</span>
+        <span><i style="background:var(--s1)"></i>Serverwärme</span></div>
+      <div id="chUeb"></div><div class="note">Speicher (kWh)</div><div id="spUeb"></div></section>
     <section class="card"><h2 id="tJul">Ein Julitag</h2><div class="note" id="nJul"></div>
       <div class="legend"><span><i style="background:var(--s2)"></i>Wärmebedarf</span>
         <span><i style="background:var(--s1)"></i>Serverwärme</span></div>
@@ -227,8 +240,11 @@ function oekonomie(b, n) {
   const erloes = serverH * preis;
   const proServer = (erloes + waerme - strom) / n - hw;
   const noetig = be + (serverH ? hw / (serverH / n) : 0);
-  return { p, preis, hw, serverH, strom, waerme, be, erloes, proServer, noetig };
+  const ergebnis = erloes + waerme - strom;  // pro Haus und Jahr, ohne Hardware
+  return { p, preis, hw, serverH, strom, waerme, be, erloes, proServer, noetig, ergebnis };
 }
+// Rechenpreis pro Server-h → $ pro H100-Stunde (zum Vergleich mit Spot-Preisen 0,79–2,50 $/GPU-h)
+const proGpuH = (chfServerH) => chfServerH / D.annahmen.usd_chf.wert / D.annahmen.gpu_pro_server.wert;
 function kacheln() {
   const L = lauf(), b = L.bilanz, o = oekonomie(b, S.n);
   const t = [
@@ -236,9 +252,13 @@ function kacheln() {
     ["Wärmebedarf gedeckt", pct(b.deckungsgrad), `${fmt(b.waerme_genutzt_kwh)} von ${fmt(b.waermebedarf_kwh)} kWh, Rest Backup`],
     ["Wärme abgeführt", fmt(b.waerme_abgefuehrt_kwh) + " kWh", pct(b.anteil_abgefuehrt_von_serverwaerme, 2) + " der Serverwärme"],
     ["Auslastung", pct(b.auslastung), `${fmt(b.server_h)} Server-h von ${fmt(S.n * 8760)}`],
-    ["Verpasste Fristen", pct(b.verpasste_fristen_anteil, 2), `${fmt(b.jobs_mit_frist)} Jobs mit Frist` +
+    ["Verpasste Fristen", pct(b.verpasste_fristen_anteil, 2), (S.sz === "spot"
+      ? `${fmt(b.jobs_mit_frist)} Aufträge B mit Frist (A im Spot-Markt ohne Frist)`
+      : `${fmt(b.jobs_mit_frist)} Aufträge A und B mit Frist`) +
       (b.jobs_abgegeben ? `, ${fmt(b.jobs_abgegeben)} abgegeben` : "")],
-    ["Break-even-Rechenpreis", chf(o.be, 3), "pro Server-h = (Strom − Wärmewert) ÷ Server-h"],
+    ["Break-even-Rechenpreis", chf(o.be, 3), "pro Server-h = (Strom − Wärmewert) ÷ Server-h, Case-Definition ohne Hardware"],
+    ["Nötig mit Hardware", chf(o.noetig, 2), `pro Server-h = ${fmt(proGpuH(o.noetig), 2)} $ pro H100-Stunde ` +
+      `(Spot heute 0,79–2,50 $)`],
   ];
   $("tiles").innerHTML = t.map(([l, v, h]) =>
     `<div class="tile card"><div class="lab">${l}</div><div class="val">${v}</div><div class="hint">${h}</div></div>`).join("");
@@ -246,7 +266,9 @@ function kacheln() {
   $("verdict").className = "verdict card " + (ok ? "ok" : "nein");
   $("verdict").innerHTML = `<div class="icon">${ok ? "✓" : "✕"}</div><div><b>${ok ? "Rechnet sich" : "Rechnet sich nicht"}: ${chf(o.proServer)} pro Server und Jahr</b>
     Erlös ${chf(o.erloes)} + Wärmewert ${chf(o.waerme)} − Strom ${chf(o.strom)}${o.hw ? ` − Hardware ${chf(o.hw * S.n)}` : ""} für ${S.n} Server.
-    Nötig sind mindestens <b style="display:inline">${chf(o.noetig, 2)} pro Server-h</b>${o.hw ? "" : " (ohne Hardware)"}.
+    Nötig sind mindestens <b style="display:inline">${chf(o.noetig, 2)} pro Server-h</b>${o.hw ? "" : " (ohne Hardware)"}
+    (${fmt(proGpuH(o.noetig), 2)} $ pro H100-Stunde), verkauft wird zu ${chf(o.preis, 2)} (${fmt(proGpuH(o.preis), 2)} $).
+    ${o.hw ? "" : "<b style=\"display:inline\">Achtung: Hardware steht auf 0, das Urteil gilt nur für Strom und Wärme.</b> "}
     ${S.sz === "spot" ? "Annahme: Der Spot-Markt nimmt jederzeit Rechenzeit ab." : "Nur Jobs mit Frist: Im Sommer fehlt der Wärmeabnehmer."}</div>`;
   $("pStromOut").textContent = fmt(+$("pStrom").value, 2) + " Rp./kWh";
   $("pRechenOut").textContent = chf(+$("pRechen").value, 2);
@@ -317,7 +339,43 @@ function serverkurve() {
     hit.addEventListener("click", () => { $("n").value = n; S.n = n; alles(); }); }
 }
 
+// ---------- Diagramm: Lohnt sich ein Server mehr? ----------
+// Zusatzergebnis des n-ten Servers = Ergebnis(n) − Ergebnis(n−1), mit den Preisen der Regler, ohne Hardware.
+// Ein Server mehr lohnt sich, solange dieser Betrag die Hardware pro Server und Jahr übersteigt.
+function grenzwert() {
+  const W = 1100, H = 200, x0 = 56, x1 = W - 8, y0 = H - 24, y1 = 10;
+  const svg = svgNeu($("chGrenz"), W, H);
+  const erg = [0]; for (let n = 1; n <= 13; n++) erg.push(oekonomie(lauf(n).bilanz, n).ergebnis);
+  const zus = []; for (let n = 1; n <= 13; n++) zus.push(erg[n] - erg[n - 1]);
+  const hw = +$("pHw").value;
+  const lo = Math.min(0, ...zus), hi = niceMax(Math.max(hw, ...zus));
+  const ys = (v) => y0 - (v - lo) / (hi - lo) * (y0 - y1);
+  for (let i = 0; i <= 4; i++) { const v = lo + (hi - lo) * i / 4, y = ys(v);
+    el("line", { x1: x0, x2: x1, y1: y, y2: y, stroke: Math.abs(v) < 1e-9 ? "var(--axis)" : "var(--grid)" }, svg);
+    const t = el("text", { x: x0 - 6, y: y + 4, "text-anchor": "end" }, svg); t.textContent = fmt(v); }
+  const bw = (x1 - x0) / 13, w = bw * 0.6;
+  zus.forEach((v, i) => { const n = i + 1, x = x0 + i * bw + (bw - w) / 2, top = ys(Math.max(v, 0)), bot = ys(Math.min(v, 0));
+    const b = saeule(svg, x, top, w, bot - top, "var(--s1)");
+    if (b && v < hw) b.setAttribute("opacity", 0.35);
+    if (n === S.n) el("rect", { x: x - 3, y: y1, width: w + 6, height: y0 - y1, fill: "none", stroke: "var(--axis)", rx: 4 }, svg);
+    const t = el("text", { x: x + w / 2, y: H - 6, "text-anchor": "middle" }, svg); t.textContent = n;
+    const hit = el("rect", { x: x0 + i * bw, y: y1, width: bw, height: y0 - y1, fill: "transparent", style: "cursor:pointer" }, svg);
+    hover(hit, `<b>Server Nr. ${n}</b><br><span class="k">bringt zusätzlich</span> ${chf(v)} pro Jahr<br>
+      <span class="k">kostet</span> ${chf(hw)} pro Jahr<br>${v >= hw ? "lohnt sich" : "lohnt sich nicht"}`);
+    hit.addEventListener("click", () => { $("n").value = n; S.n = n; alles(); }); });
+  if (hw > 0) el("line", { x1: x0, x2: x1, y1: ys(hw), y2: ys(hw), stroke: "var(--s2)", "stroke-width": 2,
+    "stroke-dasharray": "6 4" }, svg);
+  let bis = 0; while (bis < 13 && zus[bis] >= hw) bis++;
+  $("nGrenz").textContent = bis === 0
+    ? `Bei ${chf(hw)} Hardware pro Server und Jahr lohnt sich schon der erste Server nicht.` +
+      (S.sz === "spot" ? ` Mehr Server decken mehr Wärme, verdienen aber weniger: Jeder weitere rechnet nur noch in kälteren Stunden.` : "")
+    : `Bei ${chf(hw)} Hardware pro Server und Jahr lohnt sich jeder Server bis Nr. ${bis}` +
+      (bis < 13 ? `, der ${bis + 1}. bringt nur noch ${chf(zus[bis])}.` : ".") +
+      ` Mehr Server decken mehr Wärme, rechnen aber seltener.`;
+}
+
 // ---------- Diagramm: Tag ----------
+const TAGNAME = { januar: "Ein Januartag", uebergang: "Ein Übergangstag", juli: "Ein Julitag" };
 function tag(name, box, sp, titel, notiz) {
   const T = lauf().tage[name], W = 520, H = 200, x0 = 38, x1 = W - 8, y0 = H - 22, y1 = 10;
   const svg = svgNeu($(box), W, H);
@@ -342,8 +400,9 @@ function tag(name, box, sp, titel, notiz) {
     if (a > 0) el("rect", { x: x0 + h * w + 1, y: 4 + 26 * (1 - a), width: w - 2, height: 26 * a, rx: 3, fill: "var(--s1)" }, s2); });
   const t0 = el("text", { x: x0 - 6, y: 21, "text-anchor": "end" }, s2); t0.textContent = "35";
   const mitt = T.reduce((s, z) => s + z.temp_c, 0) / 24, srv = T.reduce((s, z) => s + z.server_laufend, 0) / 24;
-  $(titel).textContent = (name === "januar" ? "Ein Januartag" : "Ein Julitag") + ` (${D.tage[name].split("-").reverse().join(".")})`;
-  $(notiz).textContent = `Ø ${fmt(mitt, 1)} °C, im Mittel ${fmt(srv, 1)} von ${S.n} Servern an, kWh pro Stunde`;
+  $(titel).textContent = TAGNAME[name] + ` (${D.tage[name].split("-").reverse().join(".")})`;
+  $(notiz).textContent = `Ø ${fmt(mitt, 1)} °C, im Mittel ${fmt(srv, 1)} von ${S.n} Servern an, kWh pro Stunde` +
+    (name === "uebergang" ? ". Mittags ist der Speicher voll, die Server drosseln und laufen abends wieder hoch." : "");
 }
 
 // ---------- Live ----------
@@ -383,7 +442,8 @@ async function live() {
       t.textContent = String(h).padStart(2, "0"); }
   } catch (e) {
     box.innerHTML = `<div class="note" style="grid-column:1/-1">Noch kein Live-Lauf. Start im Terminal:<br>
-      <code>.venv/bin/python src/scheduler/live.py --tag 2025-07-15 --server ${S.n} --sekunden 3</code><br>
+      <code>.venv/bin/python src/scheduler/live.py --tag 2025-03-07 --server ${S.n} --sekunden 3</code><br>
+      (7.3.2025: Der echte Job pausiert mittags 7 h bei vollem Speicher und läuft abends weiter.)<br>
       Die Seite muss dafür über <code>bash dashboard/starten.sh</code> geöffnet sein.</div>`;
   }
 }
@@ -391,6 +451,7 @@ async function live() {
 // ---------- Annahmen auf einen Blick ----------
 function annahmenKurz() {
   const a = (k) => D.annahmen[k].wert;
+  const M = D.messung_a, JA = D.jobtypen.find((t) => t.id === "A"), JB = D.jobtypen.find((t) => t.id === "B");
   const s = (t) => `<span class="src">${t}</span>`;
   const gruppen = [
     ["Haus (Referenz Basel)", [
@@ -417,10 +478,16 @@ function annahmenKurz() {
       `Rechenzeit ${fmt(a("rechenpreis_usd_server_h"), 2)} $ pro Server-h ${s("günstigster Spot-Preis H100 × 1,6")}`,
       `Wechselkurs ${fmt(a("usd_chf"), 2)} CHF pro $ ${s("Stand 20.11.2026")}`,
       `= ${fmt(a("rechenpreis_usd_server_h") * a("usd_chf"), 2)} CHF pro Server-h (Startwert des Reglers)`,
-      `<b>Hardwarekosten nicht im Modell</b>, nur als Grenze (Regler oben)`]],
+      `<b>Hardware</b>: ${fmt(a("gpu_pro_server"), 1)} × ${fmt(a("hardware_usd_pro_gpu"))} $ pro H100 × ${fmt(a("usd_chf"), 2)} ÷ ` +
+        `${a("abschreibung_jahre")} Jahre = <b>${chf(D.hardware_chf_pro_server_jahr)} pro Server und Jahr</b> ` +
+        `(Startwert des Reglers) ${s("H100 NVL 24'500–32'383 $, untere Spanne; ohne Host, Wartung, Netz")}`]],
     ["Aufträge", [
-      `A: Texte aufbereiten (Embeddings), ${fmt(a("job_a_kwh"), 2)} kWh ≈ 1 h, pausierbar, Frist ${a("job_a_frist_h")} h ${s("selbst gemessen, 28,9 W")}`,
-      `B: Bilder prüfen, ${fmt(a("job_b_kwh"), 2)} kWh ≈ 7 min, nicht unterbrechbar, Frist ${a("job_b_frist_h")} h ${s("MLPerf v5.0")}`,
+      `A: ${fmt(M.texte_pro_kwh / 1e6, 1)} Mio. Texte pro kWh einbetten, 1 Auftrag = ${fmt(JA.einheiten_pro_job / 1e6)} Mio. Texte ` +
+        `= ${fmt(a("job_a_kwh"), 3)} kWh ≈ ${fmt(JA.laufzeit_min_1kw, 1)} min auf 1 kW, pausierbar, Frist ${a("job_a_frist_h")} h`,
+      `Gemessen auf dem Laptop: ${fmt(M.texte)} Texte in ${fmt(M.rechenzeit_s, 1)} s = ${fmt(M.durchsatz_laptop_texte_s, 1)} Texte/s ` +
+        `bei ${fmt(M.leistung_w, 1)} W ${s("powermetrics CPU+GPU+ANE; volle Chip-Leistung statt nur 27,5 W Mehrleistung, also vorsichtig")}`,
+      `B: 1 Auftrag = ${fmt(JB.einheiten_pro_job / 1e6)} Mio. Bilder = ${fmt(a("job_b_kwh"), 3)} kWh ≈ ${fmt(JB.laufzeit_min_1kw, 1)} min, ` +
+        `nicht unterbrechbar, Frist ${a("job_b_frist_h")} h ${s("MLPerf v5.0: 11'106 Bilder/s bei 4'849 W")}`,
       `Umrechnung auf 1 kW: gleiche Arbeit pro kWh wie gemessen`,
       `Fristen und Auftragsgrössen selbst festgelegt`]],
     ["Nachfrage nach Rechenzeit", [
@@ -430,13 +497,17 @@ function annahmenKurz() {
       `Ankünfte über den Tag nach Alibaba-Tagesform, feste Zufallssaat`]],
     ["Scheduler", [
       `Rechnet Stunde für Stunde, kennt nur den Bedarf der laufenden Stunde (<b>keine Wetterprognose</b>)`,
+      `Warum das reicht: Mit verlustfreiem Speicher und genug Aufträgen ist «Speicher immer füllen» schon die beste Deckung. ` +
+        `Eine Prognose hilft erst, wenn Aufträge knapp sind oder der Speicher Wärme verliert`,
       `Zuerst Aufträge, deren Frist sonst reisst (2 h Puffer), dann so viel, wie Haus und Speicher Wärme brauchen`,
       `Wärme nicht gebraucht: trotzdem rechnen (abführen) oder Auftrag an anderen Standort`]],
   ];
+  const ali = D.laeufe[`alibaba|${S.regel}|${S.n}`].bilanz, o = oekonomie(lauf().bilanz, S.n);
   const grenzen = [
-    "Gibt es weniger flexible Aufträge als angenommen, sinkt die Deckung auf etwa 52 % (Umschalter «Nur Jobs mit Frist»).",
-    "Fällt der Rechenpreis unter den Break-even, deckt der Erlös nicht einmal den Strom.",
-    "Ist ein Server pro Jahr teurer als das Ergebnis oben, lohnt es sich nicht (Regler Hardware).",
+    `Gibt es weniger flexible Aufträge als angenommen, sinkt die Deckung bei ${S.n} Servern auf ${pct(ali.deckungsgrad, 0)} (Umschalter «Nur Jobs mit Frist»).`,
+    `Fällt der Rechenpreis unter den Break-even (${chf(o.be, 3)} pro Server-h), deckt der Erlös nicht einmal den Strom.`,
+    `Mit Hardware braucht es mindestens ${chf(o.noetig, 2)} pro Server-h (${fmt(proGpuH(o.noetig), 2)} $ pro H100-Stunde). ` +
+      `Darunter lohnt es sich nicht. Der günstigste Spot-Preis (0,79 $) reicht ${proGpuH(o.noetig) > 0.79 ? "nicht" : "knapp"}.`,
     "Im Sommer fehlt im Einfamilienhaus der Wärmeabnehmer. Ohne zweiten Standort (Hotel, Landwirtschaft) bleiben die Server dann fast still.",
     "DigitalHeat zielt auf feste Rechenkunden (Firmen, Forschung, Hochschulen) statt auf einen Spot-Markt. Das Szenario «Nur Jobs mit Frist» liegt deshalb womöglich näher an der Realität.",
   ];
@@ -454,10 +525,12 @@ function annahmen() {
 }
 
 // ---------- Steuerung ----------
-function alles() { $("nOut").textContent = S.n; kacheln(); monate(); auslastung(); serverkurve();
-  tag("januar", "chJan", "spJan", "tJan", "nJan"); tag("juli", "chJul", "spJul", "tJul", "nJul"); }
+function preise() { kacheln(); grenzwert(); annahmenKurz(); }
+function alles() { $("nOut").textContent = S.n; preise(); monate(); auslastung(); serverkurve();
+  tag("januar", "chJan", "spJan", "tJan", "nJan"); tag("uebergang", "chUeb", "spUeb", "tUeb", "nUeb");
+  tag("juli", "chJul", "spJul", "tJul", "nJul"); }
 $("n").addEventListener("input", (e) => { S.n = +e.target.value; alles(); });
-for (const id of ["pStrom", "pRechen", "pHw"]) $(id).addEventListener("input", kacheln);
+for (const id of ["pStrom", "pRechen", "pHw"]) $(id).addEventListener("input", preise);
 document.querySelectorAll(".seg").forEach((seg) => seg.addEventListener("click", (e) => {
   const b = e.target.closest("button"); if (!b) return;
   seg.querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", x === b));
@@ -465,7 +538,8 @@ document.querySelectorAll(".seg").forEach((seg) => seg.addEventListener("click",
 document.querySelectorAll("[data-table]").forEach((b) => b.addEventListener("click", () => {
   const t = $(b.dataset.table); t.hidden = !t.hidden; b.textContent = t.hidden ? "Tabelle zeigen" : "Tabelle ausblenden"; }));
 $("pRechen").value = (D.annahmen.rechenpreis_usd_server_h.wert * D.annahmen.usd_chf.wert).toFixed(2);
-annahmenKurz(); annahmen(); alles(); live(); if (!window.LIVE_AUFZEICHNUNG) setInterval(live, 1000);
+$("pHw").value = D.hardware_chf_pro_server_jahr;
+annahmen(); alles(); live(); if (!window.LIVE_AUFZEICHNUNG) setInterval(live, 1000);
 </script>
 </body>
 </html>

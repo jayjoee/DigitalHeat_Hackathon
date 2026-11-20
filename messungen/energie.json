@@ -9,9 +9,9 @@
  "texte_pro_kwh": 10627265,
  "server_1kw_texte_pro_s": 2952,
  "job_archiv_embedding": {
-  "texte": 1000000,
-  "kwh": 0.094,
-  "minuten_auf_1kw_server": 5.6
+  "texte": 10000000,
+  "kwh": 0.941,
+  "minuten_auf_1kw_server": 56.5
  },
  "skalierung": "energieproportional: gleiche Texte pro kWh wie gemessen (konservativ, GPU-Server sind für Embeddings effizienter)"
 }

@@ -17,7 +17,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 CPU_LEISTUNG_W = 30.0      # Annahme M1 Pro, alle Leistungskerne ausgelastet (Spanne 20–35 W)
 SERVER_KW = 1.0            # Referenzserver laut Case
-JOB_TEXTE = 1_000_000      # Definition Jobtyp «Archiv-Embedding»: 1 Mio. Texte
+JOB_TEXTE = 10_000_000     # Definition Jobtyp «Archiv-Embedding»: 10 Mio. Texte (wie src/jobtypen.py)
 
 
 def leistung_aus_powermetrics(pfad, von, bis):

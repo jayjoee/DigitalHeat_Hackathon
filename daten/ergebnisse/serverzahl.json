@@ -32,6 +32,18 @@
    "wert": 1.26,
    "quelle": "Spot H100 0,79 $/GPU-h × 1,6 GPU pro kW (daten/PREISE.md), untere Spanne"
   },
+  "gpu_pro_server": {
+   "wert": 1.6,
+   "quelle": "MLPerf v5.0, ID 5.0-0023: 8× H100 NVL ziehen 4,85 kW → 1 kW ≈ 1,6 GPU samt Host"
+  },
+  "hardware_usd_pro_gpu": {
+   "wert": 25000,
+   "quelle": "H100 NVL 2026: 24'500 $ (fluence.network) bis 32'383 $ (CDW, 21.09.2026, auslaufend); untere Spanne, Host/Gehäuse/Kühlung nicht eingerechnet"
+  },
+  "abschreibung_jahre": {
+   "wert": 5,
+   "quelle": "Amazon 5 Jahre, Microsoft/Alphabet 6 Jahre für Server (Geschäftsberichte, zitiert in daten/PREISE.md); 5 Jahre, weil GPUs schneller veralten"
+  },
   "job_a_kwh": {
    "wert": 0.941,
    "quelle": "eigene Messung, powermetrics CPU+GPU+ANE, Mittel über 89 s Job (28.9 W); Leerlauf 1.4 W über 61 s, Mehrleistung durch den Job 27.5 W"
@@ -92,6 +104,9 @@
    "break_even_chf_pro_server_h": 0.2261,
    "rechenpreis_chf_pro_server_h": 1.058,
    "max_hardware_chf_pro_server_jahr": 6351,
+   "hardware_chf_pro_server_jahr": 6720,
+   "ergebnis_mit_hardware_chf": -369,
+   "noetiger_rechenpreis_mit_hardware_chf_pro_server_h": 1.1067,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 5.0
@@ -123,6 +138,9 @@
    "break_even_chf_pro_server_h": 0.2261,
    "rechenpreis_chf_pro_server_h": 1.058,
    "max_hardware_chf_pro_server_jahr": 5322,
+   "hardware_chf_pro_server_jahr": 6720,
+   "ergebnis_mit_hardware_chf": -2797,
+   "noetiger_rechenpreis_mit_hardware_chf_pro_server_h": 1.2771,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 9.99
@@ -154,6 +172,9 @@
    "break_even_chf_pro_server_h": 0.2261,
    "rechenpreis_chf_pro_server_h": 1.058,
    "max_hardware_chf_pro_server_jahr": 4932,
+   "hardware_chf_pro_server_jahr": 6720,
+   "ergebnis_mit_hardware_chf": -5363,
+   "noetiger_rechenpreis_mit_hardware_chf_pro_server_h": 1.36,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 14.99
@@ -185,6 +206,9 @@
    "break_even_chf_pro_server_h": 0.2261,
    "rechenpreis_chf_pro_server_h": 1.058,
    "max_hardware_chf_pro_server_jahr": 4715,
+   "hardware_chf_pro_server_jahr": 6720,
+   "ergebnis_mit_hardware_chf": -8019,
+   "noetiger_rechenpreis_mit_hardware_chf_pro_server_h": 1.4123,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 19.98
@@ -216,6 +240,9 @@
    "break_even_chf_pro_server_h": 0.2261,
    "rechenpreis_chf_pro_server_h": 1.058,
    "max_hardware_chf_pro_server_jahr": 4540,
+   "hardware_chf_pro_server_jahr": 6720,
+   "ergebnis_mit_hardware_chf": -10899,
+   "noetiger_rechenpreis_mit_hardware_chf_pro_server_h": 1.458,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 24.98
@@ -247,6 +274,9 @@
    "break_even_chf_pro_server_h": 0.2261,
    "rechenpreis_chf_pro_server_h": 1.058,
    "max_hardware_chf_pro_server_jahr": 4310,
+   "hardware_chf_pro_server_jahr": 6720,
+   "ergebnis_mit_hardware_chf": -14459,
+   "noetiger_rechenpreis_mit_hardware_chf_pro_server_h": 1.5238,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 29.98
@@ -278,6 +308,9 @@
    "break_even_chf_pro_server_h": 0.2261,
    "rechenpreis_chf_pro_server_h": 1.058,
    "max_hardware_chf_pro_server_jahr": 4043,
+   "hardware_chf_pro_server_jahr": 6720,
+   "ergebnis_mit_hardware_chf": -18737,
+   "noetiger_rechenpreis_mit_hardware_chf_pro_server_h": 1.6094,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 34.97
@@ -309,6 +342,9 @@
    "break_even_chf_pro_server_h": 0.2261,
    "rechenpreis_chf_pro_server_h": 1.058,
    "max_hardware_chf_pro_server_jahr": 3775,
+   "hardware_chf_pro_server_jahr": 6720,
+   "ergebnis_mit_hardware_chf": -23556,
+   "noetiger_rechenpreis_mit_hardware_chf_pro_server_h": 1.7075,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 39.97
@@ -340,6 +376,9 @@
    "break_even_chf_pro_server_h": 0.2261,
    "rechenpreis_chf_pro_server_h": 1.058,
    "max_hardware_chf_pro_server_jahr": 3500,
+   "hardware_chf_pro_server_jahr": 6720,
+   "ergebnis_mit_hardware_chf": -28979,
+   "noetiger_rechenpreis_mit_hardware_chf_pro_server_h": 1.824,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 44.96
@@ -371,6 +410,9 @@
    "break_even_chf_pro_server_h": 0.2261,
    "rechenpreis_chf_pro_server_h": 1.058,
    "max_hardware_chf_pro_server_jahr": 3226,
+   "hardware_chf_pro_server_jahr": 6720,
+   "ergebnis_mit_hardware_chf": -34937,
+   "noetiger_rechenpreis_mit_hardware_chf_pro_server_h": 1.9596,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 49.96
@@ -402,6 +444,9 @@
    "break_even_chf_pro_server_h": 0.2262,
    "rechenpreis_chf_pro_server_h": 1.058,
    "max_hardware_chf_pro_server_jahr": 2956,
+   "hardware_chf_pro_server_jahr": 6720,
+   "ergebnis_mit_hardware_chf": -41405,
+   "noetiger_rechenpreis_mit_hardware_chf_pro_server_h": 2.1181,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 54.95
@@ -433,6 +478,9 @@
    "break_even_chf_pro_server_h": 0.2263,
    "rechenpreis_chf_pro_server_h": 1.058,
    "max_hardware_chf_pro_server_jahr": 2712,
+   "hardware_chf_pro_server_jahr": 6720,
+   "ergebnis_mit_hardware_chf": -48096,
+   "noetiger_rechenpreis_mit_hardware_chf_pro_server_h": 2.2881,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 59.95
@@ -464,6 +512,9 @@
    "break_even_chf_pro_server_h": 0.2264,
    "rechenpreis_chf_pro_server_h": 1.058,
    "max_hardware_chf_pro_server_jahr": 2505,
+   "hardware_chf_pro_server_jahr": 6720,
+   "ergebnis_mit_hardware_chf": -54800,
+   "noetiger_rechenpreis_mit_hardware_chf_pro_server_h": 2.4588,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 64.95
@@ -495,6 +546,9 @@
    "break_even_chf_pro_server_h": 0.2261,
    "rechenpreis_chf_pro_server_h": 1.058,
    "max_hardware_chf_pro_server_jahr": 6351,
+   "hardware_chf_pro_server_jahr": 6720,
+   "ergebnis_mit_hardware_chf": -369,
+   "noetiger_rechenpreis_mit_hardware_chf_pro_server_h": 1.1067,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 5.0
@@ -526,6 +580,9 @@
    "break_even_chf_pro_server_h": 0.2261,
    "rechenpreis_chf_pro_server_h": 1.058,
    "max_hardware_chf_pro_server_jahr": 5322,
+   "hardware_chf_pro_server_jahr": 6720,
+   "ergebnis_mit_hardware_chf": -2797,
+   "noetiger_rechenpreis_mit_hardware_chf_pro_server_h": 1.2771,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 9.99
@@ -557,6 +614,9 @@
    "break_even_chf_pro_server_h": 0.2261,
    "rechenpreis_chf_pro_server_h": 1.058,
    "max_hardware_chf_pro_server_jahr": 4932,
+   "hardware_chf_pro_server_jahr": 6720,
+   "ergebnis_mit_hardware_chf": -5363,
+   "noetiger_rechenpreis_mit_hardware_chf_pro_server_h": 1.36,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 14.99
@@ -588,6 +648,9 @@
    "break_even_chf_pro_server_h": 0.2261,
    "rechenpreis_chf_pro_server_h": 1.058,
    "max_hardware_chf_pro_server_jahr": 4715,
+   "hardware_chf_pro_server_jahr": 6720,
+   "ergebnis_mit_hardware_chf": -8019,
+   "noetiger_rechenpreis_mit_hardware_chf_pro_server_h": 1.4123,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 19.98
@@ -619,6 +682,9 @@
    "break_even_chf_pro_server_h": 0.2261,
    "rechenpreis_chf_pro_server_h": 1.058,
    "max_hardware_chf_pro_server_jahr": 4540,
+   "hardware_chf_pro_server_jahr": 6720,
+   "ergebnis_mit_hardware_chf": -10899,
+   "noetiger_rechenpreis_mit_hardware_chf_pro_server_h": 1.458,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 24.98
@@ -650,6 +716,9 @@
    "break_even_chf_pro_server_h": 0.2261,
    "rechenpreis_chf_pro_server_h": 1.058,
    "max_hardware_chf_pro_server_jahr": 4310,
+   "hardware_chf_pro_server_jahr": 6720,
+   "ergebnis_mit_hardware_chf": -14460,
+   "noetiger_rechenpreis_mit_hardware_chf_pro_server_h": 1.5238,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 29.98
@@ -681,6 +750,9 @@
    "break_even_chf_pro_server_h": 0.2261,
    "rechenpreis_chf_pro_server_h": 1.058,
    "max_hardware_chf_pro_server_jahr": 4043,
+   "hardware_chf_pro_server_jahr": 6720,
+   "ergebnis_mit_hardware_chf": -18739,
+   "noetiger_rechenpreis_mit_hardware_chf_pro_server_h": 1.6095,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 34.97
@@ -712,6 +784,9 @@
    "break_even_chf_pro_server_h": 0.2261,
    "rechenpreis_chf_pro_server_h": 1.058,
    "max_hardware_chf_pro_server_jahr": 3775,
+   "hardware_chf_pro_server_jahr": 6720,
+   "ergebnis_mit_hardware_chf": -23561,
+   "noetiger_rechenpreis_mit_hardware_chf_pro_server_h": 1.7077,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 39.97
@@ -743,6 +818,9 @@
    "break_even_chf_pro_server_h": 0.2261,
    "rechenpreis_chf_pro_server_h": 1.058,
    "max_hardware_chf_pro_server_jahr": 3499,
+   "hardware_chf_pro_server_jahr": 6720,
+   "ergebnis_mit_hardware_chf": -28987,
+   "noetiger_rechenpreis_mit_hardware_chf_pro_server_h": 1.8245,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 44.96
@@ -774,6 +852,9 @@
    "break_even_chf_pro_server_h": 0.2261,
    "rechenpreis_chf_pro_server_h": 1.058,
    "max_hardware_chf_pro_server_jahr": 3225,
+   "hardware_chf_pro_server_jahr": 6720,
+   "ergebnis_mit_hardware_chf": -34948,
+   "noetiger_rechenpreis_mit_hardware_chf_pro_server_h": 1.9603,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 49.96
@@ -805,6 +886,9 @@
    "break_even_chf_pro_server_h": 0.2261,
    "rechenpreis_chf_pro_server_h": 1.058,
    "max_hardware_chf_pro_server_jahr": 2954,
+   "hardware_chf_pro_server_jahr": 6720,
+   "ergebnis_mit_hardware_chf": -41425,
+   "noetiger_rechenpreis_mit_hardware_chf_pro_server_h": 2.1194,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 54.95
@@ -836,6 +920,9 @@
    "break_even_chf_pro_server_h": 0.2262,
    "rechenpreis_chf_pro_server_h": 1.058,
    "max_hardware_chf_pro_server_jahr": 2710,
+   "hardware_chf_pro_server_jahr": 6720,
+   "ergebnis_mit_hardware_chf": -48121,
+   "noetiger_rechenpreis_mit_hardware_chf_pro_server_h": 2.2899,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 59.95
@@ -867,6 +954,9 @@
    "break_even_chf_pro_server_h": 0.2262,
    "rechenpreis_chf_pro_server_h": 1.058,
    "max_hardware_chf_pro_server_jahr": 2502,
+   "hardware_chf_pro_server_jahr": 6720,
+   "ergebnis_mit_hardware_chf": -54837,
+   "noetiger_rechenpreis_mit_hardware_chf_pro_server_h": 2.4615,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 64.95
@@ -898,6 +988,9 @@
    "break_even_chf_pro_server_h": 0.2261,
    "rechenpreis_chf_pro_server_h": 1.058,
    "max_hardware_chf_pro_server_jahr": 3010,
+   "hardware_chf_pro_server_jahr": 6720,
+   "ergebnis_mit_hardware_chf": -3710,
+   "noetiger_rechenpreis_mit_hardware_chf_pro_server_h": 2.0841,
    "ankuenfte": {
     "jobs_a_pro_tag": 10.09,
     "jobs_b_pro_tag": 5.0
@@ -929,6 +1022,9 @@
    "break_even_chf_pro_server_h": 0.2339,
    "rechenpreis_chf_pro_server_h": 1.058,
    "max_hardware_chf_pro_server_jahr": 2952,
+   "hardware_chf_pro_server_jahr": 6720,
+   "ergebnis_mit_hardware_chf": -7535,
+   "noetiger_rechenpreis_mit_hardware_chf_pro_server_h": 2.1106,
    "ankuenfte": {
     "jobs_a_pro_tag": 20.18,
     "jobs_b_pro_tag": 9.99
@@ -960,6 +1056,9 @@
    "break_even_chf_pro_server_h": 0.2437,
    "rechenpreis_chf_pro_server_h": 1.058,
    "max_hardware_chf_pro_server_jahr": 2960,
+   "hardware_chf_pro_server_jahr": 6720,
+   "ergebnis_mit_hardware_chf": -11281,
+   "noetiger_rechenpreis_mit_hardware_chf_pro_server_h": 2.0934,
    "ankuenfte": {
     "jobs_a_pro_tag": 30.27,
     "jobs_b_pro_tag": 14.99
@@ -991,6 +1090,9 @@
    "break_even_chf_pro_server_h": 0.2507,
    "rechenpreis_chf_pro_server_h": 1.058,
    "max_hardware_chf_pro_server_jahr": 2942,
+   "hardware_chf_pro_server_jahr": 6720,
+   "ergebnis_mit_hardware_chf": -15113,
+   "noetiger_rechenpreis_mit_hardware_chf_pro_server_h": 2.0958,
    "ankuenfte": {
     "jobs_a_pro_tag": 40.36,
     "jobs_b_pro_tag": 19.98
@@ -1022,6 +1124,9 @@
    "break_even_chf_pro_server_h": 0.2546,
    "rechenpreis_chf_pro_server_h": 1.058,
    "max_hardware_chf_pro_server_jahr": 2964,
+   "hardware_chf_pro_server_jahr": 6720,
+   "ergebnis_mit_hardware_chf": -18780,
+   "noetiger_rechenpreis_mit_hardware_chf_pro_server_h": 2.0769,
    "ankuenfte": {
     "jobs_a_pro_tag": 50.45,
     "jobs_b_pro_tag": 24.98
@@ -1053,6 +1158,9 @@
    "break_even_chf_pro_server_h": 0.2567,
    "rechenpreis_chf_pro_server_h": 1.058,
    "max_hardware_chf_pro_server_jahr": 2933,
+   "hardware_chf_pro_server_jahr": 6720,
+   "ergebnis_mit_hardware_chf": -22721,
+   "noetiger_rechenpreis_mit_hardware_chf_pro_server_h": 2.0935,
    "ankuenfte": {
     "jobs_a_pro_tag": 60.54,
     "jobs_b_pro_tag": 29.98
@@ -1084,6 +1192,9 @@
    "break_even_chf_pro_server_h": 0.2582,
    "rechenpreis_chf_pro_server_h": 1.058,
    "max_hardware_chf_pro_server_jahr": 2931,
+   "hardware_chf_pro_server_jahr": 6720,
+   "ergebnis_mit_hardware_chf": -26526,
+   "noetiger_rechenpreis_mit_hardware_chf_pro_server_h": 2.0932,
    "ankuenfte": {
     "jobs_a_pro_tag": 70.62,
     "jobs_b_pro_tag": 34.97
@@ -1115,6 +1226,9 @@
    "break_even_chf_pro_server_h": 0.2599,
    "rechenpreis_chf_pro_server_h": 1.058,
    "max_hardware_chf_pro_server_jahr": 2952,
+   "hardware_chf_pro_server_jahr": 6720,
+   "ergebnis_mit_hardware_chf": -30143,
+   "noetiger_rechenpreis_mit_hardware_chf_pro_server_h": 2.0776,
    "ankuenfte": {
     "jobs_a_pro_tag": 80.71,
     "jobs_b_pro_tag": 39.97
@@ -1146,6 +1260,9 @@
    "break_even_chf_pro_server_h": 0.2612,
    "rechenpreis_chf_pro_server_h": 1.058,
    "max_hardware_chf_pro_server_jahr": 2932,
+   "hardware_chf_pro_server_jahr": 6720,
+   "ergebnis_mit_hardware_chf": -34089,
+   "noetiger_rechenpreis_mit_hardware_chf_pro_server_h": 2.0881,
    "ankuenfte": {
     "jobs_a_pro_tag": 90.8,
     "jobs_b_pro_tag": 44.96
@@ -1177,6 +1294,9 @@
    "break_even_chf_pro_server_h": 0.2622,
    "rechenpreis_chf_pro_server_h": 1.058,
    "max_hardware_chf_pro_server_jahr": 2910,
+   "hardware_chf_pro_server_jahr": 6720,
+   "ergebnis_mit_hardware_chf": -38101,
+   "noetiger_rechenpreis_mit_hardware_chf_pro_server_h": 2.1009,
    "ankuenfte": {
     "jobs_a_pro_tag": 100.89,
     "jobs_b_pro_tag": 49.96
@@ -1208,6 +1328,9 @@
    "break_even_chf_pro_server_h": 0.2642,
    "rechenpreis_chf_pro_server_h": 1.058,
    "max_hardware_chf_pro_server_jahr": 2927,
+   "hardware_chf_pro_server_jahr": 6720,
+   "ergebnis_mit_hardware_chf": -41719,
+   "noetiger_rechenpreis_mit_hardware_chf_pro_server_h": 2.0874,
    "ankuenfte": {
     "jobs_a_pro_tag": 110.98,
     "jobs_b_pro_tag": 54.95
@@ -1239,6 +1362,9 @@
    "break_even_chf_pro_server_h": 0.2654,
    "rechenpreis_chf_pro_server_h": 1.058,
    "max_hardware_chf_pro_server_jahr": 2904,
+   "hardware_chf_pro_server_jahr": 6720,
+   "ergebnis_mit_hardware_chf": -45796,
+   "noetiger_rechenpreis_mit_hardware_chf_pro_server_h": 2.1006,
    "ankuenfte": {
     "jobs_a_pro_tag": 121.07,
     "jobs_b_pro_tag": 59.95
@@ -1270,6 +1396,9 @@
    "break_even_chf_pro_server_h": 0.267,
    "rechenpreis_chf_pro_server_h": 1.058,
    "max_hardware_chf_pro_server_jahr": 2898,
+   "hardware_chf_pro_server_jahr": 6720,
+   "ergebnis_mit_hardware_chf": -49681,
+   "noetiger_rechenpreis_mit_hardware_chf_pro_server_h": 2.102,
    "ankuenfte": {
     "jobs_a_pro_tag": 131.16,
     "jobs_b_pro_tag": 64.95
@@ -1301,6 +1430,9 @@
    "break_even_chf_pro_server_h": 0.2261,
    "rechenpreis_chf_pro_server_h": 1.058,
    "max_hardware_chf_pro_server_jahr": 3010,
+   "hardware_chf_pro_server_jahr": 6720,
+   "ergebnis_mit_hardware_chf": -3710,
+   "noetiger_rechenpreis_mit_hardware_chf_pro_server_h": 2.0841,
    "ankuenfte": {
     "jobs_a_pro_tag": 10.09,
     "jobs_b_pro_tag": 5.0
@@ -1332,6 +1464,9 @@
    "break_even_chf_pro_server_h": 0.2267,
    "rechenpreis_chf_pro_server_h": 1.058,
    "max_hardware_chf_pro_server_jahr": 2776,
+   "hardware_chf_pro_server_jahr": 6720,
+   "ergebnis_mit_hardware_chf": -7889,
+   "noetiger_rechenpreis_mit_hardware_chf_pro_server_h": 2.2402,
    "ankuenfte": {
     "jobs_a_pro_tag": 20.18,
     "jobs_b_pro_tag": 9.99
@@ -1363,6 +1498,9 @@
    "break_even_chf_pro_server_h": 0.2275,
    "rechenpreis_chf_pro_server_h": 1.058,
    "max_hardware_chf_pro_server_jahr": 2551,
+   "hardware_chf_pro_server_jahr": 6720,
+   "ergebnis_mit_hardware_chf": -12508,
+   "noetiger_rechenpreis_mit_hardware_chf_pro_server_h": 2.4166,
    "ankuenfte": {
     "jobs_a_pro_tag": 30.27,
     "jobs_b_pro_tag": 14.99
@@ -1394,6 +1532,9 @@
    "break_even_chf_pro_server_h": 0.228,
    "rechenpreis_chf_pro_server_h": 1.058,
    "max_hardware_chf_pro_server_jahr": 2367,
+   "hardware_chf_pro_server_jahr": 6720,
+   "ergebnis_mit_hardware_chf": -17412,
+   "noetiger_rechenpreis_mit_hardware_chf_pro_server_h": 2.5855,
    "ankuenfte": {
     "jobs_a_pro_tag": 40.36,
     "jobs_b_pro_tag": 19.98
@@ -1425,6 +1566,9 @@
    "break_even_chf_pro_server_h": 0.228,
    "rechenpreis_chf_pro_server_h": 1.058,
    "max_hardware_chf_pro_server_jahr": 2283,
+   "hardware_chf_pro_server_jahr": 6720,
+   "ergebnis_mit_hardware_chf": -22187,
+   "noetiger_rechenpreis_mit_hardware_chf_pro_server_h": 2.6727,
    "ankuenfte": {
     "jobs_a_pro_tag": 50.45,
     "jobs_b_pro_tag": 24.98
@@ -1456,6 +1600,9 @@
    "break_even_chf_pro_server_h": 0.2281,
    "rechenpreis_chf_pro_server_h": 1.058,
    "max_hardware_chf_pro_server_jahr": 2207,
+   "hardware_chf_pro_server_jahr": 6720,
+   "ergebnis_mit_hardware_chf": -27080,
+   "noetiger_rechenpreis_mit_hardware_chf_pro_server_h": 2.7566,
    "ankuenfte": {
     "jobs_a_pro_tag": 60.54,
     "jobs_b_pro_tag": 29.98
@@ -1487,6 +1634,9 @@
    "break_even_chf_pro_server_h": 0.2281,
    "rechenpreis_chf_pro_server_h": 1.058,
    "max_hardware_chf_pro_server_jahr": 2165,
+   "hardware_chf_pro_server_jahr": 6720,
+   "ergebnis_mit_hardware_chf": -31885,
+   "noetiger_rechenpreis_mit_hardware_chf_pro_server_h": 2.8051,
    "ankuenfte": {
     "jobs_a_pro_tag": 70.62,
     "jobs_b_pro_tag": 34.97
@@ -1518,6 +1668,9 @@
    "break_even_chf_pro_server_h": 0.2281,
    "rechenpreis_chf_pro_server_h": 1.058,
    "max_hardware_chf_pro_server_jahr": 2136,
+   "hardware_chf_pro_server_jahr": 6720,
+   "ergebnis_mit_hardware_chf": -36669,
+   "noetiger_rechenpreis_mit_hardware_chf_pro_server_h": 2.8398,
    "ankuenfte": {
     "jobs_a_pro_tag": 80.71,
     "jobs_b_pro_tag": 39.97
@@ -1549,6 +1702,9 @@
    "break_even_chf_pro_server_h": 0.2282,
    "rechenpreis_chf_pro_server_h": 1.058,
    "max_hardware_chf_pro_server_jahr": 2086,
+   "hardware_chf_pro_server_jahr": 6720,
+   "ergebnis_mit_hardware_chf": -41710,
+   "noetiger_rechenpreis_mit_hardware_chf_pro_server_h": 2.9034,
    "ankuenfte": {
     "jobs_a_pro_tag": 90.8,
     "jobs_b_pro_tag": 44.96
@@ -1580,6 +1736,9 @@
    "break_even_chf_pro_server_h": 0.2282,
    "rechenpreis_chf_pro_server_h": 1.058,
    "max_hardware_chf_pro_server_jahr": 2044,
+   "hardware_chf_pro_server_jahr": 6720,
+   "ergebnis_mit_hardware_chf": -46761,
+   "noetiger_rechenpreis_mit_hardware_chf_pro_server_h": 2.9578,
    "ankuenfte": {
     "jobs_a_pro_tag": 100.89,
     "jobs_b_pro_tag": 49.96
@@ -1611,6 +1770,9 @@
    "break_even_chf_pro_server_h": 0.2283,
    "rechenpreis_chf_pro_server_h": 1.058,
    "max_hardware_chf_pro_server_jahr": 2006,
+   "hardware_chf_pro_server_jahr": 6720,
+   "ergebnis_mit_hardware_chf": -51857,
+   "noetiger_rechenpreis_mit_hardware_chf_pro_server_h": 3.0095,
    "ankuenfte": {
     "jobs_a_pro_tag": 110.98,
     "jobs_b_pro_tag": 54.95
@@ -1642,6 +1804,9 @@
    "break_even_chf_pro_server_h": 0.2284,
    "rechenpreis_chf_pro_server_h": 1.058,
    "max_hardware_chf_pro_server_jahr": 1959,
+   "hardware_chf_pro_server_jahr": 6720,
+   "ergebnis_mit_hardware_chf": -57133,
+   "noetiger_rechenpreis_mit_hardware_chf_pro_server_h": 3.0758,
    "ankuenfte": {
     "jobs_a_pro_tag": 121.07,
     "jobs_b_pro_tag": 59.95
@@ -1673,6 +1838,9 @@
    "break_even_chf_pro_server_h": 0.2285,
    "rechenpreis_chf_pro_server_h": 1.058,
    "max_hardware_chf_pro_server_jahr": 1916,
+   "hardware_chf_pro_server_jahr": 6720,
+   "ergebnis_mit_hardware_chf": -62456,
+   "noetiger_rechenpreis_mit_hardware_chf_pro_server_h": 3.1396,
    "ankuenfte": {
     "jobs_a_pro_tag": 131.16,
     "jobs_b_pro_tag": 64.95

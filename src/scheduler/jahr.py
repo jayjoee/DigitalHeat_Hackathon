@@ -165,6 +165,7 @@ def bilanz(n, szenario, regel, z, raten):
     stromkosten = z["strom"] * preis_strom
     waermewert = z["genutzt"] * preis_waerme
     erloes = server_h * rechenpreis
+    hw = A.hardware_chf_pro_server_jahr()
     return {
         "server_pro_haus": n, "szenario": szenario, "regel_ueberschuss": regel,
         "waermebedarf_kwh": round(z["bedarf"]),
@@ -187,6 +188,11 @@ def bilanz(n, szenario, regel, z, raten):
         "rechenpreis_chf_pro_server_h": round(rechenpreis, 3),
         # Was ein Server pro Jahr für Hardware, Wartung, Netz höchstens kosten darf, damit es aufgeht
         "max_hardware_chf_pro_server_jahr": round((erloes + waermewert - stromkosten) / n),
+        # Mit Hardware (Abschreibung, Annahmen hardware_usd_pro_gpu, gpu_pro_server, abschreibung_jahre)
+        "hardware_chf_pro_server_jahr": round(hw),
+        "ergebnis_mit_hardware_chf": round(erloes + waermewert - stromkosten - hw * n),
+        "noetiger_rechenpreis_mit_hardware_chf_pro_server_h":
+            round((stromkosten - waermewert + hw * n) / server_h, 4) if server_h else None,
         "ankuenfte": raten,
     }
 

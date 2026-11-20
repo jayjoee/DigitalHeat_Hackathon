@@ -16,7 +16,8 @@ from src.scheduler import annahmen as A  # noqa: E402
 from src.scheduler.jahr import Haus, profil_laden  # noqa: E402
 
 ROOT = A.ROOT
-TAGE = {"januar": "2025-01-15", "juli": "2025-07-15"}
+# Übergangstag: Speicher läuft mittags voll, der 8. Server pausiert 7 h und läuft abends wieder an
+TAGE = {"januar": "2025-01-15", "uebergang": "2025-03-07", "juli": "2025-07-15"}
 
 
 def main():
@@ -49,8 +50,11 @@ def main():
                                for k, v in sorted(monate.items())],
                     "tage": tage,
                 }
+    messung = json.loads((ROOT / "messungen" / "energie.json").read_text())
+    jobtypen = json.loads((ROOT / "daten" / "jobtypen.json").read_text())["typen"]
     daten = {"erzeugt": "python3 src/dashboard_daten.py", "annahmen": A.als_liste(),
-             "tage": TAGE, "laeufe": laeufe}
+             "hardware_chf_pro_server_jahr": round(A.hardware_chf_pro_server_jahr()),
+             "messung_a": messung, "jobtypen": jobtypen, "tage": TAGE, "laeufe": laeufe}
     aus = ROOT / "dashboard" / "daten.js"
     aus.write_text("window.DATEN = " + json.dumps(daten, ensure_ascii=False) + ";\n")
     print(f"{aus.relative_to(ROOT)}: {len(laeufe)} Läufe, {aus.stat().st_size / 1e3:.0f} kB")
