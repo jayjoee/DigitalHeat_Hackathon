@@ -1,0 +1,208 @@
+{
+  "cluster": {
+    "maschinen": 1897,
+    "gpus": 6742,
+    "gpus_nach_typ": {
+      "CPU": 0,
+      "MISC": 2240,
+      "P100": 1596,
+      "T4": 994,
+      "V100": 832,
+      "V100M32": 1080
+    }
+  },
+  "jobs_status": {
+    "Terminated": 732355,
+    "Failed": 256555,
+    "Running": 62928,
+    "Waiting": 3663
+  },
+  "zeitraum_tage": 68.9,
+  "jobs_pro_tag": 15310,
+  "erfolgreiche_jobs": 732355,
+  "anteil_ohne_gpu": 0.024,
+  "laufzeit_min": {
+    "p10": 0.7,
+    "p25": 2.4,
+    "p50": 10.8,
+    "p75": 64.7,
+    "p90": 215.8,
+    "p99": 1157.3
+  },
+  "wartezeit_min": {
+    "p10": 0.0,
+    "p25": 0.0,
+    "p50": 0.0,
+    "p75": 0.0,
+    "p90": 0.0,
+    "p99": 0.0
+  },
+  "gpu_pro_job": {
+    "p10": 0.1,
+    "p25": 0.2,
+    "p50": 1.0,
+    "p75": 1.0,
+    "p90": 5.0,
+    "p99": 30.0
+  },
+  "anteil_bruchteil_gpu": 0.374,
+  "dauerklassen": {
+    "< 1 min": {
+      "jobs": 104489,
+      "anteil_jobs": 0.146,
+      "anteil_gpu_h": 0.0
+    },
+    "1–10 min": {
+      "jobs": 244814,
+      "anteil_jobs": 0.342,
+      "anteil_gpu_h": 0.007
+    },
+    "10–60 min": {
+      "jobs": 178667,
+      "anteil_jobs": 0.25,
+      "anteil_gpu_h": 0.055
+    },
+    "1–4 h": {
+      "jobs": 122811,
+      "anteil_jobs": 0.172,
+      "anteil_gpu_h": 0.166
+    },
+    "4–24 h": {
+      "jobs": 58984,
+      "anteil_jobs": 0.083,
+      "anteil_gpu_h": 0.469
+    },
+    "> 24 h": {
+      "jobs": 5138,
+      "anteil_jobs": 0.007,
+      "anteil_gpu_h": 0.302
+    }
+  },
+  "gpu_h_pro_tag": 68083,
+  "nachfrage_auslastung": 0.421,
+  "ankunft_stunde_utc8_anteil": {
+    "0.0": 0.07,
+    "1.0": 0.0496,
+    "2.0": 0.041,
+    "3.0": 0.0338,
+    "4.0": 0.0355,
+    "5.0": 0.0342,
+    "6.0": 0.0399,
+    "7.0": 0.0403,
+    "8.0": 0.0333,
+    "9.0": 0.0378,
+    "10.0": 0.0532,
+    "11.0": 0.0545,
+    "12.0": 0.0378,
+    "13.0": 0.0382,
+    "14.0": 0.0452,
+    "15.0": 0.0455,
+    "16.0": 0.0458,
+    "17.0": 0.0496,
+    "18.0": 0.0419,
+    "19.0": 0.0373,
+    "20.0": 0.0398,
+    "21.0": 0.0333,
+    "22.0": 0.0322,
+    "23.0": 0.0303
+  },
+  "ankunft_wochentag_anteil": {
+    "0.0": 0.15,
+    "1.0": 0.133,
+    "2.0": 0.146,
+    "3.0": 0.148,
+    "4.0": 0.133,
+    "5.0": 0.135,
+    "6.0": 0.155
+  },
+  "jobs_pro_tag_verteilung": {
+    "p10": 8050.8,
+    "p50": 15274.0,
+    "p90": 20662.4
+  },
+  "workloads": {
+    "bert": {
+      "jobs": 45550,
+      "laufzeit_median_min": 15.2,
+      "laufzeit_p90_min": 262.6,
+      "gpu_median": 1.0,
+      "gpu_h_summe": 280143.72
+    },
+    "ctr": {
+      "jobs": 25270,
+      "laufzeit_median_min": 20.9,
+      "laufzeit_p90_min": 156.2,
+      "gpu_median": 2.0,
+      "gpu_h_summe": 134765.32
+    },
+    "nmt": {
+      "jobs": 8732,
+      "laufzeit_median_min": 150.8,
+      "laufzeit_p90_min": 264.8,
+      "gpu_median": 1.0,
+      "gpu_h_summe": 80596.71
+    },
+    "inception": {
+      "jobs": 5220,
+      "laufzeit_median_min": 6.1,
+      "laufzeit_p90_min": 35.1,
+      "gpu_median": 25.0,
+      "gpu_h_summe": 39271.24
+    },
+    "graphlearn": {
+      "jobs": 1534,
+      "laufzeit_median_min": 64.1,
+      "laufzeit_p90_min": 523.8,
+      "gpu_median": 8.0,
+      "gpu_h_summe": 67078.14
+    },
+    "xlnet": {
+      "jobs": 335,
+      "laufzeit_median_min": 219.9,
+      "laufzeit_p90_min": 616.9,
+      "gpu_median": 2.0,
+      "gpu_h_summe": 4134.25
+    },
+    "resnet": {
+      "jobs": 296,
+      "laufzeit_median_min": 20.3,
+      "laufzeit_p90_min": 482.2,
+      "gpu_median": 2.25,
+      "gpu_h_summe": 7033.4
+    },
+    "rl": {
+      "jobs": 54,
+      "laufzeit_median_min": 3.7,
+      "laufzeit_p90_min": 235.2,
+      "gpu_median": 2.5,
+      "gpu_h_summe": 1784.67
+    },
+    "vgg": {
+      "jobs": 16,
+      "laufzeit_median_min": 260.8,
+      "laufzeit_p90_min": 2544.9,
+      "gpu_median": 1.5,
+      "gpu_h_summe": 1630.61
+    }
+  },
+  "anteil_jobs_mit_workload_tag": 0.122,
+  "anteil_instanzen_in_wiederholten_gruppen": 0.74,
+  "gpu_nutzung": {
+    "instanzen": 2009206,
+    "gpu_wrk_util_prozent": {
+      "p10": 0.0,
+      "p25": 0.3,
+      "p50": 4.0,
+      "p75": 13.8,
+      "p90": 38.0,
+      "p99": 85.1
+    },
+    "genutzt_von_angefordert": {
+      "p25": 0.0,
+      "p50": 0.1,
+      "p75": 0.3,
+      "p90": 0.6
+    },
+    "genutzt_von_angefordert_gpu_h_gewichtet": 0.321
+  }
+}

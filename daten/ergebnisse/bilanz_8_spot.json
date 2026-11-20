@@ -1,0 +1,31 @@
+{
+ "server_pro_haus": 8,
+ "szenario": "spot",
+ "regel_ueberschuss": "rechnen",
+ "waermebedarf_kwh": 31231,
+ "deckungsgrad": 0.9295,
+ "waerme_genutzt_kwh": 29027,
+ "waerme_abgefuehrt_kwh": 5,
+ "anteil_abgefuehrt_von_serverwaerme": 0.0002,
+ "backup_kwh": 2203,
+ "auslastung": 0.5178,
+ "server_h": 36290,
+ "server_h_a": 34544,
+ "server_h_b": 1746,
+ "jobs_mit_frist": 14390,
+ "jobs_fertig": 14390,
+ "verpasste_fristen_anteil": 0.0,
+ "jobs_abgegeben": 0,
+ "abgegeben_server_h": 0.0,
+ "stromkosten_chf": 12066,
+ "waermewert_chf": 3861,
+ "rechenerloes_chf": 38409,
+ "ergebnis_ohne_hardware_chf": 30204,
+ "break_even_chf_pro_server_h": 0.2261,
+ "rechenpreis_chf_pro_server_h": 1.058,
+ "max_hardware_chf_pro_server_jahr": 3775,
+ "ankuenfte": {
+  "jobs_a_pro_tag": null,
+  "jobs_b_pro_tag": 39.97
+ }
+}

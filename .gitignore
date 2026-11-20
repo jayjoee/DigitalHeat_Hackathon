@@ -1,0 +1,11 @@
+daten/roh/alibaba/
+__pycache__/
+.venv/
+.DS_Store
+messungen/*/vektoren_*.npy
+messungen/live_job/
+messungen/live_job.log
+dashboard/live.json
+dashboard/live.tmp
+messungen/*.tmp
+daten/roh/mlperf/*.json

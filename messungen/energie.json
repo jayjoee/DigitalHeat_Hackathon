@@ -1,0 +1,17 @@
+{
+ "lauf": "messungen/embedding_powermetrics",
+ "texte": 7600,
+ "rechenzeit_s": 89.0,
+ "durchsatz_laptop_texte_s": 85.4,
+ "leistung_w": 28.9,
+ "leistung_quelle": "powermetrics CPU+GPU+ANE, Mittel über 89 s Job (28.9 W); Leerlauf 1.4 W über 61 s, Mehrleistung durch den Job 27.5 W",
+ "energie_wh_pro_1000_texte": 0.0941,
+ "texte_pro_kwh": 10627265,
+ "server_1kw_texte_pro_s": 2952,
+ "job_archiv_embedding": {
+  "texte": 1000000,
+  "kwh": 0.094,
+  "minuten_auf_1kw_server": 5.6
+ },
+ "skalierung": "energieproportional: gleiche Texte pro kWh wie gemessen (konservativ, GPU-Server sind für Embeddings effizienter)"
+}

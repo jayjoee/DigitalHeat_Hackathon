@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rechnen, das heizt</title>
+<style>
+:root {
+  color-scheme: light;
+  --page: #f9f9f7; --surface: #fcfcfb; --ink: #0b0b0b; --ink-2: #52514e; --muted: #898781;
+  --grid: #e1e0d9; --axis: #c3c2b7; --ring: rgba(11,11,11,0.10);
+  --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a;
+  --good: #0ca30c; --good-ink: #006300; --critical: #d03b3b;
+  --wash: rgba(42,120,214,0.08);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --page: #0d0d0d; --surface: #1a1a19; --ink: #f0efec; --ink-2: #c3c2b7; --muted: #898781;
+    --grid: #2c2c2a; --axis: #383835; --ring: rgba(255,255,255,0.10);
+    --s1: #3987e5; --s2: #d95926; --s3: #199e70;
+    --good: #0ca30c; --good-ink: #0ca30c; --critical: #d03b3b;
+    --wash: rgba(57,135,229,0.14);
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0d0d0d; --surface: #1a1a19; --ink: #f0efec; --ink-2: #c3c2b7; --muted: #898781;
+  --grid: #2c2c2a; --axis: #383835; --ring: rgba(255,255,255,0.10);
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70;
+  --good: #0ca30c; --good-ink: #0ca30c; --critical: #d03b3b;
+  --wash: rgba(57,135,229,0.14);
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--page); color: var(--ink);
+  font: 15px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+main { max-width: 1180px; margin: 0 auto; padding-block: 24px 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1 { font-size: 26px; margin: 0 0 4px; letter-spacing: -0.01em; }
+h2 { font-size: 17px; margin: 0 0 2px; }
+.sub { color: var(--ink-2); margin: 0 0 20px; }
+.note { color: var(--muted); font-size: 13px; }
+.card { background: var(--surface); border: 1px solid var(--ring); border-radius: 12px; padding: 16px; }
+.controls { display: flex; flex-wrap: wrap; gap: 16px 28px; align-items: center; margin-bottom: 16px; }
+.ctl { display: flex; flex-direction: column; gap: 4px; }
+.ctl label { font-size: 13px; color: var(--ink-2); }
+.seg { display: inline-flex; border: 1px solid var(--ring); border-radius: 8px; overflow: hidden; }
+.seg button { border: 0; background: transparent; color: var(--ink-2); padding: 6px 12px; font: inherit;
+  font-size: 14px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--wash); color: var(--ink); font-weight: 600; }
+.range { display: flex; align-items: center; gap: 10px; }
+.range input { width: 180px; accent-color: var(--s1); }
+.range output { font-weight: 600; min-width: 4.5em; font-variant-numeric: tabular-nums; }
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 16px; }
+.tile .lab { font-size: 13px; color: var(--ink-2); }
+.tile .val { font-size: 30px; font-weight: 650; letter-spacing: -0.02em; margin: 2px 0; }
+.tile .hint { font-size: 12px; color: var(--muted); }
+.verdict { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 16px; }
+.verdict .icon { flex: none; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center;
+  color: #fff; font-weight: 700; }
+.verdict.ok .icon { background: var(--good); }
+.verdict.nein .icon { background: var(--critical); }
+.verdict b { display: block; font-size: 16px; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.grid3 { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; margin-bottom: 16px; }
+@media (max-width: 860px) { .grid2, .grid3 { grid-template-columns: 1fr; } }
+.legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 13px; color: var(--ink-2); margin: 6px 0 4px; }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+svg { display: block; width: 100%; height: auto; overflow: visible; }
+svg text { fill: var(--muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+svg .lbl { fill: var(--ink-2); font-size: 12px; }
+.tip { position: fixed; pointer-events: none; background: var(--surface); color: var(--ink);
+  border: 1px solid var(--ring); border-radius: 8px; padding: 6px 9px; font-size: 13px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.12); display: none; z-index: 10; white-space: nowrap; }
+.tip .k { color: var(--ink-2); }
+.live { display: grid; grid-template-columns: 240px 1fr; gap: 16px; align-items: start; }
+@media (max-width: 700px) { .live { grid-template-columns: 1fr; } }
+.lamp { display: flex; align-items: center; gap: 10px; font-size: 22px; font-weight: 650; margin: 6px 0 10px; }
+.dot { width: 16px; height: 16px; border-radius: 50%; background: var(--muted); }
+.dot.an { background: var(--good); box-shadow: 0 0 0 4px rgba(12,163,12,0.18); }
+.dot.aus { background: var(--s2); }
+dl { display: grid; grid-template-columns: auto 1fr; gap: 3px 12px; margin: 0; font-size: 14px; }
+dt { color: var(--ink-2); } dd { margin: 0; font-variant-numeric: tabular-nums; }
+code { background: var(--wash); padding: 1px 5px; border-radius: 4px; font-size: 13px; }
+table { border-collapse: collapse; width: 100%; font-size: 13px; }
+th, td { text-align: left; padding: 5px 8px; border-bottom: 1px solid var(--grid); vertical-align: top; }
+th { color: var(--ink-2); font-weight: 600; }
+td.num { text-align: right; font-variant-numeric: tabular-nums; }
+details summary { cursor: pointer; font-weight: 600; }
+.annahmen { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px 20px; margin-top: 12px; }
+.annahmen h3 { font-size: 14px; margin: 0 0 4px; }
+.annahmen ul { margin: 0; padding-left: 18px; font-size: 14px; color: var(--ink-2); }
+.annahmen li { margin: 2px 0; }
+.annahmen li b { color: var(--ink); }
+.annahmen .src { color: var(--muted); font-size: 12px; }
+.grenze { border-left: 3px solid var(--critical); padding-left: 10px; }
+.toggle { font-size: 13px; color: var(--s1); background: none; border: 0; cursor: pointer; padding: 0; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Rechnen, das heizt</h1>
+  <p class="sub">Referenzhaus Basel 2025: Server im Keller rechnen KI-Jobs und heizen dabei das Haus. Alle Zahlen aus derselben Jahressimulation, die auch den echten Job steuert.</p>
+
+  <div class="controls card">
+    <div class="ctl"><label for="n">Server pro Haus</label>
+      <div class="range"><input id="n" type="range" min="1" max="13" value="8"><output id="nOut">8</output></div></div>
+    <div class="ctl"><label>Nachfrage nach Rechenzeit</label>
+      <div class="seg" data-key="sz">
+        <button data-v="spot" aria-pressed="true">Spot-Markt, jederzeit</button>
+        <button data-v="alibaba" aria-pressed="false">Nur Jobs mit Frist</button></div></div>
+    <div class="ctl"><label>Wärme nicht gebraucht, Frist drängt</label>
+      <div class="seg" data-key="regel">
+        <button data-v="rechnen" aria-pressed="true">trotzdem rechnen</button>
+        <button data-v="abgeben" aria-pressed="false">an anderen Standort</button></div></div>
+  </div>
+
+  <div class="tiles" id="tiles"></div>
+
+  <div class="verdict card" id="verdict"></div>
+
+  <div class="controls card">
+    <div class="ctl"><label for="pStrom">Strompreis</label>
+      <div class="range"><input id="pStrom" type="range" min="10" max="60" step="0.25" value="33.25"><output id="pStromOut"></output></div></div>
+    <div class="ctl"><label for="pRechen">Rechenpreis pro Server-Stunde</label>
+      <div class="range"><input id="pRechen" type="range" min="0" max="5" step="0.01" value="1.06"><output id="pRechenOut"></output></div></div>
+    <div class="ctl"><label for="pHw">Hardware pro Server und Jahr</label>
+      <div class="range"><input id="pHw" type="range" min="0" max="15000" step="250" value="0"><output id="pHwOut"></output></div></div>
+  </div>
+
+  <section class="card" style="margin-bottom:16px">
+    <h2>Annahmen auf einen Blick</h2>
+    <div class="note">Darauf beruhen alle Zahlen dieser Seite. Fett = stärkste Annahmen, die das Ergebnis am meisten verändern.</div>
+    <div class="annahmen" id="annahmenKurz"></div>
+  </section>
+
+  <div class="grid3">
+    <section class="card">
+      <h2>Wärme übers Jahr</h2>
+      <div class="note">kWh pro Monat, Heizung und Warmwasser</div>
+      <div class="legend"><span><i style="background:var(--s1)"></i>Serverwärme genutzt</span>
+        <span><i style="background:var(--s2)"></i>Backup-Heizung</span>
+        <span><i style="background:var(--s3)"></i>abgeführt</span></div>
+      <div id="chMonate"></div>
+      <button class="toggle" data-table="tblMonate">Tabelle zeigen</button><div id="tblMonate" hidden></div>
+    </section>
+    <section class="card">
+      <h2>Auslastung der Server</h2>
+      <div class="note">Anteil der Stunden, in denen ein Server rechnet</div>
+      <div id="chAuslast"></div>
+    </section>
+  </div>
+
+  <section class="card" style="margin-bottom:16px">
+    <h2>Wie viele Server?</h2>
+    <div class="note">Mehr Server decken mehr Wärme, rechnen aber seltener. Punkt = aktuelle Wahl.</div>
+    <div class="legend"><span><i style="background:var(--s1)"></i>Deckung des Wärmebedarfs</span>
+      <span><i style="background:var(--s2)"></i>Auslastung</span></div>
+    <div id="chServer"></div>
+  </section>
+
+  <div class="grid2">
+    <section class="card"><h2 id="tJan">Ein Januartag</h2><div class="note" id="nJan"></div>
+      <div class="legend"><span><i style="background:var(--s2)"></i>Wärmebedarf</span>
+        <span><i style="background:var(--s1)"></i>Serverwärme</span></div>
+      <div id="chJan"></div><div class="note">Speicher (kWh)</div><div id="spJan"></div></section>
+    <section class="card"><h2 id="tJul">Ein Julitag</h2><div class="note" id="nJul"></div>
+      <div class="legend"><span><i style="background:var(--s2)"></i>Wärmebedarf</span>
+        <span><i style="background:var(--s1)"></i>Serverwärme</span></div>
+      <div id="chJul"></div><div class="note">Speicher (kWh)</div><div id="spJul"></div></section>
+  </div>
+
+  <section class="card" style="margin-bottom:16px">
+    <h2>Echter Job, live gesteuert</h2>
+    <div class="note">Ein Server ist ein echter Prozess auf diesem Laptop (Text-Embeddings). Der Scheduler pausiert ihn mit SIGSTOP und setzt ihn mit SIGCONT fort, je nach Wärmebedarf.</div>
+    <div class="live" id="live"></div>
+  </section>
+
+  <details class="card">
+    <summary>Alle Annahmen mit Quelle</summary>
+    <div id="annahmen" style="margin-top:10px"></div>
+  </details>
+</main>
+<div class="tip" id="tip"></div>
+<script src="daten.js"></script>
+<script>
+const D = window.DATEN;
+const S = { n: 8, sz: "spot", regel: "rechnen" };
+const fmt = (v, d = 0) => v.toLocaleString("de-CH", { minimumFractionDigits: d, maximumFractionDigits: d });
+const pct = (v, d = 1) => fmt(v * 100, d) + " %";
+const chf = (v, d = 0) => "CHF " + fmt(v, d);
+const $ = (id) => document.getElementById(id);
+const MON = ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"];
+const lauf = (n = S.n) => D.laeufe[`${S.sz}|${S.regel}|${n}`];
+
+// ---------- Tooltip ----------
+const tip = $("tip");
+function zeigeTip(ev, html) { tip.innerHTML = html; tip.style.display = "block";
+  const x = Math.min(ev.clientX + 14, innerWidth - tip.offsetWidth - 8);
+  tip.style.left = x + "px"; tip.style.top = (ev.clientY + 14) + "px"; }
+function versteckeTip() { tip.style.display = "none"; }
+function hover(el, html) { el.addEventListener("mousemove", (e) => zeigeTip(e, html));
+  el.addEventListener("mouseleave", versteckeTip); }
+
+// ---------- SVG-Helfer ----------
+const NS = "http://www.w3.org/2000/svg";
+function el(tag, attrs = {}, parent) { const e = document.createElementNS(NS, tag);
+  for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v); if (parent) parent.appendChild(e); return e; }
+function svgNeu(box, w, h) { box.innerHTML = ""; return el("svg", { viewBox: `0 0 ${w} ${h}`, role: "img" }, box); }
+function niceMax(v) { if (v <= 0) return 1; const p = Math.pow(10, Math.floor(Math.log10(v)));
+  for (const m of [1, 1.2, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10]) if (m * p >= v) return m * p; return 10 * p; }
+function yAchse(svg, x0, x1, y0, y1, max, ticks, f) {
+  for (let i = 0; i <= ticks; i++) { const v = max * i / ticks, y = y0 - (y0 - y1) * i / ticks;
+    el("line", { x1: x0, x2: x1, y1: y, y2: y, stroke: i ? "var(--grid)" : "var(--axis)", "stroke-width": 1 }, svg);
+    const t = el("text", { x: x0 - 6, y: y + 4, "text-anchor": "end" }, svg); t.textContent = f(v); } }
+// Säule mit 4px runder Oberkante, unten eckig
+function saeule(svg, x, y, w, h, fill, rundOben = true) {
+  if (h <= 0) return null; const r = rundOben ? Math.min(4, w / 2, h) : 0;
+  const d = `M${x},${y + h} V${y + r} Q${x},${y} ${x + r},${y} H${x + w - r} Q${x + w},${y} ${x + w},${y + r} V${y + h} Z`;
+  return el("path", { d, fill }, svg); }
+
+// ---------- Kennzahlen und Wirtschaftlichkeit ----------
+function oekonomie(b, n) {
+  const p = +$("pStrom").value / 100, preis = +$("pRechen").value, hw = +$("pHw").value;
+  const serverH = b.strom_kwh, strom = serverH * p, waerme = b.genutzt_kwh_genau * p / 2.5;
+  const be = serverH ? (strom - waerme) / serverH : 0;
+  const erloes = serverH * preis;
+  const proServer = (erloes + waerme - strom) / n - hw;
+  const noetig = be + (serverH ? hw / (serverH / n) : 0);
+  return { p, preis, hw, serverH, strom, waerme, be, erloes, proServer, noetig };
+}
+function kacheln() {
+  const L = lauf(), b = L.bilanz, o = oekonomie(b, S.n);
+  const t = [
+    ["Server pro Haus", fmt(S.n), "1 kW Strom → 0,8 kW Wärme pro Server"],
+    ["Wärmebedarf gedeckt", pct(b.deckungsgrad), `${fmt(b.waerme_genutzt_kwh)} von ${fmt(b.waermebedarf_kwh)} kWh, Rest Backup`],
+    ["Wärme abgeführt", fmt(b.waerme_abgefuehrt_kwh) + " kWh", pct(b.anteil_abgefuehrt_von_serverwaerme, 2) + " der Serverwärme"],
+    ["Auslastung", pct(b.auslastung), `${fmt(b.server_h)} Server-h von ${fmt(S.n * 8760)}`],
+    ["Verpasste Fristen", pct(b.verpasste_fristen_anteil, 2), `${fmt(b.jobs_mit_frist)} Jobs mit Frist` +
+      (b.jobs_abgegeben ? `, ${fmt(b.jobs_abgegeben)} abgegeben` : "")],
+    ["Break-even-Rechenpreis", chf(o.be, 3), "pro Server-h = (Strom − Wärmewert) ÷ Server-h"],
+  ];
+  $("tiles").innerHTML = t.map(([l, v, h]) =>
+    `<div class="tile card"><div class="lab">${l}</div><div class="val">${v}</div><div class="hint">${h}</div></div>`).join("");
+  const ok = o.proServer >= 0;
+  $("verdict").className = "verdict card " + (ok ? "ok" : "nein");
+  $("verdict").innerHTML = `<div class="icon">${ok ? "✓" : "✕"}</div><div><b>${ok ? "Rechnet sich" : "Rechnet sich nicht"}: ${chf(o.proServer)} pro Server und Jahr</b>
+    Erlös ${chf(o.erloes)} + Wärmewert ${chf(o.waerme)} − Strom ${chf(o.strom)}${o.hw ? ` − Hardware ${chf(o.hw * S.n)}` : ""} für ${S.n} Server.
+    Nötig sind mindestens <b style="display:inline">${chf(o.noetig, 2)} pro Server-h</b>${o.hw ? "" : " (ohne Hardware)"}.
+    ${S.sz === "spot" ? "Annahme: Der Spot-Markt nimmt jederzeit Rechenzeit ab." : "Nur Jobs mit Frist: Im Sommer fehlt der Wärmeabnehmer."}</div>`;
+  $("pStromOut").textContent = fmt(+$("pStrom").value, 2) + " Rp./kWh";
+  $("pRechenOut").textContent = chf(+$("pRechen").value, 2);
+  $("pHwOut").textContent = chf(+$("pHw").value);
+}
+
+// ---------- Diagramm: Monate (gestapelt) ----------
+function monate() {
+  const M = lauf().monate, W = 640, H = 250, x0 = 46, x1 = W - 8, y0 = H - 22, y1 = 10;
+  const svg = svgNeu($("chMonate"), W, H);
+  const max = niceMax(Math.max(...M.map((m) => m.genutzt_kwh + m.backup_kwh + m.abgefuehrt_kwh)));
+  yAchse(svg, x0, x1, y0, y1, max, 4, (v) => fmt(v));
+  const bw = (x1 - x0) / 12, w = bw * 0.62, sk = (y0 - y1) / max;
+  M.forEach((m, i) => {
+    const x = x0 + i * bw + (bw - w) / 2; let y = y0;
+    const teile = [["genutzt_kwh", "var(--s1)"], ["backup_kwh", "var(--s2)"], ["abgefuehrt_kwh", "var(--s3)"]]
+      .filter(([k]) => m[k] > 0.5);
+    teile.forEach(([k, c], j) => { const h = m[k] * sk; y -= h;
+      const p = saeule(svg, x, y + (j ? 0 : 0), w, Math.max(0, h - (j < teile.length - 1 ? 0 : 0)), c, j === teile.length - 1);
+      if (j > 0) el("line", { x1: x, x2: x + w, y1: y + h, y2: y + h, stroke: "var(--surface)", "stroke-width": 2 }, svg); });
+    const hit = el("rect", { x: x0 + i * bw, y: y1, width: bw, height: y0 - y1, fill: "transparent" }, svg);
+    hover(hit, `<b>${MON[i]} 2025</b><br><span class="k">Bedarf</span> ${fmt(m.bedarf_kwh)} kWh<br>
+      <span class="k">Serverwärme genutzt</span> ${fmt(m.genutzt_kwh)} kWh (${pct(m.genutzt_kwh / m.bedarf_kwh, 0)})<br>
+      <span class="k">Backup</span> ${fmt(m.backup_kwh)} kWh<br><span class="k">abgeführt</span> ${fmt(m.abgefuehrt_kwh)} kWh`);
+    const t = el("text", { x: x + w / 2, y: H - 6, "text-anchor": "middle" }, svg); t.textContent = MON[i];
+  });
+  $("tblMonate").innerHTML = `<table><tr><th>Monat</th><th class="num">Bedarf</th><th class="num">Server genutzt</th>
+    <th class="num">Backup</th><th class="num">abgeführt</th><th class="num">Auslastung</th></tr>` +
+    M.map((m, i) => `<tr><td>${MON[i]}</td><td class="num">${fmt(m.bedarf_kwh)}</td><td class="num">${fmt(m.genutzt_kwh)}</td>
+      <td class="num">${fmt(m.backup_kwh)}</td><td class="num">${fmt(m.abgefuehrt_kwh)}</td>
+      <td class="num">${pct(m.strom_kwh / (S.n * m.stunden), 0)}</td></tr>`).join("") + "</table>";
+}
+
+// ---------- Diagramm: Auslastung pro Monat ----------
+function auslastung() {
+  const M = lauf().monate, W = 320, H = 250, x0 = 40, x1 = W - 6, y0 = H - 22, y1 = 10;
+  const svg = svgNeu($("chAuslast"), W, H);
+  yAchse(svg, x0, x1, y0, y1, 1, 4, (v) => fmt(v * 100) + " %");
+  const bw = (x1 - x0) / 12, w = bw * 0.6, sk = y0 - y1;
+  M.forEach((m, i) => { const a = m.strom_kwh / (S.n * m.stunden), x = x0 + i * bw + (bw - w) / 2;
+    saeule(svg, x, y0 - a * sk, w, a * sk, "var(--s1)");
+    const hit = el("rect", { x: x0 + i * bw, y: y1, width: bw, height: y0 - y1, fill: "transparent" }, svg);
+    hover(hit, `<b>${MON[i]}</b><br>Auslastung ${pct(a, 0)}`);
+    const t = el("text", { x: x + w / 2, y: H - 6, "text-anchor": "middle" }, svg); t.textContent = MON[i][0]; });
+}
+
+// ---------- Diagramm: Serverzahl ----------
+function serverkurve() {
+  const W = 1100, H = 230, x0 = 46, x1 = W - 70, y0 = H - 26, y1 = 12;
+  const svg = svgNeu($("chServer"), W, H);
+  yAchse(svg, x0, x1, y0, y1, 1, 4, (v) => fmt(v * 100) + " %");
+  const xs = (n) => x0 + (n - 1) * (x1 - x0) / 12, ys = (v) => y0 - v * (y0 - y1);
+  const reihen = [["deckungsgrad", "var(--s1)", "Deckung"], ["auslastung", "var(--s2)", "Auslastung"]];
+  for (let n = 1; n <= 13; n++) { const t = el("text", { x: xs(n), y: H - 8, "text-anchor": "middle" }, svg); t.textContent = n; }
+  reihen.forEach(([k, c, name]) => {
+    const pts = []; for (let n = 1; n <= 13; n++) pts.push([xs(n), ys(lauf(n).bilanz[k])]);
+    el("polyline", { points: pts.map((p) => p.join(",")).join(" "), fill: "none", stroke: c, "stroke-width": 2,
+      "stroke-linejoin": "round" }, svg);
+    const last = pts[12]; const t = el("text", { x: last[0] + 8, y: last[1] + 4, class: "lbl" }, svg); t.textContent = name;
+    const p = pts[S.n - 1];
+    el("circle", { cx: p[0], cy: p[1], r: 5, fill: c, stroke: "var(--surface)", "stroke-width": 2 }, svg);
+  });
+  for (let n = 1; n <= 13; n++) { const b = lauf(n).bilanz;
+    const hit = el("rect", { x: xs(n) - (x1 - x0) / 24, y: y1, width: (x1 - x0) / 12, height: y0 - y1, fill: "transparent",
+      style: "cursor:pointer" }, svg);
+    hover(hit, `<b>${n} Server</b><br><span class="k">Deckung</span> ${pct(b.deckungsgrad)}<br>
+      <span class="k">Auslastung</span> ${pct(b.auslastung)}<br><span class="k">abgeführt</span> ${fmt(b.waerme_abgefuehrt_kwh)} kWh`);
+    hit.addEventListener("click", () => { $("n").value = n; S.n = n; alles(); }); }
+}
+
+// ---------- Diagramm: Tag ----------
+function tag(name, box, sp, titel, notiz) {
+  const T = lauf().tage[name], W = 520, H = 200, x0 = 38, x1 = W - 8, y0 = H - 22, y1 = 10;
+  const svg = svgNeu($(box), W, H);
+  const max = niceMax(Math.max(...T.map((z) => Math.max(z.bedarf_kwh, z.waerme_kwh)), 1));
+  yAchse(svg, x0, x1, y0, y1, max, 4, (v) => fmt(v, max < 4 ? 1 : 0));
+  const xs = (h) => x0 + (h + 0.5) * (x1 - x0) / 24, ys = (v) => y0 - v / max * (y0 - y1);
+  // Bedarf breiter darunter, Serverwärme schmal darüber: Deckt der Server genau den Bedarf, bleiben beide sichtbar
+  [["bedarf_kwh", "var(--s2)", 6], ["waerme_kwh", "var(--s1)", 2]].forEach(([k, c, sw]) => {
+    el("polyline", { points: T.map((z, h) => `${xs(h)},${ys(z[k])}`).join(" "), fill: "none", stroke: c,
+      "stroke-width": sw, "stroke-linejoin": "round", "stroke-linecap": "round", opacity: sw > 2 ? 0.55 : 1 }, svg); });
+  for (let h = 0; h < 24; h += 3) { const t = el("text", { x: xs(h), y: H - 6, "text-anchor": "middle" }, svg);
+    t.textContent = String(h).padStart(2, "0") + ":00"; }
+  T.forEach((z, h) => { const hit = el("rect", { x: xs(h) - (x1 - x0) / 48, y: y1, width: (x1 - x0) / 24, height: y0 - y1,
+    fill: "transparent" }, svg);
+    hover(hit, `<b>${z.zeit.slice(11, 16)} Uhr, ${fmt(z.temp_c, 1)} °C</b><br><span class="k">Bedarf</span> ${fmt(z.bedarf_kwh, 2)} kWh
+      <br><span class="k">Serverwärme</span> ${fmt(z.waerme_kwh, 2)} kWh<br><span class="k">Server an</span> ${fmt(z.server_laufend, 2)}
+      <br><span class="k">Speicher</span> ${fmt(z.speicher_kwh, 1)} kWh<br><span class="k">Backup</span> ${fmt(z.backup_kwh, 2)} kWh`); });
+  // Speicherstreifen
+  const s2 = svgNeu($(sp), W, 46), w = (x1 - x0) / 24;
+  T.forEach((z, h) => { const a = z.speicher_kwh / 35;
+    el("rect", { x: x0 + h * w + 1, y: 4, width: w - 2, height: 26, rx: 3, fill: "var(--grid)" }, s2);
+    if (a > 0) el("rect", { x: x0 + h * w + 1, y: 4 + 26 * (1 - a), width: w - 2, height: 26 * a, rx: 3, fill: "var(--s1)" }, s2); });
+  const t0 = el("text", { x: x0 - 6, y: 21, "text-anchor": "end" }, s2); t0.textContent = "35";
+  const mitt = T.reduce((s, z) => s + z.temp_c, 0) / 24, srv = T.reduce((s, z) => s + z.server_laufend, 0) / 24;
+  $(titel).textContent = (name === "januar" ? "Ein Januartag" : "Ein Julitag") + ` (${D.tage[name].split("-").reverse().join(".")})`;
+  $(notiz).textContent = `Ø ${fmt(mitt, 1)} °C, im Mittel ${fmt(srv, 1)} von ${S.n} Servern an, kWh pro Stunde`;
+}
+
+// ---------- Live ----------
+let liveZuletzt = null;
+async function live() {
+  const box = $("live");
+  try {
+    // Veröffentlichte Fassung: Aufzeichnung eines echten Laufs. Lokal: live.json, jede Sekunde neu.
+    let L = window.LIVE_AUFZEICHNUNG;
+    if (!L) {
+      const r = await fetch("live.json?" + Date.now(), { cache: "no-store" });
+      if (!r.ok) throw 0;
+      L = await r.json();
+    }
+    liveZuletzt = L;
+    const z = L.jetzt || (L.stunden && L.stunden[L.stunden.length - 1]) || {};
+    const an = L.aktiv && L.prozess === "läuft", aus = L.aktiv && L.prozess === "pausiert";
+    const W = 700, H = 120, x0 = 34, x1 = W - 8, y0 = H - 20, y1 = 8;
+    const st = (L.stunden || []).concat(L.aktiv && L.jetzt ? [{ ...L.jetzt, anteil_echter_server: L.anteil }] : []);
+    box.innerHTML = `<div><div class="lamp"><span class="dot ${an ? "an" : aus ? "aus" : ""}"></span>
+      ${L.aktiv ? (an ? "Job rechnet" : "Job pausiert") : "Job angehalten"}</div>
+      <dl><dt>Tag</dt><dd>${L.tag}${z.zeit ? ", " + z.zeit.slice(11, 16) + " Uhr" : ""}</dd>
+      <dt>Aussen</dt><dd>${z.temp_c != null ? fmt(z.temp_c, 1) + " °C" : "–"}</dd>
+      <dt>Wärmebedarf</dt><dd>${z.bedarf_kwh != null ? fmt(z.bedarf_kwh, 2) + " kWh" : "–"}</dd>
+      <dt>Speicher</dt><dd>${z.speicher_kwh != null ? fmt(z.speicher_kwh, 1) + " von 35 kWh" : "–"}</dd>
+      <dt>Server an</dt><dd>${z.server_laufend != null ? fmt(z.server_laufend, 2) + " von " + L.server : "–"}</dd>
+      <dt>Echter Job</dt><dd>Server ${L.echter_server}, PID ${L.pid}, ${L.prozess}</dd>
+      <dt>Fertig</dt><dd>${fmt(L.texte_fertig || 0)} Texte${L.aktiv ? "" : " (Checkpoint)"}</dd></dl></div>
+      <div><div class="note">Anteil jeder Stunde, in dem der echte Job rechnen durfte${window.LIVE_AUFZEICHNUNG ?
+        ` (Aufzeichnung eines echten Laufs auf dem Laptop, ${L.server} Server, 1 h = ${L.sekunden_pro_stunde} s)` : ""}</div><div id="chLive"></div></div>`;
+    const svg = svgNeu($("chLive"), W, H);
+    yAchse(svg, x0, x1, y0, y1, 1, 2, (v) => fmt(v * 100) + " %");
+    const bw = (x1 - x0) / 24;
+    st.forEach((s, i) => { const a = s.anteil_echter_server ?? 0;
+      saeule(svg, x0 + i * bw + bw * 0.18, y0 - a * (y0 - y1), bw * 0.64, a * (y0 - y1), "var(--s1)"); });
+    for (let h = 0; h < 24; h += 3) { const t = el("text", { x: x0 + (h + 0.5) * bw, y: H - 4, "text-anchor": "middle" }, svg);
+      t.textContent = String(h).padStart(2, "0"); }
+  } catch (e) {
+    box.innerHTML = `<div class="note" style="grid-column:1/-1">Noch kein Live-Lauf. Start im Terminal:<br>
+      <code>.venv/bin/python src/scheduler/live.py --tag 2025-07-15 --server ${S.n} --sekunden 3</code><br>
+      Die Seite muss dafür über <code>bash dashboard/starten.sh</code> geöffnet sein.</div>`;
+  }
+}
+
+// ---------- Annahmen auf einen Blick ----------
+function annahmenKurz() {
+  const a = (k) => D.annahmen[k].wert;
+  const s = (t) => `<span class="src">${t}</span>`;
+  const gruppen = [
+    ["Haus (Referenz Basel)", [
+      `Wetter Basel 2025, stündlich ${s("Open-Meteo")}`,
+      `Heizung ${s("max(0, 10 kW × (20 − T) ÷ 25,6), nur an 206 Heiztagen")} = 26'851 kWh/Jahr`,
+      `Warmwasser 12 kWh pro Tag, gleichmässig über den Tag = 4'380 kWh/Jahr`,
+      `Wassertank ${fmt(a("speicher_kwh"))} kWh, <b>ohne Verluste</b>`,
+      `Was die Server nicht decken, liefert eine Backup-Heizung ausserhalb des Modells`]],
+    ["Server", [
+      `1 Server = ${fmt(a("server_kw"))} kW Strom, ${pct(a("waermerueckgewinnung"), 0)} davon als nutzbare Wärme`,
+      `Wärme ohne Wärmepumpe direkt für Heizung und Warmwasser ${s("Case")}`,
+      `<b>Läuft ein Server, läuft er voll</b> (Aufträge dicht gepackt)`,
+      `1 kW entspricht ≈ 1,6 H100-GPUs ${s("MLPerf v5.0, 8 GPUs = 4,85 kW")}`]],
+    ["So baut DigitalHeat", [
+      `Direkte Flüssigkeitskühlung an den Prozessoren, eigener Kühlkreis ${s("digitalheat.ch")}`,
+      `Wärmetauscher trennt Kühlkreis und Heizwasser: Das Heizwasser kommt nie an die Server`,
+      `50–70 °C Vorlauf: reicht für Heizung und Warmwasser ohne Wärmepumpe`,
+      `5–20 kW pro Einheit: <b>unsere 8 Server = eine Einheit von 8 kW</b>`,
+      `DigitalHeat besitzt die Server, das Haus kauft Wärme als Dienstleistung`,
+      `Nicht angegeben: Kühlmittel, Anteil zurückgewonnener Wärme, Preise`]],
+    ["Preise", [
+      `Strom ${fmt(a("strompreis_chf_kwh") * 100, 2)} Rp./kWh ${s("ElCom 2026, IWB Basel, H4")}`,
+      `Wärme ${fmt(a("waermewert_chf_kwh") * 100, 1)} Rp./kWh = Strompreis ÷ 2,5 ${s("ersetzt Wärmepumpe")}`,
+      `Rechenzeit ${fmt(a("rechenpreis_usd_server_h"), 2)} $ pro Server-h ${s("günstigster Spot-Preis H100 × 1,6")}`,
+      `Wechselkurs ${fmt(a("usd_chf"), 2)} CHF pro $ ${s("Stand 20.11.2026")}`,
+      `= ${fmt(a("rechenpreis_usd_server_h") * a("usd_chf"), 2)} CHF pro Server-h (Startwert des Reglers)`,
+      `<b>Hardwarekosten nicht im Modell</b>, nur als Grenze (Regler oben)`]],
+    ["Aufträge", [
+      `A: Texte aufbereiten (Embeddings), ${fmt(a("job_a_kwh"), 2)} kWh ≈ 1 h, pausierbar, Frist ${a("job_a_frist_h")} h ${s("selbst gemessen, 28,9 W")}`,
+      `B: Bilder prüfen, ${fmt(a("job_b_kwh"), 2)} kWh ≈ 7 min, nicht unterbrechbar, Frist ${a("job_b_frist_h")} h ${s("MLPerf v5.0")}`,
+      `Umrechnung auf 1 kW: gleiche Arbeit pro kWh wie gemessen`,
+      `Fristen und Auftragsgrössen selbst festgelegt`]],
+    ["Nachfrage nach Rechenzeit", [
+      `<b>Spot-Markt: Es gibt jederzeit genug Aufträge A</b> (Standard)`,
+      `Alternative: nur Aufträge mit Frist, ${fmt(a("nachfrage_server_h_pro_server_tag"), 1)} Server-h pro Server und Tag ${s("Alibaba-GPU-Trace 2020")}`,
+      `Kurze Aufträge (B) = ${pct(a("anteil_kurze_jobs_gpu_h"), 0)} der Rechenzeit ${s("Alibaba")}`,
+      `Ankünfte über den Tag nach Alibaba-Tagesform, feste Zufallssaat`]],
+    ["Scheduler", [
+      `Rechnet Stunde für Stunde, kennt nur den Bedarf der laufenden Stunde (<b>keine Wetterprognose</b>)`,
+      `Zuerst Aufträge, deren Frist sonst reisst (2 h Puffer), dann so viel, wie Haus und Speicher Wärme brauchen`,
+      `Wärme nicht gebraucht: trotzdem rechnen (abführen) oder Auftrag an anderen Standort`]],
+  ];
+  const grenzen = [
+    "Gibt es weniger flexible Aufträge als angenommen, sinkt die Deckung auf etwa 52 % (Umschalter «Nur Jobs mit Frist»).",
+    "Fällt der Rechenpreis unter den Break-even, deckt der Erlös nicht einmal den Strom.",
+    "Ist ein Server pro Jahr teurer als das Ergebnis oben, lohnt es sich nicht (Regler Hardware).",
+    "Im Sommer fehlt im Einfamilienhaus der Wärmeabnehmer. Ohne zweiten Standort (Hotel, Landwirtschaft) bleiben die Server dann fast still.",
+    "DigitalHeat zielt auf feste Rechenkunden (Firmen, Forschung, Hochschulen) statt auf einen Spot-Markt. Das Szenario «Nur Jobs mit Frist» liegt deshalb womöglich näher an der Realität.",
+  ];
+  $("annahmenKurz").innerHTML = gruppen.map(([t, l]) =>
+    `<div><h3>${t}</h3><ul>${l.map((x) => `<li>${x}</li>`).join("")}</ul></div>`).join("") +
+    `<div class="grenze"><h3>Wo die Annahmen nicht mehr gelten</h3><ul>${grenzen.map((x) => `<li>${x}</li>`).join("")}</ul></div>`;
+}
+
+// ---------- Annahmen (Tabelle mit Quelle) ----------
+function annahmen() {
+  $("annahmen").innerHTML = "<table><tr><th>Annahme</th><th>Wert</th><th>Quelle</th></tr>" +
+    Object.entries(D.annahmen).map(([k, a]) => `<tr><td>${k.replaceAll("_", " ")}</td>
+      <td class="num">${typeof a.wert === "number" ? fmt(a.wert, a.wert < 10 ? 4 : 1) : a.wert}</td><td>${a.quelle}</td></tr>`).join("") +
+    "</table>";
+}
+
+// ---------- Steuerung ----------
+function alles() { $("nOut").textContent = S.n; kacheln(); monate(); auslastung(); serverkurve();
+  tag("januar", "chJan", "spJan", "tJan", "nJan"); tag("juli", "chJul", "spJul", "tJul", "nJul"); }
+$("n").addEventListener("input", (e) => { S.n = +e.target.value; alles(); });
+for (const id of ["pStrom", "pRechen", "pHw"]) $(id).addEventListener("input", kacheln);
+document.querySelectorAll(".seg").forEach((seg) => seg.addEventListener("click", (e) => {
+  const b = e.target.closest("button"); if (!b) return;
+  seg.querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", x === b));
+  S[seg.dataset.key] = b.dataset.v; alles(); }));
+document.querySelectorAll("[data-table]").forEach((b) => b.addEventListener("click", () => {
+  const t = $(b.dataset.table); t.hidden = !t.hidden; b.textContent = t.hidden ? "Tabelle zeigen" : "Tabelle ausblenden"; }));
+$("pRechen").value = (D.annahmen.rechenpreis_usd_server_h.wert * D.annahmen.usd_chf.wert).toFixed(2);
+annahmenKurz(); annahmen(); alles(); live(); if (!window.LIVE_AUFZEICHNUNG) setInterval(live, 1000);
+</script>
+</body>
+</html>
