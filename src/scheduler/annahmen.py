@@ -28,12 +28,18 @@ ANNAHMEN = {
     "abschreibung_jahre": (5, "Amazon 5 Jahre, Microsoft/Alphabet 6 Jahre für Server; 5 Jahre, weil GPUs schneller veralten"),
     "restwert_anteil": (0.20, "Tesla T4 nach ≈ 7 Jahren 22–25 % des Neupreises (amcompute.com)"),
     "zins": (0.045, "Schätzung: SARON ≈ 0 % + Bankmarge; Unternehmenskredite Euroraum 3,8 % (Bundesbank)"),
-    "vertragspreis_chf_karte_h": (0.60, "Unbestätigter Zielpreis für öffentliche bzw. beim Kunden ausreichend anonymisierte und freigegebene L4-Aufträge; "
-                                        "kein Confidential-Computing- oder Forschungsgeheimnis-Aufschlag. Sensitivität 0,50 CHF; "
-                                        "Zahlungsbereitschaft und geeignete Nachfrage noch zu belegen (L4_ANGEBOT.md, PHARMA_SICHT.md)."),
-    "anteil_fest_gebucht": (0.60, "Schätzung: Cloud-Kunden binden im Median 42 %, Ziel 70–80 % (FinOps-Vergleiche)"),
-    "spotpreis_chf_karte_h": (0.294, "Füllaufträge zum L4-Spot-Preis (AWS g6 Spot 0,35–0,45 $ = 0,29–0,38 CHF)"),
-    "spot_preisverfall": (0.10, "Annahme: Spot-Preis sinkt 10 % pro Jahr; H100-Index −23 % in einem Jahr (Silicon Data)"),
+    "vertragspreis_chf_karte_h": (0.50, "Ankerkunde (Roche) mit Mengenrabatt: fester Preis über 5 Jahre für den fest gebuchten Anteil. "
+                                        "Unbestätigter Zielpreis für öffentliche bzw. beim Kunden ausreichend anonymisierte und freigegebene L4-Aufträge; "
+                                        "kein Confidential-Computing- oder Forschungsgeheimnis-Aufschlag. US-Clouds mit Vertrag 0,53–0,55 CHF; "
+                                        "Zahlungsbereitschaft und geeignete Nachfrage noch zu belegen (L4_ANGEBOT.md, PHARMA_SICHT.md, KOSTEN_DH.md)."),
+    "anteil_fest_gebucht": (0.60, "Teamannahme: Ankerkunde (Roche) kauft 60 % der Server-Stunden. Vergleich: Cloud-Kunden binden im Median 42 %, "
+                                  "Ziel 70–80 % (FinOps-Vergleiche)"),
+    # Schlüsselname historisch («spot»): gemeint ist der Preis für die übrigen Stunden.
+    "spotpreis_chf_karte_h": (0.55, "Übrige Stunden an Kunden ohne Mindestmenge (unterbrechbar, wärmegeführt, kurze Laufzeit). "
+                                    "Teamannahme, unter der günstigsten Schweizer GPU-Cloud (Hikube ≈ 0,68 CHF) und auf Höhe US-Clouds "
+                                    "mit Vertrag (0,53–0,55 CHF). Untergrenze L4-Spot 0,29–0,38 CHF (AWS g6 Spot 0,35–0,45 $). KOSTEN_DH.md"),
+    "spot_preisverfall": (0.10, "Annahme: Preis der übrigen Stunden sinkt 10 % pro Jahr (jährliche Neuverhandlung); "
+                                "H100-Index −23 % in einem Jahr (Silicon Data). Der Preis des Ankerkunden bleibt fest."),
     "plattform_anteil": (0.05, "Direktvertrag mit eigener Plattform statt Marktplatz (15–30 %)"),
     "verfuegbarkeit": (0.993, "A100/H100-Knoten 99,3–99,4 % verfügbar (arXiv 2503.11901)"),
     "waermepreis_haushalt_chf_kwh": (0.0, "Gratiswärme im Pilot (ehemalige Öl-Häuser, Holzofen als Reserve; CustomerView_Joel.md)"),

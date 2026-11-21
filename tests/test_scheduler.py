@@ -4,7 +4,7 @@ Aufruf: python3 -m unittest discover -s tests -v      (ohne Zusatzpakete)
 
 Regressionstest 2: `Haus.schritt` nach der Aufteilung Zeile für Zeile wie vorher (tests/referenz_haus8.json,
 erzeugt vor dem Umbau mit Stand f81d801/e90eaf0). Regressionstest 1: Flotte aus genau dem Referenzhaus =
-`jahr.simuliere(8)`, inklusive +34'543 CHF/J bei 60 % fest gebucht ohne Fehlmenge.
+`jahr.simuliere(8)`, inklusive +40'411 CHF/J bei 60 % fest gebucht ohne Fehlmenge.
 """
 import hashlib
 import json
@@ -82,8 +82,8 @@ class Regression(unittest.TestCase):
         f = Flotte([Haus(8, "spot", "rechnen", PROFIL, mit_ankuenften=False)], "spot", "rechnen")
         f.simuliere(monatlich=False)
         b = f.bilanz(anteil_fest_gebucht=0.60, fehlmenge_server_h=0.0)
-        self.assertEqual(b["dh_ergebnis_pro_jahr_chf"], 34543)
-        self.assertEqual(f.bilanz_wie_haus()["dh_ergebnis_pro_jahr_chf"], 34543)
+        self.assertEqual(b["dh_ergebnis_pro_jahr_chf"], 40411)
+        self.assertEqual(f.bilanz_wie_haus()["dh_ergebnis_pro_jahr_chf"], 40411)
 
     def test_gleiche_haeuser_spot_wie_einzelhaus(self):
         # Unbegrenzt A: jedes Haus der Flotte rechnet so viel wie allein (Rest: andere Ziehung der B-Ankünfte).
@@ -239,7 +239,7 @@ class Zusage(unittest.TestCase):
 
 class Wirtschaft(unittest.TestCase):
     def test_fehlmenge_null_aendert_nichts(self):
-        self.assertEqual(rechne(8, 36290, 29027)["ergebnis_pro_jahr_chf"], 34543)
+        self.assertEqual(rechne(8, 36290, 29027)["ergebnis_pro_jahr_chf"], 40412)
         self.assertEqual(rechne(8, 36290, 29027, 0.0), rechne(8, 36290, 29027))
 
     def test_fehlmenge_kostet_gutschrift(self):

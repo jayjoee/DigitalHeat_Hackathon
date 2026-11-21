@@ -1,5 +1,6 @@
 {
  "erzeugt": "python3 src/scheduler/flotte.py",
+ "leistungsprofil": null,
  "regel_ueberschuss": "abgeben",
  "server_pro_haus": 8,
  "server_bad_regel": 170,
@@ -7,42 +8,42 @@
  "suche_senkengroesse_alibaba": [
   {
    "server_bad": 10,
-   "ergebnis_chf": -157202,
+   "ergebnis_chf": -83385,
    "abgegeben_server_h": 143671.9
   },
   {
    "server_bad": 20,
-   "ergebnis_chf": -142275,
+   "ergebnis_chf": -63068,
    "abgegeben_server_h": 110512.9
   },
   {
    "server_bad": 30,
-   "ergebnis_chf": -128088,
+   "ergebnis_chf": -43530,
    "abgegeben_server_h": 77639.1
   },
   {
    "server_bad": 40,
-   "ergebnis_chf": -111729,
+   "ergebnis_chf": -21731,
    "abgegeben_server_h": 44022.8
   },
   {
    "server_bad": 50,
-   "ergebnis_chf": -101372,
+   "ergebnis_chf": -6207,
    "abgegeben_server_h": 12506.8
   },
   {
    "server_bad": 60,
-   "ergebnis_chf": -157723,
+   "ergebnis_chf": -61074,
    "abgegeben_server_h": 5249.8
   },
   {
    "server_bad": 70,
-   "ergebnis_chf": -232848,
+   "ergebnis_chf": -135948,
    "abgegeben_server_h": 5249.8
   },
   {
    "server_bad": 80,
-   "ergebnis_chf": -311427,
+   "ergebnis_chf": -214009,
    "abgegeben_server_h": 5248.9
   }
  ],
@@ -2283,7 +2284,7 @@
      "mit_zusage": true
     }
    ],
-   "ergebnis_mit_zusage_chf": 685220
+   "ergebnis_mit_zusage_chf": 805380
   },
   "Sportbad 50 (nach Nachfrage)": {
    "methode": "Kalibrierung Jan–Jun 2025, Auswertung Jul–Dez 2025 (keine Previous Runs 2024)",
@@ -4521,7 +4522,7 @@
      "mit_zusage": true
     }
    ],
-   "ergebnis_mit_zusage_chf": 846393
+   "ergebnis_mit_zusage_chf": 998572
   }
  },
  "annahmen": {
@@ -4582,7 +4583,7 @@
      "waerme_genutzt_kwh": 321854,
      "waerme_abgefuehrt_kwh": 5150,
      "backup_kwh": 302757,
-     "ergebnis_pro_jahr_chf": -176618
+     "ergebnis_pro_jahr_chf": -108690
     }
    },
    "auslastung": 0.2916,
@@ -4596,8 +4597,8 @@
    "migrationen": 0,
    "migration_kwh": 0.0,
    "dh_investition_chf": 5802400,
-   "dh_ergebnis_pro_jahr_chf": -176618,
-   "ergebnis_pro_investiertem_franken": -0.0304,
+   "dh_ergebnis_pro_jahr_chf": -108690,
+   "ergebnis_pro_investiertem_franken": -0.0187,
    "ankuenfte": {
     "jobs_a_pro_tag": 1614.28,
     "jobs_b_pro_tag": 799.34
@@ -4610,7 +4611,7 @@
      "deckungsgrad": 0.4928,
      "auslastung": 0.2798,
      "abgefuehrt_kwh": 294,
-     "ergebnis_pro_jahr_chf": -11207
+     "ergebnis_pro_jahr_chf": -7947
     },
     {
      "name": "Haus 02",
@@ -4619,7 +4620,7 @@
      "deckungsgrad": 0.4844,
      "auslastung": 0.2749,
      "abgefuehrt_kwh": 284,
-     "ergebnis_pro_jahr_chf": -12210
+     "ergebnis_pro_jahr_chf": -8979
     },
     {
      "name": "Haus 03",
@@ -4628,7 +4629,7 @@
      "deckungsgrad": 0.4833,
      "auslastung": 0.2741,
      "abgefuehrt_kwh": 271,
-     "ergebnis_pro_jahr_chf": -12385
+     "ergebnis_pro_jahr_chf": -9159
     },
     {
      "name": "Haus 04",
@@ -4637,7 +4638,7 @@
      "deckungsgrad": 0.4872,
      "auslastung": 0.2759,
      "abgefuehrt_kwh": 256,
-     "ergebnis_pro_jahr_chf": -11997
+     "ergebnis_pro_jahr_chf": -8760
     },
     {
      "name": "Haus 05",
@@ -4646,7 +4647,7 @@
      "deckungsgrad": 0.491,
      "auslastung": 0.2779,
      "abgefuehrt_kwh": 246,
-     "ergebnis_pro_jahr_chf": -11597
+     "ergebnis_pro_jahr_chf": -8348
     },
     {
      "name": "Haus 06",
@@ -4655,7 +4656,7 @@
      "deckungsgrad": 0.502,
      "auslastung": 0.2839,
      "abgefuehrt_kwh": 236,
-     "ergebnis_pro_jahr_chf": -10376
+     "ergebnis_pro_jahr_chf": -7078
     },
     {
      "name": "Haus 07",
@@ -4664,7 +4665,7 @@
      "deckungsgrad": 0.514,
      "auslastung": 0.2905,
      "abgefuehrt_kwh": 232,
-     "ergebnis_pro_jahr_chf": -9051
+     "ergebnis_pro_jahr_chf": -5676
     },
     {
      "name": "Haus 08",
@@ -4673,7 +4674,7 @@
      "deckungsgrad": 0.5183,
      "auslastung": 0.2929,
      "abgefuehrt_kwh": 236,
-     "ergebnis_pro_jahr_chf": -8561
+     "ergebnis_pro_jahr_chf": -5158
     },
     {
      "name": "Haus 09",
@@ -4682,7 +4683,7 @@
      "deckungsgrad": 0.5293,
      "auslastung": 0.2989,
      "abgefuehrt_kwh": 231,
-     "ergebnis_pro_jahr_chf": -7358
+     "ergebnis_pro_jahr_chf": -3885
     },
     {
      "name": "Haus 10",
@@ -4691,7 +4692,7 @@
      "deckungsgrad": 0.5387,
      "auslastung": 0.3042,
      "abgefuehrt_kwh": 233,
-     "ergebnis_pro_jahr_chf": -6301
+     "ergebnis_pro_jahr_chf": -2767
     },
     {
      "name": "Haus 11",
@@ -4700,7 +4701,7 @@
      "deckungsgrad": 0.5431,
      "auslastung": 0.3068,
      "abgefuehrt_kwh": 241,
-     "ergebnis_pro_jahr_chf": -5783
+     "ergebnis_pro_jahr_chf": -2219
     },
     {
      "name": "Haus 12",
@@ -4709,7 +4710,7 @@
      "deckungsgrad": 0.5507,
      "auslastung": 0.3111,
      "abgefuehrt_kwh": 241,
-     "ergebnis_pro_jahr_chf": -4927
+     "ergebnis_pro_jahr_chf": -1313
     },
     {
      "name": "Haus 13",
@@ -4718,7 +4719,7 @@
      "deckungsgrad": 0.552,
      "auslastung": 0.3119,
      "abgefuehrt_kwh": 248,
-     "ergebnis_pro_jahr_chf": -4757
+     "ergebnis_pro_jahr_chf": -1133
     },
     {
      "name": "Haus 14",
@@ -4727,7 +4728,7 @@
      "deckungsgrad": 0.5455,
      "auslastung": 0.3085,
      "abgefuehrt_kwh": 259,
-     "ergebnis_pro_jahr_chf": -5448
+     "ergebnis_pro_jahr_chf": -1864
     },
     {
      "name": "Haus 15",
@@ -4736,7 +4737,7 @@
      "deckungsgrad": 0.5352,
      "auslastung": 0.3028,
      "abgefuehrt_kwh": 261,
-     "ergebnis_pro_jahr_chf": -6586
+     "ergebnis_pro_jahr_chf": -3068
     },
     {
      "name": "Haus 16",
@@ -4745,7 +4746,7 @@
      "deckungsgrad": 0.5255,
      "auslastung": 0.2974,
      "abgefuehrt_kwh": 262,
-     "ergebnis_pro_jahr_chf": -7662
+     "ergebnis_pro_jahr_chf": -4207
     },
     {
      "name": "Haus 17",
@@ -4754,7 +4755,7 @@
      "deckungsgrad": 0.5163,
      "auslastung": 0.2924,
      "abgefuehrt_kwh": 270,
-     "ergebnis_pro_jahr_chf": -8669
+     "ergebnis_pro_jahr_chf": -5273
     },
     {
      "name": "Haus 18",
@@ -4763,7 +4764,7 @@
      "deckungsgrad": 0.5087,
      "auslastung": 0.2883,
      "abgefuehrt_kwh": 279,
-     "ergebnis_pro_jahr_chf": -9481
+     "ergebnis_pro_jahr_chf": -6131
     },
     {
      "name": "Haus 19",
@@ -4772,7 +4773,7 @@
      "deckungsgrad": 0.5,
      "auslastung": 0.2836,
      "abgefuehrt_kwh": 284,
-     "ergebnis_pro_jahr_chf": -10436
+     "ergebnis_pro_jahr_chf": -7141
     },
     {
      "name": "Haus 20",
@@ -4781,7 +4782,7 @@
      "deckungsgrad": 0.4877,
      "auslastung": 0.2768,
      "abgefuehrt_kwh": 285,
-     "ergebnis_pro_jahr_chf": -11826
+     "ergebnis_pro_jahr_chf": -8584
     }
    ],
    "variante": "0 Senken",
@@ -4924,7 +4925,7 @@
      "waerme_genutzt_kwh": 317811,
      "waerme_abgefuehrt_kwh": 4210,
      "backup_kwh": 306800,
-     "ergebnis_pro_jahr_chf": -194622
+     "ergebnis_pro_jahr_chf": -127531
     },
     "bad": {
      "standorte": 1,
@@ -4935,7 +4936,7 @@
      "waerme_genutzt_kwh": 137675,
      "waerme_abgefuehrt_kwh": 0,
      "backup_kwh": 512325,
-     "ergebnis_pro_jahr_chf": 93250
+     "ergebnis_pro_jahr_chf": 121324
     }
    },
    "auslastung": 0.3132,
@@ -4949,8 +4950,8 @@
    "migrationen": 3457,
    "migration_kwh": 1.7,
    "dh_investition_chf": 7598100,
-   "dh_ergebnis_pro_jahr_chf": -101372,
-   "ergebnis_pro_investiertem_franken": -0.0133,
+   "dh_ergebnis_pro_jahr_chf": -6207,
+   "ergebnis_pro_investiertem_franken": -0.0008,
    "ankuenfte": {
     "jobs_a_pro_tag": 1614.28,
     "jobs_b_pro_tag": 799.34
@@ -4963,7 +4964,7 @@
      "deckungsgrad": 0.4862,
      "auslastung": 0.2752,
      "abgefuehrt_kwh": 242,
-     "ergebnis_pro_jahr_chf": -12158
+     "ergebnis_pro_jahr_chf": -8926
     },
     {
      "name": "Haus 02",
@@ -4972,7 +4973,7 @@
      "deckungsgrad": 0.4782,
      "auslastung": 0.2705,
      "abgefuehrt_kwh": 232,
-     "ergebnis_pro_jahr_chf": -13118
+     "ergebnis_pro_jahr_chf": -9906
     },
     {
      "name": "Haus 03",
@@ -4981,7 +4982,7 @@
      "deckungsgrad": 0.4774,
      "auslastung": 0.27,
      "abgefuehrt_kwh": 227,
-     "ergebnis_pro_jahr_chf": -13230
+     "ergebnis_pro_jahr_chf": -10018
     },
     {
      "name": "Haus 04",
@@ -4990,7 +4991,7 @@
      "deckungsgrad": 0.4812,
      "auslastung": 0.2719,
      "abgefuehrt_kwh": 218,
-     "ergebnis_pro_jahr_chf": -12824
+     "ergebnis_pro_jahr_chf": -9611
     },
     {
      "name": "Haus 05",
@@ -4999,7 +5000,7 @@
      "deckungsgrad": 0.4847,
      "auslastung": 0.2737,
      "abgefuehrt_kwh": 209,
-     "ergebnis_pro_jahr_chf": -12450
+     "ergebnis_pro_jahr_chf": -9226
     },
     {
      "name": "Haus 06",
@@ -5008,7 +5009,7 @@
      "deckungsgrad": 0.4957,
      "auslastung": 0.2798,
      "abgefuehrt_kwh": 205,
-     "ergebnis_pro_jahr_chf": -11209
+     "ergebnis_pro_jahr_chf": -7950
     },
     {
      "name": "Haus 07",
@@ -5017,7 +5018,7 @@
      "deckungsgrad": 0.5088,
      "auslastung": 0.287,
      "abgefuehrt_kwh": 198,
-     "ergebnis_pro_jahr_chf": -9758
+     "ergebnis_pro_jahr_chf": -6425
     },
     {
      "name": "Haus 08",
@@ -5026,7 +5027,7 @@
      "deckungsgrad": 0.512,
      "auslastung": 0.2887,
      "abgefuehrt_kwh": 197,
-     "ergebnis_pro_jahr_chf": -9406
+     "ergebnis_pro_jahr_chf": -6052
     },
     {
      "name": "Haus 09",
@@ -5035,7 +5036,7 @@
      "deckungsgrad": 0.5231,
      "auslastung": 0.2949,
      "abgefuehrt_kwh": 196,
-     "ergebnis_pro_jahr_chf": -8172
+     "ergebnis_pro_jahr_chf": -4747
     },
     {
      "name": "Haus 10",
@@ -5044,7 +5045,7 @@
      "deckungsgrad": 0.5335,
      "auslastung": 0.3007,
      "abgefuehrt_kwh": 199,
-     "ergebnis_pro_jahr_chf": -7006
+     "ergebnis_pro_jahr_chf": -3512
     },
     {
      "name": "Haus 11",
@@ -5053,7 +5054,7 @@
      "deckungsgrad": 0.5369,
      "auslastung": 0.3028,
      "abgefuehrt_kwh": 207,
-     "ergebnis_pro_jahr_chf": -6586
+     "ergebnis_pro_jahr_chf": -3068
     },
     {
      "name": "Haus 12",
@@ -5062,7 +5063,7 @@
      "deckungsgrad": 0.545,
      "auslastung": 0.3072,
      "abgefuehrt_kwh": 204,
-     "ergebnis_pro_jahr_chf": -5705
+     "ergebnis_pro_jahr_chf": -2137
     },
     {
      "name": "Haus 13",
@@ -5071,7 +5072,7 @@
      "deckungsgrad": 0.545,
      "auslastung": 0.3072,
      "abgefuehrt_kwh": 202,
-     "ergebnis_pro_jahr_chf": -5702
+     "ergebnis_pro_jahr_chf": -2133
     },
     {
      "name": "Haus 14",
@@ -5080,7 +5081,7 @@
      "deckungsgrad": 0.5385,
      "auslastung": 0.3036,
      "abgefuehrt_kwh": 201,
-     "ergebnis_pro_jahr_chf": -6430
+     "ergebnis_pro_jahr_chf": -2903
     },
     {
      "name": "Haus 15",
@@ -5089,7 +5090,7 @@
      "deckungsgrad": 0.5282,
      "auslastung": 0.298,
      "abgefuehrt_kwh": 208,
-     "ergebnis_pro_jahr_chf": -7555
+     "ergebnis_pro_jahr_chf": -4093
     },
     {
      "name": "Haus 16",
@@ -5098,7 +5099,7 @@
      "deckungsgrad": 0.5186,
      "auslastung": 0.2926,
      "abgefuehrt_kwh": 210,
-     "ergebnis_pro_jahr_chf": -8622
+     "ergebnis_pro_jahr_chf": -5222
     },
     {
      "name": "Haus 17",
@@ -5107,7 +5108,7 @@
      "deckungsgrad": 0.5091,
      "auslastung": 0.2873,
      "abgefuehrt_kwh": 208,
-     "ergebnis_pro_jahr_chf": -9696
+     "ergebnis_pro_jahr_chf": -6359
     },
     {
      "name": "Haus 18",
@@ -5116,7 +5117,7 @@
      "deckungsgrad": 0.5012,
      "auslastung": 0.283,
      "abgefuehrt_kwh": 213,
-     "ergebnis_pro_jahr_chf": -10555
+     "ergebnis_pro_jahr_chf": -7267
     },
     {
      "name": "Haus 19",
@@ -5125,7 +5126,7 @@
      "deckungsgrad": 0.4927,
      "auslastung": 0.2783,
      "abgefuehrt_kwh": 219,
-     "ergebnis_pro_jahr_chf": -11502
+     "ergebnis_pro_jahr_chf": -8251
     },
     {
      "name": "Haus 20",
@@ -5134,7 +5135,7 @@
      "deckungsgrad": 0.4802,
      "auslastung": 0.2714,
      "abgefuehrt_kwh": 217,
-     "ergebnis_pro_jahr_chf": -12938
+     "ergebnis_pro_jahr_chf": -9725
     },
     {
      "name": "Sportbad St. Jakob",
@@ -5143,7 +5144,7 @@
      "deckungsgrad": 0.2118,
      "auslastung": 0.3963,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 93250
+     "ergebnis_pro_jahr_chf": 121324
     }
    ],
    "variante": "Sportbad 50 (nach Nachfrage)",
@@ -5286,7 +5287,7 @@
      "waerme_genutzt_kwh": 316770,
      "waerme_abgefuehrt_kwh": 158,
      "backup_kwh": 307841,
-     "ergebnis_pro_jahr_chf": -213168
+     "ergebnis_pro_jahr_chf": -146782
     },
     "bad": {
      "standorte": 1,
@@ -5297,7 +5298,7 @@
      "waerme_genutzt_kwh": 148573,
      "waerme_abgefuehrt_kwh": 0,
      "backup_kwh": 501427,
-     "ergebnis_pro_jahr_chf": -853499
+     "ergebnis_pro_jahr_chf": -818683
     }
    },
    "auslastung": 0.2018,
@@ -5311,8 +5312,8 @@
    "migrationen": 2,
    "migration_kwh": 0.0,
    "dh_investition_chf": 11904900,
-   "dh_ergebnis_pro_jahr_chf": -1066667,
-   "ergebnis_pro_investiertem_franken": -0.0896,
+   "dh_ergebnis_pro_jahr_chf": -965465,
+   "ergebnis_pro_investiertem_franken": -0.0811,
    "ankuenfte": {
     "jobs_a_pro_tag": 1614.28,
     "jobs_b_pro_tag": 799.34
@@ -5325,7 +5326,7 @@
      "deckungsgrad": 0.4853,
      "auslastung": 0.2705,
      "abgefuehrt_kwh": 8,
-     "ergebnis_pro_jahr_chf": -13132
+     "ergebnis_pro_jahr_chf": -9919
     },
     {
      "name": "Haus 02",
@@ -5334,7 +5335,7 @@
      "deckungsgrad": 0.4772,
      "auslastung": 0.266,
      "abgefuehrt_kwh": 8,
-     "ergebnis_pro_jahr_chf": -14088
+     "ergebnis_pro_jahr_chf": -10879
     },
     {
      "name": "Haus 03",
@@ -5343,7 +5344,7 @@
      "deckungsgrad": 0.4762,
      "auslastung": 0.2654,
      "abgefuehrt_kwh": 8,
-     "ergebnis_pro_jahr_chf": -14200
+     "ergebnis_pro_jahr_chf": -10994
     },
     {
      "name": "Haus 04",
@@ -5352,7 +5353,7 @@
      "deckungsgrad": 0.4791,
      "auslastung": 0.267,
      "abgefuehrt_kwh": 8,
-     "ergebnis_pro_jahr_chf": -13860
+     "ergebnis_pro_jahr_chf": -10647
     },
     {
      "name": "Haus 05",
@@ -5361,7 +5362,7 @@
      "deckungsgrad": 0.4832,
      "auslastung": 0.2693,
      "abgefuehrt_kwh": 7,
-     "ergebnis_pro_jahr_chf": -13384
+     "ergebnis_pro_jahr_chf": -10171
     },
     {
      "name": "Haus 06",
@@ -5370,7 +5371,7 @@
      "deckungsgrad": 0.4935,
      "auslastung": 0.2751,
      "abgefuehrt_kwh": 8,
-     "ergebnis_pro_jahr_chf": -12177
+     "ergebnis_pro_jahr_chf": -8945
     },
     {
      "name": "Haus 07",
@@ -5379,7 +5380,7 @@
      "deckungsgrad": 0.5064,
      "auslastung": 0.2822,
      "abgefuehrt_kwh": 6,
-     "ergebnis_pro_jahr_chf": -10706
+     "ergebnis_pro_jahr_chf": -7428
     },
     {
      "name": "Haus 08",
@@ -5388,7 +5389,7 @@
      "deckungsgrad": 0.5101,
      "auslastung": 0.2843,
      "abgefuehrt_kwh": 7,
-     "ergebnis_pro_jahr_chf": -10296
+     "ergebnis_pro_jahr_chf": -6993
     },
     {
      "name": "Haus 09",
@@ -5397,7 +5398,7 @@
      "deckungsgrad": 0.5205,
      "auslastung": 0.2901,
      "abgefuehrt_kwh": 8,
-     "ergebnis_pro_jahr_chf": -9136
+     "ergebnis_pro_jahr_chf": -5766
     },
     {
      "name": "Haus 10",
@@ -5406,7 +5407,7 @@
      "deckungsgrad": 0.5311,
      "auslastung": 0.296,
      "abgefuehrt_kwh": 7,
-     "ergebnis_pro_jahr_chf": -7958
+     "ergebnis_pro_jahr_chf": -4520
     },
     {
      "name": "Haus 11",
@@ -5415,7 +5416,7 @@
      "deckungsgrad": 0.5346,
      "auslastung": 0.2979,
      "abgefuehrt_kwh": 8,
-     "ergebnis_pro_jahr_chf": -7559
+     "ergebnis_pro_jahr_chf": -4097
     },
     {
      "name": "Haus 12",
@@ -5424,7 +5425,7 @@
      "deckungsgrad": 0.5431,
      "auslastung": 0.3027,
      "abgefuehrt_kwh": 7,
-     "ergebnis_pro_jahr_chf": -6613
+     "ergebnis_pro_jahr_chf": -3097
     },
     {
      "name": "Haus 13",
@@ -5433,7 +5434,7 @@
      "deckungsgrad": 0.5432,
      "auslastung": 0.3027,
      "abgefuehrt_kwh": 7,
-     "ergebnis_pro_jahr_chf": -6607
+     "ergebnis_pro_jahr_chf": -3091
     },
     {
      "name": "Haus 14",
@@ -5442,7 +5443,7 @@
      "deckungsgrad": 0.5371,
      "auslastung": 0.2993,
      "abgefuehrt_kwh": 8,
-     "ergebnis_pro_jahr_chf": -7284
+     "ergebnis_pro_jahr_chf": -3806
     },
     {
      "name": "Haus 15",
@@ -5451,7 +5452,7 @@
      "deckungsgrad": 0.5267,
      "auslastung": 0.2935,
      "abgefuehrt_kwh": 8,
-     "ergebnis_pro_jahr_chf": -8440
+     "ergebnis_pro_jahr_chf": -5030
     },
     {
      "name": "Haus 16",
@@ -5460,7 +5461,7 @@
      "deckungsgrad": 0.5179,
      "auslastung": 0.2886,
      "abgefuehrt_kwh": 9,
-     "ergebnis_pro_jahr_chf": -9421
+     "ergebnis_pro_jahr_chf": -6068
     },
     {
      "name": "Haus 17",
@@ -5469,7 +5470,7 @@
      "deckungsgrad": 0.5077,
      "auslastung": 0.283,
      "abgefuehrt_kwh": 8,
-     "ergebnis_pro_jahr_chf": -10561
+     "ergebnis_pro_jahr_chf": -7274
     },
     {
      "name": "Haus 18",
@@ -5478,7 +5479,7 @@
      "deckungsgrad": 0.4996,
      "auslastung": 0.2785,
      "abgefuehrt_kwh": 9,
-     "ergebnis_pro_jahr_chf": -11475
+     "ergebnis_pro_jahr_chf": -8223
     },
     {
      "name": "Haus 19",
@@ -5487,7 +5488,7 @@
      "deckungsgrad": 0.491,
      "auslastung": 0.2737,
      "abgefuehrt_kwh": 8,
-     "ergebnis_pro_jahr_chf": -12466
+     "ergebnis_pro_jahr_chf": -9242
     },
     {
      "name": "Haus 20",
@@ -5496,7 +5497,7 @@
      "deckungsgrad": 0.4796,
      "auslastung": 0.2673,
      "abgefuehrt_kwh": 8,
-     "ergebnis_pro_jahr_chf": -13805
+     "ergebnis_pro_jahr_chf": -10592
     },
     {
      "name": "Sportbad St. Jakob",
@@ -5505,7 +5506,7 @@
      "deckungsgrad": 0.2286,
      "auslastung": 0.1257,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": -853499
+     "ergebnis_pro_jahr_chf": -818683
     }
    ],
    "variante": "Sportbad 170 (Senkenregel)",
@@ -5648,7 +5649,7 @@
      "waerme_genutzt_kwh": 580549,
      "waerme_abgefuehrt_kwh": 0,
      "backup_kwh": 44062,
-     "ergebnis_pro_jahr_chf": 690540
+     "ergebnis_pro_jahr_chf": 807900
     }
    },
    "auslastung": 0.5178,
@@ -5662,8 +5663,8 @@
    "migrationen": 0,
    "migration_kwh": 0.0,
    "dh_investition_chf": 5802400,
-   "dh_ergebnis_pro_jahr_chf": 690540,
-   "ergebnis_pro_investiertem_franken": 0.119,
+   "dh_ergebnis_pro_jahr_chf": 807900,
+   "ergebnis_pro_investiertem_franken": 0.1392,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 799.34
@@ -5676,7 +5677,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 02",
@@ -5685,7 +5686,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 03",
@@ -5694,7 +5695,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 04",
@@ -5703,7 +5704,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 05",
@@ -5712,7 +5713,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 06",
@@ -5721,7 +5722,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 07",
@@ -5730,7 +5731,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 08",
@@ -5739,7 +5740,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 09",
@@ -5748,7 +5749,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 10",
@@ -5757,7 +5758,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 11",
@@ -5766,7 +5767,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 12",
@@ -5775,7 +5776,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 13",
@@ -5784,7 +5785,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 14",
@@ -5793,7 +5794,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 15",
@@ -5802,7 +5803,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 16",
@@ -5811,7 +5812,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 17",
@@ -5820,7 +5821,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 18",
@@ -5829,7 +5830,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 19",
@@ -5838,7 +5839,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 20",
@@ -5847,7 +5848,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     }
    ],
    "variante": "0 Senken",
@@ -5990,7 +5991,7 @@
      "waerme_genutzt_kwh": 580549,
      "waerme_abgefuehrt_kwh": 0,
      "backup_kwh": 44062,
-     "ergebnis_pro_jahr_chf": 690540
+     "ergebnis_pro_jahr_chf": 807900
     },
     "bad": {
      "standorte": 1,
@@ -6001,7 +6002,7 @@
      "waerme_genutzt_kwh": 157680,
      "waerme_abgefuehrt_kwh": 0,
      "backup_kwh": 492320,
-     "ergebnis_pro_jahr_chf": 161050
+     "ergebnis_pro_jahr_chf": 193168
     }
    },
    "auslastung": 0.5024,
@@ -6015,8 +6016,8 @@
    "migrationen": 3972,
    "migration_kwh": 2.0,
    "dh_investition_chf": 7598100,
-   "dh_ergebnis_pro_jahr_chf": 851590,
-   "ergebnis_pro_investiertem_franken": 0.1121,
+   "dh_ergebnis_pro_jahr_chf": 1001068,
+   "ergebnis_pro_investiertem_franken": 0.1318,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 799.34
@@ -6029,7 +6030,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 02",
@@ -6038,7 +6039,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 03",
@@ -6047,7 +6048,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 04",
@@ -6056,7 +6057,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 05",
@@ -6065,7 +6066,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 06",
@@ -6074,7 +6075,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 07",
@@ -6083,7 +6084,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 08",
@@ -6092,7 +6093,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 09",
@@ -6101,7 +6102,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 10",
@@ -6110,7 +6111,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 11",
@@ -6119,7 +6120,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 12",
@@ -6128,7 +6129,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 13",
@@ -6137,7 +6138,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 14",
@@ -6146,7 +6147,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 15",
@@ -6155,7 +6156,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 16",
@@ -6164,7 +6165,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 17",
@@ -6173,7 +6174,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 18",
@@ -6182,7 +6183,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 19",
@@ -6191,7 +6192,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 20",
@@ -6200,7 +6201,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Sportbad St. Jakob",
@@ -6209,7 +6210,7 @@
      "deckungsgrad": 0.2426,
      "auslastung": 0.4534,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 161050
+     "ergebnis_pro_jahr_chf": 193168
     }
    ],
    "variante": "Sportbad 50 (nach Nachfrage)",
@@ -6352,7 +6353,7 @@
      "waerme_genutzt_kwh": 580549,
      "waerme_abgefuehrt_kwh": 0,
      "backup_kwh": 44062,
-     "ergebnis_pro_jahr_chf": 690540
+     "ergebnis_pro_jahr_chf": 807900
     },
     "bad": {
      "standorte": 1,
@@ -6363,7 +6364,7 @@
      "waerme_genutzt_kwh": 526212,
      "waerme_abgefuehrt_kwh": 0,
      "backup_kwh": 123788,
-     "ergebnis_pro_jahr_chf": 513117
+     "ergebnis_pro_jahr_chf": 619734
     }
    },
    "auslastung": 0.4791,
@@ -6377,8 +6378,8 @@
    "migrationen": 3930,
    "migration_kwh": 2.0,
    "dh_investition_chf": 11904900,
-   "dh_ergebnis_pro_jahr_chf": 1203657,
-   "ergebnis_pro_investiertem_franken": 0.1011,
+   "dh_ergebnis_pro_jahr_chf": 1427634,
+   "ergebnis_pro_investiertem_franken": 0.1199,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 799.34
@@ -6391,7 +6392,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 02",
@@ -6400,7 +6401,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 03",
@@ -6409,7 +6410,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 04",
@@ -6418,7 +6419,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 05",
@@ -6427,7 +6428,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 06",
@@ -6436,7 +6437,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 07",
@@ -6445,7 +6446,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 08",
@@ -6454,7 +6455,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 09",
@@ -6463,7 +6464,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 10",
@@ -6472,7 +6473,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 11",
@@ -6481,7 +6482,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 12",
@@ -6490,7 +6491,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 13",
@@ -6499,7 +6500,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 14",
@@ -6508,7 +6509,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 15",
@@ -6517,7 +6518,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 16",
@@ -6526,7 +6527,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 17",
@@ -6535,7 +6536,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 18",
@@ -6544,7 +6545,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 19",
@@ -6553,7 +6554,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Haus 20",
@@ -6562,7 +6563,7 @@
      "deckungsgrad": 0.9295,
      "auslastung": 0.5178,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 34527
+     "ergebnis_pro_jahr_chf": 40395
     },
     {
      "name": "Sportbad St. Jakob",
@@ -6571,7 +6572,7 @@
      "deckungsgrad": 0.8096,
      "auslastung": 0.4427,
      "abgefuehrt_kwh": 0,
-     "ergebnis_pro_jahr_chf": 513117
+     "ergebnis_pro_jahr_chf": 619734
     }
    ],
    "variante": "Sportbad 170 (Senkenregel)",

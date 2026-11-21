@@ -1,8 +1,10 @@
-# Kosten und Wirtschaftlichkeit aus Sicht DigitalHeat (Stand 21.11.2026, überarbeitet)
+# Kosten und Wirtschaftlichkeit aus Sicht DigitalHeat (Stand 21.11.2026, Preismodell mit Ankerkunde)
 
-Säule «Firma». Ergänzt Joëls Kundensicht (`CustomerView_Joel.md`), die Pharma-Sicht (`PHARMA_SICHT.md`) und die Rechnung für die ganze Firma (`FIRMA.md`). Das Angebot selbst ist in `L4_ANGEBOT.md` festgelegt. **Alle Beträge in CHF.** Dollar- und Euro-Quellen sind mit 0,84 CHF/$ und 0,92 CHF/€ umgerechnet (Mitte November 2026). Gerechnet wird mit `src/wirtschaft.py`.
+Säule «Firma». Ergänzt Joëls Kundensicht (`CustomerView_Joel.md`), die Pharma-Sicht (`PHARMA_SICHT.md`) und die Rechnung für die ganze Firma (`FIRMA.md`). Das Angebot selbst ist in `L4_ANGEBOT.md` festgelegt. **Alle Beträge in CHF.** Dollar- und Euro-Quellen sind mit 0,84 CHF/$ und 0,92 CHF/€ umgerechnet (Mitte November 2026). Gerechnet wird mit `src/wirtschaft.py`, alle Zahlen dieses Dokuments erzeugt `src/kosten_dh.py` (Ergebnis in `daten/ergebnisse/kosten_dh.json`).
 
-**Rechenbasis ist das Abschaltmodell**, wie in `PITCH.md`, `README.md` und `FIRMA.md`: Server ohne Arbeit werden abgeschaltet, im Leerlauf ziehen sie angenommene 230 W, im Standby 10 W, ein Start dauert 5 Minuten (`src/scheduler/serverbetrieb.py`, `ERGEBNISSE.md`, Abschnitt «Leerlauf und Abschalten im Referenzhaus»). Das Idealmodell des Case (0 W Leerlauf) steht jeweils zum Vergleich daneben. Frühere Fassungen dieses Dokuments nannten nur die Zahlen des Idealmodells (+34'500 CHF, Break-even 0,36 CHF).
+**Rechenbasis ist das Abschaltmodell**, wie in `PITCH.md`, `README.md` und `FIRMA.md`: Server ohne Arbeit werden abgeschaltet, im Leerlauf ziehen sie angenommene 230 W, im Standby 10 W, ein Start dauert 5 Minuten (`src/scheduler/serverbetrieb.py`, `ERGEBNISSE.md`, Abschnitt «Leerlauf und Abschalten im Referenzhaus»). Das Idealmodell des Case (0 W Leerlauf) steht jeweils zum Vergleich daneben.
+
+**Neues Preismodell (21.11.2026):** Ein Ankerkunde (Roche) kauft 60 % der Server-Stunden zu **0,50 CHF pro L4-Stunde** mit Mengenrabatt und festem Preis über 5 Jahre. Die übrigen 40 % gehen an Kunden ohne Mindestmenge zu **0,55 CHF**, dieser Preis sinkt 10 % pro Jahr. Die frühere Fassung rechnete mit 0,60 CHF fest gebucht und dem Rest zum Spot-Preis von 0,294 CHF (+29'400 CHF, Break-even 0,38 CHF). **`FIRMA.md`, `PITCH.md`, `README.md`, `ERGEBNISSE.md`, `PHARMA_SICHT.md`, `RESULTATE_EINFACH.md` und die Dashboards nennen noch die alten Preise und Zahlen.**
 
 ## Kurzfassung
 
@@ -13,38 +15,46 @@ Säule «Firma». Ergänzt Joëls Kundensicht (`CustomerView_Joel.md`), die Phar
 | Verkaufte Server-Stunden pro Jahr | 34'512 | 18'873 | 20'324 |
 | Investition DH | **290'100 CHF** | 151'100 CHF | 185'800 CHF |
 | Wärme an den Haushalt | gratis | gratis | gratis |
-| **Ergebnis DH pro Jahr** (0,60 CHF, 60 % fest gebucht, alle Stunden verkauft) | **+29'400 CHF** | +16'100 CHF | +12'700 CHF |
-| Vorsichtiger Preis (0,50 CHF) | +15'800 CHF | +8'700 CHF | +4'700 CHF |
-| Investition zurück nach | **3,2 Jahren** | 3,1 Jahren | 3,6 Jahren |
-| Interner Zinsfuss | 18,8 % | 19,6 % | 14,4 % |
-| **Nötiger Vertragspreis (Break-even)** | **0,38 CHF pro L4-Stunde** (= 3,07 CHF pro Server-Stunde) | 0,38 CHF | 0,44 CHF |
-| Zum Vergleich: Idealmodell des Case (0 W Leerlauf) | 92,95 % Deckung, +34'500 CHF, Break-even 0,36 CHF | 93,6 %, +19'000 CHF | 99,6 %, +15'300 CHF |
+| **Ergebnis DH pro Jahr** (Roche 60 % zu 0,50 CHF, Rest 0,55 CHF, alle Stunden verkauft) | **+35'000 CHF** | +19'200 CHF | +16'000 CHF |
+| Vorsichtig: Rest nur zum Spot-Preis (0,294 CHF) | +15'800 CHF | +8'700 CHF | +4'700 CHF |
+| Nur Roche, Rest unverkauft | −6'400 CHF | −3'400 CHF | −8'600 CHF |
+| Investition zurück nach | **2,9 Jahren** | 2,9 Jahren | 3,3 Jahren |
+| Interner Zinsfuss | 21,6 % | 22,5 % | 17,0 % |
+| **Break-even Roche-Preis** (Rest zu 0,55 CHF) | **0,24 CHF pro L4-Stunde** (= 1,95 CHF pro Server-Stunde) | 0,24 CHF | 0,30 CHF |
+| Break-even Roche-Preis, wenn der Rest nur Spot bringt | 0,38 CHF | 0,38 CHF | 0,44 CHF |
+| Zum Vergleich: Idealmodell des Case (0 W Leerlauf) | 92,95 % Deckung, +40'400 CHF, Break-even 0,22 CHF | 93,6 %, +22'300 CHF | 99,6 %, +18'700 CHF |
 
-**In einem Satz:** Wenn DigitalHeat jede Rechenstunde verkauft, 60 % davon fest zu 0,60 CHF pro L4-Stunde und den Rest zum Spot-Preis, bleiben beim Referenzhaus rund 29'400 CHF pro Jahr nach allen Kosten, Steuern und Zinsen. Der Haushalt bekommt die Wärme gratis, die Investition ist nach gut 3 Jahren zurück. Preis und Absatz sind Annahmen und noch mit keinem Kunden bestätigt.
+**In einem Satz:** Wenn DigitalHeat jede Rechenstunde verkauft, 60 % an Roche zu 0,50 CHF pro L4-Stunde und den Rest zu 0,55 CHF, bleiben beim Referenzhaus rund 35'000 CHF pro Jahr nach allen Kosten, Steuern und Zinsen. Der Haushalt bekommt die Wärme gratis, die Investition ist nach knapp 3 Jahren zurück. Preise und Absatz sind Annahmen und noch mit keinem Kunden bestätigt.
 
 ### Was diese Zahl voraussetzt
 
-Die +29'400 CHF gelten nur, wenn alle fünf Punkte zutreffen. Die ersten beiden entscheiden über das Geschäft.
+Die +35'000 CHF gelten nur, wenn alle fünf Punkte zutreffen. Die ersten beiden entscheiden über das Geschäft.
 
 1. **Jede gerechnete Stunde findet einen Käufer.** Die Server laufen, wenn das Haus Wärme braucht. Das Modell verkauft alle diese Stunden. Bleibt ein Teil unverkauft, läuft der Strom trotzdem:
 
-   | Verkaufte Stunden | 100 % | 90 % | 80 % | 72 % | 60 % |
-   |---|---|---|---|---|---|
-   | Ergebnis pro Jahr | **+29'400 CHF** | +19'000 CHF | +8'700 CHF | 0 | −12'700 CHF |
+   | Verkaufte Stunden | 100 % | 90 % | 80 % | 70 % | 68 % | 60 % |
+   |---|---|---|---|---|---|---|
+   | Ergebnis pro Jahr | **+35'000 CHF** | +24'100 CHF | +13'100 CHF | +2'200 CHF | 0 | −9'200 CHF |
 
-   Mit der Nachfrage aus dem Alibaba-Trace ist die Flotte negativ (Abschnitt 8).
-2. **0,60 CHF pro L4-Stunde ist ein Zielpreis, kein bestätigter Preis.** Nach `L4_ANGEBOT.md` rechnet DH nur öffentliche, synthetische oder vom Kunden freigegebene anonymisierte Aufgaben. Für solche Aufgaben ist die Zahlungsbereitschaft noch nicht belegt.
-3. **Der Vertragspreis bleibt 5 Jahre fest**, während der Spot-Preis im Modell 10 % pro Jahr fällt. Fällt der Vertragspreis ebenso, bleiben +15'200 CHF.
+   Roche allein (60 %) trägt das Haus nicht: −6'400 CHF pro Jahr. Mit der Nachfrage aus dem Alibaba-Trace ist die Flotte negativ (Abschnitt 8).
+2. **Die übrigen 40 % bringen 0,55 CHF pro L4-Stunde.** Das ist der am wenigsten belegte Wert, und er trägt das Ergebnis: Bringt der Rest nur den Spot-Preis, bleiben +15'800 CHF. Die Kunden dafür (ohne Mindestmenge, unterbrechbar, Lieferung nur in Heizstunden) sind noch nicht gefunden. Nach `L4_ANGEBOT.md` rechnet DH nur öffentliche, synthetische oder vom Kunden freigegebene anonymisierte Aufgaben.
+3. **Der Roche-Preis bleibt 5 Jahre fest**, während der Preis der übrigen Stunden 10 % pro Jahr fällt. Fällt auch der Roche-Preis 10 % pro Jahr, bleiben +23'200 CHF.
 4. **Firmenkosten von 1'200 CHF pro Haus.** Das gilt erst bei grosser Stückzahl. `FIRMA.md` rechnet mit 5'400 CHF pro Haus bei 170 Häusern und 77'000 CHF bei 5 Häusern.
-5. **4,5 % Zins**, der zugleich der Diskontsatz ist. Für ein junges Unternehmen ist das tief: bei 8 % bleiben +22'500 CHF, bei 12 % +14'400 CHF.
+5. **4,5 % Zins**, der zugleich der Diskontsatz ist. Für ein junges Unternehmen ist das tief: bei 8 % bleiben +28'200 CHF, bei 12 % +20'300 CHF.
 
-**Preise pro Server-Stunde (für den Pitch):** Ein Server hat 8 L4-Karten. 0,60 CHF pro L4-Stunde = **4,80 CHF pro Server-Stunde**. Hikube 0,68 CHF = 5,44 CHF, Spot 0,294 CHF = 2,35 CHF, Break-even 0,384 CHF = 3,07 CHF pro Server-Stunde. Im Code und in `annahmen.py` bleibt alles pro L4-Stunde, nur die Anzeige rechnet × 8.
+**Preise pro Server-Stunde (für den Pitch):** Ein Server hat 8 L4-Karten. Roche 0,50 CHF pro L4-Stunde = **4,00 CHF pro Server-Stunde**, übrige Kunden 0,55 CHF = **4,40 CHF**. Hikube 0,68 CHF = 5,44 CHF, Spot 0,294 CHF = 2,35 CHF. Im Code und in `annahmen.py` bleibt alles pro L4-Stunde, nur die Anzeige rechnet × 8.
 
-**Zwei Break-even-Zahlen:** Der Case definiert den Break-even als (Strom − Wert der genutzten Wärme) ÷ Server-Stunden = **0,23 CHF pro Server-Stunde** (ohne Hardware; im Abschaltmodell 0,235 CHF, im Idealmodell 0,226 CHF). Mit allen Kosten braucht DH **3,07 CHF pro Server-Stunde**, also 0,38 CHF pro L4-Karte und Stunde.
+**Drei Break-even-Zahlen:**
+- Der Case definiert den Break-even als (Strom − Wert der genutzten Wärme) ÷ Server-Stunden = **0,23 CHF pro Server-Stunde** (ohne Hardware; im Abschaltmodell 0,235 CHF, im Idealmodell 0,226 CHF). Er hängt nicht vom Preismodell ab.
+- Mit allen Kosten braucht DH von Roche **0,24 CHF pro L4-Stunde**, solange die übrigen Stunden 0,55 CHF bringen.
+- Bringen die übrigen Stunden nur den Spot-Preis, braucht DH von Roche **0,38 CHF pro L4-Stunde** (3,07 CHF pro Server-Stunde). Das ist die vorsichtigere Zahl.
 
-**Was «Ergebnis pro Jahr» heisst:** Kapitalwert über 5 Jahre, als gleichmässiger Jahresbetrag ausgedrückt. Enthalten sind Steuern, Zinskosten, Preisverfall beim Spot-Preis, Garantie, Restwert und Preissteigerung der laufenden Kosten. Ohne Zinskosten ist der Gewinn nach Steuern im Mittel **37'900 CHF pro Jahr**, das sind 13 % der Investition. Der interne Zinsfuss beträgt 18,8 % (bei 0,50 CHF: 12,4 %).
+**Was «Ergebnis pro Jahr» heisst:** Kapitalwert über 5 Jahre, als gleichmässiger Jahresbetrag ausgedrückt. Enthalten sind Steuern, Zinskosten, Preisverfall der übrigen Stunden, Garantie, Restwert und Preissteigerung der laufenden Kosten. Ohne Zinskosten ist der Gewinn nach Steuern im Mittel **43'300 CHF pro Jahr**, das sind 15 % der Investition. Der interne Zinsfuss beträgt 21,6 % (Rest nur Spot: 12,4 %).
 
-**Warum 0,60 CHF:** Der Preis ist eine Zielannahme des Teams (`L4_ANGEBOT.md`). Zur Einordnung: Schweizer GPU-Clouds verlangen ab ≈ 0,68 CHF (Hikube) bis 2,13 CHF (Everyware) pro L4-Stunde, US-Clouds mit festem Vertrag 0,53–0,55 CHF, Spot kostet 0,29–0,38 CHF. Die Vergleichsangebote enthalten teils andere CPU-, RAM- und Serviceleistungen und sind nicht Stück für Stück verglichen. DH liefert vor allem im Winter und unterbrechbar, darum liegt der Zielpreis unter den Schweizer Listenpreisen. Die frühere Begründung über Kunden mit Datenstandortpflicht (Pharma, Banken, Spitäler) gilt nicht mehr: Vertrauliche Daten sind vom L4-Angebot ausgeschlossen, weil L4 keinen Schutz während der Verarbeitung bietet (`CONFIDENTIAL_COMPUTING.md`).
+**Warum diese Preise:**
+- **Roche 0,50 CHF:** Mengenrabatt für den Ankerkunden. Roche nimmt 60 % der Stunden ab, fest über 5 Jahre. Das entspricht dem Cloud-Prinzip, nach dem Kunden mit Abnahmeverpflichtung weniger zahlen. Zur Einordnung: US-Clouds mit festem Vertrag 0,53–0,55 CHF.
+- **Übrige Kunden 0,55 CHF:** ohne Mindestmenge, kurze Laufzeit, Rechenzentrum in der Schweiz. Diese Kunden bekommen die schlechtere Leistung: Ihre Aufträge laufen nur, wenn das Haus Wärme braucht, und können unterbrochen werden; Roche hat Vorrang. Der Preis muss deshalb unter den Alternativen bleiben: Schweizer GPU-Clouds verlangen ab ≈ 0,68 CHF (Hikube) bis 2,13 CHF (Everyware) pro L4-Stunde, Spot kostet 0,29–0,38 CHF. Weil diese Kunden jedes Jahr neu verhandeln und L4-Preise sinken, fällt der Preis im Modell 10 % pro Jahr.
+- Die Vergleichsangebote enthalten teils andere CPU-, RAM- und Serviceleistungen und sind nicht Stück für Stück verglichen. Vertrauliche Daten sind vom L4-Angebot ausgeschlossen, weil L4 keinen Schutz während der Verarbeitung bietet (`CONFIDENTIAL_COMPUTING.md`).
 
 ---
 
@@ -55,21 +65,23 @@ Gewinn pro Haus und Jahr = Erlös Rechnen + Erlös Wärme − Strom − laufende
                            − (Investition − Restwert) verteilt auf 5 Jahre inkl. Zins
 
 Erlös Rechnen = verkaufte Server-Stunden × 8 Karten × (1 − Plattform) × Verfügbarkeit
-                × [Anteil fest gebucht × Vertragspreis + Rest × Spot-Preis]
+                × [Anteil Roche × Roche-Preis + Rest × Preis übrige Stunden × 0,9^(Jahr−1)]
 
 Strom         = gesamter Verbrauch (Rechnen + Leerlauf + Standby + Starts) × Strompreis
 
-Break-even    = der Vertragspreis, bei dem der Gewinn genau 0 ist
+Break-even    = der Roche-Preis, bei dem der Gewinn genau 0 ist
 ```
 
-**Nachrechnen** (Referenzhaus, Stunden und Strom aus `daten/ergebnisse/serverbetrieb.json`, Zeile «abschalten», 230 W):
+Im Code heissen die Parameter `vertragspreis_chf_karte_h` (Roche), `anteil_fest_gebucht` (Anteil Roche), `spotpreis_chf_karte_h` (übrige Stunden; der Name ist historisch) und `spot_preisverfall`.
+
+**Nachrechnen:**
 
 ```sh
-python3 -c "from src.wirtschaft import rechne, break_even as b; a=(8, 34511.6, 28272.3); print(rechne(*a, strom_kwh=35662.1)['ergebnis_pro_jahr_chf'], b(*a, strom_kwh=35662.1))"
-# 29388 0.384
+python3 src/kosten_dh.py
+# Referenzhaus: 34,970 CHF/J, Rest nur Spot 15,799, Break-even Ankerkunde 0.2438 CHF/L4-h
 ```
 
-Die Werte für das Durchschnitts-EFH stammen aus derselben Simulation (`HausMitServerbetrieb` mit dem Profil aus `src/dashboard3d_daten.py`, `profil_haus2`). Dafür gibt es noch kein eigenes Skript und keine Ergebnisdatei im Repo.
+Das Skript simuliert auch das Durchschnitts-EFH (`profil_haus2` aus `src/dashboard3d_daten.py`) und alle Sensitivitäten dieses Dokuments.
 
 ## 2. Annahmen
 
@@ -82,8 +94,8 @@ Die Werte für das Durchschnitts-EFH stammen aus derselben Simulation (`HausMitS
 | Verkaufte Server-Stunden Referenzhaus | 34'512 h | 36'290 h im Idealmodell | Q | Jahressimulation Basel 2025, Abschaltmodell |
 | Gesamtstrom | 35'662 kWh | – | Q | davon Rechnen 34'512, Leerlauf 769, Standby 322, Starts 60 kWh |
 | Genutzte Wärme | 28'272 kWh (90,5 %) | 29'027 kWh im Idealmodell | Q | Jahressimulation |
-| Leerlauf, Standby, Startzeit | 230 W, 10 W, 5 min | Leerlauf 100–350 W (Ergebnis +30'500 bis +28'200 CHF) | S | Leerlauf aus einer H100-Messung abgeleitet (Latif et al. 2024). **Keine Messung an L4-Hardware** |
-| Server ausschalten statt pausieren | ja | – | E | Pausieren kostet rund 8'500 CHF Ergebnis pro Jahr (Abschnitt 5) |
+| Leerlauf, Standby, Startzeit | 230 W, 10 W, 5 min | Leerlauf 100–350 W (Ergebnis +36'100 bis +33'700 CHF) | S | Leerlauf aus einer H100-Messung abgeleitet (Latif et al. 2024). **Keine Messung an L4-Hardware** |
+| Server ausschalten statt pausieren | ja | – | E | Pausieren kostet rund 8'900 CHF Ergebnis pro Jahr (Abschnitt 5) |
 | Strompreis | 0,3325 CHF/kWh | 0,327–0,333 | Q | ElCom 2026, IWB H4 (Haushaltsprofil). Bei 36 MWh pro Jahr passt eher das Gewerbeprofil C2 mit 0,32745 CHF (`ANNAHMEN_PRUEFUNG.md`); das wären +160 CHF pro Jahr |
 | Wärme an den Haushalt | **gratis** | 0–0,07 CHF/kWh | E | Joëls Pilot-Modell |
 | Verfügbarkeit | 99,3 % | – | Q | arXiv 2503.11901 |
@@ -124,30 +136,34 @@ Die Werte für das Durchschnitts-EFH stammen aus derselben Simulation (`HausMitS
 
 | Variable | Wert | Spanne | Qualität | Quelle |
 |---|---|---|---|---|
-| **Vertragspreis** | **0,60 CHF pro L4-Stunde** | 0,50–0,66 CHF | E | Unbestätigter Zielpreis (`L4_ANGEBOT.md`). Einordnung: Hikube ≈ 0,68 CHF, Everyware 2,13 CHF (getdeploying.com, everyware.ch), US-Clouds mit Vertrag 0,53–0,55 CHF |
-| **Fest gebuchter Anteil** | **60 %** | 42–80 % | S | siehe Abschnitt 2b |
+| **Roche-Preis (Ankerkunde)** | **0,50 CHF pro L4-Stunde**, fest über 5 Jahre | 0,45–0,55 CHF | E | Mengenrabatt für 60 % Abnahme. Unbestätigt. Einordnung: US-Clouds mit Vertrag 0,53–0,55 CHF |
+| **Anteil Roche** | **60 %** der Server-Stunden | 42–80 % | E/S | Teamannahme «Roche kann 60 % kaufen»; siehe Abschnitt 2b |
+| **Preis übrige Stunden** | **0,55 CHF pro L4-Stunde**, sinkt 10 % pro Jahr | 0,29–0,68 CHF | E | Kunden ohne Mindestmenge, unterbrechbar, wärmegeführt. Unter Hikube ≈ 0,68 CHF (getdeploying.com), über Spot 0,29–0,38 CHF. Preisverfall: H100-Index −23 % in einem Jahr (Silicon Data) |
 | **Verkaufter Anteil der Rechenstunden** | **100 %** | offen | E | Annahme «genug Aufträge». Kein Nachfragebeleg; siehe Kurzfassung und Abschnitt 8 |
-| Restliche Stunden als Füllauftrag | 0,29 CHF, sinkt 10 % pro Jahr | 0,29–0,38 CHF | Q | L4-Spot-Preis |
+| Untergrenze übrige Stunden | Spot 0,29 CHF | 0,29–0,38 CHF | Q | L4-Spot-Preis (AWS g6 Spot 0,35–0,45 $); Rückfall, wenn kein Kunde ohne Mindestmenge gefunden wird |
 | Plattformkosten | 5 % | 0–5 % | E | Direktvertrag statt Marktplatz (15–30 %) |
-| Preis im Vertrag | fest über 5 Jahre | – | E | Mehrjährige Verträge mit Abnahmepflicht sind im GPU-Markt üblich (2–5 Jahre). `PHARMA_SICHT.md` nennt 3 Jahre, der Pilot läuft 1 Jahr: Laufzeiten sind noch nicht abgeglichen (`TODO_KURZ.md`) |
+| Laufzeit Roche-Vertrag | 5 Jahre | – | E | Mehrjährige Verträge mit Abnahmepflicht sind im GPU-Markt üblich (2–5 Jahre). `PHARMA_SICHT.md` nennt 3 Jahre, der Pilot läuft 1 Jahr: Laufzeiten sind noch nicht abgeglichen (`TODO_KURZ.md`) |
 
-## 2b. Wie die vier unsicheren Werte geschätzt sind
+## 2b. Wie die unsicheren Werte geschätzt sind
 
-Für diese Posten gibt es keine öffentliche Zahl, weil sie pro Firma oder pro Objekt festgelegt werden. Sie sind deshalb aus Vergleichswerten geschätzt. Eine Offerte ersetzt die Schätzung später.
+Für diese Posten gibt es keine öffentliche Zahl, weil sie pro Firma oder pro Objekt festgelegt werden. Sie sind deshalb aus Vergleichswerten geschätzt. Eine Offerte oder ein Vertrag ersetzt die Schätzung später.
 
 | Posten | Vergleichswert | Schätzung | Begründung |
 |---|---|---|---|
 | **Versicherung** | Hausrat Schweiz: Mobiliar 91,80 CHF für 110'000 CHF Summe ≈ **0,8 ‰** (hellosafe.ch); Hausrat ab 150 CHF/Jahr (comparis.ch) | **0,3–1,0 %, gerechnet 0,6 %** des Hardwarewerts, plus 5 % Stempelabgabe | Server in fremden Kellern mit Flüssigkühlung sind riskanter als Hausrat (Wasser, Überspannung, Diebstahl), dazu kommt eine Elektronikdeckung |
 | **Einbau** | Schweizer Servicetechniker 143,80 CHF/h, Fahrt 1,60 CHF/km (SAK); Installation einer Wärmepumpe ohne Gerät 4'600–11'000 CHF (Deutschland, 5'000–12'000 €) | **6'400–12'800 CHF, gerechnet 9'000 CHF** | 30–60 Arbeitsstunden plus 2'000–4'000 CHF Material |
 | **Kreditzins** | SNB-Leitzins 0 %, SARON ≈ 0 %; gewerbliche SARON-Kredite = SARON + Marge (SGKB, BCF, Raiffeisen); Hypothekenmarge ab 1,0 % (PostFinance); Unternehmenskredite Euroraum 3,8 % (Bundesbank) | **3,5–5,5 %, gerechnet 4,5 %** | Ein ungesicherter Kredit für Server ist riskanter als eine Hypothek. Das Modell finanziert die ganze Investition zu diesem Satz. Eigenkapital verlangt mehr, siehe Abschnitt 4 |
-| **Fest gebuchter Anteil** | Cloud-Kunden binden im Median **42 %** ihrer Rechenzeit, die besten 25 % über **65 %**, Ziel vieler Firmen **70–80 %** (FinOps-Vergleiche); CoreWeave macht 96–98 % des Umsatzes mit Mehrjahresverträgen | **42–80 %, gerechnet 60 %** | Die Vergleichswerte beschreiben Käufer, nicht einen neuen Anbieter mit Winterkontingent. 60 % ist ein Ziel für die Kundengespräche, kein Messwert |
+| **Anteil Roche** | Cloud-Kunden binden im Median **42 %** ihrer Rechenzeit, die besten 25 % über **65 %**, Ziel vieler Firmen **70–80 %** (FinOps-Vergleiche); CoreWeave macht 96–98 % des Umsatzes mit Mehrjahresverträgen | **60 %** (Teamannahme) | Die Vergleichswerte beschreiben Käufer, nicht einen neuen Anbieter mit Winterkontingent. 60 % ist ein Ziel für das Gespräch mit Roche, kein Messwert |
+| **Preis übrige Stunden** | Hikube ≈ 0,68 CHF, Everyware 2,13 CHF, US-Clouds mit Vertrag 0,53–0,55 CHF, Spot 0,29–0,38 CHF pro L4-Stunde | **0,55 CHF, sinkt 10 % pro Jahr** | Etwas über Roche, weil ohne Mindestmenge und Laufzeit; unter allen Schweizer GPU-Clouds, weil unterbrechbar und nur in Heizstunden geliefert |
 
-**Wirkung des fest gebuchten Anteils (Referenzhaus, 0,60 CHF, alle Stunden verkauft):**
+**Wirkung des Roche-Anteils (Referenzhaus, alle Stunden verkauft):**
 
-| Fest gebucht | 0 % | 24 % | 42 % (Median) | **60 % (gerechnet)** | 80 % (Zielwert) |
+| Anteil Roche | 0 % | 42 % | **60 % (gerechnet)** | 80 % | 100 % |
 |---|---|---|---|---|---|
-| Ergebnis pro Jahr | −20'900 CHF | 0 | +14'800 CHF | **+29'400 CHF** | +45'600 CHF |
-| Break-even | – | – | 0,45 CHF | **0,38 CHF** | 0,35 CHF |
+| Rest zu 0,55 CHF | +28'800 CHF | +33'100 CHF | **+35'000 CHF** | +37'000 CHF | +39'100 CHF |
+| Rest nur Spot | −20'900 CHF | +5'300 CHF | +15'800 CHF | +27'400 CHF | +39'100 CHF |
+
+Obwohl Roche weniger pro Stunde zahlt, steigt das Ergebnis mit dem Roche-Anteil leicht: Der Roche-Preis bleibt 5 Jahre fest, der Preis der übrigen Stunden fällt und liegt im Mittel der 5 Jahre bei 0,45 CHF. Vor allem senkt ein hoher Roche-Anteil das Absatzrisiko: Findet DH für den Rest nur Spot-Käufer, hängt alles am Roche-Anteil (zweite Zeile).
 
 ## 3. Ergebnis pro Haus
 
@@ -156,72 +172,71 @@ Für diese Posten gibt es keine öffentliche Zahl, weil sie pro Firma oder pro O
 | Wärmedeckung | 90,5 % | 91,5 % | 98,7 % |
 | Hardware | 258'000 CHF | 129'000 CHF | 161'200 CHF |
 | **Investition gesamt** | **290'100 CHF** | **151'100 CHF** | **185'800 CHF** |
-| Rechenerlös im 1. Jahr | 124'400 CHF | 68'000 CHF | 73'300 CHF |
+| Rechenerlös im 1. Jahr | 135'400 CHF | 74'100 CHF | 79'800 CHF |
 | Laufende Kosten im 1. Jahr (ohne Strom) | 9'200 CHF | 6'400 CHF | 7'100 CHF |
-| **Ergebnis pro Jahr (0,60 CHF)** | **+29'400 CHF** | **+16'100 CHF** | **+12'700 CHF** |
-| Ergebnis pro Jahr, vorsichtig (0,50 CHF) | +15'800 CHF | +8'700 CHF | +4'700 CHF |
-| Investition zurück nach | 3,2 Jahren | 3,1 Jahren | 3,6 Jahren |
-| Interner Zinsfuss | 18,8 % | 19,6 % | 14,4 % |
-| **Break-even pro L4-Stunde** | **0,38 CHF** | **0,38 CHF** | **0,44 CHF** |
+| **Ergebnis pro Jahr** | **+35'000 CHF** | **+19'200 CHF** | **+16'000 CHF** |
+| Ergebnis pro Jahr, Rest nur Spot | +15'800 CHF | +8'700 CHF | +4'700 CHF |
+| Investition zurück nach | 2,9 Jahren | 2,9 Jahren | 3,3 Jahren |
+| Interner Zinsfuss | 21,6 % | 22,5 % | 17,0 % |
+| **Break-even Roche-Preis** (Rest 0,55 / Rest Spot) | **0,24 / 0,38 CHF** | **0,24 / 0,38 CHF** | **0,30 / 0,44 CHF** |
 
-**Rechnung Jahr für Jahr (Referenzhaus, 0,60 CHF):**
+**Rechnung Jahr für Jahr (Referenzhaus):**
 
 | CHF | Jahr 1 | Jahr 2 | Jahr 3 | Jahr 4 | Jahr 5 |
 |---|---|---|---|---|---|
-| Erlös | 124'392 | 121'329 | 118'573 | 116'092 | 113'859 |
+| Erlös | 135'435 | 129'705 | 124'548 | 119'907 | 115'730 |
 | Strom | −11'858 | −11'858 | −11'858 | −11'858 | −11'858 |
 | Laufende Kosten | −9'209 | −12'926 | −13'507 | −21'017 | −21'963 |
 | Abschreibung | −47'706 | −47'706 | −47'706 | −47'706 | −47'706 |
-| Gewinn vor Steuern | 55'620 | 48'840 | 45'502 | 35'511 | 32'333 |
-| Steuern | −7'253 | −6'369 | −5'933 | −4'631 | −4'216 |
-| **Gewinn nach Steuern** | **48'367** | **42'471** | **39'568** | **30'881** | **28'116** |
-| Geld zurück (kumuliert, nach Investition 290'120; Jahr 5 mit Restwert 51'592) | −194'048 | −103'871 | −16'597 | +61'989 | +189'403 |
+| Gewinn vor Steuern | 66'663 | 57'216 | 51'478 | 39'327 | 34'204 |
+| Steuern | −8'693 | −7'461 | −6'713 | −5'128 | −4'460 |
+| **Gewinn nach Steuern** | **57'970** | **49'755** | **44'765** | **34'199** | **29'744** |
+| Geld zurück (kumuliert, nach Investition 290'120; Jahr 5 mit Restwert 51'592) | −184'444 | −86'983 | +5'488 | +87'392 | +216'433 |
 
-**Serverzahl (Referenzhaus, 0,60 CHF):**
+**Serverzahl (Referenzhaus):**
 
 | Server | 6 | 7 | **8** | 9 | 10 | 13 |
 |---|---|---|---|---|---|---|
 | Wärmedeckung | 76,6 % | 84,5 % | **90,5 %** | 95,2 % | 98,1 % | 100 % |
-| Ergebnis pro Jahr | +29'600 CHF | +30'500 CHF | **+29'400 CHF** | +27'100 CHF | +22'700 CHF | +3'000 CHF |
+| Ergebnis pro Jahr | +34'400 CHF | +35'700 CHF | **+35'000 CHF** | +32'900 CHF | +28'700 CHF | +9'100 CHF |
 
-DH verdient am meisten mit 7 Servern. Der 8. Server kostet rund 1'100 CHF Ergebnis pro Jahr und bringt 6 Prozentpunkte Deckung, der 9. kostet weitere 2'300 CHF für knapp 5 Punkte. Das frühere Team-Ziel von 93 % Deckung erreicht das Abschaltmodell erst mit 9 Servern; im Idealmodell reichen 8 (92,95 %). Beim Durchschnitts-EFH sind 4 kW für DH besser als 5 kW (+16'100 statt +12'700 CHF), decken aber nur 91,5 % statt 98,7 %.
+DH verdient am meisten mit 7 Servern. Der 8. Server kostet rund 800 CHF Ergebnis pro Jahr und bringt 6 Prozentpunkte Deckung, der 9. kostet weitere 2'000 CHF für knapp 5 Punkte. Das Team bleibt bei 8 Servern, weil die Wärmedeckung im Case zuerst bewertet wird. Das frühere Team-Ziel von 93 % Deckung erreicht das Abschaltmodell erst mit 9 Servern; im Idealmodell reichen 8 (92,95 %). Beim Durchschnitts-EFH sind 4 kW für DH besser als 5 kW (+19'200 statt +16'000 CHF), decken aber nur 91,5 % statt 98,7 %.
 
 ## 4. Bandbreite (Referenzhaus)
 
 | | Günstig | **Gerechnet** | Teuer |
 |---|---|---|---|
-| Vertragspreis / fest gebucht | 0,66 CHF / 80 % | **0,60 CHF / 60 %** | 0,50 CHF / 42 % |
+| Roche-Preis / Preis übrige Stunden | 0,55 / 0,65 CHF | **0,50 / 0,55 CHF** | 0,45 / 0,45 CHF |
 | Hardware | −15 % | **258'000 CHF** | +15 % |
 | Kühlung pro kW | 1'260 CHF | **2'520 CHF** | 3'780 CHF |
 | Einbau | 6'400 CHF | **9'000 CHF** | 12'800 CHF |
 | Zins / Versicherung / GPU-Ausfälle | 3,5 % / 0,3 % / 3 % | **4,5 % / 0,6 % / 4,5 %** | 5,5 % / 1,0 % / 6,1 % |
-| **Ergebnis pro Jahr** | **+69'200 CHF** | **+29'400 CHF** | **−9'400 CHF** |
-| **Break-even pro L4-Stunde** | 0,28 CHF | **0,38 CHF** | 0,59 CHF |
+| **Ergebnis pro Jahr** | **+61'900 CHF** | **+35'000 CHF** | **+6'400 CHF** |
+| **Break-even Roche-Preis** | 0,10 CHF | **0,24 CHF** | 0,40 CHF |
 
-In allen drei Spalten sind alle Rechenstunden verkauft. Diese Bandbreite deckt das Absatzrisiko also nicht ab.
+In allen drei Spalten sind alle Rechenstunden verkauft und Roche nimmt 60 %. Diese Bandbreite deckt das Absatzrisiko also nicht ab.
 
 **Was am meisten bewegt:**
-1. **Verkaufte Stunden.** Je 10 % unverkaufte Stunden fehlen rund 10'400 CHF pro Jahr. Unter 72 % ist das Ergebnis negativ.
-2. **Vertragspreis.** 10 Rappen pro L4-Stunde machen rund 13'600 CHF pro Jahr aus (0,50 CHF: +15'800, 0,60 CHF: +29'400 CHF).
-3. **Fest gebuchter Anteil.** Zwischen 42 % und 80 % liegen rund 30'700 CHF pro Jahr.
-4. **Preisbindung.** Fällt auch der Vertragspreis 10 % pro Jahr, fehlen rund 14'100 CHF pro Jahr.
-5. **Zins.** 8 % statt 4,5 % kosten rund 6'900 CHF pro Jahr, 12 % rund 15'000 CHF.
+1. **Verkaufte Stunden.** Je 10 % unverkaufte Stunden fehlen rund 10'900 CHF pro Jahr. Unter 68 % ist das Ergebnis negativ.
+2. **Preis der übrigen Stunden.** Nur Spot statt 0,55 CHF kostet rund 19'200 CHF pro Jahr; 10 Rappen machen rund 7'500 CHF aus.
+3. **Roche-Preis.** 5 Rappen pro L4-Stunde machen rund 6'800 CHF pro Jahr aus (0,45 CHF: +28'200, 0,55 CHF: +41'800 CHF).
+4. **Preisbindung.** Fällt auch der Roche-Preis 10 % pro Jahr, fehlen rund 11'800 CHF pro Jahr. Bleibt umgekehrt auch der Preis der übrigen Stunden fest, kommen rund 8'600 CHF dazu.
+5. **Zins.** 8 % statt 4,5 % kosten rund 6'700 CHF pro Jahr, 12 % rund 14'700 CHF.
 6. **Hardwarepreis.** ±15 % sind rund ±7'200 CHF pro Jahr.
 7. **Firmenkosten.** 5'400 statt 1'200 CHF pro Haus kosten rund 4'000 CHF pro Jahr, 10'000 CHF rund 8'300 CHF.
-8. **Zinsspanne für Kredit und Versicherung** (3,5–5,5 % und 0,3–1,0 %). Zusammen rund ±3'000 CHF pro Jahr.
+8. **Zinsspanne für Kredit und Versicherung** (3,5–5,5 % und 0,3–1,0 %). Zusammen rund +2'700 bis −2'900 CHF pro Jahr.
 9. **Wärmepreis an den Haushalt.** Gratis oder 7 Rp./kWh macht nur rund 1'700 CHF pro Jahr aus. Gratiswärme ist für DH tragbar.
 
 ## 5. Wann es sich nicht lohnt
 
-- **Zu wenig Aufträge.** Unter 72 % verkauften Rechenstunden ist das Ergebnis negativ. Mit der Nachfrage aus dem Alibaba-Trace verliert die Flotte Geld (Abschnitt 8).
-- **Vertragspreis unter 0,38 CHF pro L4-Stunde.**
-- **Weniger als rund ein Viertel der Stunden fest gebucht** (bei 0,60 CHF). Nur zum Spot-Preis verkauft: −20'900 CHF pro Jahr.
-- **Kunden, die den Preis mit US-Clouds vergleichen:** Dort kostet ein fester Vertrag 0,53–0,55 CHF. Für sie muss DH auf rund 0,50 CHF (+15'800 CHF pro Jahr).
-- **Teurer Fall** (0,50 CHF, nur 42 % fest gebucht, Kosten am oberen Rand): −9'400 CHF pro Jahr.
+- **Zu wenig Aufträge.** Unter 68 % verkauften Rechenstunden ist das Ergebnis negativ. Roche allein reicht nicht (−6'400 CHF pro Jahr). Mit der Nachfrage aus dem Alibaba-Trace verliert die Flotte Geld (Abschnitt 8).
+- **Übrige Stunden nur zum Spot-Preis und Roche-Preis unter 0,38 CHF pro L4-Stunde.**
+- **Kein Ankerkunde, alles nur zum Spot-Preis:** −20'900 CHF pro Jahr.
+- **Teurer Fall** (Roche 0,45 CHF, übrige Stunden 0,45 CHF, Kosten am oberen Rand): nur noch +6'400 CHF pro Jahr.
 - **Nur Marktplatz statt Direktvertrag:** Mit 20 % Gebühr und Preisverfall von 10 % pro Jahr auf allen Stunden braucht es rund 0,47 CHF im ersten Jahr.
 - **Vertrauliche Aufträge:** L4 schützt Daten während der Verarbeitung nicht. Solche Aufträge sind ausgeschlossen (`L4_ANGEBOT.md`). Neue H100 mit diesem Schutz rechneten sich in der früheren Rechnung selbst im günstigen Fall nicht, weil die Hardware für Dauerbetrieb gebaut ist, DH aber nur die halbe Zeit rechnet. Im Abschaltmodell ist das nicht neu gerechnet.
-- **Server nur pausieren:** Bei 230 W Leerlauf rund 5'200 kWh mehr Strom (1'740 CHF) und 2'340 Rechenstunden weniger, weil die Leerlaufwärme den Speicher füllt. Das Ergebnis fällt von +29'400 auf +20'900 CHF pro Jahr. Details im [Betriebsvergleich](ERGEBNISSE.md#leerlauf-und-abschalten-im-referenzhaus).
-- **Pilot mit wenigen Häusern:** Die Firmenkosten (Zertifikat, Software, Personal) verteilen sich auf wenige Häuser. Nach `FIRMA.md` trägt die Firma ihre Fixkosten ab 7 Häusern bei genug Aufträgen und erst ab 68 Häusern bei knapper Nachfrage.
+- **Server nur pausieren:** Bei 230 W Leerlauf rund 5'200 kWh mehr Strom (1'740 CHF) und 2'340 Rechenstunden weniger, weil die Leerlaufwärme den Speicher füllt. Das Ergebnis fällt von +35'000 auf +26'100 CHF pro Jahr. Details im [Betriebsvergleich](ERGEBNISSE.md#leerlauf-und-abschalten-im-referenzhaus).
+- **Pilot mit wenigen Häusern:** Die Firmenkosten (Zertifikat, Software, Personal) verteilen sich auf wenige Häuser. `FIRMA.md` rechnet das noch mit den alten Preisen: Die Firma trägt ihre Fixkosten dort ab 7 Häusern bei genug Aufträgen und erst ab 68 Häusern bei knapper Nachfrage.
 
 ## 6. Abgleich mit Joëls Kundensicht
 
@@ -232,7 +247,7 @@ In allen drei Spalten sind alle Rechenstunden verkauft. Diese Bandbreite deckt d
 | Einheitengrösse? | Referenzhaus 8 kW. Durchschnitts-EFH: 4 kW ist für DH besser (91,5 % Deckung), 5 kW für den Haushalt (98,7 %). Die Kundensicht, `FIRMA.md` und der Pitch rechnen mit 5 kW. **Offen, vom Team zu entscheiden** |
 | Genug flexible Aufträge? | Nicht belegt. Das Modell nimmt es an (Abschnitt 8) |
 | Anteil am Rechenerlös? | Im Pilot nicht nötig |
-| Vertrag, Konkurs? | Die Rechnung braucht 5 Jahre Laufzeit (Abschreibung). Der Pilotvertrag der Kundensicht läuft 1 Jahr mit kostenlosem Rückbau: Für diesen Fall ist die Investition nicht gedeckt. Holzofen bleibt im Haus |
+| Vertrag, Konkurs? | Die Rechnung braucht 5 Jahre Laufzeit (Abschreibung, Roche-Vertrag). Der Pilotvertrag der Kundensicht läuft 1 Jahr mit kostenlosem Rückbau: Für diesen Fall ist die Investition nicht gedeckt. Holzofen bleibt im Haus |
 
 **Hardwarekosten:** Abgeglichen. `CustomerView_Joel.md` rechnet ebenfalls mit **258'000 CHF Hardware** und **290'000 CHF** gesamt für 8 kW (vorher 142'000 + 20'000 CHF ohne Quelle).
 
@@ -242,50 +257,53 @@ In allen drei Spalten sind alle Rechenstunden verkauft. Diese Bandbreite deckt d
 
 | Was | Bei wem | Wirkung |
 |---|---|---|
-| Bezahltes Winterkontingent für einen zulässigen Workflow: Menge, Preis, Laufzeit | Gespräch mit einem ersten Kunden | grösster Hebel (±10'400 CHF pro 10 % Absatz, ±13'600 CHF pro 10 Rappen, bis 30'700 CHF bei der Festbuchung) |
-| Leerlauf, Standby und Startzeit am L4-Server messen | eigener Testaufbau | mit Abschalten +28'200 CHF (350 W) bis +30'500 CHF (100 W); wichtiger ist, ob das Abschalten in der Praxis klappt, sonst +20'900 CHF |
+| Kunden für die übrigen 40 %: Menge, Preis, Bereitschaft zu Unterbruch und Winterlieferung | Hochschulen, Forschungsgruppen, Rendering, KI-Startups | grösster Hebel (bis 19'200 CHF zwischen 0,55 CHF und Spot, ±10'900 CHF pro 10 % Absatz) |
+| Roche: Menge, Preis, Laufzeit, Lieferung nach Wärmeprofil | Gespräch mit Roche | ±6'800 CHF pro 5 Rappen; ohne festen Preis −11'800 CHF |
+| Leerlauf, Standby und Startzeit am L4-Server messen | eigener Testaufbau | mit Abschalten +36'100 CHF (100 W) bis +33'700 CHF (350 W); wichtiger ist, ob das Abschalten in der Praxis klappt, sonst +26'100 CHF |
 | Server-Konfiguration 8× L4, Schweizer Preis inkl. Lieferung | Gigabyte-/Supermicro-Händler | ±7'200 CHF/Jahr |
-| Finanzierung: Anteil Kredit und Eigenkapital, Zinssatz | Hausbank, Investoren | rund 2'000 CHF/Jahr pro Prozentpunkt |
-| Versicherung (Inventar, Elektronik, Haftpflicht, Cyber) | Zurich, Mobiliar, AXA, Helvetia | ±1'500 CHF/Jahr |
-| Einbau | Heizungsinstallateur Basel | ±1'000 CHF/Jahr |
+| Finanzierung: Anteil Kredit und Eigenkapital, Zinssatz | Hausbank, Investoren | rund 1'900 CHF/Jahr pro Prozentpunkt |
+| Versicherung (Inventar, Elektronik, Haftpflicht, Cyber) | Zurich, Mobiliar, AXA, Helvetia | ±1'000 CHF/Jahr |
+| Einbau | Heizungsinstallateur Basel | ±700 CHF/Jahr |
 
 ## 8. Zusage am Vortag und Flotte mit Sportbad (Stand 21.11.2026)
 
 **Kostenposition Fehlmenge** (`src/wirtschaft.py`):
-Fehlmenge CHF = nicht gelieferte, zugesagte Server-h × 8 Karten × Vertragspreis × 50 % Gutschrift × (1 + Kostensteigerung)^(t−1).
+Fehlmenge CHF = nicht gelieferte, zugesagte Server-h × 8 Karten × Roche-Preis × 50 % Gutschrift × (1 + Kostensteigerung)^(t−1).
 Die fehlende Stunde wird nicht bezahlt. Zusätzlich gibt es 50 % Gutschrift. Das ist eine Schätzung: AWS EC2 schreibt je nach Ausfall 10, 30 oder 100 % der Monatsrechnung gut. Die Position ist vor Steuer abzugsfähig.
 
-**Referenzhaus mit Zusage** (`src/scheduler/zusage.py`, `daten/ergebnisse/zusage_8_spot.json`). Diese Auswertung gibt es für das Einzelhaus nur im Idealmodell; entscheidend ist die Differenz.
+**Referenzhaus mit Zusage an Roche** (`src/scheduler/zusage.py`, `daten/ergebnisse/zusage_8_spot.json`). Diese Auswertung gibt es für das Einzelhaus nur im Idealmodell; entscheidend ist die Differenz.
 
-| | ohne Zusage (Annahme 60 % fest) | mit Zusage am Vortag |
+| | ohne Zusage (Annahme 60 % Roche) | mit Zusage am Vortag |
 |---|---|---|
 | Zusagbar | – | 93 % der Server-h im ganzen Jahr, **92 % im Auswertungshalbjahr** Juli–Dezember (Sicherheitsfaktor 0,95, kalibriert auf Januar–Juni) |
-| Tatsächlich fest gebucht | 60 % | 59,8 % |
-| Fehlmenge | 0 | 57 Server-h pro Jahr an einem Tag, Gutschrift 138 CHF im 1. Jahr |
-| **Ergebnis pro Jahr (Idealmodell)** | **+34'543 CHF** | **+34'276 CHF** |
+| Tatsächlich an Roche verkauft | 60 % | 59,8 % |
+| Fehlmenge | 0 | 57 Server-h pro Jahr an einem Tag, Gutschrift 115 CHF im 1. Jahr |
+| **Ergebnis pro Jahr (Idealmodell)** | **+40'400 CHF** | **+40'300 CHF** |
 
-Die Zusage kostet rund 270 CHF pro Jahr. Der Betrag ist so klein, weil der Kunde im Modell nur 64 % der zugesagten Menge abnimmt. Bucht er mehr, wächst die Fehlmenge. Kalibrierung und Auswertung stützen sich auf je ein Halbjahr eines einzigen Wetterjahrs.
+Die Zusage kostet rund 130 CHF pro Jahr. Der Betrag ist so klein, weil Roche im Modell nur 64 % der zugesagten Menge abnimmt. Bucht Roche mehr, wächst die Fehlmenge. Kalibrierung und Auswertung stützen sich auf je ein Halbjahr eines einzigen Wetterjahrs.
 
 **Flotte: 20 Häuser + Sportbad St. Jakob im Abschaltmodell** (`src/scheduler/flotte.py --abschalten`, `daten/ergebnisse/flotte_abschalten.json`). Die Kosten des Bads sind eine Schätzung: kein neuer Speicher (das Becken speichert), Einbau 9'000 CHF pro 8 Server wie im Haus, sonst gleiche Kostensätze. Die Rechnung enthält den gesamten Strom einschliesslich Leerlauf, Standby, Starts und Migration.
 
 | | Investition | Ergebnis pro Jahr «Nur Jobs mit Frist» (Alibaba-Nachfrage) | Ergebnis pro Jahr «Genug Aufträge» |
 |---|---|---|---|
-| 20 Häuser ohne Bad | 5,80 Mio. CHF | **−238'600 CHF** | +614'600 CHF |
-| 20 Häuser + Bad mit 50 Servern | 7,60 Mio. CHF | **−172'000 CHF** | +737'000 CHF |
+| 20 Häuser ohne Bad | 5,80 Mio. CHF | **−172'100 CHF** | +727'700 CHF |
+| 20 Häuser + Bad mit 50 Servern | 7,60 Mio. CHF | **−78'600 CHF** | +880'000 CHF |
 
-- Das Bad mit 50 Servern kostet rund 1,8 Mio. CHF und bringt der Flotte **+66'600 CHF pro Jahr** bei knapper Nachfrage und +122'500 CHF bei genug Aufträgen. 50 Server sind die Vergleichsgrösse aus dem Idealmodell; das Optimum im Abschaltmodell ist nicht gesucht.
-- Mit Zusage am Vortag (genug Aufträge): 610'000 statt 614'600 CHF ohne Bad, 732'200 statt 737'000 CHF mit Bad. Zusagbar sind 91 % der Stunden (Auswertungshalbjahr: 89 % ohne, 90 % mit Bad).
-- Bei knapper Nachfrage fehlen die Aufträge, nicht die Wärme. Der Router verschiebt Arbeit, er erzeugt keine neue. Darum hängt das Geschäft am Absatz (Kurzfassung, Abschnitt 5).
+- Das Bad mit 50 Servern kostet rund 1,8 Mio. CHF und bringt der Flotte **+93'500 CHF pro Jahr** bei knapper Nachfrage und +152'400 CHF bei genug Aufträgen. Im Sommer übernimmt es die Aufträge, für die die Häuser keine Wärme brauchen: Statt 194'900 werden nur noch 30'200 Server-Stunden abgegeben. 50 Server sind die Vergleichsgrösse aus dem Idealmodell; das Optimum im Abschaltmodell ist nicht gesucht.
+- Mit Zusage am Vortag (genug Aufträge): 725'500 statt 727'700 CHF ohne Bad, 877'700 statt 880'000 CHF mit Bad. Zusagbar sind 91 % der Stunden (Auswertungshalbjahr: 89 % ohne, 90 % mit Bad).
+- Bei knapper Nachfrage fehlen die Aufträge im Winter, nicht die Wärme. Der Router verschiebt Arbeit zwischen Standorten, aber nicht vom Sommer in den Winter, und er erzeugt keine neue. Die Häuser sind dann nur zu 28 % ausgelastet. Darum hängt das Geschäft am Absatz der Winterstunden (Kurzfassung, Abschnitt 5).
 
 **Zum Vergleich: dieselbe Flotte im Idealmodell des Case** (`daten/ergebnisse/flotte.json`):
 
 | | Investition | «Nur Jobs mit Frist» | «Genug Aufträge» |
 |---|---|---|---|
-| 20 Häuser ohne Bad | 5,80 Mio. CHF | −176'600 CHF | +690'500 CHF |
-| 20 Häuser + Bad mit 50 Servern | 7,60 Mio. CHF | −101'400 CHF | +851'600 CHF |
-| 20 Häuser + Bad mit 170 Servern (Senkenregel) | 11,90 Mio. CHF | −1'066'700 CHF | +1'203'700 CHF |
+| 20 Häuser ohne Bad | 5,80 Mio. CHF | −108'700 CHF | +807'900 CHF |
+| 20 Häuser + Bad mit 50 Servern | 7,60 Mio. CHF | −6'200 CHF | +1'001'100 CHF |
+| 20 Häuser + Bad mit 170 Servern (Senkenregel) | 11,90 Mio. CHF | −965'500 CHF | +1'427'600 CHF |
 
-Die Firmenrechnung über 10 Jahre mit Ausbauplan, Fixkosten, Förderung und Finanzierung steht in `FIRMA.md`.
+Auch mit den neuen Preisen bleibt 50 Server die beste Badgrösse bei knapper Nachfrage (Suche über 10–80 Server).
+
+Die Firmenrechnung über 10 Jahre mit Ausbauplan, Fixkosten, Förderung und Finanzierung steht in `FIRMA.md` (noch mit den alten Preisen).
 
 ## Quellen
 

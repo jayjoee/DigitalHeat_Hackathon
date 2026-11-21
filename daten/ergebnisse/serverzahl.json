@@ -65,20 +65,20 @@
    "quelle": "Schätzung: SARON ≈ 0 % + Bankmarge; Unternehmenskredite Euroraum 3,8 % (Bundesbank)"
   },
   "vertragspreis_chf_karte_h": {
-   "wert": 0.6,
-   "quelle": "Schweizer Cloud für Kunden mit Datenstandort Schweiz (Pharma, Banken, Spitäler): rund 12 % unter Schweizer GPU-Clouds (Hikube ≈ 0,68 CHF, Everyware 2,13 CHF pro L4-h); vorsichtiger Fall 0,50 CHF (PHARMA_SICHT.md, KOSTEN_DH.md)"
+   "wert": 0.5,
+   "quelle": "Ankerkunde (Roche) mit Mengenrabatt: fester Preis über 5 Jahre für den fest gebuchten Anteil. Unbestätigter Zielpreis für öffentliche bzw. beim Kunden ausreichend anonymisierte und freigegebene L4-Aufträge; kein Confidential-Computing- oder Forschungsgeheimnis-Aufschlag. US-Clouds mit Vertrag 0,53–0,55 CHF; Zahlungsbereitschaft und geeignete Nachfrage noch zu belegen (L4_ANGEBOT.md, PHARMA_SICHT.md, KOSTEN_DH.md)."
   },
   "anteil_fest_gebucht": {
    "wert": 0.6,
-   "quelle": "Schätzung: Cloud-Kunden binden im Median 42 %, Ziel 70–80 % (FinOps-Vergleiche)"
+   "quelle": "Teamannahme: Ankerkunde (Roche) kauft 60 % der Server-Stunden. Vergleich: Cloud-Kunden binden im Median 42 %, Ziel 70–80 % (FinOps-Vergleiche)"
   },
   "spotpreis_chf_karte_h": {
-   "wert": 0.294,
-   "quelle": "Füllaufträge zum L4-Spot-Preis (AWS g6 Spot 0,35–0,45 $ = 0,29–0,38 CHF)"
+   "wert": 0.55,
+   "quelle": "Übrige Stunden an Kunden ohne Mindestmenge (unterbrechbar, wärmegeführt, kurze Laufzeit). Teamannahme, unter der günstigsten Schweizer GPU-Cloud (Hikube ≈ 0,68 CHF) und auf Höhe US-Clouds mit Vertrag (0,53–0,55 CHF). Untergrenze L4-Spot 0,29–0,38 CHF (AWS g6 Spot 0,35–0,45 $). KOSTEN_DH.md"
   },
   "spot_preisverfall": {
    "wert": 0.1,
-   "quelle": "Annahme: Spot-Preis sinkt 10 % pro Jahr; H100-Index −23 % in einem Jahr (Silicon Data)"
+   "quelle": "Annahme: Preis der übrigen Stunden sinkt 10 % pro Jahr (jährliche Neuverhandlung); H100-Index −23 % in einem Jahr (Silicon Data). Der Preis des Ankerkunden bleibt fest."
   },
   "plattform_anteil": {
    "wert": 0.05,
@@ -90,7 +90,7 @@
   },
   "waermepreis_haushalt_chf_kwh": {
    "wert": 0.0,
-   "quelle": "Gratiswärme im Öl-Pilot (CustomerView_Joel.md)"
+   "quelle": "Gratiswärme im Pilot (ehemalige Öl-Häuser, Holzofen als Reserve; CustomerView_Joel.md)"
   },
   "gpu_preis_chf": {
    "wert": 2100,
@@ -175,6 +175,66 @@
   "zufallssaat": {
    "wert": 2025,
    "quelle": "fest, damit jeder Lauf dieselben Ankünfte erzeugt"
+  },
+  "prognose_modell": {
+   "wert": "ecmwf_ifs025",
+   "quelle": "Open-Meteo Previous Runs API, ECMWF IFS 0,25°, Lauf alle 6 h (open-meteo.com/en/docs/ecmwf-api); 2025: previous_day1 MAE 0,84 °C, previous_day2 0,95 °C gegen Ist (daten/roh/openmeteo_prognose)"
+  },
+  "prognose_verzug_h": {
+   "wert": 8,
+   "quelle": "Schätzung, konservativ: ECMWF-Echtzeitverteilung einige Stunden nach Laufbeginn + 2 h Open-Data-Verzug (open-meteo.com/en/docs/ecmwf-api); Lauf spätestens Zielstunde − N × 24 h angenommen"
+  },
+  "entscheid_uhr_lokal": {
+   "wert": 12,
+   "quelle": "Design-Doc: Zusage um 12 Uhr Ortszeit Basel am Vortag (wie Day-ahead-Strommarkt)"
+  },
+  "zusage_max_fehltage": {
+   "wert": 0.05,
+   "quelle": "Design-Doc: höchstens 5 % der Tage mit Fehlmenge"
+  },
+  "migration_min": {
+   "wert": 0.03,
+   "quelle": "Gemessen 21.11.2026 am Embedding-Job (M1 Pro): Neustart aus Checkpoint bis rechenbereit 0,28 s (5 Läufe) + laufenden Block (128 Texte) fertig rechnen bis 1,42 s = 1,7 s mit 6 Threads; mit 1 Thread SIGTERM bis Checkpoint 6,4 s (messungen/vektorvergleich.json). Ohne Übertragung von Checkpoint und Modell über das Netz zwischen Standorten"
+  },
+  "flotte_haeuser": {
+   "wert": 20,
+   "quelle": "Arbeitsannahme Design-Doc; vorerst 20 × Referenzhaus (TODOS.md, D3)"
+  },
+  "bad_jahresbedarf_kwh": {
+   "wert": 650000,
+   "quelle": "Schätzung ±30 %: VHF/EnergieSchweiz-Leitfaden 2018, 430–480 kWh/m² pro 120-Tage-Saison (S. 156) × 1'050 m² (Annahme 50 m × 21 m, 8 Bahnen) × 163/123 Betriebstage; Sportbad St. Jakob (daten/HALLENBAD.md)"
+  },
+  "bad_monatsanteile": {
+   "wert": [
+    0,
+    0,
+    0,
+    0.04,
+    0.238,
+    0.138,
+    0.162,
+    0.156,
+    0.218,
+    0.048,
+    0,
+    0
+   ],
+   "quelle": "Schätzung: Mittel aus Betriebstagen und (24 °C − Tagesmittel), Basel 2025 (daten/HALLENBAD.md)"
+  },
+  "bad_betrieb_2025": {
+   "wert": [
+    "2025-04-26",
+    "2025-10-05"
+   ],
+   "quelle": "bs.ch, Medienmitteilung ED 3.10.2025 (daten/HALLENBAD.md, Q2)"
+  },
+  "bad_speicher_kwh": {
+   "wert": 1200,
+   "quelle": "Schätzung: Becken als Speicher, 1'050 m² × 2 m (Annahme Mindesttiefe Wettkampfbecken) × 1,163 kWh/(m³·K) × 0,5 K zulässige Schwankung"
+  },
+  "sla_gutschrift_anteil": {
+   "wert": 0.5,
+   "quelle": "Schätzung: fehlende Stunde unbezahlt + 50 % des Vertragspreises gutgeschrieben; AWS EC2 SLA schreibt 10/30/100 % der Monatsrechnung gut (aws.amazon.com/compute/sla)"
   }
  },
  "ergebnisse": [
@@ -201,11 +261,11 @@
    "waermewert_chf": 812,
    "break_even_chf_pro_server_h": 0.2261,
    "dh_investition_chf": 46765,
-   "dh_rechenerloes_jahr1_chf": 27506,
-   "dh_gewinn_nach_steuer_mittel_chf": 8895,
-   "dh_ergebnis_pro_jahr_chf": 7573,
-   "dh_break_even_chf_karte_h": 0.3485,
-   "dh_break_even_chf_server_h": 2.788,
+   "dh_rechenerloes_jahr1_chf": 29948,
+   "dh_gewinn_nach_steuer_mittel_chf": 10090,
+   "dh_ergebnis_pro_jahr_chf": 8807,
+   "dh_break_even_chf_karte_h": 0.2085,
+   "dh_break_even_chf_server_h": 1.668,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 5.0
@@ -234,11 +294,11 @@
    "waermewert_chf": 1361,
    "break_even_chf_pro_server_h": 0.2261,
    "dh_investition_chf": 81530,
-   "dh_rechenerloes_jahr1_chf": 46092,
-   "dh_gewinn_nach_steuer_mittel_chf": 16646,
-   "dh_ergebnis_pro_jahr_chf": 14307,
-   "dh_break_even_chf_karte_h": 0.3163,
-   "dh_break_even_chf_server_h": 2.53,
+   "dh_rechenerloes_jahr1_chf": 50184,
+   "dh_gewinn_nach_steuer_mittel_chf": 18649,
+   "dh_ergebnis_pro_jahr_chf": 16375,
+   "dh_break_even_chf_karte_h": 0.1763,
+   "dh_break_even_chf_server_h": 1.41,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 9.99
@@ -267,11 +327,11 @@
    "waermewert_chf": 1892,
    "break_even_chf_pro_server_h": 0.2261,
    "dh_investition_chf": 116295,
-   "dh_rechenerloes_jahr1_chf": 64081,
-   "dh_gewinn_nach_steuer_mittel_chf": 23948,
-   "dh_ergebnis_pro_jahr_chf": 20591,
-   "dh_break_even_chf_karte_h": 0.3063,
-   "dh_break_even_chf_server_h": 2.45,
+   "dh_rechenerloes_jahr1_chf": 69770,
+   "dh_gewinn_nach_steuer_mittel_chf": 26732,
+   "dh_ergebnis_pro_jahr_chf": 23466,
+   "dh_break_even_chf_karte_h": 0.1663,
+   "dh_break_even_chf_server_h": 1.33,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 14.99
@@ -300,11 +360,11 @@
    "waermewert_chf": 2411,
    "break_even_chf_pro_server_h": 0.2261,
    "dh_investition_chf": 151060,
-   "dh_rechenerloes_jahr1_chf": 81680,
-   "dh_gewinn_nach_steuer_mittel_chf": 30957,
-   "dh_ergebnis_pro_jahr_chf": 26582,
-   "dh_break_even_chf_karte_h": 0.3025,
-   "dh_break_even_chf_server_h": 2.42,
+   "dh_rechenerloes_jahr1_chf": 88931,
+   "dh_gewinn_nach_steuer_mittel_chf": 34506,
+   "dh_ergebnis_pro_jahr_chf": 30247,
+   "dh_break_even_chf_karte_h": 0.1625,
+   "dh_break_even_chf_server_h": 1.3,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 19.98
@@ -333,11 +393,11 @@
    "waermewert_chf": 2902,
    "break_even_chf_pro_server_h": 0.2261,
    "dh_investition_chf": 185825,
-   "dh_rechenerloes_jahr1_chf": 98309,
-   "dh_gewinn_nach_steuer_mittel_chf": 37238,
-   "dh_ergebnis_pro_jahr_chf": 31844,
-   "dh_break_even_chf_karte_h": 0.3039,
-   "dh_break_even_chf_server_h": 2.431,
+   "dh_rechenerloes_jahr1_chf": 107037,
+   "dh_gewinn_nach_steuer_mittel_chf": 41510,
+   "dh_ergebnis_pro_jahr_chf": 36255,
+   "dh_break_even_chf_karte_h": 0.1639,
+   "dh_break_even_chf_server_h": 1.311,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 24.98
@@ -366,11 +426,11 @@
    "waermewert_chf": 3306,
    "break_even_chf_pro_server_h": 0.2261,
    "dh_investition_chf": 220590,
-   "dh_rechenerloes_jahr1_chf": 111992,
-   "dh_gewinn_nach_steuer_mittel_chf": 41308,
-   "dh_ergebnis_pro_jahr_chf": 34889,
-   "dh_break_even_chf_karte_h": 0.3152,
-   "dh_break_even_chf_server_h": 2.522,
+   "dh_rechenerloes_jahr1_chf": 121935,
+   "dh_gewinn_nach_steuer_mittel_chf": 46175,
+   "dh_ergebnis_pro_jahr_chf": 39914,
+   "dh_break_even_chf_karte_h": 0.1751,
+   "dh_break_even_chf_server_h": 1.401,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 29.98
@@ -399,11 +459,11 @@
    "waermewert_chf": 3618,
    "break_even_chf_pro_server_h": 0.2261,
    "dh_investition_chf": 255355,
-   "dh_rechenerloes_jahr1_chf": 122569,
-   "dh_gewinn_nach_steuer_mittel_chf": 43046,
-   "dh_ergebnis_pro_jahr_chf": 35597,
-   "dh_break_even_chf_karte_h": 0.3345,
-   "dh_break_even_chf_server_h": 2.676,
+   "dh_rechenerloes_jahr1_chf": 133450,
+   "dh_gewinn_nach_steuer_mittel_chf": 48372,
+   "dh_ergebnis_pro_jahr_chf": 41096,
+   "dh_break_even_chf_karte_h": 0.1944,
+   "dh_break_even_chf_server_h": 1.555,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 34.97
@@ -432,11 +492,11 @@
    "waermewert_chf": 3861,
    "break_even_chf_pro_server_h": 0.2261,
    "dh_investition_chf": 290120,
-   "dh_rechenerloes_jahr1_chf": 130802,
-   "dh_gewinn_nach_steuer_mittel_chf": 43025,
-   "dh_ergebnis_pro_jahr_chf": 34543,
-   "dh_break_even_chf_karte_h": 0.3585,
-   "dh_break_even_chf_server_h": 2.868,
+   "dh_rechenerloes_jahr1_chf": 142414,
+   "dh_gewinn_nach_steuer_mittel_chf": 48709,
+   "dh_ergebnis_pro_jahr_chf": 40411,
+   "dh_break_even_chf_karte_h": 0.2184,
+   "dh_break_even_chf_server_h": 1.747,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 39.97
@@ -465,11 +525,11 @@
    "waermewert_chf": 4026,
    "break_even_chf_pro_server_h": 0.2261,
    "dh_investition_chf": 324885,
-   "dh_rechenerloes_jahr1_chf": 136424,
-   "dh_gewinn_nach_steuer_mittel_chf": 41044,
-   "dh_ergebnis_pro_jahr_chf": 31525,
-   "dh_break_even_chf_karte_h": 0.3887,
-   "dh_break_even_chf_server_h": 3.11,
+   "dh_rechenerloes_jahr1_chf": 148536,
+   "dh_gewinn_nach_steuer_mittel_chf": 46973,
+   "dh_ergebnis_pro_jahr_chf": 37646,
+   "dh_break_even_chf_karte_h": 0.2485,
+   "dh_break_even_chf_server_h": 1.988,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 44.96
@@ -498,11 +558,11 @@
    "waermewert_chf": 4123,
    "break_even_chf_pro_server_h": 0.2261,
    "dh_investition_chf": 359650,
-   "dh_rechenerloes_jahr1_chf": 139726,
-   "dh_gewinn_nach_steuer_mittel_chf": 37321,
-   "dh_ergebnis_pro_jahr_chf": 26760,
-   "dh_break_even_chf_karte_h": 0.4249,
-   "dh_break_even_chf_server_h": 3.399,
+   "dh_rechenerloes_jahr1_chf": 152130,
+   "dh_gewinn_nach_steuer_mittel_chf": 43394,
+   "dh_ergebnis_pro_jahr_chf": 33030,
+   "dh_break_even_chf_karte_h": 0.2846,
+   "dh_break_even_chf_server_h": 2.277,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 49.96
@@ -531,11 +591,11 @@
    "waermewert_chf": 4153,
    "break_even_chf_pro_server_h": 0.2262,
    "dh_investition_chf": 394415,
-   "dh_rechenerloes_jahr1_chf": 140829,
-   "dh_gewinn_nach_steuer_mittel_chf": 31948,
-   "dh_ergebnis_pro_jahr_chf": 20342,
-   "dh_break_even_chf_karte_h": 0.4679,
-   "dh_break_even_chf_server_h": 3.743,
+   "dh_rechenerloes_jahr1_chf": 153332,
+   "dh_gewinn_nach_steuer_mittel_chf": 38069,
+   "dh_ergebnis_pro_jahr_chf": 26661,
+   "dh_break_even_chf_karte_h": 0.3276,
+   "dh_break_even_chf_server_h": 2.621,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 54.95
@@ -564,11 +624,11 @@
    "waermewert_chf": 4153,
    "break_even_chf_pro_server_h": 0.2263,
    "dh_investition_chf": 429180,
-   "dh_rechenerloes_jahr1_chf": 140971,
-   "dh_gewinn_nach_steuer_mittel_chf": 25854,
-   "dh_ergebnis_pro_jahr_chf": 13202,
-   "dh_break_even_chf_karte_h": 0.5143,
-   "dh_break_even_chf_server_h": 4.114,
+   "dh_rechenerloes_jahr1_chf": 153486,
+   "dh_gewinn_nach_steuer_mittel_chf": 31980,
+   "dh_ergebnis_pro_jahr_chf": 19527,
+   "dh_break_even_chf_karte_h": 0.374,
+   "dh_break_even_chf_server_h": 2.992,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 59.95
@@ -597,11 +657,11 @@
    "waermewert_chf": 4154,
    "break_even_chf_pro_server_h": 0.2264,
    "dh_investition_chf": 463945,
-   "dh_rechenerloes_jahr1_chf": 141047,
-   "dh_gewinn_nach_steuer_mittel_chf": 19710,
-   "dh_ergebnis_pro_jahr_chf": 6010,
-   "dh_break_even_chf_karte_h": 0.561,
-   "dh_break_even_chf_server_h": 4.488,
+   "dh_rechenerloes_jahr1_chf": 153568,
+   "dh_gewinn_nach_steuer_mittel_chf": 25839,
+   "dh_ergebnis_pro_jahr_chf": 12339,
+   "dh_break_even_chf_karte_h": 0.4207,
+   "dh_break_even_chf_server_h": 3.366,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 64.95
@@ -630,11 +690,11 @@
    "waermewert_chf": 812,
    "break_even_chf_pro_server_h": 0.2261,
    "dh_investition_chf": 46765,
-   "dh_rechenerloes_jahr1_chf": 27506,
-   "dh_gewinn_nach_steuer_mittel_chf": 8895,
-   "dh_ergebnis_pro_jahr_chf": 7573,
-   "dh_break_even_chf_karte_h": 0.3485,
-   "dh_break_even_chf_server_h": 2.788,
+   "dh_rechenerloes_jahr1_chf": 29948,
+   "dh_gewinn_nach_steuer_mittel_chf": 10090,
+   "dh_ergebnis_pro_jahr_chf": 8807,
+   "dh_break_even_chf_karte_h": 0.2085,
+   "dh_break_even_chf_server_h": 1.668,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 5.0
@@ -663,11 +723,11 @@
    "waermewert_chf": 1361,
    "break_even_chf_pro_server_h": 0.2261,
    "dh_investition_chf": 81530,
-   "dh_rechenerloes_jahr1_chf": 46092,
-   "dh_gewinn_nach_steuer_mittel_chf": 16646,
-   "dh_ergebnis_pro_jahr_chf": 14307,
-   "dh_break_even_chf_karte_h": 0.3163,
-   "dh_break_even_chf_server_h": 2.53,
+   "dh_rechenerloes_jahr1_chf": 50184,
+   "dh_gewinn_nach_steuer_mittel_chf": 18649,
+   "dh_ergebnis_pro_jahr_chf": 16375,
+   "dh_break_even_chf_karte_h": 0.1763,
+   "dh_break_even_chf_server_h": 1.41,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 9.99
@@ -696,11 +756,11 @@
    "waermewert_chf": 1892,
    "break_even_chf_pro_server_h": 0.2261,
    "dh_investition_chf": 116295,
-   "dh_rechenerloes_jahr1_chf": 64081,
-   "dh_gewinn_nach_steuer_mittel_chf": 23948,
-   "dh_ergebnis_pro_jahr_chf": 20591,
-   "dh_break_even_chf_karte_h": 0.3063,
-   "dh_break_even_chf_server_h": 2.45,
+   "dh_rechenerloes_jahr1_chf": 69770,
+   "dh_gewinn_nach_steuer_mittel_chf": 26732,
+   "dh_ergebnis_pro_jahr_chf": 23466,
+   "dh_break_even_chf_karte_h": 0.1663,
+   "dh_break_even_chf_server_h": 1.33,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 14.99
@@ -729,11 +789,11 @@
    "waermewert_chf": 2411,
    "break_even_chf_pro_server_h": 0.2261,
    "dh_investition_chf": 151060,
-   "dh_rechenerloes_jahr1_chf": 81678,
-   "dh_gewinn_nach_steuer_mittel_chf": 30955,
-   "dh_ergebnis_pro_jahr_chf": 26581,
-   "dh_break_even_chf_karte_h": 0.3025,
-   "dh_break_even_chf_server_h": 2.42,
+   "dh_rechenerloes_jahr1_chf": 88929,
+   "dh_gewinn_nach_steuer_mittel_chf": 34505,
+   "dh_ergebnis_pro_jahr_chf": 30245,
+   "dh_break_even_chf_karte_h": 0.1625,
+   "dh_break_even_chf_server_h": 1.3,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 19.98
@@ -762,11 +822,11 @@
    "waermewert_chf": 2902,
    "break_even_chf_pro_server_h": 0.2261,
    "dh_investition_chf": 185825,
-   "dh_rechenerloes_jahr1_chf": 98309,
-   "dh_gewinn_nach_steuer_mittel_chf": 37238,
-   "dh_ergebnis_pro_jahr_chf": 31843,
-   "dh_break_even_chf_karte_h": 0.3039,
-   "dh_break_even_chf_server_h": 2.431,
+   "dh_rechenerloes_jahr1_chf": 107037,
+   "dh_gewinn_nach_steuer_mittel_chf": 41510,
+   "dh_ergebnis_pro_jahr_chf": 36254,
+   "dh_break_even_chf_karte_h": 0.1639,
+   "dh_break_even_chf_server_h": 1.311,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 24.98
@@ -795,11 +855,11 @@
    "waermewert_chf": 3306,
    "break_even_chf_pro_server_h": 0.2261,
    "dh_investition_chf": 220590,
-   "dh_rechenerloes_jahr1_chf": 111991,
-   "dh_gewinn_nach_steuer_mittel_chf": 41307,
-   "dh_ergebnis_pro_jahr_chf": 34888,
-   "dh_break_even_chf_karte_h": 0.3152,
-   "dh_break_even_chf_server_h": 2.522,
+   "dh_rechenerloes_jahr1_chf": 121933,
+   "dh_gewinn_nach_steuer_mittel_chf": 46173,
+   "dh_ergebnis_pro_jahr_chf": 39912,
+   "dh_break_even_chf_karte_h": 0.1752,
+   "dh_break_even_chf_server_h": 1.402,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 29.98
@@ -828,11 +888,11 @@
    "waermewert_chf": 3618,
    "break_even_chf_pro_server_h": 0.2261,
    "dh_investition_chf": 255355,
-   "dh_rechenerloes_jahr1_chf": 122558,
-   "dh_gewinn_nach_steuer_mittel_chf": 43038,
-   "dh_ergebnis_pro_jahr_chf": 35589,
-   "dh_break_even_chf_karte_h": 0.3345,
-   "dh_break_even_chf_server_h": 2.676,
+   "dh_rechenerloes_jahr1_chf": 133438,
+   "dh_gewinn_nach_steuer_mittel_chf": 48364,
+   "dh_ergebnis_pro_jahr_chf": 41088,
+   "dh_break_even_chf_karte_h": 0.1944,
+   "dh_break_even_chf_server_h": 1.555,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 34.97
@@ -861,11 +921,11 @@
    "waermewert_chf": 3861,
    "break_even_chf_pro_server_h": 0.2261,
    "dh_investition_chf": 290120,
-   "dh_rechenerloes_jahr1_chf": 130781,
-   "dh_gewinn_nach_steuer_mittel_chf": 43009,
-   "dh_ergebnis_pro_jahr_chf": 34527,
-   "dh_break_even_chf_karte_h": 0.3586,
-   "dh_break_even_chf_server_h": 2.869,
+   "dh_rechenerloes_jahr1_chf": 142392,
+   "dh_gewinn_nach_steuer_mittel_chf": 48693,
+   "dh_ergebnis_pro_jahr_chf": 40395,
+   "dh_break_even_chf_karte_h": 0.2185,
+   "dh_break_even_chf_server_h": 1.748,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 39.97
@@ -894,11 +954,11 @@
    "waermewert_chf": 4026,
    "break_even_chf_pro_server_h": 0.2261,
    "dh_investition_chf": 324885,
-   "dh_rechenerloes_jahr1_chf": 136385,
-   "dh_gewinn_nach_steuer_mittel_chf": 41014,
-   "dh_ergebnis_pro_jahr_chf": 31495,
-   "dh_break_even_chf_karte_h": 0.3888,
-   "dh_break_even_chf_server_h": 3.11,
+   "dh_rechenerloes_jahr1_chf": 148493,
+   "dh_gewinn_nach_steuer_mittel_chf": 46941,
+   "dh_ergebnis_pro_jahr_chf": 37614,
+   "dh_break_even_chf_karte_h": 0.2487,
+   "dh_break_even_chf_server_h": 1.99,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 44.96
@@ -927,11 +987,11 @@
    "waermewert_chf": 4123,
    "break_even_chf_pro_server_h": 0.2261,
    "dh_investition_chf": 359650,
-   "dh_rechenerloes_jahr1_chf": 139670,
-   "dh_gewinn_nach_steuer_mittel_chf": 37279,
-   "dh_ergebnis_pro_jahr_chf": 26718,
-   "dh_break_even_chf_karte_h": 0.4251,
-   "dh_break_even_chf_server_h": 3.401,
+   "dh_rechenerloes_jahr1_chf": 152070,
+   "dh_gewinn_nach_steuer_mittel_chf": 43349,
+   "dh_ergebnis_pro_jahr_chf": 32985,
+   "dh_break_even_chf_karte_h": 0.2848,
+   "dh_break_even_chf_server_h": 2.278,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 49.96
@@ -960,11 +1020,11 @@
    "waermewert_chf": 4153,
    "break_even_chf_pro_server_h": 0.2261,
    "dh_investition_chf": 394415,
-   "dh_rechenerloes_jahr1_chf": 140730,
-   "dh_gewinn_nach_steuer_mittel_chf": 31874,
-   "dh_ergebnis_pro_jahr_chf": 20268,
-   "dh_break_even_chf_karte_h": 0.4683,
-   "dh_break_even_chf_server_h": 3.746,
+   "dh_rechenerloes_jahr1_chf": 153224,
+   "dh_gewinn_nach_steuer_mittel_chf": 37990,
+   "dh_ergebnis_pro_jahr_chf": 26582,
+   "dh_break_even_chf_karte_h": 0.328,
+   "dh_break_even_chf_server_h": 2.624,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 54.95
@@ -993,11 +1053,11 @@
    "waermewert_chf": 4153,
    "break_even_chf_pro_server_h": 0.2262,
    "dh_investition_chf": 429180,
-   "dh_rechenerloes_jahr1_chf": 140845,
-   "dh_gewinn_nach_steuer_mittel_chf": 25759,
-   "dh_ergebnis_pro_jahr_chf": 13107,
-   "dh_break_even_chf_karte_h": 0.5149,
-   "dh_break_even_chf_server_h": 4.119,
+   "dh_rechenerloes_jahr1_chf": 153349,
+   "dh_gewinn_nach_steuer_mittel_chf": 31880,
+   "dh_ergebnis_pro_jahr_chf": 19426,
+   "dh_break_even_chf_karte_h": 0.3746,
+   "dh_break_even_chf_server_h": 2.997,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 59.95
@@ -1026,11 +1086,11 @@
    "waermewert_chf": 4154,
    "break_even_chf_pro_server_h": 0.2262,
    "dh_investition_chf": 463945,
-   "dh_rechenerloes_jahr1_chf": 140865,
-   "dh_gewinn_nach_steuer_mittel_chf": 19573,
-   "dh_ergebnis_pro_jahr_chf": 5873,
-   "dh_break_even_chf_karte_h": 0.5618,
-   "dh_break_even_chf_server_h": 4.494,
+   "dh_rechenerloes_jahr1_chf": 153370,
+   "dh_gewinn_nach_steuer_mittel_chf": 25694,
+   "dh_ergebnis_pro_jahr_chf": 12194,
+   "dh_break_even_chf_karte_h": 0.4215,
+   "dh_break_even_chf_server_h": 3.372,
    "ankuenfte": {
     "jobs_a_pro_tag": null,
     "jobs_b_pro_tag": 64.95
@@ -1059,11 +1119,11 @@
    "waermewert_chf": 385,
    "break_even_chf_pro_server_h": 0.2261,
    "dh_investition_chf": 46765,
-   "dh_rechenerloes_jahr1_chf": 13036,
-   "dh_gewinn_nach_steuer_mittel_chf": -2261,
-   "dh_ergebnis_pro_jahr_chf": -3597,
-   "dh_break_even_chf_karte_h": 0.8326,
-   "dh_break_even_chf_server_h": 6.661,
+   "dh_rechenerloes_jahr1_chf": 14193,
+   "dh_gewinn_nach_steuer_mittel_chf": -1625,
+   "dh_ergebnis_pro_jahr_chf": -2941,
+   "dh_break_even_chf_karte_h": 0.6923,
+   "dh_break_even_chf_server_h": 5.538,
    "ankuenfte": {
     "jobs_a_pro_tag": 10.09,
     "jobs_b_pro_tag": 5.0
@@ -1092,11 +1152,11 @@
    "waermewert_chf": 706,
    "break_even_chf_pro_server_h": 0.2339,
    "dh_investition_chf": 81530,
-   "dh_rechenerloes_jahr1_chf": 25813,
-   "dh_gewinn_nach_steuer_mittel_chf": 1381,
-   "dh_ergebnis_pro_jahr_chf": -987,
-   "dh_break_even_chf_karte_h": 0.6337,
-   "dh_break_even_chf_server_h": 5.07,
+   "dh_rechenerloes_jahr1_chf": 28104,
+   "dh_gewinn_nach_steuer_mittel_chf": 2523,
+   "dh_ergebnis_pro_jahr_chf": 190,
+   "dh_break_even_chf_karte_h": 0.4934,
+   "dh_break_even_chf_server_h": 3.947,
    "ankuenfte": {
     "jobs_a_pro_tag": 20.18,
     "jobs_b_pro_tag": 9.99
@@ -1125,11 +1185,11 @@
    "waermewert_chf": 967,
    "break_even_chf_pro_server_h": 0.2437,
    "dh_investition_chf": 116295,
-   "dh_rechenerloes_jahr1_chf": 39285,
-   "dh_gewinn_nach_steuer_mittel_chf": 5335,
-   "dh_ergebnis_pro_jahr_chf": 1938,
-   "dh_break_even_chf_karte_h": 0.555,
-   "dh_break_even_chf_server_h": 4.44,
+   "dh_rechenerloes_jahr1_chf": 42772,
+   "dh_gewinn_nach_steuer_mittel_chf": 7042,
+   "dh_ergebnis_pro_jahr_chf": 3701,
+   "dh_break_even_chf_karte_h": 0.4147,
+   "dh_break_even_chf_server_h": 3.318,
    "ankuenfte": {
     "jobs_a_pro_tag": 30.27,
     "jobs_b_pro_tag": 14.99
@@ -1158,11 +1218,11 @@
    "waermewert_chf": 1192,
    "break_even_chf_pro_server_h": 0.2507,
    "dh_investition_chf": 151060,
-   "dh_rechenerloes_jahr1_chf": 52510,
-   "dh_gewinn_nach_steuer_mittel_chf": 9061,
-   "dh_ergebnis_pro_jahr_chf": 4639,
-   "dh_break_even_chf_karte_h": 0.5193,
-   "dh_break_even_chf_server_h": 4.154,
+   "dh_rechenerloes_jahr1_chf": 57172,
+   "dh_gewinn_nach_steuer_mittel_chf": 11343,
+   "dh_ergebnis_pro_jahr_chf": 6995,
+   "dh_break_even_chf_karte_h": 0.379,
+   "dh_break_even_chf_server_h": 3.032,
    "ankuenfte": {
     "jobs_a_pro_tag": 40.36,
     "jobs_b_pro_tag": 19.98
@@ -1191,11 +1251,11 @@
    "waermewert_chf": 1436,
    "break_even_chf_pro_server_h": 0.2546,
    "dh_investition_chf": 185825,
-   "dh_rechenerloes_jahr1_chf": 66458,
-   "dh_gewinn_nach_steuer_mittel_chf": 13330,
-   "dh_ergebnis_pro_jahr_chf": 7884,
-   "dh_break_even_chf_karte_h": 0.4915,
-   "dh_break_even_chf_server_h": 3.932,
+   "dh_rechenerloes_jahr1_chf": 72358,
+   "dh_gewinn_nach_steuer_mittel_chf": 16218,
+   "dh_ergebnis_pro_jahr_chf": 10866,
+   "dh_break_even_chf_karte_h": 0.3513,
+   "dh_break_even_chf_server_h": 2.81,
    "ankuenfte": {
     "jobs_a_pro_tag": 50.45,
     "jobs_b_pro_tag": 24.98
@@ -1224,11 +1284,11 @@
    "waermewert_chf": 1664,
    "break_even_chf_pro_server_h": 0.2567,
    "dh_investition_chf": 220590,
-   "dh_rechenerloes_jahr1_chf": 79119,
-   "dh_gewinn_nach_steuer_mittel_chf": 16632,
-   "dh_ergebnis_pro_jahr_chf": 10160,
-   "dh_break_even_chf_karte_h": 0.4826,
-   "dh_break_even_chf_server_h": 3.861,
+   "dh_rechenerloes_jahr1_chf": 86143,
+   "dh_gewinn_nach_steuer_mittel_chf": 20070,
+   "dh_ergebnis_pro_jahr_chf": 13710,
+   "dh_break_even_chf_karte_h": 0.3423,
+   "dh_break_even_chf_server_h": 2.738,
    "ankuenfte": {
     "jobs_a_pro_tag": 60.54,
     "jobs_b_pro_tag": 29.98
@@ -1257,11 +1317,11 @@
    "waermewert_chf": 1905,
    "break_even_chf_pro_server_h": 0.2582,
    "dh_investition_chf": 255355,
-   "dh_rechenerloes_jahr1_chf": 92397,
-   "dh_gewinn_nach_steuer_mittel_chf": 20398,
-   "dh_ergebnis_pro_jahr_chf": 12901,
-   "dh_break_even_chf_karte_h": 0.4723,
-   "dh_break_even_chf_server_h": 3.778,
+   "dh_rechenerloes_jahr1_chf": 100600,
+   "dh_gewinn_nach_steuer_mittel_chf": 24414,
+   "dh_ergebnis_pro_jahr_chf": 17046,
+   "dh_break_even_chf_karte_h": 0.332,
+   "dh_break_even_chf_server_h": 2.656,
    "ankuenfte": {
     "jobs_a_pro_tag": 70.62,
     "jobs_b_pro_tag": 34.97
@@ -1290,11 +1350,11 @@
    "waermewert_chf": 2148,
    "break_even_chf_pro_server_h": 0.2599,
    "dh_investition_chf": 290120,
-   "dh_rechenerloes_jahr1_chf": 106598,
-   "dh_gewinn_nach_steuer_mittel_chf": 24857,
-   "dh_ergebnis_pro_jahr_chf": 16335,
-   "dh_break_even_chf_karte_h": 0.4599,
-   "dh_break_even_chf_server_h": 3.679,
+   "dh_rechenerloes_jahr1_chf": 116061,
+   "dh_gewinn_nach_steuer_mittel_chf": 29489,
+   "dh_ergebnis_pro_jahr_chf": 21118,
+   "dh_break_even_chf_karte_h": 0.3196,
+   "dh_break_even_chf_server_h": 2.557,
    "ankuenfte": {
     "jobs_a_pro_tag": 80.71,
     "jobs_b_pro_tag": 39.97
@@ -1323,11 +1383,11 @@
    "waermewert_chf": 2359,
    "break_even_chf_pro_server_h": 0.2612,
    "dh_investition_chf": 324885,
-   "dh_rechenerloes_jahr1_chf": 119328,
-   "dh_gewinn_nach_steuer_mittel_chf": 28211,
-   "dh_ergebnis_pro_jahr_chf": 18664,
-   "dh_break_even_chf_karte_h": 0.457,
-   "dh_break_even_chf_server_h": 3.656,
+   "dh_rechenerloes_jahr1_chf": 129922,
+   "dh_gewinn_nach_steuer_mittel_chf": 33397,
+   "dh_ergebnis_pro_jahr_chf": 24018,
+   "dh_break_even_chf_karte_h": 0.3167,
+   "dh_break_even_chf_server_h": 2.534,
    "ankuenfte": {
     "jobs_a_pro_tag": 90.8,
     "jobs_b_pro_tag": 44.96
@@ -1356,11 +1416,11 @@
    "waermewert_chf": 2569,
    "break_even_chf_pro_server_h": 0.2622,
    "dh_investition_chf": 359650,
-   "dh_rechenerloes_jahr1_chf": 131732,
-   "dh_gewinn_nach_steuer_mittel_chf": 31321,
-   "dh_ergebnis_pro_jahr_chf": 20747,
-   "dh_break_even_chf_karte_h": 0.456,
-   "dh_break_even_chf_server_h": 3.648,
+   "dh_rechenerloes_jahr1_chf": 143426,
+   "dh_gewinn_nach_steuer_mittel_chf": 37045,
+   "dh_ergebnis_pro_jahr_chf": 26657,
+   "dh_break_even_chf_karte_h": 0.3157,
+   "dh_break_even_chf_server_h": 2.526,
    "ankuenfte": {
     "jobs_a_pro_tag": 100.89,
     "jobs_b_pro_tag": 49.96
@@ -1389,11 +1449,11 @@
    "waermewert_chf": 2770,
    "break_even_chf_pro_server_h": 0.2642,
    "dh_investition_chf": 394415,
-   "dh_rechenerloes_jahr1_chf": 146137,
-   "dh_gewinn_nach_steuer_mittel_chf": 35933,
-   "dh_ergebnis_pro_jahr_chf": 24335,
-   "dh_break_even_chf_karte_h": 0.4477,
-   "dh_break_even_chf_server_h": 3.582,
+   "dh_rechenerloes_jahr1_chf": 159111,
+   "dh_gewinn_nach_steuer_mittel_chf": 42284,
+   "dh_ergebnis_pro_jahr_chf": 30892,
+   "dh_break_even_chf_karte_h": 0.3074,
+   "dh_break_even_chf_server_h": 2.459,
    "ankuenfte": {
     "jobs_a_pro_tag": 110.98,
     "jobs_b_pro_tag": 54.95
@@ -1422,11 +1482,11 @@
    "waermewert_chf": 2949,
    "break_even_chf_pro_server_h": 0.2654,
    "dh_investition_chf": 429180,
-   "dh_rechenerloes_jahr1_chf": 158374,
-   "dh_gewinn_nach_steuer_mittel_chf": 38917,
-   "dh_ergebnis_pro_jahr_chf": 26293,
-   "dh_break_even_chf_karte_h": 0.4482,
-   "dh_break_even_chf_server_h": 3.586,
+   "dh_rechenerloes_jahr1_chf": 172434,
+   "dh_gewinn_nach_steuer_mittel_chf": 45800,
+   "dh_ergebnis_pro_jahr_chf": 33399,
+   "dh_break_even_chf_karte_h": 0.3079,
+   "dh_break_even_chf_server_h": 2.463,
    "ankuenfte": {
     "jobs_a_pro_tag": 121.07,
     "jobs_b_pro_tag": 59.95
@@ -1455,11 +1515,11 @@
    "waermewert_chf": 3120,
    "break_even_chf_pro_server_h": 0.267,
    "dh_investition_chf": 463945,
-   "dh_rechenerloes_jahr1_chf": 171595,
-   "dh_gewinn_nach_steuer_mittel_chf": 42640,
-   "dh_ergebnis_pro_jahr_chf": 28991,
-   "dh_break_even_chf_karte_h": 0.4455,
-   "dh_break_even_chf_server_h": 3.564,
+   "dh_rechenerloes_jahr1_chf": 186829,
+   "dh_gewinn_nach_steuer_mittel_chf": 50097,
+   "dh_ergebnis_pro_jahr_chf": 36690,
+   "dh_break_even_chf_karte_h": 0.3052,
+   "dh_break_even_chf_server_h": 2.442,
    "ankuenfte": {
     "jobs_a_pro_tag": 131.16,
     "jobs_b_pro_tag": 64.95
@@ -1488,11 +1548,11 @@
    "waermewert_chf": 385,
    "break_even_chf_pro_server_h": 0.2261,
    "dh_investition_chf": 46765,
-   "dh_rechenerloes_jahr1_chf": 13036,
-   "dh_gewinn_nach_steuer_mittel_chf": -2261,
-   "dh_ergebnis_pro_jahr_chf": -3597,
-   "dh_break_even_chf_karte_h": 0.8326,
-   "dh_break_even_chf_server_h": 6.661,
+   "dh_rechenerloes_jahr1_chf": 14193,
+   "dh_gewinn_nach_steuer_mittel_chf": -1625,
+   "dh_ergebnis_pro_jahr_chf": -2941,
+   "dh_break_even_chf_karte_h": 0.6923,
+   "dh_break_even_chf_server_h": 5.538,
    "ankuenfte": {
     "jobs_a_pro_tag": 10.09,
     "jobs_b_pro_tag": 5.0
@@ -1521,11 +1581,11 @@
    "waermewert_chf": 706,
    "break_even_chf_pro_server_h": 0.2267,
    "dh_investition_chf": 81530,
-   "dh_rechenerloes_jahr1_chf": 24059,
-   "dh_gewinn_nach_steuer_mittel_chf": -11,
-   "dh_ergebnis_pro_jahr_chf": -2378,
-   "dh_break_even_chf_karte_h": 0.6863,
-   "dh_break_even_chf_server_h": 5.49,
+   "dh_rechenerloes_jahr1_chf": 26195,
+   "dh_gewinn_nach_steuer_mittel_chf": 1063,
+   "dh_ergebnis_pro_jahr_chf": -1271,
+   "dh_break_even_chf_karte_h": 0.546,
+   "dh_break_even_chf_server_h": 4.368,
    "ankuenfte": {
     "jobs_a_pro_tag": 20.18,
     "jobs_b_pro_tag": 9.99
@@ -1554,11 +1614,11 @@
    "waermewert_chf": 967,
    "break_even_chf_pro_server_h": 0.2275,
    "dh_investition_chf": 116295,
-   "dh_rechenerloes_jahr1_chf": 33193,
-   "dh_gewinn_nach_steuer_mittel_chf": 633,
-   "dh_ergebnis_pro_jahr_chf": -2765,
-   "dh_break_even_chf_karte_h": 0.6729,
-   "dh_break_even_chf_server_h": 5.383,
+   "dh_rechenerloes_jahr1_chf": 36140,
+   "dh_gewinn_nach_steuer_mittel_chf": 2115,
+   "dh_ergebnis_pro_jahr_chf": -1238,
+   "dh_break_even_chf_karte_h": 0.5326,
+   "dh_break_even_chf_server_h": 4.261,
    "ankuenfte": {
     "jobs_a_pro_tag": 30.27,
     "jobs_b_pro_tag": 14.99
@@ -1587,11 +1647,11 @@
    "waermewert_chf": 1192,
    "break_even_chf_pro_server_h": 0.228,
    "dh_investition_chf": 151060,
-   "dh_rechenerloes_jahr1_chf": 41097,
-   "dh_gewinn_nach_steuer_mittel_chf": 299,
-   "dh_ergebnis_pro_jahr_chf": -4128,
-   "dh_break_even_chf_karte_h": 0.6879,
-   "dh_break_even_chf_server_h": 5.503,
+   "dh_rechenerloes_jahr1_chf": 44745,
+   "dh_gewinn_nach_steuer_mittel_chf": 2134,
+   "dh_ergebnis_pro_jahr_chf": -2238,
+   "dh_break_even_chf_karte_h": 0.5475,
+   "dh_break_even_chf_server_h": 4.38,
    "ankuenfte": {
     "jobs_a_pro_tag": 40.36,
     "jobs_b_pro_tag": 19.98
@@ -1620,11 +1680,11 @@
    "waermewert_chf": 1436,
    "break_even_chf_pro_server_h": 0.228,
    "dh_investition_chf": 185825,
-   "dh_rechenerloes_jahr1_chf": 49540,
-   "dh_gewinn_nach_steuer_mittel_chf": 395,
-   "dh_ergebnis_pro_jahr_chf": -5063,
-   "dh_break_even_chf_karte_h": 0.6895,
-   "dh_break_even_chf_server_h": 5.516,
+   "dh_rechenerloes_jahr1_chf": 53938,
+   "dh_gewinn_nach_steuer_mittel_chf": 2607,
+   "dh_ergebnis_pro_jahr_chf": -2784,
+   "dh_break_even_chf_karte_h": 0.5491,
+   "dh_break_even_chf_server_h": 4.393,
    "ankuenfte": {
     "jobs_a_pro_tag": 50.45,
     "jobs_b_pro_tag": 24.98
@@ -1653,11 +1713,11 @@
    "waermewert_chf": 1664,
    "break_even_chf_pro_server_h": 0.2281,
    "dh_investition_chf": 220590,
-   "dh_rechenerloes_jahr1_chf": 57477,
-   "dh_gewinn_nach_steuer_mittel_chf": 88,
-   "dh_ergebnis_pro_jahr_chf": -6399,
-   "dh_break_even_chf_karte_h": 0.6975,
-   "dh_break_even_chf_server_h": 5.58,
+   "dh_rechenerloes_jahr1_chf": 62580,
+   "dh_gewinn_nach_steuer_mittel_chf": 2655,
+   "dh_ergebnis_pro_jahr_chf": -3755,
+   "dh_break_even_chf_karte_h": 0.557,
+   "dh_break_even_chf_server_h": 4.456,
    "ankuenfte": {
     "jobs_a_pro_tag": 60.54,
     "jobs_b_pro_tag": 29.98
@@ -1686,11 +1746,11 @@
    "waermewert_chf": 1905,
    "break_even_chf_pro_server_h": 0.2281,
    "dh_investition_chf": 255355,
-   "dh_rechenerloes_jahr1_chf": 65793,
-   "dh_gewinn_nach_steuer_mittel_chf": 82,
-   "dh_ergebnis_pro_jahr_chf": -7435,
-   "dh_break_even_chf_karte_h": 0.699,
-   "dh_break_even_chf_server_h": 5.592,
+   "dh_rechenerloes_jahr1_chf": 71633,
+   "dh_gewinn_nach_steuer_mittel_chf": 3019,
+   "dh_ergebnis_pro_jahr_chf": -4409,
+   "dh_break_even_chf_karte_h": 0.5585,
+   "dh_break_even_chf_server_h": 4.468,
    "ankuenfte": {
     "jobs_a_pro_tag": 70.62,
     "jobs_b_pro_tag": 34.97
@@ -1719,11 +1779,11 @@
    "waermewert_chf": 2148,
    "break_even_chf_pro_server_h": 0.2281,
    "dh_investition_chf": 290120,
-   "dh_rechenerloes_jahr1_chf": 74194,
-   "dh_gewinn_nach_steuer_mittel_chf": 144,
-   "dh_ergebnis_pro_jahr_chf": -8403,
-   "dh_break_even_chf_karte_h": 0.6992,
-   "dh_break_even_chf_server_h": 5.594,
+   "dh_rechenerloes_jahr1_chf": 80780,
+   "dh_gewinn_nach_steuer_mittel_chf": 3457,
+   "dh_ergebnis_pro_jahr_chf": -4991,
+   "dh_break_even_chf_karte_h": 0.5587,
+   "dh_break_even_chf_server_h": 4.47,
    "ankuenfte": {
     "jobs_a_pro_tag": 80.71,
     "jobs_b_pro_tag": 39.97
@@ -1752,11 +1812,11 @@
    "waermewert_chf": 2359,
    "break_even_chf_pro_server_h": 0.2282,
    "dh_investition_chf": 324885,
-   "dh_rechenerloes_jahr1_chf": 81486,
-   "dh_gewinn_nach_steuer_mittel_chf": -675,
-   "dh_ergebnis_pro_jahr_chf": -10251,
-   "dh_break_even_chf_karte_h": 0.7101,
-   "dh_break_even_chf_server_h": 5.681,
+   "dh_rechenerloes_jahr1_chf": 88720,
+   "dh_gewinn_nach_steuer_mittel_chf": 2964,
+   "dh_ergebnis_pro_jahr_chf": -6503,
+   "dh_break_even_chf_karte_h": 0.5696,
+   "dh_break_even_chf_server_h": 4.557,
    "ankuenfte": {
     "jobs_a_pro_tag": 90.8,
     "jobs_b_pro_tag": 44.96
@@ -1785,11 +1845,11 @@
    "waermewert_chf": 2569,
    "break_even_chf_pro_server_h": 0.2282,
    "dh_investition_chf": 359650,
-   "dh_rechenerloes_jahr1_chf": 88733,
-   "dh_gewinn_nach_steuer_mittel_chf": -1530,
-   "dh_ergebnis_pro_jahr_chf": -12134,
-   "dh_break_even_chf_karte_h": 0.7197,
-   "dh_break_even_chf_server_h": 5.758,
+   "dh_rechenerloes_jahr1_chf": 96610,
+   "dh_gewinn_nach_steuer_mittel_chf": 2432,
+   "dh_ergebnis_pro_jahr_chf": -8053,
+   "dh_break_even_chf_karte_h": 0.5791,
+   "dh_break_even_chf_server_h": 4.633,
    "ankuenfte": {
     "jobs_a_pro_tag": 100.89,
     "jobs_b_pro_tag": 49.96
@@ -1818,11 +1878,11 @@
    "waermewert_chf": 2770,
    "break_even_chf_pro_server_h": 0.2283,
    "dh_investition_chf": 394415,
-   "dh_rechenerloes_jahr1_chf": 95798,
-   "dh_gewinn_nach_steuer_mittel_chf": -2529,
-   "dh_ergebnis_pro_jahr_chf": -14162,
-   "dh_break_even_chf_karte_h": 0.7293,
-   "dh_break_even_chf_server_h": 5.834,
+   "dh_rechenerloes_jahr1_chf": 104302,
+   "dh_gewinn_nach_steuer_mittel_chf": 1749,
+   "dh_ergebnis_pro_jahr_chf": -9756,
+   "dh_break_even_chf_karte_h": 0.5888,
+   "dh_break_even_chf_server_h": 4.71,
    "ankuenfte": {
     "jobs_a_pro_tag": 110.98,
     "jobs_b_pro_tag": 54.95
@@ -1851,11 +1911,11 @@
    "waermewert_chf": 2948,
    "break_even_chf_pro_server_h": 0.2284,
    "dh_investition_chf": 429180,
-   "dh_rechenerloes_jahr1_chf": 102078,
-   "dh_gewinn_nach_steuer_mittel_chf": -4170,
-   "dh_ergebnis_pro_jahr_chf": -16831,
-   "dh_break_even_chf_karte_h": 0.744,
-   "dh_break_even_chf_server_h": 5.952,
+   "dh_rechenerloes_jahr1_chf": 111141,
+   "dh_gewinn_nach_steuer_mittel_chf": 407,
+   "dh_ergebnis_pro_jahr_chf": -12117,
+   "dh_break_even_chf_karte_h": 0.6034,
+   "dh_break_even_chf_server_h": 4.827,
    "ankuenfte": {
     "jobs_a_pro_tag": 121.07,
     "jobs_b_pro_tag": 59.95
@@ -1884,11 +1944,11 @@
    "waermewert_chf": 3120,
    "break_even_chf_pro_server_h": 0.2285,
    "dh_investition_chf": 463945,
-   "dh_rechenerloes_jahr1_chf": 108166,
-   "dh_gewinn_nach_steuer_mittel_chf": -5987,
-   "dh_ergebnis_pro_jahr_chf": -19675,
-   "dh_break_even_chf_karte_h": 0.7585,
-   "dh_break_even_chf_server_h": 6.068,
+   "dh_rechenerloes_jahr1_chf": 117768,
+   "dh_gewinn_nach_steuer_mittel_chf": -1096,
+   "dh_ergebnis_pro_jahr_chf": -14639,
+   "dh_break_even_chf_karte_h": 0.6179,
+   "dh_break_even_chf_server_h": 4.943,
    "ankuenfte": {
     "jobs_a_pro_tag": 131.16,
     "jobs_b_pro_tag": 64.95

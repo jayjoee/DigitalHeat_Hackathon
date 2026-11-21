@@ -2235,10 +2235,10 @@
   }
  ],
  "wirtschaft": {
-  "ohne_zusage_60_prozent_chf": 34543,
-  "mit_zusage_chf": 34276,
-  "fehlmenge_chf_jahr1": 138,
-  "vertragspreis_chf_server_h": 4.8
+  "ohne_zusage_60_prozent_chf": 40412,
+  "mit_zusage_chf": 40286,
+  "fehlmenge_chf_jahr1": 115,
+  "vertragspreis_chf_server_h": 4.0
  },
  "annahmen": {
   "prognose_modell": {
@@ -2263,11 +2263,11 @@
   },
   "anteil_fest_gebucht": {
    "wert": 0.6,
-   "quelle": "Schätzung: Cloud-Kunden binden im Median 42 %, Ziel 70–80 % (FinOps-Vergleiche)"
+   "quelle": "Teamannahme: Ankerkunde (Roche) kauft 60 % der Server-Stunden. Vergleich: Cloud-Kunden binden im Median 42 %, Ziel 70–80 % (FinOps-Vergleiche)"
   },
   "vertragspreis_chf_karte_h": {
-   "wert": 0.6,
-   "quelle": "Schweizer Cloud für Kunden mit Datenstandort Schweiz (Pharma, Banken, Spitäler): rund 12 % unter Schweizer GPU-Clouds (Hikube ≈ 0,68 CHF, Everyware 2,13 CHF pro L4-h); vorsichtiger Fall 0,50 CHF (PHARMA_SICHT.md, KOSTEN_DH.md)"
+   "wert": 0.5,
+   "quelle": "Ankerkunde (Roche) mit Mengenrabatt: fester Preis über 5 Jahre für den fest gebuchten Anteil. Unbestätigter Zielpreis für öffentliche bzw. beim Kunden ausreichend anonymisierte und freigegebene L4-Aufträge; kein Confidential-Computing- oder Forschungsgeheimnis-Aufschlag. US-Clouds mit Vertrag 0,53–0,55 CHF; Zahlungsbereitschaft und geeignete Nachfrage noch zu belegen (L4_ANGEBOT.md, PHARMA_SICHT.md, KOSTEN_DH.md)."
   }
  }
 }

@@ -1,0 +1,688 @@
+{
+ "erzeugt": "python3 src/kosten_dh.py",
+ "betrieb": "Abschaltmodell: 230 W Leerlauf, 10 W Standby, 5 min Start (src/scheduler/serverbetrieb.py)",
+ "preise": {
+  "vertragspreis_chf_karte_h": 0.5,
+  "anteil_fest_gebucht": 0.6,
+  "spotpreis_chf_karte_h": 0.55,
+  "spot_preisverfall": 0.1,
+  "plattform_anteil": 0.05
+ },
+ "spot_untergrenze_chf_karte_h": 0.294,
+ "referenzhaus": {
+  "server": 8,
+  "deckung": 0.9053,
+  "server_h": 34512,
+  "strom_kwh": 35662.1,
+  "waerme_kwh": 28272.3,
+  "hardware_chf": 257960,
+  "investition_chf": 290120,
+  "erloes_jahr1_chf": 135435,
+  "laufend_jahr1_chf": 9209,
+  "ergebnis_chf": 34970,
+  "ergebnis_rest_spot_chf": 15799,
+  "ergebnis_rest_unverkauft_chf": -6359,
+  "gewinn_nach_steuer_mittel_chf": 43287,
+  "rueckzahlung_jahre": 2.94,
+  "zinsfuss": 0.2162,
+  "zinsfuss_rest_spot": 0.1239,
+  "break_even_anker_chf_karte_h": 0.2438,
+  "break_even_anker_rest_spot_chf_karte_h": 0.384,
+  "break_even_rest_chf_karte_h": 0.083,
+  "jahre": [
+   {
+    "jahr": 1,
+    "erloes": 135435,
+    "waerme": 0,
+    "strom": 11858,
+    "laufend": 9209,
+    "fehlmenge": 0,
+    "abschreibung": 47706,
+    "gewinn_vor_steuer": 66663,
+    "steuer": 8693,
+    "gewinn_nach_steuer": 57970,
+    "cashflow": 105676
+   },
+   {
+    "jahr": 2,
+    "erloes": 129705,
+    "waerme": 0,
+    "strom": 11858,
+    "laufend": 12926,
+    "fehlmenge": 0,
+    "abschreibung": 47706,
+    "gewinn_vor_steuer": 57216,
+    "steuer": 7461,
+    "gewinn_nach_steuer": 49755,
+    "cashflow": 97461
+   },
+   {
+    "jahr": 3,
+    "erloes": 124548,
+    "waerme": 0,
+    "strom": 11858,
+    "laufend": 13507,
+    "fehlmenge": 0,
+    "abschreibung": 47706,
+    "gewinn_vor_steuer": 51478,
+    "steuer": 6713,
+    "gewinn_nach_steuer": 44765,
+    "cashflow": 92471
+   },
+   {
+    "jahr": 4,
+    "erloes": 119907,
+    "waerme": 0,
+    "strom": 11858,
+    "laufend": 21017,
+    "fehlmenge": 0,
+    "abschreibung": 47706,
+    "gewinn_vor_steuer": 39327,
+    "steuer": 5128,
+    "gewinn_nach_steuer": 34199,
+    "cashflow": 81904
+   },
+   {
+    "jahr": 5,
+    "erloes": 115730,
+    "waerme": 0,
+    "strom": 11858,
+    "laufend": 21963,
+    "fehlmenge": 0,
+    "abschreibung": 47706,
+    "gewinn_vor_steuer": 34204,
+    "steuer": 4460,
+    "gewinn_nach_steuer": 29744,
+    "cashflow": 129041
+   }
+  ]
+ },
+ "efh_4": {
+  "server": 4,
+  "deckung": 0.9145,
+  "server_h": 18873,
+  "strom_kwh": 19572.7,
+  "waerme_kwh": 15547.2,
+  "hardware_chf": 128980,
+  "investition_chf": 151060,
+  "erloes_jahr1_chf": 74065,
+  "laufend_jahr1_chf": 6425,
+  "ergebnis_chf": 19160,
+  "ergebnis_rest_spot_chf": 8677,
+  "ergebnis_rest_unverkauft_chf": -3446,
+  "gewinn_nach_steuer_mittel_chf": 23462,
+  "rueckzahlung_jahre": 2.87,
+  "zinsfuss": 0.2254,
+  "zinsfuss_rest_spot": 0.1285,
+  "break_even_anker_chf_karte_h": 0.2434,
+  "break_even_anker_rest_spot_chf_karte_h": 0.3835,
+  "break_even_rest_chf_karte_h": 0.0821,
+  "jahre": [
+   {
+    "jahr": 1,
+    "erloes": 74065,
+    "waerme": 0,
+    "strom": 6508,
+    "laufend": 6425,
+    "fehlmenge": 0,
+    "abschreibung": 25053,
+    "gewinn_vor_steuer": 36079,
+    "steuer": 4705,
+    "gewinn_nach_steuer": 31375,
+    "cashflow": 56427
+   },
+   {
+    "jahr": 2,
+    "erloes": 70931,
+    "waerme": 0,
+    "strom": 6508,
+    "laufend": 8365,
+    "fehlmenge": 0,
+    "abschreibung": 25053,
+    "gewinn_vor_steuer": 31006,
+    "steuer": 4043,
+    "gewinn_nach_steuer": 26963,
+    "cashflow": 52015
+   },
+   {
+    "jahr": 3,
+    "erloes": 68111,
+    "waerme": 0,
+    "strom": 6508,
+    "laufend": 8741,
+    "fehlmenge": 0,
+    "abschreibung": 25053,
+    "gewinn_vor_steuer": 27809,
+    "steuer": 3626,
+    "gewinn_nach_steuer": 24183,
+    "cashflow": 49236
+   },
+   {
+    "jahr": 4,
+    "erloes": 65573,
+    "waerme": 0,
+    "strom": 6508,
+    "laufend": 12585,
+    "fehlmenge": 0,
+    "abschreibung": 25053,
+    "gewinn_vor_steuer": 21427,
+    "steuer": 2794,
+    "gewinn_nach_steuer": 18633,
+    "cashflow": 43686
+   },
+   {
+    "jahr": 5,
+    "erloes": 63289,
+    "waerme": 0,
+    "strom": 6508,
+    "laufend": 13152,
+    "fehlmenge": 0,
+    "abschreibung": 25053,
+    "gewinn_vor_steuer": 18576,
+    "steuer": 2422,
+    "gewinn_nach_steuer": 16154,
+    "cashflow": 67003
+   }
+  ]
+ },
+ "efh_5": {
+  "server": 5,
+  "deckung": 0.9873,
+  "server_h": 20324,
+  "strom_kwh": 21187.5,
+  "waerme_kwh": 16783.6,
+  "hardware_chf": 161225,
+  "investition_chf": 185825,
+  "erloes_jahr1_chf": 79756,
+  "laufend_jahr1_chf": 7121,
+  "ergebnis_chf": 16032,
+  "ergebnis_rest_spot_chf": 4743,
+  "ergebnis_rest_unverkauft_chf": -8630,
+  "gewinn_nach_steuer_mittel_chf": 21364,
+  "rueckzahlung_jahre": 3.34,
+  "zinsfuss": 0.1697,
+  "zinsfuss_rest_spot": 0.0827,
+  "break_even_anker_chf_karte_h": 0.3007,
+  "break_even_anker_rest_spot_chf_karte_h": 0.4409,
+  "break_even_rest_chf_karte_h": 0.1864,
+  "jahre": [
+   {
+    "jahr": 1,
+    "erloes": 79756,
+    "waerme": 0,
+    "strom": 7045,
+    "laufend": 7121,
+    "fehlmenge": 0,
+    "abschreibung": 30716,
+    "gewinn_vor_steuer": 34875,
+    "steuer": 4548,
+    "gewinn_nach_steuer": 30327,
+    "cashflow": 61043
+   },
+   {
+    "jahr": 2,
+    "erloes": 76382,
+    "waerme": 0,
+    "strom": 7045,
+    "laufend": 9505,
+    "fehlmenge": 0,
+    "abschreibung": 30716,
+    "gewinn_vor_steuer": 29116,
+    "steuer": 3797,
+    "gewinn_nach_steuer": 25319,
+    "cashflow": 56035
+   },
+   {
+    "jahr": 3,
+    "erloes": 73345,
+    "waerme": 0,
+    "strom": 7045,
+    "laufend": 9933,
+    "fehlmenge": 0,
+    "abschreibung": 30716,
+    "gewinn_vor_steuer": 25652,
+    "steuer": 3345,
+    "gewinn_nach_steuer": 22307,
+    "cashflow": 53023
+   },
+   {
+    "jahr": 4,
+    "erloes": 70612,
+    "waerme": 0,
+    "strom": 7045,
+    "laufend": 14693,
+    "fehlmenge": 0,
+    "abschreibung": 30716,
+    "gewinn_vor_steuer": 18158,
+    "steuer": 2368,
+    "gewinn_nach_steuer": 15790,
+    "cashflow": 46506
+   },
+   {
+    "jahr": 5,
+    "erloes": 68152,
+    "waerme": 0,
+    "strom": 7045,
+    "laufend": 15355,
+    "fehlmenge": 0,
+    "abschreibung": 30716,
+    "gewinn_vor_steuer": 15037,
+    "steuer": 1961,
+    "gewinn_nach_steuer": 13076,
+    "cashflow": 76037
+   }
+  ]
+ },
+ "idealmodell": {
+  "referenzhaus": {
+   "server": 8,
+   "deckung": 0.9295,
+   "server_h": 36290,
+   "strom_kwh": 36290.0,
+   "waerme_kwh": 29027.5,
+   "hardware_chf": 257960,
+   "investition_chf": 290120,
+   "erloes_jahr1_chf": 142414,
+   "laufend_jahr1_chf": 9209,
+   "ergebnis_chf": 40411,
+   "ergebnis_rest_spot_chf": 20253,
+   "ergebnis_rest_unverkauft_chf": -2898,
+   "gewinn_nach_steuer_mittel_chf": 48709,
+   "rueckzahlung_jahre": 2.77,
+   "zinsfuss": 0.2413,
+   "zinsfuss_rest_spot": 0.1454,
+   "break_even_anker_chf_karte_h": 0.2184,
+   "break_even_anker_rest_spot_chf_karte_h": 0.3585,
+   "break_even_rest_chf_karte_h": 0.0368,
+   "jahre": [
+    {
+     "jahr": 1,
+     "erloes": 142414,
+     "waerme": 0,
+     "strom": 12066,
+     "laufend": 9209,
+     "fehlmenge": 0,
+     "abschreibung": 47706,
+     "gewinn_vor_steuer": 73433,
+     "steuer": 9576,
+     "gewinn_nach_steuer": 63857,
+     "cashflow": 111563
+    },
+    {
+     "jahr": 2,
+     "erloes": 136389,
+     "waerme": 0,
+     "strom": 12066,
+     "laufend": 12926,
+     "fehlmenge": 0,
+     "abschreibung": 47706,
+     "gewinn_vor_steuer": 63691,
+     "steuer": 8305,
+     "gewinn_nach_steuer": 55386,
+     "cashflow": 103091
+    },
+    {
+     "jahr": 3,
+     "erloes": 130966,
+     "waerme": 0,
+     "strom": 12066,
+     "laufend": 13507,
+     "fehlmenge": 0,
+     "abschreibung": 47706,
+     "gewinn_vor_steuer": 57687,
+     "steuer": 7522,
+     "gewinn_nach_steuer": 50164,
+     "cashflow": 97870
+    },
+    {
+     "jahr": 4,
+     "erloes": 126086,
+     "waerme": 0,
+     "strom": 12066,
+     "laufend": 21017,
+     "fehlmenge": 0,
+     "abschreibung": 47706,
+     "gewinn_vor_steuer": 45297,
+     "steuer": 5907,
+     "gewinn_nach_steuer": 39390,
+     "cashflow": 87096
+    },
+    {
+     "jahr": 5,
+     "erloes": 121693,
+     "waerme": 0,
+     "strom": 12066,
+     "laufend": 21963,
+     "fehlmenge": 0,
+     "abschreibung": 47706,
+     "gewinn_vor_steuer": 39959,
+     "steuer": 5211,
+     "gewinn_nach_steuer": 34748,
+     "cashflow": 134046
+    }
+   ]
+  },
+  "efh_4": {
+   "server": 4,
+   "deckung": 0.9356,
+   "server_h": 19882,
+   "strom_kwh": 19882.4,
+   "waerme_kwh": 15905.6,
+   "hardware_chf": 128980,
+   "investition_chf": 151060,
+   "erloes_jahr1_chf": 78025,
+   "laufend_jahr1_chf": 6425,
+   "ergebnis_chf": 22262,
+   "ergebnis_rest_spot_chf": 11218,
+   "ergebnis_rest_unverkauft_chf": -1466,
+   "gewinn_nach_steuer_mittel_chf": 26552,
+   "rueckzahlung_jahre": 2.69,
+   "zinsfuss": 0.2529,
+   "zinsfuss_rest_spot": 0.152,
+   "break_even_anker_chf_karte_h": 0.2169,
+   "break_even_anker_rest_spot_chf_karte_h": 0.357,
+   "break_even_rest_chf_karte_h": 0.034,
+   "jahre": [
+    {
+     "jahr": 1,
+     "erloes": 78025,
+     "waerme": 0,
+     "strom": 6611,
+     "laufend": 6425,
+     "fehlmenge": 0,
+     "abschreibung": 25053,
+     "gewinn_vor_steuer": 39937,
+     "steuer": 5208,
+     "gewinn_nach_steuer": 34729,
+     "cashflow": 59782
+    },
+    {
+     "jahr": 2,
+     "erloes": 74724,
+     "waerme": 0,
+     "strom": 6611,
+     "laufend": 8365,
+     "fehlmenge": 0,
+     "abschreibung": 25053,
+     "gewinn_vor_steuer": 34696,
+     "steuer": 4524,
+     "gewinn_nach_steuer": 30171,
+     "cashflow": 55224
+    },
+    {
+     "jahr": 3,
+     "erloes": 71753,
+     "waerme": 0,
+     "strom": 6611,
+     "laufend": 8741,
+     "fehlmenge": 0,
+     "abschreibung": 25053,
+     "gewinn_vor_steuer": 31348,
+     "steuer": 4088,
+     "gewinn_nach_steuer": 27261,
+     "cashflow": 52313
+    },
+    {
+     "jahr": 4,
+     "erloes": 69079,
+     "waerme": 0,
+     "strom": 6611,
+     "laufend": 12585,
+     "fehlmenge": 0,
+     "abschreibung": 25053,
+     "gewinn_vor_steuer": 24830,
+     "steuer": 3238,
+     "gewinn_nach_steuer": 21592,
+     "cashflow": 46645
+    },
+    {
+     "jahr": 5,
+     "erloes": 66673,
+     "waerme": 0,
+     "strom": 6611,
+     "laufend": 13152,
+     "fehlmenge": 0,
+     "abschreibung": 25053,
+     "gewinn_vor_steuer": 21857,
+     "steuer": 2850,
+     "gewinn_nach_steuer": 19007,
+     "cashflow": 69856
+    }
+   ]
+  },
+  "efh_5": {
+   "server": 5,
+   "deckung": 0.996,
+   "server_h": 21165,
+   "strom_kwh": 21165.0,
+   "waerme_kwh": 16931.7,
+   "hardware_chf": 161225,
+   "investition_chf": 185825,
+   "erloes_jahr1_chf": 83058,
+   "laufend_jahr1_chf": 7121,
+   "ergebnis_chf": 18699,
+   "ergebnis_rest_spot_chf": 6943,
+   "ergebnis_rest_unverkauft_chf": -6796,
+   "gewinn_nach_steuer_mittel_chf": 24022,
+   "rueckzahlung_jahre": 3.15,
+   "zinsfuss": 0.1895,
+   "zinsfuss_rest_spot": 0.0998,
+   "break_even_anker_chf_karte_h": 0.2767,
+   "break_even_anker_rest_spot_chf_karte_h": 0.4169,
+   "break_even_rest_chf_karte_h": 0.1428,
+   "jahre": [
+    {
+     "jahr": 1,
+     "erloes": 83058,
+     "waerme": 0,
+     "strom": 7037,
+     "laufend": 7121,
+     "fehlmenge": 0,
+     "abschreibung": 30716,
+     "gewinn_vor_steuer": 38184,
+     "steuer": 4979,
+     "gewinn_nach_steuer": 33205,
+     "cashflow": 63921
+    },
+    {
+     "jahr": 2,
+     "erloes": 79544,
+     "waerme": 0,
+     "strom": 7037,
+     "laufend": 9505,
+     "fehlmenge": 0,
+     "abschreibung": 30716,
+     "gewinn_vor_steuer": 32286,
+     "steuer": 4210,
+     "gewinn_nach_steuer": 28076,
+     "cashflow": 58792
+    },
+    {
+     "jahr": 3,
+     "erloes": 76382,
+     "waerme": 0,
+     "strom": 7037,
+     "laufend": 9933,
+     "fehlmenge": 0,
+     "abschreibung": 30716,
+     "gewinn_vor_steuer": 28696,
+     "steuer": 3742,
+     "gewinn_nach_steuer": 24954,
+     "cashflow": 55670
+    },
+    {
+     "jahr": 4,
+     "erloes": 73535,
+     "waerme": 0,
+     "strom": 7037,
+     "laufend": 14693,
+     "fehlmenge": 0,
+     "abschreibung": 30716,
+     "gewinn_vor_steuer": 21089,
+     "steuer": 2750,
+     "gewinn_nach_steuer": 18339,
+     "cashflow": 49055
+    },
+    {
+     "jahr": 5,
+     "erloes": 70974,
+     "waerme": 0,
+     "strom": 7037,
+     "laufend": 15355,
+     "fehlmenge": 0,
+     "abschreibung": 30716,
+     "gewinn_vor_steuer": 17866,
+     "steuer": 2330,
+     "gewinn_nach_steuer": 15536,
+     "cashflow": 78497
+    }
+   ]
+  }
+ },
+ "serverzahl": [
+  {
+   "server": 6,
+   "deckung": 0.7659,
+   "ergebnis_chf": 34364
+  },
+  {
+   "server": 7,
+   "deckung": 0.8451,
+   "ergebnis_chf": 35732
+  },
+  {
+   "server": 8,
+   "deckung": 0.9053,
+   "ergebnis_chf": 34970
+  },
+  {
+   "server": 9,
+   "deckung": 0.9523,
+   "ergebnis_chf": 32944
+  },
+  {
+   "server": 10,
+   "deckung": 0.9808,
+   "ergebnis_chf": 28704
+  },
+  {
+   "server": 13,
+   "deckung": 1.0,
+   "ergebnis_chf": 9144
+  }
+ ],
+ "leerlauf": {
+  "100": 36117,
+  "350": 33695
+ },
+ "pausieren_230w": 26055,
+ "sensitivitaeten": {
+  "mischpreis_chf_karte_h": 0.52,
+  "verkaufte_stunden": {
+   "100%": 34970,
+   "90%": 24056,
+   "80%": 13143,
+   "70%": 2217,
+   "60%": -9187
+  },
+  "verkaufte_stunden_nullpunkt": 0.6802,
+  "anker_preis": {
+   "0.40": 21380,
+   "0.45": 28175,
+   "0.50": 34970,
+   "0.55": 41764,
+   "0.60": 48559
+  },
+  "rest_preis": {
+   "0.000": -6359,
+   "0.294": 15799,
+   "0.400": 23737,
+   "0.500": 31225,
+   "0.550": 34970,
+   "0.600": 38714,
+   "0.680": 44705
+  },
+  "fest_gebucht": {
+   "0%": 28803,
+   "42%": 33120,
+   "60%": 34970,
+   "80%": 37025,
+   "100%": 39081
+  },
+  "fest_gebucht_rest_spot": {
+   "0%": -20871,
+   "42%": 5322,
+   "60%": 15799,
+   "80%": 27440,
+   "100%": 39081
+  },
+  "anker_preis_faellt_auch": 23187,
+  "rest_preis_fest": 43610,
+  "zins": {
+   "0.035": 36852,
+   "0.045": 34970,
+   "0.055": 33068,
+   "0.080": 28231,
+   "0.120": 20257
+  },
+  "hardware_minus15": 42152,
+  "hardware_plus15": 27787,
+  "firmenanteil": {
+   "1200": 34970,
+   "5400": 30989,
+   "10000": 26629
+  },
+  "versicherung": {
+   "0.003": 35740,
+   "0.006": 34970,
+   "0.01": 33943
+  },
+  "einbau": {
+   "6400": 35494,
+   "9000": 34970,
+   "12800": 34203
+  },
+  "waermepreis_7rp": 36691,
+  "strompreis_c2": 35126,
+  "marktplatz_preis_jahr1": 0.4732,
+  "bandbreite": {
+   "guenstig": {
+    "ergebnis_chf": 61942,
+    "break_even_anker": 0.0965
+   },
+   "teuer": {
+    "ergebnis_chf": 6443,
+    "break_even_anker": 0.4029
+   },
+   "annahmen": {
+    "guenstig": {
+     "vertragspreis_chf_karte_h": 0.55,
+     "spotpreis_chf_karte_h": 0.65,
+     "server_preis_chf": 27408.25,
+     "kuehlung_chf_pro_kw": 1260,
+     "einbau_chf": 6400,
+     "zins": 0.035,
+     "versicherung_anteil": 0.003,
+     "gpu_ausfall": 0.03
+    },
+    "teuer": {
+     "vertragspreis_chf_karte_h": 0.45,
+     "spotpreis_chf_karte_h": 0.45,
+     "server_preis_chf": 37081.75,
+     "kuehlung_chf_pro_kw": 3780,
+     "einbau_chf": 12800,
+     "zins": 0.055,
+     "versicherung_anteil": 0.01,
+     "gpu_ausfall": 0.061
+    }
+   }
+  }
+ },
+ "zusage_idealmodell": {
+  "ohne_chf": 40411,
+  "mit_chf": 40286,
+  "gutschrift_jahr1_chf": 115,
+  "anteil_fest_gebucht": 0.5984,
+  "fehlmenge_server_h": 57.33
+ }
+}
