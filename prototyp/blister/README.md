@@ -2,7 +2,9 @@
 
 Zwei Rechner prüfen einen Batch mit 30 synthetischen Kamerabildern von Blisterpackungen. Die Software vergleicht pro Fach die Helligkeit des Zentrums mit der umgebenden Folie. Sie markiert fehlende Tabletten rot und zeigt, welche Fächer betroffen sind. Der Datensatz ist deterministisch auf beiden Geräten verfügbar.
 
-Der Demo-Ablauf verwendet die aufgezeichnete Simulation des Wärme-Routers vom 25. Mai 2025, ab 06:00 Uhr. Um 10:00 Uhr ist der simulierte Hausspeicher mit 35 kWh voll und der Router weist den Auftrag dem Sportbad zu. Das Haus stoppt zwischen zwei Packungen und sendet den Bildindex, die bisherigen Beanstandungen und den Stand der Modellzeit per TLS. Das Sportbad prüft beim nächsten Bild weiter. «Hier geprüft» weist auf beiden Leinwänden die vor Ort erledigten Packungen aus.
+Der Demo-Ablauf beginnt mit der aufgezeichneten Simulation des Wärme-Routers vom 25. Mai 2025, ab 06:00 Uhr. Um 10:00 Uhr ist der simulierte Hausspeicher mit 35 kWh voll und der Router weist den Auftrag dem Sportbad zu. Das Haus stoppt zwischen zwei Packungen und sendet den Bildindex, die bisherigen Beanstandungen und den Stand der Modellzeit per TLS.
+
+Ab 10:00 Uhr folgt die Demo einem zusätzlichen Szenario. Das Haus entnimmt 0,5 kWh Wärme pro Modellstunde aus dem Speicher. Nach sechs Modellstunden sind noch 32 kWh gespeichert. Um 16:00 Uhr hält das Sportbad zwischen zwei Packungen an und das Haus holt den Prüfstand über dieselbe TLS-Verbindung zurück. Modellzeit und Batch-Zähler bleiben während der Übergaben auf beiden Leinwänden sichtbar. «Hier geprüft» zeigt die Packungsnummern, die der jeweilige Laptop tatsächlich verarbeitet hat.
 
 Die Anzeige führt Modellzeit, Aussentemperatur, Füllstand und die örtliche Wärmeleistung fürs Wasser auf. Bei voller Zuteilung ergeben 1 kW Serverleistung und 80 % Wärmerückgewinnung 0,8 kW für einen Modellserver. Teilzuteilungen ergeben einen niedrigeren Stundendurchschnitt. Bei 0 kW bleibt der Job stehen. Der Vorlauf von 55 °C ist ein illustrativer Annahmewert. Die Rechner führen die Bildprüfung und Übergabe aus, die Wärme ist simuliert.
 
@@ -14,7 +16,7 @@ Benötigt Python 3.10 oder neuer und OpenSSL für die Einrichtung. Alle Befehle 
 python3 prototyp/blister_demo.py demo --open
 ```
 
-Auf **Haus · Laptop A** auf **Batch starten** klicken. Packung 3 zeigt das erste leere Fach. Nach rund 14 Sekunden erfolgt die automatische Übergabe nach Packung 8. Im Tab **Sportbad · Laptop B** läuft der Batch ab Packung 9 weiter. Der vollständige Batch enthält 24 vollständige und sechs beanstandete Packungen.
+Auf **Haus · Laptop A** auf **Batch starten** klicken. Packung 3 zeigt das erste leere Fach. Nach rund 14 Sekunden übernimmt **Sportbad · Laptop B** ab Packung 9. Sobald der Hausspeicher auf 32 kWh sinkt, übernimmt das Haus wieder ab Packung 21. Der vollständige Batch enthält 24 vollständige und sechs beanstandete Packungen.
 
 ## Auf zwei Laptops starten (einfach)
 

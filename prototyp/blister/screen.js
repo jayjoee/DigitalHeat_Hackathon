@@ -20,7 +20,8 @@ const statusLabels = {
   rechnet: "Prüfung läuft",
   "Übergabe läuft": "Haus pausiert · Checkpoint unterwegs",
   "Übergabe offen": "Bestätigung ausstehend",
-  übergeben: "Haus pausiert · ans Sportbad übergeben",
+  übergeben: "Haus pausiert · Sportbad prüft",
+  zurückgegeben: "Sportbad pausiert · zurück ans Haus",
   fertig: "Prüfung abgeschlossen",
 };
 
@@ -103,32 +104,34 @@ function animate(now) {
 }
 
 function showRoute(data, done) {
-  const previous = data.resumed_after;
   get("route-house").removeAttribute("aria-current");
   get("route-pool").removeAttribute("aria-current");
+  get("route-arrow").textContent = data.return_at ? "←" : "→";
   if (data.job) {
-    get(data.control && data.state !== "übergeben" ? "route-house" : "route-pool")
-      .setAttribute("aria-current", "step");
+    const atHouse = data.return_at || (data.control && data.state !== "übergeben");
+    get(atHouse ? "route-house" : "route-pool").setAttribute("aria-current", "step");
   }
   let handoff = "";
-  if (previous > 0) {
-    handoff = "Vom Haus übernommen · Weiter ab Packung " + (previous + 1);
+  if (data.return_at) {
+    handoff = "Haus braucht wieder Wärme · Rückkehr ab Packung " + data.return_at;
   } else if (data.state === "übergeben") {
-    handoff = "Speicher voll · Sportbad übernimmt ab Packung " + (done + 1);
+    handoff = "Das Haus nutzt gespeicherte Wärme, während das Sportbad rechnet.";
   } else if (data.state === "Übergabe läuft") {
     handoff = "Speicher voll · Prüfstand nach Packung " + done + " wird gesendet.";
   } else if (data.state === "Übergabe offen") {
     handoff = "Das Haus pausiert. Ihr könnt denselben Prüfstand erneut senden.";
+  } else if (data.resumed_after > 0) {
+    handoff = "Vom Haus übernommen · Weiter ab Packung " + (data.resumed_after + 1);
   } else if (!data.control) {
     handoff = "Wartet auf den Prüfstand aus dem Haus.";
   } else if (data.state === "rechnet") {
-    handoff = "Der Wärme-Router wechselt bei vollem Hausspeicher automatisch zum Sportbad.";
+    handoff = "Bei vollem Hausspeicher übernimmt das Sportbad.";
   }
   get("handoff").textContent = handoff;
-  const local = done - previous;
-  get("recent").textContent = local > 0
-    ? "Hier geprüft · " + local + (local === 1 ? " Packung (" : " Packungen (") +
-      (local === 1 ? "Nr. " + done : "Nr. " + (previous + 1) + "–" + done) + ")"
+  const local = data.local_ranges.reduce((count, [first, last]) => count + last - first + 1, 0);
+  const ranges = data.local_ranges.map(([first, last]) => first === last ? String(first) : first + "–" + last);
+  get("recent").textContent = local
+    ? "Hier geprüft · " + local + (local === 1 ? " Packung" : " Packungen") + " (Nr. " + ranges.join(", ") + ")"
     : "Hier geprüft · noch keine Packung";
 }
 
@@ -153,6 +156,7 @@ async function refresh() {
   let state = statusLabels[data.state];
   if (!data.control && data.state === "bereit") state = "Wartet auf das Haus";
   if (data.heat.scheduled_pause) state = "Prüfung pausiert · Router gibt keine Rechenzeit frei";
+  if (data.sync_pending) state = "Haus pausiert · warte auf die Verbindung zum Sportbad";
   get("state").textContent = state;
   get("count").textContent = done + " / " + data.total;
   const percent = Math.round(100 * done / data.total);

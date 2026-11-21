@@ -2,7 +2,6 @@
 import argparse
 import base64
 from collections import deque
-from functools import partial
 import hmac
 import http.client
 from http.server import ThreadingHTTPServer
@@ -33,12 +32,24 @@ STATIC = Path(__file__).with_name("blister")
 STEPS_PER_HOUR = 2
 TRACE = ROOT / "daten/ergebnisse/live_flotte_2025-05-25.json"
 FORWARD_C = 55  # Illustrative water supply temperature, absent from the router model.
+RETURN_TANK_KWH = 32.0
 
 
 def heat_profile():
-    """Play the recorded routing decision around the first house-to-pool migration."""
+    """Keep the first recorded handoff, then model the house drawing from its store."""
     hours = json.loads(TRACE.read_text())["stunden"]
     switch = next(i for i, hour in enumerate(hours) if hour["standort_typ"] == "bad")
+    capacity = wert("speicher_kwh")
+    server_heat = wert("server_kw") * wert("waermerueckgewinnung")
+    tank = capacity
+    returned = False
+    for hour in hours[switch:]:
+        returned = returned or tank <= RETURN_TANK_KWH
+        hour["haus_speicher_kwh"] = round(tank, 3)
+        if returned:
+            hour["standort_typ"] = "haus"
+            hour["anteil_echter_server"] = 1.0
+        tank = min(capacity, max(0, tank - hour["haus_bedarf_kwh"] + (server_heat if returned else 0)))
     return hours[max(0, switch - 4):]
 
 
@@ -91,8 +102,16 @@ def inspect(index):
     return {"index": index, "pixels": base64.b64encode(pixels).decode(), "boxes": boxes}
 
 
+def valid_checkpoint(data):
+    return (isinstance(data, dict) and set(data) == {"id", "next", "rejects", "heat_step"}
+            and isinstance(data["id"], str) and len(data["id"]) == 32
+            and type(data["next"]) is int and type(data["rejects"]) is int
+            and 0 <= data["rejects"] <= data["next"] <= TOTAL
+            and type(data["heat_step"]) is int and data["heat_step"] >= 0)
+
+
 class Batch:
-    def __init__(self, site, interval, handoff=None):
+    def __init__(self, site, interval, link=None):
         self.site, self.interval = site, interval
         self.lock = threading.Lock()
         self.job = None
@@ -100,9 +119,14 @@ class Batch:
         self.frame = None
         self.received = None
         self.history = deque(maxlen=4)
-        self.handoff = handoff
+        self.local_ranges = []
+        self.link = link
+        self.local_site = "haus" if link else "bad"
         self.heat_hours = heat_profile()
         self.heat_step = -1
+        self.return_at = None
+        self.remote_view = None
+        self.sync_pending = False
         self.stop = threading.Event()
         self.thread = threading.Thread(target=self.run, daemon=True)
         self.thread.start()
@@ -110,35 +134,50 @@ class Batch:
     def run(self):
         while not self.stop.wait(self.interval):
             with self.lock:
-                if self.state != "rechnet":
+                if self.state == "übergeben":
+                    action = self.follow_pool
+                elif self.state == "rechnet":
+                    action = self.tick()
+                else:
                     continue
-                self.heat_step += 1
-                hour = self.heat_hour(self.heat_step)
-                move = self.handoff is not None and hour["standort_typ"] == "bad"
-                if move:
-                    self.state = "Übergabe läuft"
-                elif hour["anteil_echter_server"] > 0:
-                    self.frame = inspect(self.job["next"])
-                    self.job["next"] += 1
-                    self.job["rejects"] += int(any(box[2] for box in self.frame["boxes"]))
-                    self.history.append(self.frame["index"] + 1)
-                    if self.job["next"] == TOTAL:
-                        self.state = "fertig"
-            if move:
-                try:
-                    self.send_checkpoint()
-                except APIError:
-                    pass  # The sender stays paused and offers a retry.
+            if action is not None:
+                action()
+
+    def tick(self):
+        self.heat_step += 1
+        self.remote_view = None
+        hour = self.heat_hour(self.heat_step)
+        if hour["standort_typ"] != self.local_site:
+            if self.link:
+                self.state = "Übergabe läuft"
+                return self.send_checkpoint
+            # Freeze permanently at this pack boundary before offering it to the house.
+            self.return_at = self.job["next"] + 1
+            self.state = "zurückgegeben"
+            return None
+        if hour["anteil_echter_server"] > 0:
+            self.frame = inspect(self.job["next"])
+            self.job["next"] += 1
+            self.job["rejects"] += int(any(box[2] for box in self.frame["boxes"]))
+            number = self.job["next"]
+            self.history.append(number)
+            if self.local_ranges and self.local_ranges[-1][1] == number - 1:
+                self.local_ranges[-1][1] = number
+            else:
+                self.local_ranges.append([number, number])
+            if number == TOTAL:
+                self.state = "fertig"
+        if self.link and self.return_at is not None:
+            return self.publish_progress
+        return None
 
     def heat_hour(self, step):
         return self.heat_hours[min(len(self.heat_hours) - 1, step // STEPS_PER_HOUR)]
 
-    def heat_snapshot(self):
+    def heat_snapshot(self, display_step):
         initial_step = self.received["heat_step"] if self.received else 0
-        hour = self.heat_hour(max(initial_step, self.heat_step))
-        local_site = "haus" if self.handoff else "bad"
-        eligible = hour["standort_typ"] == local_site
-        working = self.state == "rechnet" and eligible
+        hour = self.heat_hour(max(initial_step, display_step))
+        working = self.state == "rechnet" and hour["standort_typ"] == self.local_site
         heat_kw = (wert("server_kw") * wert("waermerueckgewinnung") * hour["anteil_echter_server"]
                    if working else 0)
         return {"time": hour["zeit"], "outside_c": hour["temp_c"],
@@ -148,10 +187,15 @@ class Batch:
 
     def snapshot(self):
         with self.lock:
-            return {"site": self.site, "state": self.state, "job": dict(self.job) if self.job else None,
+            view = self.remote_view or self.job
+            display_step = self.remote_view["heat_step"] if self.remote_view else self.heat_step
+            job = {key: view[key] for key in ("id", "next", "rejects")} if view else None
+            return {"site": self.site, "state": self.state, "job": job,
                     "frame": self.frame, "recent": list(self.history), "total": TOTAL,
+                    "local_ranges": [span.copy() for span in self.local_ranges],
                     "resumed_after": self.received["next"] if self.received else 0,
-                    "heat": self.heat_snapshot()}
+                    "return_at": self.return_at, "sync_pending": self.sync_pending,
+                    "heat": self.heat_snapshot(display_step)}
 
     def start(self):
         with self.lock:
@@ -165,27 +209,26 @@ class Batch:
             if self.state != "Übergabe offen":
                 raise APIError(409, "Es gibt keine offene Übergabe.")
             self.state = "Übergabe läuft"
-        self.send_checkpoint()
+        if not self.send_checkpoint():
+            raise APIError(502, "Übergabe unbestätigt. Das Haus bleibt pausiert.")
 
     def send_checkpoint(self):
         with self.lock:
             checkpoint = {**self.job, "heat_step": self.heat_step}
         try:
-            self.handoff(checkpoint)
-        except (OSError, ValueError, http.client.HTTPException) as error:
+            if self.link.request("POST", "/checkpoint", checkpoint) != {"accepted": True}:
+                raise ValueError("Checkpoint nicht bestätigt")
+        except (OSError, ValueError, http.client.HTTPException):
             with self.lock:
                 self.state = "Übergabe offen"
-            raise APIError(502, "Übergabe unbestätigt. Das Haus bleibt pausiert.") from error
+            return False
         with self.lock:
             self.state = "übergeben"
+        return True
 
     def receive(self, data):
-        if (not isinstance(data, dict) or set(data) != {"id", "next", "rejects", "heat_step"}
-                or not isinstance(data["id"], str) or len(data["id"]) != 32
-                or type(data["next"]) is not int or type(data["rejects"]) is not int
-                or not 0 <= data["rejects"] <= data["next"] < TOTAL or data["next"] == 0
-                or type(data["heat_step"]) is not int
-                or not 0 <= data["heat_step"] < len(self.heat_hours) * STEPS_PER_HOUR
+        if (not valid_checkpoint(data) or not 0 < data["next"] < TOTAL
+                or data["heat_step"] >= len(self.heat_hours) * STEPS_PER_HOUR
                 or self.heat_hour(data["heat_step"])["standort_typ"] != "bad"):
             raise APIError(400, "Ungültiger Checkpoint.")
         with self.lock:
@@ -198,27 +241,87 @@ class Batch:
             self.heat_step = data["heat_step"] - 1
             self.state = "rechnet"
 
+    def pool_progress(self):
+        with self.lock:
+            checkpoint = {**self.job, "heat_step": self.heat_step} if self.job else None
+            if self.received and self.heat_step < self.received["heat_step"]:
+                checkpoint["heat_step"] = self.received["heat_step"]
+            return {"checkpoint": checkpoint, "returned": self.state == "zurückgegeben"}
 
-def transfer_checkpoint(target, tls, token, checkpoint):
-    conn = http.client.HTTPSConnection(target.hostname, target.port or 443, context=tls, timeout=4)
-    try:
-        conn.request("POST", "/checkpoint", json.dumps(checkpoint),
-                     {"Authorization": "Bearer " + token, "Content-Type": "application/json"})
-        response = conn.getresponse()
-        if response.status != 200 or json.loads(response.read(1024)) != {"accepted": True}:
-            raise ValueError("Checkpoint nicht bestätigt")
-    finally:
-        conn.close()
+    def follow_pool(self):
+        try:
+            response = self.link.request("GET", "/checkpoint")
+            checkpoint = response.get("checkpoint") if isinstance(response, dict) else None
+            if not valid_checkpoint(checkpoint) or checkpoint["id"] != self.job["id"]:
+                raise ValueError("Prüfstand nicht verfügbar")
+            with self.lock:
+                previous = self.remote_view or {**self.job, "heat_step": self.heat_step}
+                if checkpoint["heat_step"] < previous["heat_step"] or checkpoint["next"] < previous["next"]:
+                    raise ValueError("Prüfstand ist älter als der letzte Empfang")
+                self.sync_pending = False
+                self.remote_view = checkpoint
+                if (response.get("returned") is True and checkpoint["next"] < TOTAL
+                        and self.heat_hour(checkpoint["heat_step"])["standort_typ"] == "haus"):
+                    self.return_at = checkpoint["next"] + 1
+                    self.job = {key: checkpoint[key] for key in ("id", "next", "rejects")}
+                    self.heat_step = checkpoint["heat_step"] - 1
+                    self.state = "rechnet"
+        except (OSError, ValueError, http.client.HTTPException):
+            with self.lock:
+                self.sync_pending = True
+
+    def publish_progress(self):
+        with self.lock:
+            progress = {**self.job, "heat_step": self.heat_step}
+        try:
+            self.link.request("POST", "/progress", progress, timeout=.4)
+        except (OSError, ValueError, http.client.HTTPException):
+            pass  # The house owns the job; updating the inactive screen is best effort.
+
+    def observe_house(self, data):
+        if not valid_checkpoint(data):
+            raise APIError(400, "Ungültiger Prüfstand.")
+        with self.lock:
+            current = self.remote_view or {**(self.job or {}), "heat_step": self.heat_step}
+            if (self.state != "zurückgegeben" or data["id"] != self.job["id"]
+                    or data["next"] < current["next"] or data["heat_step"] < current["heat_step"]):
+                raise APIError(409, "Meldung passt nicht zum zurückgegebenen Batch.")
+            self.remote_view = data
+
+
+class PoolLink:
+    def __init__(self, target, tls, token):
+        self.target, self.tls, self.token = target, tls, token
+
+    def request(self, method, path, data=None, *, timeout=4):
+        conn = http.client.HTTPSConnection(self.target.hostname, self.target.port or 443,
+                                           context=self.tls, timeout=timeout)
+        try:
+            body = json.dumps(data) if data is not None else None
+            conn.request(method, path, body, {"Authorization": "Bearer " + self.token,
+                                               "Content-Type": "application/json"})
+            response = conn.getresponse()
+            if response.status != 200:
+                raise ValueError("Prüfstand nicht bestätigt")
+            return json.loads(response.read(1024))
+        finally:
+            conn.close()
 
 
 class TransferHandler(Handler):
     def route(self, method):
         if not hmac.compare_digest(self.headers.get("Authorization", ""), "Bearer " + self.server.token):
             raise APIError(401, "Ungültiger Zugangsschlüssel.")
-        if method != "POST" or self.path != "/checkpoint":
-            raise APIError(404, "Endpunkt nicht gefunden.")
-        self.server.batch.receive(self.body())
-        self.reply(200, {"accepted": True})
+        batch = self.server.batch
+        if method == "GET" and self.path == "/checkpoint":
+            return self.reply(200, batch.pool_progress())
+        if method == "POST" and self.path == "/checkpoint":
+            batch.receive(self.body())
+            return self.reply(200, {"accepted": True})
+        if method == "POST" and self.path == "/progress":
+            batch.observe_house(self.body())
+            return self.reply(200, {"accepted": True})
+        raise APIError(404, "Endpunkt nicht gefunden.")
 
 
 class ScreenHandler(Handler):
@@ -316,8 +419,8 @@ def main():
     sender = args.role == "sender"
     screen_port = args.screen_port or (8082 if sender else 8092)
     tls = tls_context(cert) if sender else tls_context(cert, str(args.credentials / "worker-key.pem"))
-    handoff = partial(transfer_checkpoint, target, tls, token) if sender else None
-    batch = Batch("Haus · Laptop A" if sender else "Sportbad · Laptop B", args.interval, handoff)
+    link = PoolLink(target, tls, token) if sender else None
+    batch = Batch("Haus · Laptop A" if sender else "Sportbad · Laptop B", args.interval, link)
     with ThreadingHTTPServer(("127.0.0.1", screen_port), ScreenHandler) as screen:
         screen.batch = batch
         screen.csrf = secrets.token_urlsafe(32)
