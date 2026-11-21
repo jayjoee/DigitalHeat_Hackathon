@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="de">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DigitalHeat · Blisterprüfung</title>
+<link rel="stylesheet" href="/screen.css">
+<script src="/screen.js" defer></script>
+<main>
+  <header><strong>DigitalHeat</strong><span id="site"></span></header>
+  <h1>Blisterprüfung</h1>
+  <div class="layout">
+    <section class="image" aria-label="Prüfbild">
+      <canvas id="frame" width="480" height="288" aria-label="Letztes geprüftes Blisterbild"></canvas>
+      <p id="image-note">Warte auf das erste Bild</p>
+    </section>
+    <section class="metrics" aria-label="Batchfortschritt">
+      <p id="state" role="status">Verbinde …</p>
+      <p id="count">0 / 30</p>
+      <progress id="progress" value="0" max="30" aria-label="Geprüfte Bilder"></progress>
+      <p>Geprüfte Bilder</p>
+      <p id="rejects">0 Packungen beanstandet</p>
+      <p id="recent"></p>
+      <button id="start" hidden>Batch starten</button>
+      <button id="move" hidden>Zum Sportbad wechseln</button>
+      <p id="error" role="alert"></p>
+    </section>
+  </div>
+  <footer>Synthetische Kamerabilder · Lokale Prüfung der Bildpixel · Fehlende Tabletten rot markiert</footer>
+</main>
+</html>
