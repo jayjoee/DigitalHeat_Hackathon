@@ -181,7 +181,7 @@ Für diese Posten gibt es keine öffentliche Zahl, weil sie pro Firma oder pro O
 | Anteil am Rechenerlös? | Im Pilot nicht nötig |
 | Vertrag, Konkurs? | Mindestens 5 Jahre (Abschreibung), Backup-Heizung bleibt |
 
-**Hardwarekosten:** Joël nennt 142'000 CHF Hardware plus 20'000 CHF Einbau für 8 kW. Der belegte Komplettpreis ergibt **258'000 CHF für 8 kW** bzw. 161'000 CHF für 5 kW. Joëls 162'000 CHF passen eher zu einer 5-kW-Einheit. Für die Rechnung gilt der belegte Preis.
+**Hardwarekosten:** Abgeglichen. `CustomerView_Joel.md` rechnet jetzt ebenfalls mit **258'000 CHF Hardware** und **290'000 CHF** gesamt für 8 kW (vorher 142'000 + 20'000 CHF ohne Quelle).
 
 ## 7. Was Offerten noch genauer machen würden
 

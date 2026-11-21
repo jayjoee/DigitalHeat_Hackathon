@@ -112,13 +112,13 @@ Ziel ist eine Win-Win-Win-Situation. Dieses Dokument behandelt nur den Kunden. W
 #### 3.1 Wer zahlt was?
 **DigitalHeat zahlt und besitzt alles:** Server, Einbau, Server-Strom (eigener Zähler) und Unterhalt. So beschreibt es auch DigitalHeat selbst («kein Hardwarekauf durch den Wärmeabnehmer»), und so arbeiten Heata und Deep Green in Grossbritannien.
 
-Warum der Haushalt die Anlage nicht selbst kauft: Eine 8-kW-Einheit kostet geschätzt rund 162'000 CHF (Hardware ≈ 142'000, Einbau ≈ 20'000). Eine Wärmepumpe kostet in Basel 31'500–63'000 CHF. Die Serverheizung ist vor allem ein Rechenzentrum, das sich über verkaufte Rechenzeit bezahlt, nicht über die Wärme. Wie sich das für DigitalHeat rechnet, klärt die Säule Firma.
+Warum der Haushalt die Anlage nicht selbst kauft: Eine 8-kW-Einheit kostet rund 290'000 CHF (Hardware ≈ 258'000, Kühlung, Einbau, Speicher und Netzwerk ≈ 32'000; belegter Komplettpreis eines L4-Servers, siehe KOSTEN_DH.md). Eine Wärmepumpe kostet in Basel 31'500–63'000 CHF. Die Serverheizung ist vor allem ein Rechenzentrum, das sich über verkaufte Rechenzeit bezahlt, nicht über die Wärme. Wie sich das für DigitalHeat rechnet, klärt die Säule Firma.
 
 | Modell | Haushalt zahlt | Bewertung aus Kundensicht |
 |---|---|---|
 | **A Gratiswärme** (empfohlen für den Pilot) | nichts, stellt Platz und Anschluss | stärkstes Verkaufsargument |
 | **B Wärmeabo** | Preis pro kWh, legt die Säule Firma fest | lohnt sich bis zur Schwelle in Abschnitt 4.3 |
-| C Kunde kauft die Anlage | ≈ 162'000 CHF | nicht sinnvoll: zu teuer, zu riskant |
+| C Kunde kauft die Anlage | ≈ 290'000 CHF | nicht sinnvoll: zu teuer, zu riskant |
 
 **Wohin der Ertrag der Rechenleistung fliesst:** Der Pharmakunde zahlt DigitalHeat für die Rechenzeit. DigitalHeat zahlt davon Strom, Hardware, Einbau und Unterhalt. Der Haushalt bekommt keinen Anteil am Rechenerlös, sondern die Wärme gratis und trägt kein Risiko. Ob er zusätzlich einen Bonus oder eine Platzmiete erhält, entscheidet die Säule Firma (Abschnitt 11).
 
@@ -611,7 +611,7 @@ Rechnung: `python3 src/kunde/wirtschaftlichkeit.py` → `daten/ergebnisse/win_wi
 **Empfehlung: DigitalHeat zahlt und besitzt alles** (Server, Installation, Strom der Server). Das ist auch das Modell auf digitalheat.ch («kein Hardwarekauf durch den Wärmeabnehmer») und bei Heata (UK) und Deep Green (UK).
 
 Gründe:
-- Eine 8-kW-Einheit kostet rund **142'000 CHF Hardware + 20'000 CHF Installation**. Das kann und will kein Haushalt tragen.
+- Eine 8-kW-Einheit kostet rund **258'000 CHF Hardware + 32'000 CHF Kühlung, Einbau, Speicher und Netzwerk = 290'000 CHF** (KOSTEN_DH.md). Das kann und will kein Haushalt tragen.
 - Die Hardware ist nach rund 5 Jahren abgeschrieben, das Risiko (Preis der Rechenzeit, Auslastung, Defekte) gehört zu dem, der die Rechenzeit verkauft.
 - Der Server hat einen eigenen Stromzähler. Der Haushalt zahlt keinen Server-Strom.
 
@@ -619,7 +619,7 @@ Gründe:
 |---|---|---|---|
 | **A Gratiswärme** (empfohlen für den Pilot) | nichts, stellt Platz und Anschluss | Wärme gratis | sehr einfach zu verkaufen |
 | **B Wärmeabo** | Preis pro kWh, legt die Säule Firma fest (Beispiel 9,3 Rp. = 30 % unter Wärmepumpe) | günstigere Wärme | schwächeres Argument, Ersparnis siehe 3d |
-| C Kunde kauft die Anlage | ≈ 162'000 CHF | Anteil am Rechenerlös | nicht sinnvoll: zu teuer, zu riskant |
+| C Kunde kauft die Anlage | ≈ 290'000 CHF | Anteil am Rechenerlös | nicht sinnvoll: zu teuer, zu riskant |
 
 ### 3. Was spart der Haushalt? (Modell A, Gratiswärme)
 
