@@ -6,28 +6,51 @@
 <link rel="stylesheet" href="/screen.css">
 <script src="/screen.js" defer></script>
 <main>
-  <header><strong>DigitalHeat</strong><span id="site"></span></header>
+  <header><strong>DigitalHeat</strong><span id="site">Standort wird geladen</span></header>
   <h1>Blisterprüfung</h1>
+  <p class="intro">Qualitätskontrolle an synthetischen Kamerabildern. Acht Tablettenfächer pro Packung.</p>
+  <section class="heat" aria-labelledby="heat-heading">
+    <h2 id="heat-heading">Wärmeverlauf · Simulation</h2>
+    <dl>
+      <div><dt>Modellzeit · 25. Mai</dt><dd id="heat-time">–</dd><p id="outdoor">–</p></div>
+      <div><dt>Wärme ins Wasser hier</dt><dd id="heat-power">–</dd><p>Für einen Modellserver</p></div>
+      <div><dt>Vorlauf hier</dt><dd id="heat-forward">–</dd><p>Angenommene Temperatur</p></div>
+      <div><dt>Speicher im Haus</dt><dd id="heat-tank">–</dd><p id="tank-capacity">–</p></div>
+    </dl>
+  </section>
   <div class="layout">
     <section class="image" aria-label="Prüfbild">
-      <canvas id="frame" width="720" height="432" aria-label="Letztes geprüftes Blisterbild"></canvas>
+      <div class="image-head">
+        <h2 id="image-title">Prüfbild</h2>
+        <span id="verdict" class="verdict">Wartet</span>
+      </div>
+      <div class="camera">
+        <canvas id="frame" width="720" height="432" aria-label="Letztes geprüftes Blisterbild"></canvas>
+        <p id="empty-camera">Das erste Prüfbild erscheint hier.</p>
+      </div>
       <p id="image-note">Warte auf das erste Bild</p>
     </section>
     <section class="metrics" aria-label="Batchfortschritt">
-      <p id="state" role="status">Verbinde …</p>
+      <div class="route" aria-label="Übergabe vom Haus zum Sportbad">
+        <span id="route-house">Haus</span><span aria-hidden="true">→</span><span id="route-pool">Sportbad</span>
+      </div>
+      <h2 id="state" role="status">Verbinde …</h2>
+      <p id="handoff"></p>
       <p id="count">0 / 30</p>
       <div id="progress" role="progressbar" aria-valuemin="0" aria-valuemax="30"
-           aria-valuenow="0" aria-label="Geprüfte Bilder">
+           aria-valuenow="0" aria-label="Geprüfte Packungen im Batch">
         <div id="progress-fill"></div>
       </div>
-      <p class="progress-caption"><span>Geprüfte Bilder</span><span id="percent">0 %</span></p>
-      <p id="rejects">0 Packungen beanstandet</p>
-      <p id="recent"></p>
-      <button id="start" hidden>Batch starten</button>
-      <button id="move" hidden>Zum Sportbad wechseln</button>
+      <p class="progress-caption"><span>Geprüfte Packungen im Batch</span><span id="percent">0 %</span></p>
+      <dl class="results">
+        <div><dt>Freigegeben</dt><dd id="passed">0</dd></div>
+        <div><dt>Beanstandet</dt><dd id="rejects">0</dd></div>
+      </dl>
+      <p id="recent">Hier geprüft · noch keine Packung</p>
+      <button id="start" type="button" hidden>Batch starten</button>
+      <button id="move" type="button" hidden>Übergabe wiederholen</button>
       <p id="error" role="alert"></p>
     </section>
   </div>
-  <footer>Synthetische Kamerabilder · Lokale Prüfung der Bildpixel · Fehlende Tabletten rot markiert</footer>
 </main>
 </html>

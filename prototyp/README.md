@@ -17,9 +17,9 @@ Im Ordner `prototyp` starten:
 python3 digitalheat.py demo --port 8081 --host-port 8091 --worker-port 8444 --open
 ```
 
-Auf [Haus · Laptop A](http://127.0.0.1:8081) **Batch starten** und nach einigen Bildern
-**Zum Sportbad wechseln** drücken. Auf [Sportbad · Laptop B](http://127.0.0.1:8091)
-läuft die Prüfung beim nächsten Bild weiter. Für zwei physische Geräte siehe [Blister-Demo](blister/README.md).
+Auf [Haus · Laptop A](http://127.0.0.1:8081) **Batch starten**.
+Beim automatischen Wechsel läuft die Prüfung auf [Sportbad · Laptop B](http://127.0.0.1:8091)
+beim nächsten Bild weiter. Für zwei physische Geräte siehe [Blister-Demo](blister/README.md).
 
 ## Klassischen Pharma-Prototyp ausprobieren
 
