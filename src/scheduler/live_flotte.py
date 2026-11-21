@@ -29,6 +29,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 from src.scheduler import annahmen as A  # noqa: E402
 from src.scheduler.flotte import bad_profil, baue, serverzahl_haus  # noqa: E402
 from src.scheduler.jahr import profil_laden  # noqa: E402
+from src.scheduler.serverbetrieb import Leistungsprofil  # noqa: E402
 
 ROOT = A.ROOT
 PY = ROOT / ".venv" / "bin" / "python"
@@ -46,15 +47,15 @@ def bad_anteil(n_bad_flotte):
     return math.ceil(n_bad_flotte / A.wert("flotte_haeuser"))
 
 
-def neue_flotte(profil, n_bad):
-    f, _ = baue(1, serverzahl_haus(profil), SZENARIO, REGEL, profil, bad_profil(profil), n_bad)
+def neue_flotte(profil, n_bad, leistung=None):
+    f, _ = baue(1, serverzahl_haus(profil), SZENARIO, REGEL, profil, bad_profil(profil), n_bad, leistung=leistung)
     j = f.markierter_job(standort=0)
     return f, j
 
 
-def trockenlauf(profil, n_bad):
+def trockenlauf(profil, n_bad, leistung=None):
     """Ganzes Jahr mit markiertem Job; gibt pro Stunde (Standort, kWh) des Jobs."""
-    f, j = neue_flotte(profil, n_bad)
+    f, j = neue_flotte(profil, n_bad, leistung)
     spur = []
     for h in range(len(profil)):
         f.schritt(h)
@@ -104,16 +105,18 @@ def starten(ordner, log):
 def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("--flotte", action="store_true")
+    ap.add_argument("--abschalten", action="store_true", help="Ein/Aus-Zustände der Standorte mit simulieren")
     ap.add_argument("--tag", help="JJJJ-MM-TT; Standard: Demo-Tag aus dem Trockenlauf")
     ap.add_argument("--sekunden", type=float, default=3.0, help="Echtzeit pro simulierter Stunde")
     ap.add_argument("--arbeitsordner", default="messungen/live_job_flotte")
     ap.add_argument("--nur-tag", action="store_true", help="nur den Demo-Tag bestimmen und ausgeben")
     a = ap.parse_args(argv)
+    leistung = Leistungsprofil(230) if a.abschalten else None
 
     profil = profil_laden()
     n_bad = bad_anteil(n_bad_aus_bilanz())
     print(f"Trockenlauf: Haus 01 + Sportbad ({n_bad} Server, Anteil eines Hauses), «Nur Jobs mit Frist» …", flush=True)
-    f_probe, spur = trockenlauf(profil, n_bad)
+    f_probe, spur = trockenlauf(profil, n_bad, leistung)
     tag = a.tag or demo_tag(profil, f_probe, spur)
     if tag is None:
         raise SystemExit("Kein Tag mit Migration Haus → Bad gefunden")
@@ -126,7 +129,7 @@ def main(argv=None):
         return
 
     # 1) Dieselbe Flotte bis zum Tag vorrechnen (deterministisch, gleicher Zustand wie im Trockenlauf)
-    f, j = neue_flotte(profil, n_bad)
+    f, j = neue_flotte(profil, n_bad, leistung)
     for h in range(h0):
         f.schritt(h)
     ort = j.standort
@@ -179,6 +182,10 @@ def main(argv=None):
                  "haus_bedarf_kwh": zs[0]["bedarf_kwh"], "haus_speicher_kwh": zs[0]["speicher_kwh"],
                  "haus_server_laufend": zs[0]["server_laufend"], "bad_bedarf_kwh": zs[i_bad]["bedarf_kwh"],
                  "bad_server_laufend": zs[i_bad]["server_laufend"]}
+            if leistung is not None:
+                z.update(haus_server_eingeschaltet=zs[0]["server_eingeschaltet"],
+                         bad_server_eingeschaltet=zs[i_bad]["server_eingeschaltet"],
+                         haus_server_standby=zs[0]["server_standby"], bad_server_standby=zs[i_bad]["server_standby"])
             ein_s = x * a.sekunden
             t_start = time.time()
             if ein_s > 0.05:
@@ -207,7 +214,8 @@ def main(argv=None):
                 "standort": namen[ort], "texte_fertig": fortschritt(ordner), "stunden": protokoll,
                 "migrationen": migrationen, "aktualisiert": time.time()}
         status_schreiben(ende)
-    aus = ROOT / "daten" / "ergebnisse" / f"live_flotte_{tag}.json"
+    zusatz = "_abschalten" if leistung is not None else ""
+    aus = ROOT / "daten" / "ergebnisse" / f"live_flotte_{tag}{zusatz}.json"
     aus.write_text(json.dumps(ende, indent=1, ensure_ascii=False))
     print(f"Checkpoint bei {fortschritt(ordner):,} Texten, {len(migrationen)} Migration(en). "
           f"Protokoll: {aus.relative_to(ROOT)}, Dashboard: dashboard/live.json")

@@ -25,7 +25,7 @@ Szenario **Genug Aufträge**: Ein Pharma-Vertrag bucht 60 % der Stunden fest (Wi
 |---|---|
 | Server pro Haus | **8** |
 | Deckung des Wärmebedarfs (Heizung + Warmwasser, 31'231 kWh) | **93,0 %** (29'027 kWh, Rest 2'203 kWh vom Backup) |
-| Abgeführte Wärme | **5 kWh** (0,02 % der Serverwärme) |
+| Abgeführte Wärme | **5 kWh** (Case-Idealwert bei 0 W Leerlauf, 0,02 % der Serverwärme) |
 | Auslastung | **51,8 %** (36'290 Server-h ÷ 8 × 8'760) |
 | Verpasste Fristen | **0,0 %** von 14'390 Jobs mit Frist |
 | Stromkosten | 12'066 CHF (36'290 kWh × 0,3325) |
@@ -37,6 +37,30 @@ Szenario **Genug Aufträge**: Ein Pharma-Vertrag bucht 60 % der Stunden fest (Wi
 | **Ergebnis DigitalHeat** | **+34'500 CHF pro Jahr** nach allen Kosten, Steuern und Zins (ohne Zins: +43'000 CHF), Rendite ≈ 21 %, Investition nach 3,0 Jahren zurück |
 | Vorsichtiger Fall (0,50 CHF) | +20'300 CHF pro Jahr, Investition nach 3,6 Jahren zurück |
 | **Nötiger Vertragspreis mit allen Kosten** | **0,36 CHF pro L4-Stunde** = 2,87 CHF pro Server-h |
+
+## Leerlauf und Abschalten im Referenzhaus
+
+Beide Strategien nutzen dasselbe Wetter, dieselbe Auftragsfolge und den 35-kWh-Speicher. Beim **Pausieren** bleiben acht Server bereit. Beim **Abschalten** schaltet das Modell je nach Wärmebedarf und Fristen nur die benötigten Server ein. Bei höchstens 35 % Speicherfüllung beginnt die Ladephase, ab 85 % endet sie. Fristkritische Aufträge können auch bei vollem Tank einen Server starten. Ein Server bleibt nach der letzten Anforderung eine Stunde bereit.
+
+Die Annahmen pro Server sind 1’000 W unter Last, 100/230/350 W im Leerlauf, 10 W im Standby und fünf Minuten Startzeit. Während des Starts zieht der Server im Modell 1’000 W und kann noch keine Jobs ausführen. Für Last, Leerlauf und Start gelten je 80 % Wärmerückgewinnung. Die Standby-Leistung zählt zum Stromverbrauch, dem Wassertank wird daraus keine Wärme gutgeschrieben. Die 230 W sind aus einer H100-Messung abgeleitet. Für die L4-Konfiguration liegen noch keine Messungen vor.
+
+| Genug Aufträge | Leerlauf je Server | Strom pro Jahr | Abgeführte Wärme | Wärmedeckung | Fristen verpasst |
+|---|---:|---:|---:|---:|---:|
+| Case-Idealmodell | 0 W | 36’290 kWh | 5 kWh | 93,0 % | 0 |
+| Jobs pausieren | 100 W | 36’891 kWh | 1’083 kWh | 91,0 % | 0 |
+| Server abschalten | 100 W | 35’552 kWh | <1 kWh | 90,3 % | 0 |
+| Jobs pausieren | 230 W | 40’890 kWh | 4’191 kWh | 91,3 % | 0 |
+| Server abschalten | 230 W | 35’662 kWh | <1 kWh | 90,5 % | 0 |
+| Jobs pausieren | 350 W | 44’623 kWh | 7’098 kWh | 91,6 % | 0 |
+| Server abschalten | 350 W | 35’777 kWh | <1 kWh | 90,8 % | 0 |
+
+Bei 230 W spart das Abschalten rund **5’200 kWh bzw. 1’740 CHF Strom pro Jahr**. Die Wärmedeckung sinkt gegenüber dem Pausieren um **0,8 Prozentpunkte**. Die Case-Kostenschwelle beträgt rund **0,23 CHF pro Rechenstunde** beim Abschalten und **0,30 CHF** beim Pausieren. Leerlauf und Standby verursachen Kosten, während nur die Rechenstunden als Erlösgrundlage zählen.
+
+Bei **nur Jobs mit Frist** (Alibaba-Szenario) fallen bei 230 W auch mit Abschalten **8’760 kWh** abgeführte Wärme an, gegenüber **10’969 kWh** beim Pausieren. Fristkritische Jobs laufen in diesem Vergleich lokal, auch wenn der Tank voll ist. In beiden Strategien wurden alle fälligen Fristen des Referenzjahrs eingehalten.
+
+Der Einzelhausvergleich bildet die lokale Ausführung ab. Der Wärme-Router nutzt dieselbe Abschaltlogik auch für die [Flotte mit Sportbad](#flotte-mit-bedarfsgerechtem-abschalten). Vor einem Pilotbetrieb müssen Startzeit bis zur Jobbereitschaft und Leistung in allen Betriebszuständen am L4-System gemessen werden, ebenso der Strombedarf der Kühlung.
+
+**Reproduzieren:** `python3 -m src.scheduler.serverbetrieb --ausgabe daten/ergebnisse/serverbetrieb.json`. Die Optionen `--leerlauf-watt`, `--standby-watt` und `--start-minuten` erlauben eigene Szenarien.
 
 ## Warum 8 Server
 | Server | 4 | 6 | **8** | 10 | 12 |
@@ -101,7 +125,7 @@ Frage: Wie viele Server-Stunden kann DigitalHeat einen Tag im Voraus verbindlich
 - Damit ist die Preisprämisse belegt und nicht nur angenommen. Offen bleibt die Nachfrage: Zusagbar heisst noch nicht verkauft.
 - Daten: `daten/ergebnisse/zusage_8_spot.json`.
 
-## Wärme-Router: Flotte mit Sommer-Senke (Stand 21.11.2026, `src/scheduler/router.py`, `flotte.py`)
+## Wärme-Router im Case-Idealmodell
 Flotte: 20 × Referenzhaus mit je 8 Servern (Serverregel, Test). Ein gemeinsamer Auftragspool, der Router verteilt die Aufträge auf die Standorte. Der Kern `entscheide()` ist unverändert. Regel bei Überschuss: abgeben (Wärme zuerst).
 **Vorrang (Team-Entscheid 21.11.2026): Wohnhäuser haben bei der Zuteilung immer Vorrang. Das Bad nimmt nur Rechenlast auf, die kein Haus als Wärme brauchen kann.** Ein Haus darf dafür auch einen angefangenen Job vom Bad zurückholen.
 Senke: **Sportbad St. Jakob**, offen 26.4.–5.10.2025, ca. 650 MWh pro Jahr (Schätzung ±30 %, `daten/HALLENBAD.md`). Ein Hallenbad scheidet aus, weil das Rialto Sommerpause hat und das Hallenbad Eglisee nur im Winter steht.
@@ -130,4 +154,21 @@ Senke: **Sportbad St. Jakob**, offen 26.4.–5.10.2025, ca. 650 MWh pro Jahr (Sc
 
 **Grenzen:** Der Wärmebedarf des Bads ist eine Schätzung, ohne Lehrschwimmbecken und Duschen. Ins Becken als Speicher passen 1'200 kWh (Schätzung). Das Bad hat in der Zusage keinen Prognosefehler (Monatsprofil). Die Migration rechnet ohne Übertragung über das Netz. Die Typ-B-Ankünfte im Pool sind anders gezogen als in 20 einzelnen Häusern.
 
-**Reproduzieren:** `python3 src/scheduler/zusage.py`, `python3 src/scheduler/flotte.py` (≈ 5 min), Tests `python3 -m unittest discover -s tests` (22 Tests), Vektorvergleich `.venv/bin/python tests/vektorvergleich.py` (≈ 8 min).
+**Reproduzieren:** `python3 src/scheduler/zusage.py`, `python3 src/scheduler/flotte.py` (≈ 5 min), Tests `python3 -m unittest discover -s tests`, Vektorvergleich `.venv/bin/python tests/vektorvergleich.py` (≈ 8 min).
+
+## Flotte mit bedarfsgerechtem Abschalten
+
+Der Wärme-Router teilt zuerst den Häusern Aufträge zu. Zusammen mit Wärmebedarf und Speicherfüllstand bestimmt die verfügbare Arbeit, wie viele Server pro Standort starten. Starts dauern im Modell fünf Minuten und reduzieren das Rechenbudget der Stunde. Leerlauf und Starts liefern Wärme mit dem Case-Wirkungsgrad, nur Standby liefert keine nutzbare Wärme. Für beide Standorttypen gelten angenommene **230 W Leerlauf und 10 W Standby** pro Server. Ohne saisonalen Wärmebedarf hält das Bad alle Server im Standby. Für die Erlösrechnung zählen Rechenstunden abzüglich Migrationszeit. Die Stromrechnung verwendet den Gesamtverbrauch.
+
+| Nachfrage | Sportbad | Strom Flotte | Wärmedeckung Häuser / Bad | Extern abgegeben | Fristen verpasst (intern) | Jahresergebnis |
+|---|---|---:|---:|---:|---:|---:|
+| Nur Jobs mit Frist | Ohne | 451’579 kWh | 56,8 % / – | 194’940 h | 0 | −238’567 CHF |
+| Nur Jobs mit Frist | 50 Server | 620’914 kWh | 56,2 % / 21,0 % | 30’227 h | 0 | −172’014 CHF |
+| Genug Aufträge | Ohne | 714’113 kWh | 90,6 % / – | 183 h | 0 | +614’580 CHF |
+| Genug Aufträge | 50 Server | 903’903 kWh | 90,6 % / 23,1 % | 187 h | 0 | +737’049 CHF |
+
+Mit und ohne Bad kommen dieselben Aufträge mit Frist an. Bei knapper Nachfrage hält das Sportbad rund **165’000 zusätzliche Serverstunden** im eigenen System und verbessert das Jahresergebnis um **66’553 CHF**. Dabei steigt der Gesamtstrom, weil mehr Aufträge lokal laufen. Die 50 Bad-Server sind übers Jahr zu rund **60 % im Standby**. Mit genügend Aufträgen erhöht das Bad das Jahresergebnis um **122’469 CHF**. In diesem Szenario füllt der Spot-Nachschub auch die zusätzliche Kapazität am Bad. **50 Server** sind die Vergleichsgrösse aus dem Case-Idealmodell. Das Optimum im Abschaltmodell wurde noch nicht gesucht.
+
+Mit Vortagszusage und Gutschrift liegt das Jahresergebnis bei genügend Aufträgen bei **610’040 CHF ohne Bad** und **732’188 CHF mit Bad**. Rund **91 %** der simulierten Kapazität sind am Vortag zusagbar. Für das Sportbad verwendet die Prognose dasselbe geschätzte Monatsprofil wie die tatsächliche Simulation. Die Ausführung abgegebener Jobs in der externen Cloud wird nicht simuliert.
+
+**Reproduzieren:** `python3 src/scheduler/flotte.py --abschalten` schreibt `daten/ergebnisse/flotte_abschalten.json`. Die Optionen `--leerlauf-watt`, `--standby-watt` und `--start-minuten` ändern das Leistungsprofil. Die Live-Option `--flotte --abschalten` zeigt simulierte Serverzustände neben dem echten lokalen Job.

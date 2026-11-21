@@ -119,11 +119,12 @@ class Haus:
         """Jobs fortschreiben und Fristen prüfen. Gilt für Einzelhaus und Pool (router.Pool erbt die Logik)."""
         fristen_buchen(self.q, self.z, h, e.abgegeben, e.laeufe)
 
-    def verbuchen(self, h, e):
+    def verbuchen(self, h, e, *, zusatzstrom_kwh=0.0, zusatzwaerme_kwh=0.0):
         p, z = self.profil[h], self.z
         bedarf = self.bedarf(h)
         speicher_vorher = self.s
-        waerme = e.strom_kwh * self.eta
+        strom = e.strom_kwh + zusatzstrom_kwh
+        waerme = e.strom_kwh * self.eta + zusatzwaerme_kwh
         direkt = min(waerme, bedarf)
         rest = bedarf - direkt
         aus_sp = min(self.s, rest)
@@ -133,12 +134,12 @@ class Haus:
         rein = min(ueber, self.smax - self.s)
         self.s += rein
         abgef = ueber - rein
-        for k, v in (("strom", e.strom_kwh), ("waerme", waerme), ("genutzt", direkt + aus_sp),
+        for k, v in (("strom", strom), ("waerme", waerme), ("genutzt", direkt + aus_sp),
                      ("aus_speicher", aus_sp), ("abgefuehrt", abgef), ("backup", backup), ("bedarf", bedarf)):
             z[k] += v
         return {"zeit": p["zeit"], "temp_c": p["temp"], "bedarf_kwh": round(bedarf, 3),
                 "heizung_kwh": round(p["heizung"], 3), "warmwasser_kwh": round(p["ww"], 3),
-                "strom_kwh": round(e.strom_kwh, 3), "waerme_kwh": round(waerme, 3),
+                "strom_kwh": round(strom, 3), "waerme_kwh": round(waerme, 3),
                 "genutzt_kwh": round(direkt + aus_sp, 3), "speicher_vorher_kwh": round(speicher_vorher, 3),
                 "speicher_kwh": round(self.s, 3), "abgefuehrt_kwh": round(abgef, 3),
                 "backup_kwh": round(backup, 3), "server_laufend": round(e.strom_kwh / A.wert("server_kw"), 3),
@@ -199,11 +200,11 @@ def simuliere(n_server, szenario="spot", bei_ueberschuss="rechnen", stunden_csv=
 def bilanz(n, szenario, regel, z, raten):
     from src.wirtschaft import rechne, break_even  # Wirtschaftlichkeit DigitalHeat (KOSTEN_DH.md)
     preis_strom, preis_waerme = A.wert("strompreis_chf_kwh"), A.wert("waermewert_chf_kwh")
-    server_h = z["strom"] / A.wert("server_kw")
+    server_h = z.get("rechenstrom", z["strom"]) / A.wert("server_kw")
     stromkosten = z["strom"] * preis_strom
     waermewert = z["genutzt"] * preis_waerme
-    w = rechne(n, server_h, z["genutzt"])
-    be = break_even(n, server_h, z["genutzt"])
+    w = rechne(n, server_h, z["genutzt"], strom_kwh=z["strom"])
+    be = break_even(n, server_h, z["genutzt"], strom_kwh=z["strom"])
     karten = A.wert("karten_pro_server")
     return {
         "server_pro_haus": n, "szenario": szenario, "regel_ueberschuss": regel,

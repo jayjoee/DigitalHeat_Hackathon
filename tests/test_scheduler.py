@@ -19,8 +19,9 @@ sys.path.insert(0, str(ROOT))
 from src.scheduler import annahmen as A  # noqa: E402
 from src.scheduler import zusage as Z  # noqa: E402
 from src.scheduler.jahr import Haus, profil_laden, simuliere  # noqa: E402
-from src.scheduler.kern import Job  # noqa: E402
+from src.scheduler.kern import Job, Lage, entscheide  # noqa: E402
 from src.scheduler.router import Flotte  # noqa: E402
+from src.scheduler.serverbetrieb import HausMitServerbetrieb, Leistungsprofil  # noqa: E402
 from src.wirtschaft import rechne  # noqa: E402
 
 PROFIL = profil_laden()
@@ -247,6 +248,109 @@ class Wirtschaft(unittest.TestCase):
         erwartet = 100 * 8 * A.wert("vertragspreis_chf_karte_h") * A.wert("sla_gutschrift_anteil")
         self.assertEqual(b["jahre"][0]["fehlmenge"], round(erwartet))
         self.assertLess(b["ergebnis_pro_jahr_chf"], a["ergebnis_pro_jahr_chf"])
+
+    def test_zustandsstrom_erhoeht_kosten_ohne_mehrerloes(self):
+        basis = rechne(8, 36290, 29027)
+        mit_leerlauf = rechne(8, 36290, 29027, strom_kwh=37290)
+        self.assertEqual(basis["jahre"][0]["erloes"], mit_leerlauf["jahre"][0]["erloes"])
+        self.assertEqual(mit_leerlauf["jahre"][0]["strom"] - basis["jahre"][0]["strom"], 333)
+
+
+class Serverbetrieb(unittest.TestCase):
+    def test_flotte_bad_startet_bei_waermebedarf_und_geht_in_standby(self):
+        leistung = Leistungsprofil(230, start_minuten=5)
+        haus = HausMitServerbetrieb(1, "spot", kunstprofil([0.8, 0, 0]), leistung,
+                                    abschalten=True, bei_ueberschuss="abgeben", speicher_kwh=0,
+                                    mit_ankuenften=False)
+        bad = HausMitServerbetrieb(2, "spot", kunstprofil([0, 1.6, 0]), leistung,
+                                   abschalten=True, bei_ueberschuss="abgeben", speicher_kwh=0,
+                                   mit_ankuenften=False, typ="bad")
+        f = Flotte([haus, bad], "spot", "abgeben", nachfrage_server=0)
+        f.schritt(0)
+        self.assertEqual(bad.eingeschaltet, 0)
+        self.assertAlmostEqual(bad.z["standbystrom"], 0.02)
+        kopie = f.kopie()
+        r = kopie.schritt(1)
+        self.assertEqual(bad.eingeschaltet, 0)
+        self.assertEqual(r["standorte"][1]["server_eingeschaltet"], 2)
+        self.assertEqual(r["standorte"][1]["server_starts"], 2)
+        self.assertLess(r["standorte"][1]["server_laufend"], 2.0)
+        self.assertEqual(f.schritt(1), r)
+        r = f.schritt(2)
+        self.assertEqual(r["standorte"][1]["server_standby"], 2)
+        self.assertAlmostEqual(r["standorte"][1]["strom_kwh"], 0.02)
+        self.assertAlmostEqual(r["standorte"][1]["waerme_kwh"], 0)
+        b = f.bilanz()
+        self.assertGreater(b["strom_kwh"], b["server_h_verkauft"])
+        self.assertAlmostEqual(bad.z["strom"], sum(bad.z[k] for k in (
+            "rechenstrom", "leerlaufstrom", "standbystrom", "startstrom")))
+
+    def test_flotte_haus_hat_vorrang_vor_bad_beim_start(self):
+        profil = kunstprofil([0.8])
+        leistung = Leistungsprofil(230)
+        standorte = [HausMitServerbetrieb(1, "alibaba", profil, leistung,
+                                          abschalten=True, bei_ueberschuss="abgeben", speicher_kwh=0,
+                                          mit_ankuenften=False, typ=typ) for typ in ("haus", "bad")]
+        f = Flotte(standorte, "alibaba", "abgeben", nachfrage_server=0)
+        job(f, 1, 0.5, frist=1, typ="B")
+        f.schritt(0)
+        self.assertEqual(standorte[0].z["serverstarts"], 1)
+        self.assertEqual(standorte[1].z["serverstarts"], 0)
+        self.assertEqual(f.pool.z["fertig"], 1)
+
+    def test_flotte_gibt_dringenden_job_bei_vollem_speicher_ab(self):
+        haus = HausMitServerbetrieb(1, "alibaba", kunstprofil([0]), Leistungsprofil(230),
+                                    abschalten=True, bei_ueberschuss="abgeben", mit_ankuenften=False)
+        haus.s = haus.smax
+        f = Flotte([haus], "alibaba", "abgeben", nachfrage_server=0)
+        job(f, 1, 0.5, frist=1, typ="B")
+        f.schritt(0)
+        self.assertEqual(haus.z["serverstarts"], 0)
+        self.assertEqual(f.pool.z["abgegeben"], 1)
+        self.assertEqual(f.pool.z["verpasst"], 0)
+
+    def test_start_nachlauf_standby_und_waerme(self):
+        haus = HausMitServerbetrieb(1, "spot", kunstprofil([0.8, 0.0, 0.0]),
+                                    Leistungsprofil(230, start_minuten=15), abschalten=True,
+                                    speicher_kwh=0, mit_ankuenften=False)
+        start, leerlauf, standby = (haus.schritt(h) for h in range(3))
+        self.assertAlmostEqual(start["server_laufend"], 0.75)
+        self.assertAlmostEqual(start["strom_kwh"], 1.0)
+        self.assertAlmostEqual(start["genutzt_kwh"], 0.8)
+        self.assertAlmostEqual(leerlauf["strom_kwh"], 0.23)
+        self.assertAlmostEqual(leerlauf["abgefuehrt_kwh"], 0.184)
+        self.assertAlmostEqual(standby["strom_kwh"], 0.01)
+        self.assertEqual(standby["waerme_kwh"], 0)
+        self.assertEqual(haus.z["serverstarts"], 1)
+
+    def test_nicht_unterbrechbarer_job_passt_nur_auf_einen_server(self):
+        lage = Lage(0, 1, 0, 0, 2, server_kapazitaeten_kwh=(0.4, 0.4))
+        pflicht = Job(0, "B", 0, 1, 0.7, False)
+        ergebnis = entscheide(lage, [pflicht])
+        self.assertEqual(ergebnis.laeufe, [])
+        self.assertEqual(ergebnis.server_belegt_kwh, (0, 0))
+
+    def test_pflichtjob_weckt_server_auch_bei_vollem_speicher(self):
+        haus = HausMitServerbetrieb(2, "alibaba", kunstprofil([0.0]), Leistungsprofil(230),
+                                    abschalten=True, mit_ankuenften=False)
+        haus.s = haus.smax
+        haus.plan = {0: ["B"]}
+        haus.schritt(0)
+        self.assertEqual(haus.z["serverstarts"], 1)
+        self.assertEqual(haus.z["fertig"], 1)
+        self.assertEqual(haus.z["verpasst"], 0)
+
+    def test_pflichtjob_weckt_server_vor_der_naechsten_stunde(self):
+        haus = HausMitServerbetrieb(1, "alibaba", kunstprofil([0.0, 0.0]),
+                                    Leistungsprofil(230, start_minuten=59), abschalten=True,
+                                    mit_ankuenften=False)
+        haus.s = haus.smax
+        haus.plan = {0: ["B"]}
+        self.assertEqual(haus.schritt(0)["server_laufend"], 0)
+        self.assertEqual(haus.z["serverstarts"], 1)
+        haus.schritt(1)
+        self.assertEqual(haus.z["fertig"], 1)
+        self.assertEqual(haus.z["verpasst"], 0)
 
 
 if __name__ == "__main__":

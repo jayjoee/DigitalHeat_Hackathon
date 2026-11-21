@@ -53,13 +53,16 @@ Eine Liste aller Dokumente mit je einem Satz steht in [`docs/README.md`](docs/RE
 | | |
 |---|---|
 | Server pro Haus | 8 (je 8 Grafikkarten NVIDIA L4, zusammen 8 kW) |
-| Wärme gedeckt | 93 % (Referenzhaus Basel, Wetter 2025) |
-| Weggekühlte Wärme | 5 kWh im ganzen Jahr |
-| Preis für den Kunden | 4,80 CHF pro Server-Stunde (12 % unter Schweizer Clouds) |
-| Ergebnis für DigitalHeat | +34'300 CHF pro Haus und Jahr, Investition nach 3 Jahren zurück |
-| Sportbad als Sommer-Abnehmer | aus 180'000 verschenkten Server-Stunden werden 12'500 |
+| Wärme gedeckt | 93 % im Case-Idealmodell, 90,5 % mit Abschalten (Referenzhaus Basel 2025) |
+| Weggekühlte Wärme | 5 kWh im Case-Idealmodell (0 W Leerlauf) |
+| Angenommener Vertragspreis | 4,80 CHF pro Server-Stunde |
+| Ergebnis für DigitalHeat | +29'400 CHF pro Haus und Jahr mit Abschalten, vor Day-ahead-Gutschriften |
 
 **Ehrlich gesagt:** Gibt es zu wenig Aufträge, macht das System Verlust, auch mit Bad. Der Engpass sind die Aufträge, nicht die Wärme. Details und alle Grenzen stehen in [`docs/ERGEBNISSE.md`](docs/ERGEBNISSE.md).
+
+**Serverbetrieb im Referenzhaus:** Bei angenommenen 230 W Leerlauf spart bedarfsgerechtes Abschalten rund **5'200 kWh Strom pro Jahr** gegenüber dem blossen Pausieren der Jobs. Die Wärmedeckung sinkt von 91,3 % auf 90,5 %. Das Dashboard zeigt den Vergleich für drei Leerlaufleistungen.
+
+Im Dashboard vergleicht der Abschnitt **Flotte** 20 Häuser mit und ohne 50 Server am Sportbad. «Bedarfsgerecht abschalten» berücksichtigt Startzeit, Leerlauf und Standby an beiden Standorttypen. Für die Live-Demo mit diesen simulierten Zuständen `--abschalten` an den Flottenbefehl anhängen.
 
 ## Was ist echt, was ist simuliert?
 
@@ -68,17 +71,19 @@ Eine Liste aller Dokumente mit je einem Satz steht in [`docs/README.md`](docs/RE
 | Ein KI-Job (Texte in Vektoren umwandeln) läuft wirklich auf dem Laptop. Er wird pausiert, fortgesetzt und per Checkpoint an einen neuen Ort verschoben | Die Häuser, das Sportbad und die 20 Standorte. Jedes Haus ist ein Rechenmodell, kein echter Keller |
 | Strom und Tempo des Jobs sind gemessen | Die Aufträge. Sie kommen nach dem Muster eines echten Rechenzentrums (Alibaba-Trace) |
 | Wetter Basel 2025 und die Prognosen dazu (Open-Meteo, ECMWF) | Der Wärmebedarf des Sportbads, eine Schätzung (±30 %) |
-| Strompreis Basel 2026 (ElCom) und Hardwarepreise (Offerten aus dem Netz) | Der Ortswechsel bei der Migration. Der Neustart ist echt, das Netz dazwischen nicht |
+| Strompreis Basel 2026 (ElCom) und Hardwarepreise (Offerten aus dem Netz) | Ortswechsel, Netzübertragung und Stromzustände der Server. Der Prozess startet lokal neu |
 
 ## Selber nachrechnen
 
 Jede Zahl kommt aus dem Code. Alle Annahmen mit Quelle stehen in `src/scheduler/annahmen.py`.
 
 ```sh
-python3 -m unittest discover -s tests       # 22 Prüfungen, ca. 6 s
+python3 -m unittest discover -s tests       # Scheduler- und Regressionstests
 python3 src/scheduler/jahr.py --server 8    # ein Haus, ganzes Jahr
+python3 -m src.scheduler.serverbetrieb --ausgabe daten/ergebnisse/serverbetrieb.json
 python3 src/scheduler/zusage.py             # Zusage am Vortag
 python3 src/scheduler/flotte.py             # 20 Häuser + Sportbad (ca. 5 min)
+python3 src/scheduler/flotte.py --abschalten # Flotte mit Leerlauf, Standby und Startzeit
 python3 src/dashboard_daten.py              # Zahlen fürs Dashboard neu erzeugen
 ```
 

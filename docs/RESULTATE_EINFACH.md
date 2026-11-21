@@ -16,10 +16,12 @@ Ein Server braucht Strom und macht daraus fast vollständig Wärme. Normalerweis
 |---|---|---|
 | Server pro Haus | **8** | |
 | Wärmebedarf gedeckt | **93 %** | Nur 7 % muss die normale Heizung liefern, an den kältesten Tagen |
-| Verschwendete Wärme | **5 kWh im Jahr** | Praktisch nichts wird weggekühlt |
+| Abgeführte Wärme | **5 kWh im Jahr im Case-Idealmodell** | Das Modell setzt 0 W bei pausierten Servern an |
 | Auslastung | **52 %** | Die Server rechnen gut die Hälfte der Zeit |
 | Verpasste Fristen | **0 %** | Jeder Auftrag mit Frist wird rechtzeitig fertig |
 | Break-even-Preis | **0,23 CHF pro Server-Stunde** | Ab diesem Preis decken die Rechenerlöse den Strom (abzüglich Wert der Wärme) |
+
+**Jobs pausieren oder Server abschalten?** Bei angenommenen 230 W Leerlauf fallen beim Pausieren im Modell rund 4’200 kWh ungenutzte Wärme an. Gezieltes Abschalten spart im Vergleich rund 5’200 kWh Strom pro Jahr. Die Wärmedeckung sinkt dabei von 91,3 % auf 90,5 %. Die Verbrauchswerte der L4-Server müssen im Pilot gemessen werden. [Rechnung und Bandbreite](ERGEBNISSE.md#leerlauf-und-abschalten-im-referenzhaus)
 
 ## Warum genau 8 Server?
 - Mehr Server = mehr Wärme, aber jeder Server rechnet seltener.
@@ -34,9 +36,9 @@ Ein Server braucht Strom und macht daraus fast vollständig Wärme. Normalerweis
 ## Der Wärme-Router: 20 Häuser und ein Sportbad
 - Alle Aufträge kommen in einen gemeinsamen Topf. Jede Stunde verteilt der **Wärme-Router** sie dorthin, wo die Wärme gebraucht wird.
 - **Die Häuser haben immer Vorrang.** Das Bad bekommt nur Arbeit, deren Wärme gerade kein Haus brauchen kann.
-- Ohne Bad gehen im Jahr rund **180'000 Server-Stunden** an andere Clouds, weil im Sommer niemand die Wärme braucht. Mit einem Bad mit 50 Servern sind es nur noch **12'500**. Die Häuser bekommen trotzdem fast gleich viel Wärme wie vorher (51 % statt 52 % bei knapper Nachfrage).
-- Das bringt DigitalHeat rund **75'000 CHF mehr pro Jahr**.
-- **Wie gross soll das Bad sein?** Nach der Wärme wären es 170 Server, nach den Aufträgen sind es **50**. Mehr Server bringen nur etwas, wenn es auch mehr Aufträge gibt.
+- An beiden Standorttypen simuliert der Router das Ein- und Ausschalten. Ausserhalb der Saison bleiben die Bad-Server im Standby.
+- Bei knapper Nachfrage gehen ohne Bad rund **195’000 Serverstunden** an andere Clouds. Mit 50 Servern im Bad sind es rund **30’000**. Das verbessert das Jahresergebnis um rund **66’600 CHF**.
+- Die 50 Bad-Server stammen aus dem Vergleich im Case-Idealmodell. Bei ausreichenden Aufträgen könnte das Bad mehr Rechenlast aufnehmen. [Ergebnisse des Abschaltmodells](ERGEBNISSE.md#flotte-mit-bedarfsgerechtem-abschalten)
 - **Ehrlich:** Wenn es nur Aufträge mit Frist gibt, macht die Flotte trotzdem Verlust, weil Aufträge fehlen und nicht Wärme. Der Router verteilt die Arbeit besser, er schafft aber keine neue. Entscheidend bleibt der feste Vertrag mit Pharma, Banken und Spitälern.
 
 ## Planbar: die Zusage am Vortag

@@ -132,9 +132,9 @@ def tageswerte(anlage, prognose):
             for hh in range(h, tage[tag][-1] + 1):
                 z = probe.schritt(hh)
                 if hh in tage[tag]:
-                    progn[tag] += z["server_laufend"]
+                    progn[tag] += z.get("server_h_lieferbar", z["server_laufend"])
         z = anlage.schritt(h)
-        geliefert[anlage.profil[h]["zeit"][:10]] += z["server_laufend"]
+        geliefert[anlage.profil[h]["zeit"][:10]] += z.get("server_h_lieferbar", z["server_laufend"])
     return [{"tag": t, "prognose_server_h": round(progn[t], 3) if t in start_12 else 0.0,
              "geliefert_server_h": round(geliefert[t], 3), "mit_zusage": t in start_12} for t in namen]
 

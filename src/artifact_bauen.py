@@ -1,7 +1,7 @@
 """Baut aus dashboard/index.html eine eigenständige Seite zum Veröffentlichen.
 
 - Daten (dashboard/daten.js) direkt eingebettet
-- Live-Panel zeigt die Aufzeichnung eines echten Laufs (dashboard/live.json) statt des lokalen Prozesses
+- Live-Panel zeigt die lokale Aufzeichnung oder den aufgezeichneten Flottenlauf aus dem Repo
 - Ohne doctype/html/head/body (die Veröffentlichung legt sie selbst an)
 
 Aufruf: python3 src/artifact_bauen.py  -> dashboard/artifact/index.html
@@ -17,7 +17,10 @@ D = ROOT / "dashboard"
 def main():
     html = (D / "index.html").read_text()
     daten = (D / "daten.js").read_text().strip()
-    live = json.loads((D / "live.json").read_text())
+    aufzeichnung = D / "live.json"
+    if not aufzeichnung.exists():
+        aufzeichnung = ROOT / "daten" / "ergebnisse" / "live_flotte_2025-05-25.json"
+    live = json.loads(aufzeichnung.read_text())
     live["aktiv"] = False
     live.pop("jetzt", None)
 

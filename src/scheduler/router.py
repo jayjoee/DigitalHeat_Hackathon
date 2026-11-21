@@ -1,6 +1,6 @@
 """Wärme-Router: ein gemeinsamer Auftragspool für mehrere Standorte (Häuser und Sommer-Senken).
 
-`kern.entscheide()` bleibt unverändert. Der Router entscheidet nur, welcher Standort welche Jobs sieht.
+Der Router verteilt die Jobs. Standorte mit Serverbetrieb wählen zusätzlich ihre aktive Kapazität.
 Design: docs/designs/waerme-router-basel.md, Baustein 3. Pro Stunde h:
 
   0. Pool: Ankünfte (Alibaba-Rate × Server der Häuser) und Spot-Nachschub für alle Server der Flotte.
@@ -42,6 +42,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 from src.scheduler import annahmen as A  # noqa: E402
 from src.scheduler.jahr import Haus, ankuenfte, bilanz as haus_bilanz, fristen_buchen  # noqa: E402
 from src.scheduler.kern import Job, entscheide, spaetester_start  # noqa: E402
+from src.scheduler.serverbetrieb import HausMitServerbetrieb  # noqa: E402
 
 
 def _schluessel(j):
@@ -115,8 +116,11 @@ class Flotte:
         q = sorted(pool.q, key=_schluessel)
         lagen = [s.lage(h) for s in st]
         haus = [s.typ == "haus" for s in st]
-        ziel = [min(l.n_server * l.server_kw, (l.bedarf_kwh + l.speicher_max_kwh - l.speicher_kwh) / l.eta)
-                for l in lagen]
+        leistung = [isinstance(s, HausMitServerbetrieb) for s in st]
+        offen = [i for i, l in enumerate(lagen) if haus[i] or not leistung[i] or l.bedarf_kwh > 0]
+        ziel = [min(l.n_server * l.server_kw, (s.waermeziel(l)[0] if leistung[i] else
+                    l.bedarf_kwh + l.speicher_max_kwh - l.speicher_kwh) / l.eta)
+                for i, (s, l) in enumerate(zip(st, lagen))]
 
         # a) Pflichtjobs verteilen
         pflicht = [j for j in q if spaetester_start(j, kw) <= h]
@@ -125,7 +129,7 @@ class Flotte:
         zu_kwh = [0.0] * len(st)
         zu_n = [0] * len(st)
         for j in pflicht:
-            frei = [i for i in range(len(st)) if zu_n[i] < st[i].n]
+            frei = [i for i in offen if zu_n[i] < st[i].n]
             alt = j.standort
             haus_frei = [k for k in frei if haus[k] and ziel[k] - zu_kwh[k] > 1e-9]
             if alt is not None and not j.unterbrechbar:
@@ -133,7 +137,7 @@ class Flotte:
             elif alt is not None and alt in frei and (haus[alt] or not haus_frei):
                 i = alt  # Bindung; ein Job an der Senke bleibt nur, wenn kein Haus Wärme braucht (Vorrang)
             else:
-                kandidaten = haus_frei or frei or list(range(len(st)))
+                kandidaten = haus_frei or frei or offen or list(range(len(st)))
                 i = max(kandidaten, key=lambda k: (ziel[k] - zu_kwh[k], -k))
             zu[i].append(j)
             zu_kwh[i] += min(j.rest_kwh, kw)
@@ -144,12 +148,13 @@ class Flotte:
         reihenfolge = sorted(range(len(st)), key=lambda k: (not haus[k], -(ziel[k] - zu_kwh[k]), k))
         genommen, entschieden = set(), set()
         entscheidungen = [None] * len(st)
+        betriebsplaene = [None] * len(st)
         alle_laeufe, alle_abgegeben = [], []
         for i in reihenfolge:
             kap = st[i].n * kw
             liste = list(zu[i])
             vorrat = 0.0
-            for j in q:
+            for j in q if not leistung[i] or ziel[i] > 1e-9 else ():
                 if vorrat >= kap - 1e-9:
                     break  # mehr freie Jobs kann der Kern in dieser Stunde nicht nehmen (siehe Docstring Test)
                 if j.id in pflicht_ids or j.id in genommen:
@@ -161,7 +166,12 @@ class Flotte:
                 liste.append(j)
                 if j.unterbrechbar:
                     vorrat += min(j.rest_kwh, kw)
-            e = entscheide(lagen[i], liste, self.regel)
+            if leistung[i]:
+                betrieb = st[i].betrieb_planen(lagen[i], liste)
+                betriebsplaene[i] = betrieb
+                e = st[i].betrieb_entscheiden(betrieb, liste)
+            else:
+                e = entscheide(lagen[i], liste, self.regel)
             for j in e.abgegeben:
                 genommen.add(j.id)
             for j, m in e.laeufe:
@@ -176,21 +186,32 @@ class Flotte:
             waisen = [j for j in q if j.standort is not None and j.unterbrechbar
                       and j.id not in genommen and j.id not in pflicht_ids]
             for i in reihenfolge:
-                waisen = [j for j in waisen if j.id not in genommen and j.standort != i]
+                waisen = [j for j in waisen if j.id not in genommen and (leistung[i] or j.standort != i)]
                 if not waisen:
                     break
                 e, l = entscheidungen[i], lagen[i]
-                rest_kap = l.n_server * kw - e.strom_kwh
-                if e.ziel_strom_kwh - e.strom_kwh <= 1e-9 or rest_kap <= 1e-9:
+                rest_ziel = e.ziel_strom_kwh - e.strom_kwh
+                if rest_ziel <= 1e-9:
                     continue
-                l2 = replace(l, bedarf_kwh=l.bedarf_kwh - e.strom_kwh * l.eta, n_server=rest_kap / kw)
-                e2 = entscheide(l2, waisen, self.regel)
+                if leistung[i]:
+                    kapazitaeten = betriebsplaene[i].lage.server_kapazitaeten_kwh
+                    rest = tuple(max(0.0, k - b) for k, b in zip(kapazitaeten, e.server_belegt_kwh))
+                    l2 = replace(l, server_kapazitaeten_kwh=rest, rechenziel_kwh=rest_ziel)
+                    kandidaten = [j for j in waisen if j.standort != i]
+                else:
+                    rest_kap = l.n_server * kw - e.strom_kwh
+                    if rest_kap <= 1e-9:
+                        continue
+                    l2 = replace(l, bedarf_kwh=l.bedarf_kwh - e.strom_kwh * l.eta, n_server=rest_kap / kw)
+                    kandidaten = waisen
+                e2 = entscheide(l2, kandidaten, self.regel)
                 e.laeufe += e2.laeufe
                 e.strom_kwh += e2.strom_kwh
                 for j, m in e2.laeufe:
                     genommen.add(j.id)
 
         self.zuteilung = {}  # Job-ID → (Standort, kWh) dieser Stunde, für live.py
+        migrationsstrom = 0.0
         for i in reihenfolge:
             e = entscheidungen[i]
             for j, m in e.laeufe:
@@ -199,6 +220,7 @@ class Flotte:
                     pool.z["migrationen"] += 1
                     pool.z["migration_kwh"] += self.migration_kwh
                     self.mig_st[i] += self.migration_kwh
+                    migrationsstrom += self.migration_kwh
                     j.rest_kwh += self.migration_kwh
                 j.standort = i
             alle_laeufe += e.laeufe
@@ -209,11 +231,18 @@ class Flotte:
         if len(ids) != len(set(ids)):
             raise RuntimeError(f"Stunde {h}: ein Job wurde mehrfach zugeteilt")
         fristen_buchen(pool.q, pool.z, h, alle_abgegeben, alle_laeufe)
-        zeilen = [s.verbuchen(h, e) for s, e in zip(st, entscheidungen)]
+        zeilen = [s.betrieb_verbuchen(h, e, betrieb) if betrieb is not None else s.verbuchen(h, e)
+                  for s, e, betrieb in zip(st, entscheidungen, betriebsplaene)]
+        rechenstunden = sum(e.strom_kwh for e in entscheidungen) / kw if any(leistung) else sum(
+            z["server_laufend"] for z in zeilen)
+        betriebsdaten = {}
+        if any(leistung):
+            # Für Kapazitätszusagen zählt nur die Arbeit, die Kunden in dieser Stunde erhalten.
+            betriebsdaten["server_h_lieferbar"] = max(0.0, rechenstunden - migrationsstrom / kw)
         return {"zeit": zeilen[0]["zeit"], "stunde": h,
-                "server_laufend": round(sum(z["server_laufend"] for z in zeilen), 3),
+                "server_laufend": round(rechenstunden, 3),
                 "abgefuehrt_kwh": round(sum(z["abgefuehrt_kwh"] for z in zeilen), 3),
-                "warteschlange": len(pool.q), "standorte": zeilen}
+                "warteschlange": len(pool.q), "standorte": zeilen, **betriebsdaten}
 
     def markierter_job(self, standort=0):
         """Ein Demo-Job im Pool (live.py): unbegrenzter Typ A ohne Frist, angefangen an `standort`."""
@@ -257,6 +286,10 @@ class Flotte:
                         m["haus_genutzt_kwh"] += z["genutzt_kwh"]
                 for s, z in zip(self.st, r["standorte"]):
                     m["haus_server_h" if s.typ == "haus" else "senke_server_h"] += z["server_laufend"]
+                    if "server_eingeschaltet" in z:
+                        m["strom_kwh"] = m.get("strom_kwh", 0.0) + z["strom_kwh"]
+                        k = "haus_eingeschaltet_h" if s.typ == "haus" else "bad_eingeschaltet_h"
+                        m[k] = m.get(k, 0) + z["server_eingeschaltet"]
         self.monate = monate
         return self.bilanz()
 
@@ -286,7 +319,8 @@ class Flotte:
         """
         from src.wirtschaft import rechne
         kosten = kosten or {}
-        verkauft = [max(0.0, s.z["strom"] / self.kw - self.mig_st[i]) for i, s in enumerate(self.st)]
+        gerechnet = [s.z.get("rechenstrom", s.z["strom"]) / self.kw for s in self.st]
+        verkauft = [max(0.0, h - self.mig_st[i]) for i, h in enumerate(gerechnet)]
         total_verkauft = sum(verkauft) or 1.0
         standorte, ergebnis, investition = [], 0, 0
         gruppen = {}
@@ -294,24 +328,26 @@ class Flotte:
             ueber = dict(kosten.get(s.name, {}))
             if anteil_fest_gebucht is not None:
                 ueber["anteil_fest_gebucht"] = anteil_fest_gebucht
+            if "rechenstrom" in s.z:
+                ueber["strom_kwh"] = s.z["strom"]
             w = rechne(s.n, verkauft[i], s.z["genutzt"], fehlmenge_server_h * verkauft[i] / total_verkauft,
                        **ueber)
             ergebnis += w["ergebnis_pro_jahr_chf"]
             investition += w["investition_chf"]
             g = gruppen.setdefault(s.typ, dict(server=0, server_h=0.0, bedarf=0.0, genutzt=0.0, abgefuehrt=0.0,
                                                backup=0.0, ergebnis=0, standorte=0))
-            for k, v in (("server", s.n), ("server_h", s.z["strom"] / self.kw), ("bedarf", s.z["bedarf"]),
+            for k, v in (("server", s.n), ("server_h", gerechnet[i]), ("bedarf", s.z["bedarf"]),
                          ("genutzt", s.z["genutzt"]), ("abgefuehrt", s.z["abgefuehrt"]), ("backup", s.z["backup"]),
                          ("ergebnis", w["ergebnis_pro_jahr_chf"]), ("standorte", 1)):
                 g[k] += v
             standorte.append({"name": s.name, "typ": s.typ, "server": s.n,
                               "deckungsgrad": round(s.z["genutzt"] / s.z["bedarf"], 4) if s.z["bedarf"] else None,
-                              "auslastung": round(s.z["strom"] / self.kw / (s.n * len(s.profil)), 4),
+                              "auslastung": round(gerechnet[i] / (s.n * len(s.profil)), 4),
                               "abgefuehrt_kwh": round(s.z["abgefuehrt"]),
                               "ergebnis_pro_jahr_chf": w["ergebnis_pro_jahr_chf"]})
         stunden = len(self.profil)
         pz = self.pool.z
-        return {
+        ergebnis_bilanz = {
             "szenario": self.szenario, "regel_ueberschuss": self.regel, "standorte_anzahl": len(self.st),
             "server": self.n_alle,
             "gruppen": {k: {"standorte": g["standorte"], "server": g["server"],
@@ -320,7 +356,7 @@ class Flotte:
                             "server_h": round(g["server_h"]), "waerme_genutzt_kwh": round(g["genutzt"]),
                             "waerme_abgefuehrt_kwh": round(g["abgefuehrt"]), "backup_kwh": round(g["backup"]),
                             "ergebnis_pro_jahr_chf": g["ergebnis"]} for k, g in gruppen.items()},
-            "auslastung": round(sum(s.z["strom"] for s in self.st) / self.kw / (self.n_alle * stunden), 4),
+            "auslastung": round(sum(gerechnet) / (self.n_alle * stunden), 4),
             "server_h_verkauft": round(sum(verkauft)),
             "waerme_abgefuehrt_kwh": round(sum(s.z["abgefuehrt"] for s in self.st)),
             "jobs_mit_frist": pz["mit_frist"], "jobs_fertig": pz["fertig"],
@@ -331,6 +367,15 @@ class Flotte:
             "ergebnis_pro_investiertem_franken": round(ergebnis / investition, 4) if investition else None,
             "ankuenfte": self.pool.raten, "standorte": standorte,
         }
+        if all("rechenstrom" in s.z for s in self.st):
+            for typ, gruppe in ergebnis_bilanz["gruppen"].items():
+                zustaende = [s.z for s in self.st if s.typ == typ]
+                gruppe.update({k: round(sum(z[k] for z in zustaende), 2) for k in
+                               ("strom", "rechenstrom", "leerlaufstrom", "standbystrom", "startstrom",
+                                "serverstarts", "server_h_aus")})
+            ergebnis_bilanz.update(strom_kwh=round(sum(s.z["strom"] for s in self.st), 2),
+                                  jobs_frist_verpasst=pz["verpasst"])
+        return ergebnis_bilanz
 
     def bilanz_wie_haus(self):
         """Nur für einen Standort: Bilanz exakt im Format von `jahr.simuliere` (Regressionstest 1)."""

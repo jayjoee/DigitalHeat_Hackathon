@@ -20,9 +20,9 @@ ROOT = A.ROOT
 TAGE = {"januar": "2025-01-15", "uebergang": "2025-03-07", "juli": "2025-07-15"}
 
 
-def flotte_daten():
+def flotte_daten(dateiname="flotte.json"):
     """Wärme-Router (daten/ergebnisse/flotte.json, src/scheduler/flotte.py) kompakt fürs Dashboard."""
-    p = ROOT / "daten" / "ergebnisse" / "flotte.json"
+    p = ROOT / "daten" / "ergebnisse" / dateiname
     if not p.exists():
         return None
     d = json.loads(p.read_text())
@@ -32,7 +32,8 @@ def flotte_daten():
                                           "jahr", "ergebnis_mit_zusage_chf")}
         zusage[name]["tage"] = [[t["tag"], t["prognose_server_h"], t["geliefert_server_h"]] for t in z["tage"]]
     return {k: d[k] for k in ("server_pro_haus", "server_bad_regel", "server_bad_nach_nachfrage",
-                              "suche_senkengroesse_alibaba", "ergebnisse", "regel_ueberschuss")} | {"zusage": zusage}
+                              "suche_senkengroesse_alibaba", "ergebnisse", "regel_ueberschuss")} | {
+                                  "zusage": zusage, "leistungsprofil": d.get("leistungsprofil")}
 
 
 def main():
@@ -67,9 +68,12 @@ def main():
                 }
     messung = json.loads((ROOT / "messungen" / "energie.json").read_text())
     jobtypen = json.loads((ROOT / "daten" / "jobtypen.json").read_text())["typen"]
+    serverbetrieb = ROOT / "daten" / "ergebnisse" / "serverbetrieb.json"
     daten = {"erzeugt": "python3 src/dashboard_daten.py", "annahmen": A.als_liste(),
              "messung_a": messung, "jobtypen": jobtypen, "tage": TAGE, "laeufe": laeufe,
-             "flotte": flotte_daten()}
+             "flotte": flotte_daten(),
+             "flotte_abschalten": flotte_daten("flotte_abschalten.json"),
+             "serverbetrieb": json.loads(serverbetrieb.read_text()) if serverbetrieb.exists() else None}
     aus = ROOT / "dashboard" / "daten.js"
     aus.write_text("window.DATEN = " + json.dumps(daten, ensure_ascii=False) + ";\n")
     print(f"{aus.relative_to(ROOT)}: {len(laeufe)} Läufe, {aus.stat().st_size / 1e3:.0f} kB")

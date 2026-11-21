@@ -170,7 +170,7 @@ Für diese Posten gibt es keine öffentliche Zahl, weil sie pro Firma oder pro O
 - **Teurer Fall** (0,50 CHF, nur 42 % fest gebucht, Kosten am oberen Rand): −5'300 CHF pro Jahr.
 - **Nur Marktplatz statt Direktvertrag:** Mit 20 % Gebühr und Preisverfall von 10 % pro Jahr braucht es rund 0,50 CHF, also fast so viel wie die Cloud mit festem Vertrag.
 - **Neue H100 statt L4:** Selbst im günstigen Fall Verlust, weil die Hardware für Dauerbetrieb gebaut ist, DH aber nur die halbe Zeit rechnet.
-- **Server nur pausieren statt ausschalten:** +1'550 CHF Strom und 3'700 kWh Abwärme pro Jahr.
+- **Server nur pausieren:** Bei angenommenen 230 W Leerlauf rund 1'740 CHF mehr Stromkosten pro Referenzhaus und Jahr gegenüber bedarfsgerechtem Abschalten. Details im [Betriebsvergleich](ERGEBNISSE.md#leerlauf-und-abschalten-im-referenzhaus).
 - **Pilot mit wenigen Häusern:** Die Firmenkosten (Zertifikat, Software, Personal) verteilen sich auf wenige Häuser; der Pilot ist eine Investition und macht voraussichtlich Verlust.
 
 ## 6. Abgleich mit Joëls Kundensicht
@@ -213,7 +213,7 @@ Die fehlende Stunde wird nicht bezahlt. Zusätzlich gibt es 50 % Gutschrift. Das
 
 Die Preisprämisse kostet also nur rund 270 CHF pro Jahr, wenn man sie ehrlich mit einer Zusage am Vortag absichert.
 
-**Flotte: 20 Häuser + Sportbad St. Jakob** (`src/scheduler/flotte.py`, `daten/ergebnisse/flotte.json`). Die Kosten des Bads sind eine Schätzung: kein neuer Speicher (das Becken speichert), Einbau 9'000 CHF pro 8 Server wie im Haus, sonst gleiche Kostensätze.
+**Flotte im Case-Idealmodell: 20 Häuser + Sportbad St. Jakob** (`src/scheduler/flotte.py`, `daten/ergebnisse/flotte.json`). Die Kosten des Bads sind eine Schätzung: kein neuer Speicher (das Becken speichert), Einbau 9'000 CHF pro 8 Server wie im Haus, sonst gleiche Kostensätze.
 
 | | Investition | Ergebnis pro Jahr «Nur Jobs mit Frist» | Ergebnis pro Jahr «Genug Aufträge» |
 |---|---|---|---|
@@ -224,6 +224,8 @@ Die Preisprämisse kostet also nur rund 270 CHF pro Jahr, wenn man sie ehrlich m
 - Das Bad mit 50 Servern kostet rund 1,8 Mio. CHF und bringt der Flotte **+75'200 CHF pro Jahr** bei knapper Nachfrage und +161'000 CHF bei genug Aufträgen.
 - Mit Zusage am Vortag (genug Aufträge): 846'400 statt 851'600 CHF pro Jahr.
 - Bei knapper Nachfrage fehlen die Aufträge, nicht die Wärme. Der Router verschiebt Arbeit, er erzeugt keine neue. Darum hängt das Geschäft weiterhin am Vertrag mit festen Kunden (Abschnitt 5).
+
+**Flotte mit bedarfsgerechtem Abschalten:** Für den Vergleich bleiben die Investitionen bei 5,80 Mio. CHF ohne Bad und 7,60 Mio. CHF mit 50 Bad-Servern. Bei knapper Nachfrage beträgt das annualisierte Ergebnis **−238’567 CHF ohne Bad** und **−172’014 CHF mit Bad**. Bei genügend Aufträgen sind es **+614’580 CHF** und **+737’049 CHF** vor möglichen Day-ahead-Gutschriften. Die Rechnung berücksichtigt den gesamten Stromverbrauch einschliesslich Leerlauf, Standby, Starts und Migration. Die Preis- und Absatzannahmen entsprechen dem Case-Vergleich. [Betriebsvergleich und Ergebnisse](ERGEBNISSE.md#flotte-mit-bedarfsgerechtem-abschalten)
 
 ## Quellen
 
