@@ -23,7 +23,7 @@ from src.scheduler.serverbetrieb import HausMitServerbetrieb, Leistungsprofil  #
 ROOT = A.ROOT
 # Übergangstag: Speicher läuft mittags voll, der 8. Server pausiert 7 h und läuft abends wieder an
 TAGE = {"januar": "2025-01-15", "uebergang": "2025-03-07", "juli": "2025-07-15"}
-# Wie KOSTEN_DH.md, PITCH.md und daten/ergebnisse/serverbetrieb.json: 230 W Leerlauf, 10 W Standby, 5 min Start
+# Wie KOSTEN_DH.md und daten/ergebnisse/serverbetrieb.json: 230 W Leerlauf, 10 W Standby, 5 min Start
 LEISTUNG = Leistungsprofil(230, 10, 5)
 
 

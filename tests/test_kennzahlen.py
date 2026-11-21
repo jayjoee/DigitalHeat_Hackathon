@@ -13,7 +13,6 @@ HAUSHALT = json.loads((ROOT / "daten" / "ergebnisse" / "haushalt.json").read_tex
 
 DOKS = {name: (ROOT / pfad).read_text(encoding="utf-8") for name, pfad in {
     "README": "README.md",
-    "PITCH": "docs/PITCH.md",
     "KOSTEN_DH": "docs/wirtschaft/KOSTEN_DH.md",
     "ERGEBNISSE": "docs/ergebnisse/ERGEBNISSE.md",
     "PILOTPLAN": "docs/wirtschaft/PILOTPLAN.md",
@@ -42,27 +41,27 @@ class Kennzahlen(unittest.TestCase):
                 self.assertIn(text, DOKS[name], f"«{text}» fehlt in {name} oder ist veraltet")
 
     def test_ergebnis_referenzhaus(self):
-        self.pruefe(chf(DATEN["referenzhaus"]["ergebnis_chf"], 1000), ["README", "PITCH", "KOSTEN_DH", "ERGEBNISSE", "EINFACH"])
+        self.pruefe(chf(DATEN["referenzhaus"]["ergebnis_chf"], 1000), ["README", "KOSTEN_DH", "ERGEBNISSE", "EINFACH"])
 
     def test_verkaufte_stunden_nullpunkt(self):
         self.pruefe(prozent(DATEN["pilot_schwellen"]["verkaufte_stunden_min"]),
-                    ["README", "PITCH", "KOSTEN_DH", "ERGEBNISSE", "PILOTPLAN", "EINFACH"])
+                    ["README", "KOSTEN_DH", "ERGEBNISSE", "PILOTPLAN", "EINFACH"])
 
     def test_roche_preis_wenn_rest_spot(self):
         self.pruefe(preis(DATEN["pilot_schwellen"]["roche_preis_min_rest_spot_chf_karte_h"]),
-                    ["PITCH", "KOSTEN_DH", "ERGEBNISSE", "PILOTPLAN"])
+                    ["KOSTEN_DH", "ERGEBNISSE", "PILOTPLAN"])
 
     def test_mittleres_nachfrageszenario(self):
         n = DATEN["nachfrage_szenarien"]
-        self.pruefe(chf(n["winterkunde_sommer_unverkauft"]), ["PITCH", "KOSTEN_DH", "ERGEBNISSE", "PILOTPLAN", "EINFACH"])
-        self.pruefe(prozent(n["anteil_stunden_heizsaison"]), ["PITCH", "KOSTEN_DH", "ERGEBNISSE", "PILOTPLAN"])
+        self.pruefe(chf(n["winterkunde_sommer_unverkauft"]), ["KOSTEN_DH", "ERGEBNISSE", "PILOTPLAN", "EINFACH"])
+        self.pruefe(prozent(n["anteil_stunden_heizsaison"]), ["KOSTEN_DH", "ERGEBNISSE", "PILOTPLAN"])
         self.pruefe(chf(n["nur_roche"]).lstrip("-"), ["KOSTEN_DH", "ERGEBNISSE"])
 
     def test_pilotschwellen(self):
         s = DATEN["pilot_schwellen"]
-        self.pruefe(chf(s["serverpreis_max_chf"]), ["PITCH", "KOSTEN_DH", "PILOTPLAN"])
-        self.pruefe(chf(s["pilot_investition_2_server_chf"]), ["PITCH", "KOSTEN_DH", "PILOTPLAN"])
-        self.pruefe(prozent(s["anteil_roche_kapazitaet"], 2), ["PITCH", "KOSTEN_DH", "PILOTPLAN"])
+        self.pruefe(chf(s["serverpreis_max_chf"]), ["KOSTEN_DH", "PILOTPLAN"])
+        self.pruefe(chf(s["pilot_investition_2_server_chf"]), ["KOSTEN_DH", "PILOTPLAN"])
+        self.pruefe(prozent(s["anteil_roche_kapazitaet"], 2), ["KOSTEN_DH", "PILOTPLAN"])
 
     def test_ersparnis_haushalt(self):
         for haus in ("referenzhaus", "efh"):

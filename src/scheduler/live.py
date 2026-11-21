@@ -38,7 +38,7 @@ def stunde_von(profil, tag):
     for h, p in enumerate(profil):
         if p["zeit"].startswith(tag):
             return h
-    raise SystemExit(f"Tag {tag} nicht im Profil")
+    raise SystemExit(f"Day {tag} is outside the profile")
 
 
 def anteil(strom_kwh, k, server_kw=1.0):
@@ -128,9 +128,10 @@ def main():
     gruppe(job, signal.SIGSTOP)
     laeuft = False
     protokoll = []
-    print(f"Tag {a.tag}, {a.server} Server, echter Job = Server {k + 1} (PID {job.pid}), "
+    print(f"Day {a.tag}, {a.server} servers, live job = server {k + 1} (PID {job.pid}), "
           f"1 h = {a.sekunden:g} s")
-    print("Zeit   Temp   Bedarf  Speicher  Server an   Server " f"{k + 1}  Job     {einheit}")
+    unit_label = "molecules" if a.job == "docking" else "texts"
+    print("Time   Temp   Demand  Storage  Servers on  Server " f"{k + 1}  Job     {unit_label}")
     kopf = {"tag": a.tag, "server": a.server, "szenario": a.szenario, "echter_server": k + 1,
             "pid": job.pid, "sekunden_pro_stunde": a.sekunden, "auftrag": a.job, "einheit": einheit}
 
@@ -156,7 +157,7 @@ def main():
                 melden(z, x, "pausiert", protokoll)
                 time.sleep(max(0, a.sekunden - (time.time() - t_start)))
             n_texte = fortschritt(ordner)
-            zustand = "läuft" if x >= 0.99 else ("pausiert" if x <= 0.01 else f"{x:.0%} an")
+            zustand = "running" if x >= 0.99 else ("paused" if x <= 0.01 else f"{x:.0%} on")
             print(f"{z['zeit'][11:16]}  {z['temp_c']:5.1f}  {z['bedarf_kwh']:5.2f}   {z['speicher_kwh']:6.1f}"
                   f"    {z['server_laufend']:5.2f}      {x:4.0%}    {zustand:8s} {n_texte:,}", flush=True)
             protokoll.append({**z, "echter_server": k + 1, "anteil_echter_server": round(x, 3),
@@ -175,7 +176,7 @@ def main():
     aus.write_text(json.dumps({"tag": a.tag, "server": a.server, "szenario": a.szenario, "auftrag": a.job,
                                "echter_server": k + 1, "pid": job.pid, "stunden": protokoll},
                               indent=1, ensure_ascii=False))
-    print(f"Checkpoint bei {fortschritt(ordner):,} {einheit}n, Exit {job.returncode}. Protokoll: {aus.relative_to(ROOT)}")
+    print(f"Checkpoint at {fortschritt(ordner):,} {unit_label}. Exit {job.returncode}. Log: {aus.relative_to(ROOT)}")
 
 
 if __name__ == "__main__":

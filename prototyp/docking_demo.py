@@ -185,7 +185,7 @@ class Batch:
                     "local_ranges": [span.copy() for span in self.local_ranges],
                     "resumed_after": self.received["next"] if self.received else 0,
                     "return_at": self.return_at, "sync_pending": self.sync_pending,
-                    "schloss": "Abl-Kinase (Leukämie-Ziel)", "stark_kcal": STARK_KCAL,
+                    "schloss": "Abl kinase (leukaemia target)", "stark_kcal": STARK_KCAL,
                     "molekuele": [{"name": n, "gruppe": g, "energie": e}
                                   for (n, g), e in zip(MOLEKUELE, ENERGIEN)],
                     "heat": self.heat_snapshot(display_step)}
@@ -193,17 +193,17 @@ class Batch:
     def start(self):
         with self.lock:
             if self.state != "bereit":
-                raise APIError(409, "Der Docking-Lauf wurde bereits gestartet.")
+                raise APIError(409, "The docking run has already started.")
             self.job = {"id": uuid.uuid4().hex, "next": 0, "rejects": 0}
             self.state = "rechnet"
 
     def retry_transfer(self):
         with self.lock:
             if self.state != "Übergabe offen":
-                raise APIError(409, "Es gibt keine offene Übergabe.")
+                raise APIError(409, "There is no pending handoff.")
             self.state = "Übergabe läuft"
         if not self.send_checkpoint():
-            raise APIError(502, "Übergabe unbestätigt. Das Haus bleibt pausiert.")
+            raise APIError(502, "Handoff not confirmed. The house remains paused.")
 
     def send_checkpoint(self):
         with self.lock:
@@ -223,12 +223,12 @@ class Batch:
         if (not valid_checkpoint(data) or not 0 < data["next"] < TOTAL
                 or data["heat_step"] >= len(self.heat_hours) * STEPS_PER_HOUR
                 or self.heat_hour(data["heat_step"])["standort_typ"] != "bad"):
-            raise APIError(400, "Ungültiger Checkpoint.")
+            raise APIError(400, "Invalid checkpoint.")
         with self.lock:
             if data == self.received:
                 return
             if self.state != "bereit":
-                raise APIError(409, "Auf diesem Empfänger läuft bereits ein Lauf.")
+                raise APIError(409, "This receiver already has a run.")
             self.received = dict(data)
             self.job = {key: data[key] for key in ("id", "next", "rejects")}
             self.heat_step = data["heat_step"] - 1
@@ -273,12 +273,12 @@ class Batch:
 
     def observe_house(self, data):
         if not valid_checkpoint(data):
-            raise APIError(400, "Ungültiger Prüfstand.")
+            raise APIError(400, "Invalid progress update.")
         with self.lock:
             current = self.remote_view or {**(self.job or {}), "heat_step": self.heat_step}
             if (self.state != "zurückgegeben" or data["id"] != self.job["id"]
                     or data["next"] < current["next"] or data["heat_step"] < current["heat_step"]):
-                raise APIError(409, "Meldung passt nicht zum zurückgegebenen Lauf.")
+                raise APIError(409, "Update does not match the returned run.")
             self.remote_view = data
 
 
@@ -304,7 +304,7 @@ class PoolLink:
 class TransferHandler(Handler):
     def route(self, method):
         if not hmac.compare_digest(self.headers.get("Authorization", ""), "Bearer " + self.server.token):
-            raise APIError(401, "Ungültiger Zugangsschlüssel.")
+            raise APIError(401, "Invalid access key.")
         batch = self.server.batch
         if method == "GET" and self.path == "/checkpoint":
             return self.reply(200, batch.pool_progress())
@@ -314,14 +314,14 @@ class TransferHandler(Handler):
         if method == "POST" and self.path == "/progress":
             batch.observe_house(self.body())
             return self.reply(200, {"accepted": True})
-        raise APIError(404, "Endpunkt nicht gefunden.")
+        raise APIError(404, "Endpoint not found.")
 
 
 class ScreenHandler(Handler):
     def route(self, method):
         host = f"127.0.0.1:{self.server.server_port}"
         if self.headers.get("Host") != host or self.headers.get("Origin") not in (None, f"http://{host}"):
-            raise APIError(403, "Diese Ansicht ist lokal.")
+            raise APIError(403, "This screen is local only.")
         if method == "GET":
             files = {"/": ("index.html", "text/html"), "/screen.js": ("screen.js", "text/javascript"),
                      "/screen.css": ("screen.css", "text/css")}
@@ -333,14 +333,14 @@ class ScreenHandler(Handler):
                                         "csrf": self.server.csrf})
         if method == "POST" and self.server.target and self.path in ("/start", "/move"):
             if not hmac.compare_digest(self.headers.get("X-DigitalHeat-CSRF", ""), self.server.csrf):
-                raise APIError(403, "Sitzung ungültig.")
+                raise APIError(403, "Invalid session.")
             self.body()
             if self.path == "/start":
                 self.server.batch.start()
             else:
                 self.server.batch.retry_transfer()
             return self.reply(200, {"ok": True})
-        raise APIError(404, "Endpunkt nicht gefunden.")
+        raise APIError(404, "Endpoint not found.")
 
 
 def local_demo(open_browser, vina, sender_port=8083, host_port=8093, worker_port=8446):
@@ -404,25 +404,25 @@ def main():
     if args.role == "demo":
         return local_demo(args.open, vina)
     if args.credentials is None:
-        parser.error("--credentials ist für sender und worker erforderlich.")
+        parser.error("Sender and worker require --credentials.")
     if args.open:
-        parser.error("--open ist für demo vorgesehen.")
+        parser.error("--open is supported in demo mode.")
     target = urlsplit(args.target or "")
     if args.role == "sender" and (target.scheme != "https" or not target.hostname
                                   or target.path not in ("", "/") or target.username
                                   or target.password or target.query or target.fragment):
-        parser.error("Sender benötigt --target https://EMPFÄNGER:8446")
+        parser.error("Sender requires --target https://RECEIVER:8446")
     if not 0.05 <= args.interval <= 60:
-        parser.error("--interval muss zwischen 0.05 und 60 Sekunden liegen.")
+        parser.error("--interval must be between 0.05 and 60 seconds.")
     cert = str(args.credentials / "worker-cert.pem")
     token = (args.credentials / "token.txt").read_text().strip()
     if len(token) < 40:
-        parser.error("Der Zugangsschlüssel ist ungültig.")
+        parser.error("Invalid access key.")
     sender = args.role == "sender"
     screen_port = args.screen_port or (8083 if sender else 8093)
     tls = tls_context(cert) if sender else tls_context(cert, str(args.credentials / "worker-key.pem"))
     link = PoolLink(target, tls, token) if sender else None
-    batch = Batch("Haus · Laptop A" if sender else "Sportbad · Laptop B", args.interval, link, vina)
+    batch = Batch("House · Laptop A" if sender else "Sports pool · Laptop B", args.interval, link, vina)
     with ThreadingHTTPServer(("127.0.0.1", screen_port), ScreenHandler) as screen:
         screen.batch = batch
         screen.csrf = secrets.token_urlsafe(32)

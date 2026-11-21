@@ -1,89 +1,41 @@
-# Rechnen, das heizt – die Resultate einfach erklärt
+# Results and assumptions in plain English
 
-## Die Idee
-Ein Server braucht Strom und macht daraus fast vollständig Wärme. Normalerweise wird diese Wärme weggekühlt. Wir stellen die Server in den Keller eines Hauses: Sie rechnen KI-Aufträge und heizen dabei das Haus und das Warmwasser.
+## Basel reference house, 2025
 
-## Das Testhaus
-- Einfamilienhaus in Basel, Wetter des ganzen Jahres 2025
-- Braucht im Jahr **31'231 kWh Wärme** (Heizung 26'851 + Warmwasser 4'380)
-- An den kältesten Tagen bis 10 kW Heizleistung
-- Ein Wassertank speichert 35 kWh Wärme
-- Ein Server: 1 kW Strom → 0,8 kW nutzbare Wärme
+The reference house needs **31'231 kWh** of heat in 2025. Space heating accounts for 26'851 kWh and hot water for 4'380 kWh. The model uses hourly Basel weather, a 20 °C indoor setpoint, a 12 °C daily-average threshold for heating days and 12 kWh of hot water per day. It assumes a 1'000-litre tank with 35 kWh of usable storage and zero storage losses. Each reference server draws 1 kW at full load and transfers 0.8 kW to water. [Reference case](../CASE.md)
 
-## Das Ergebnis: 8 Server pro Haus
+| Metric | Case baseline, 8 servers | Demand-based shutdown, 8 servers |
+|---|---:|---:|
+| Share of heat demand covered | 93 % | 90.5 % |
+| Heat rejected over the year | 5 kWh | Less than 1 kWh in the model |
+| Server-hours running | 36'290 | 34'512 |
+| Utilisation (running hours ÷ installed servers ÷ 8'760) | 51.8% | 49.2% |
+| Missed deadlines | 0% | 0% |
+| Electricity cost | About CHF 12'066 | About CHF 11'858 |
 
-| Kennzahl | Ergebnis | Was das heisst |
-|---|---|---|
-| Server pro Haus | **8** | |
-| Wärmebedarf gedeckt | **93 %** | Die restlichen 7 % liefert der Holzofen, den viele ältere Häuser schon haben, nur an den kältesten Tagen. Öl braucht es keines mehr. |
-| Abgeführte Wärme | **5 kWh im Jahr im Case-Idealmodell** | Das Modell setzt 0 W bei pausierten Servern an |
-| Auslastung | **52 %** | Die Server rechnen gut die Hälfte der Zeit |
-| Verpasste Fristen | **0 %** | Jeder Auftrag mit Frist wird rechtzeitig fertig |
-| Break-even-Preis | **0,23 CHF pro Server-Stunde** | Ab diesem Preis decken die Rechenerlöse den Strom (abzüglich Wert der Wärme) |
+The 5 kWh figure assumes 0 W when a server is paused. With demand-based shutdown we assume 230 W at idle, 10 W in standby and a five-minute startup. Keeping the same servers powered while paused would reject about 4'200 kWh of heat and use roughly 5'200 kWh more electricity. Real L4 measurements are pending. A backup heat source covers the remaining demand. The household example assumes an existing wood stove. [Annual results data](../../daten/ergebnisse/bilanz_8_spot.json) · [Power-state sensitivity data](../../daten/ergebnisse/serverbetrieb.json)
 
-**Jobs pausieren oder Server abschalten?** Bei angenommenen 230 W Leerlauf fallen beim Pausieren im Modell rund 4’200 kWh ungenutzte Wärme an. Gezieltes Abschalten spart im Vergleich rund 5’200 kWh Strom pro Jahr. Die Wärmedeckung sinkt dabei von 91,3 % auf 90,5 %. Die Verbrauchswerte der L4-Server müssen im Pilot gemessen werden. [Rechnung und Bandbreite](ERGEBNISSE.md#leerlauf-und-abschalten-im-referenzhaus)
+## How the heat router works
 
-## Warum genau 8 Server?
-- Mehr Server = mehr Wärme, aber jeder Server rechnet seltener.
-- Bis 8 Server bringt jeder weitere Server viel zusätzliche Wärme. Ab dem 9. kaum noch.
-- 12–13 Server würden 100 % decken, wären aber nur zu 35 % ausgelastet. Das lohnt sich nicht.
+The router checks heat demand and available storage each hour. It schedules flexible jobs while the heat is useful and pauses or moves them when it cannot be used. Short, non-interruptible jobs have a deadline. The policy decides whether to complete them locally, even if heat is rejected, or send them outside the site.
 
-## Das Problem: der Sommer
-- Im Winter laufen die Server fast pausenlos (96 % Auslastung).
-- Im Sommer braucht das Haus nur Warmwasser, die Server laufen dann nur zu **8 %**.
-- **Lösung:** Im Sommer gehen die Aufträge an Orte, die dann Wärme brauchen. In Basel ist das das **Sportbad St. Jakob**: ein beheiztes 50-m-Becken, offen von Ende April bis Anfang Oktober, also genau dann, wenn die Häuser keine Wärme brauchen. Ein Hallenbad passt nicht, denn das Rialto macht im Sommer Pause.
+In the 20-house scenario, houses have priority. The heated St. Jakob sports pool can take jobs during its outdoor season. The model estimates its seasonal heat demand at roughly 650'000 kWh with an uncertainty band of ±30%. With limited demand, adding 50 pool servers reduces external transfers from about 195'000 to 30'000 server-hours, but the modelled fleet remains loss-making at that demand level. The day-ahead commitment uses only forecasts available by noon on the previous day. It covers about 93% of reference-house server-hours in the tested scenario. [Fleet data](../../daten/ergebnisse/flotte_abschalten.json) · [Day-ahead data](../../daten/ergebnisse/zusage_8_spot.json)
 
-## Der Wärme-Router: 20 Häuser und ein Sportbad
-- Alle Aufträge kommen in einen gemeinsamen Topf. Jede Stunde verteilt der **Wärme-Router** sie dorthin, wo die Wärme gebraucht wird.
-- **Die Häuser haben immer Vorrang.** Das Bad bekommt nur Arbeit, deren Wärme gerade kein Haus brauchen kann.
-- An beiden Standorttypen simuliert der Router das Ein- und Ausschalten. Ausserhalb der Saison bleiben die Bad-Server im Standby.
-- Bei knapper Nachfrage gehen ohne Bad rund **195’000 Serverstunden** an andere Clouds. Mit 50 Servern im Bad sind es rund **30’000**. Das verbessert das Jahresergebnis um rund **93’500 CHF**.
-- Die 50 Bad-Server stammen aus dem Vergleich im Case-Idealmodell. Bei ausreichenden Aufträgen könnte das Bad mehr Rechenlast aufnehmen. [Ergebnisse des Abschaltmodells](ERGEBNISSE.md#flotte-mit-bedarfsgerechtem-abschalten)
-- **Ehrlich:** Wenn es nur Aufträge mit Frist gibt, macht die Flotte trotzdem Verlust, weil Aufträge fehlen und nicht Wärme. Der Router verteilt die Arbeit besser, er schafft aber keine neue. Entscheidend bleibt der feste Vertrag mit zahlenden Kunden.
+## What the business model assumes
 
-## Planbar: die Zusage am Vortag
-- Der Ankerkunde zahlt 0,50 CHF nur für Stunden, die DigitalHeat **am Vortag um 12 Uhr verbindlich zusagt**.
-- Die Zusage stützt sich auf die Wetterprognose vom Vortag (ECMWF). Im Test zählen nur Prognosen, die um 12 Uhr schon veröffentlicht waren.
-- Ergebnis Referenzhaus: **93 % der Stunden lassen sich zusagen**, verkauft werden 60 %. An rund 2 % der Tage fehlt etwas. Dafür gibt es eine Gutschrift, die rund 130 CHF pro Jahr kostet.
-- Das Ergebnis sinkt dadurch kaum. Abgesichert ist damit die Liefermenge. Preis und Nachfrage bleiben Annahmen.
+The assumed tariff is CHF 0.3325/kWh. The case values useful heat at CHF 0.133/kWh, based on a heat pump with a factor of 2.5. The case break-even equals **(electricity cost − value of useful heat) ÷ server-hours sold**. In the baseline it is **CHF 0.226 per server-hour**, roughly CHF 0.23. This measure covers energy economics. Hardware and other expenses are included in the separate business model.
 
-## Lohnt es sich?
-- **Der Strom ist nicht das Problem.** Nur für Strom (abzüglich Wärmewert) reichen schon 0,23 CHF pro Server-Stunde.
-- **Entscheidend sind die Computer.** DigitalHeat kauft pro Haus 8 Server mit je 8 Grafikkarten (NVIDIA L4) und investiert dafür mit Einbau rund **290'000 CHF**.
-- DigitalHeat rechnet öffentliche und vom Kunden freigegebene, nicht vertrauliche Aufgaben (`L4_ANGEBOT.md`). Angenommen ist ein Ankerkunde (Roche), der 60 % der Stunden fest für **0,50 CHF pro Grafikkarte und Stunde** kauft; die übrigen Stunden gehen für **0,55 CHF** an andere Kunden. Beides ist noch mit keinem Kunden bestätigt; Schweizer Clouds verlangen ab 0,68 CHF.
-- Findet jede Rechenstunde einen Käufer, bleiben DigitalHeat nach allen Kosten, Steuern und Zinsen rund **35'000 CHF pro Haus und Jahr**. Das Geld für die Computer ist nach **knapp 3 Jahren** zurück, der interne Zinsfuss liegt bei rund **22 %**. Bleibt ein Drittel der Stunden unverkauft, ist der Gewinn weg. Gerechnet ist mit Servern, die ohne Arbeit abschalten (230 W Leerlauf). Die Rechnung für die ganze Firma mit ihren Fixkosten steht in `FIRMA.md`.
-- Bringen die übrigen Stunden nur den Spot-Preis von 0,294 CHF, sind es noch rund 15'800 CHF pro Haus und Jahr.
-- **82 % der Rechenstunden fallen in den Winter** (Oktober bis März). Kauft neben Roche ein zweiter Kunde die übrigen Winterstunden, bleiben rund **27'500 CHF pro Haus und Jahr**, auch wenn im Sommer niemand die übrigen Stunden kauft.
-- Der Haushalt bekommt die **Wärme gratis**.
-- **Es lohnt sich NICHT, wenn:**
-  - Roche weniger als **0,38 CHF pro Grafikkarte und Stunde** zahlt und die übrigen Stunden nur den Spot-Preis bringen, oder
-  - weniger als **66 %** der Rechenstunden überhaupt einen Käufer finden, oder
-  - es nicht genug flexible Aufträge gibt. Dann deckt das System nur 52 % und muss im Sommer Wärme wegkühlen.
+| Business scenario, demand-based shutdown | Equivalent annual result |
+|---|---:|
+| All hours sold at the target prices | About CHF 35'000 |
+| Anchor customer plus a customer for the remaining winter hours | About CHF 27'500 |
+| Anchor customer plus remaining hours at the modelled spot price | About CHF 15'800 |
+| Anchor customer only | About −CHF 6'400 |
 
-## Welche Aufträge passen?
-| Auftrag | Dauer | Unterbrechbar | Frist | Herkunft der Zahlen |
-|---|---|---|---|---|
-| Texte für eine Suche aufbereiten (Embeddings) | ca. 1 h | ja | 24 h | **selbst gemessen** auf dem Laptop |
-| Bilder auf Objekte prüfen | ca. 7 min | nein | 2 h | MLPerf-Messungen eines Servers |
+The hypothetical anchor customer buys 60% of hours at CHF 0.50 per L4-hour. Other customers pay CHF 0.55 in the fully sold scenario, which generates approximately CHF 135'400 of first-year compute revenue. The anchor price, additional demand and volumes are unconfirmed. The reference house costs about CHF 290'000 to equip. The depreciation period is five years, and the scenario breaks even at **66 %** of hours sold under the modelled sales mix. The switch-off scenario assumes free heat for the household. [Financial model data and assumptions](../../daten/ergebnisse/kosten_dh.json)
 
-- Gut passen Aufträge, die **warten können** und sich **pausieren lassen**. Sie werden dann gerechnet, wenn das Haus Wärme braucht.
-- Eilige Aufträge laufen sofort. Wird ihre Wärme nicht gebraucht, landet sie im Speicher oder der Auftrag geht an einen anderen Standort.
+## What the demos establish
 
-## Echt getestet
-- Ein echter KI-Auftrag läuft auf dem Laptop: 85 Texte pro Sekunde bei 28,9 Watt (gemessen).
-- Der Scheduler pausiert und startet ihn je nach Wärmebedarf:
-  - **Januar:** Das Haus braucht viel Wärme, der Auftrag läuft durchgehend.
-  - **Juli:** Der Speicher ist voll, der Auftrag läuft nur 62 % jeder Stunde und ist sonst pausiert.
-  - **7. März:** Am Nachmittag ist der Speicher voll. Der Auftrag pausiert 7 Stunden lang und rechnet am Abend weiter, sobald das Haus wieder Wärme braucht.
-- Nach einem Stopp macht der Auftrag genau dort weiter, wo er aufgehört hat. Das Ergebnis ist identisch.
-
-- **Der Job wandert echt.** Am 25. Mai rechnet der echte Auftrag bis 10 Uhr im Haus. Dann ist der Wassertank voll, und der Router schickt ihn ins Sportbad. Der Auftrag speichert seinen Stand, ein neuer Prozess macht dort weiter. Ein Vergleich mit einem Lauf ohne Unterbruch ergibt exakt dieselben Ergebnisse.
-
-## Wichtigste Annahmen
-- Es gibt genug Rechenaufträge: Eine Pharmafirma bucht 60 % der Stunden fest, der Rest geht zu 0,55 CHF an Kunden ohne Mindestmenge. Ohne genug Aufträge sinkt die Deckung auf 52 %.
-- Strompreis 33,25 Rp./kWh (IWB Basel 2026). Die Wärme ist 13,3 Rp./kWh wert, weil sie eine Wärmepumpe ersetzt (Case-Regel).
-- Ein Server mit 8 Grafikkarten kostet 32'245 CHF und hält 5 Jahre. Alle Beträge in CHF, Herleitung in `KOSTEN_DH.md`.
-- Der Wärmebedarf des Sportbads ist geschätzt: rund 650'000 kWh im Jahr, auf ±30 % genau (Kennwert des Verbands Hallen- und Freibäder, `daten/HALLENBAD.md`).
-
-## In einem Satz
-**8 Server pro Haus decken rund 90 % der Wärme (93 % im Case-Modell ohne Leerlauf), und der Haushalt bekommt sie gratis. Im Sommer schickt der Wärme-Router die Arbeit ins Sportbad, statt sie zu verschenken. Findet jede Rechenstunde einen Käufer zum Zielpreis, verdient DigitalHeat rund 35'000 CHF pro Haus und Jahr und hat die Investition nach knapp 3 Jahren zurück.**
+- A real local text-embedding or molecular docking process responds to heat decisions from the scheduler used for the annual balance.
+- In the two-laptop docking demo, the checkpoint and route changes are live. The standard screens replay earlier Vina results while simulating the tank, heat demand and model clock.
+- The laptop embedding measurements document throughput and chip power. Physical heating performance, L4 operating power, actual workloads and customer willingness to pay remain pilot questions. [Workload definitions and measurement methods](../../daten/JOBTYPEN.md)

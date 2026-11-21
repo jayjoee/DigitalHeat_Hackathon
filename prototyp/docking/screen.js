@@ -1,31 +1,45 @@
 const get = id => document.getElementById(id);
 let requestActive = false;
-const num = new Intl.NumberFormat("de-CH", {maximumFractionDigits: 2});
+const num = new Intl.NumberFormat("en-GB", {maximumFractionDigits: 2});
 
 const statusLabels = {
-  bereit: "Bereit zum Start",
-  rechnet: "Screening läuft",
-  "Übergabe läuft": "Haus pausiert · Checkpoint unterwegs",
-  "Übergabe offen": "Bestätigung ausstehend",
-  übergeben: "Haus pausiert · Sportbad dockt",
-  zurückgegeben: "Sportbad pausiert · zurück ans Haus",
-  fertig: "Screening abgeschlossen",
+  bereit: "Ready to start",
+  rechnet: "Screening in progress",
+  "Übergabe läuft": "House paused · sending checkpoint",
+  "Übergabe offen": "Awaiting confirmation",
+  übergeben: "House paused · sports pool screening",
+  zurückgegeben: "Sports pool paused · returned to house",
+  fertig: "Screening complete",
 };
+
+const moleculeNames = {
+  Koffein: "Caffeine", Nikotin: "Nicotine", Zimtaldehyd: "Cinnamaldehyde", Lidocain: "Lidocaine",
+};
+const groups = {
+  Alltag: "Everyday compound", Medikament: "Medicine",
+  "Kinasehemmer (Leukämie)": "Kinase inhibitor (leukaemia)",
+  "Kinasehemmer (Lunge)": "Kinase inhibitor (lung)",
+  "Kinasehemmer (Niere/Leber)": "Kinase inhibitor (kidney/liver)",
+  "Kinasehemmer (Niere)": "Kinase inhibitor (kidney)",
+  "Kinasehemmer (Brust)": "Kinase inhibitor (breast)",
+};
+const moleculeName = name => moleculeNames[name] ?? name;
+const groupLabel = group => groups[group] ?? group;
 
 function showItem(item, starkKcal) {
   if (!item) return;
-  get("image-title").textContent = "Molekül " + (item.index + 1);
-  get("mol-name").textContent = item.name;
-  get("mol-gruppe").textContent = item.gruppe;
+  get("image-title").textContent = "Molecule " + (item.index + 1);
+  get("mol-name").textContent = moleculeName(item.name);
+  get("mol-gruppe").textContent = groupLabel(item.gruppe);
   get("energie-wert").textContent = num.format(item.energie);
   const fraction = Math.min(1, Math.max(0, -item.energie / 15));
   get("energie-fill").style.width = (fraction * 100).toFixed(0) + "%";
   get("energie-fill").style.background = item.stark ? "var(--mint)" : "#5c7a80";
-  get("verdict").textContent = item.stark ? "Starker Treffer" : "Bindet";
+  get("verdict").textContent = item.stark ? "Strong hit" : "Binds";
   get("verdict").dataset.result = item.stark ? "pass" : "";
   get("image-note").textContent = item.stark
-    ? item.name + " passt sehr gut in die Bindetasche (≤ " + starkKcal + " kcal/mol)."
-    : item.name + " bindet schwächer.";
+    ? moleculeName(item.name) + " has a strong predicted fit (≤ " + starkKcal + " kcal/mol)."
+    : moleculeName(item.name) + " has a weaker predicted fit.";
 }
 
 function showRanking(data, done) {
@@ -34,12 +48,12 @@ function showRanking(data, done) {
     .map((m, i) => ({...m, nr: i + 1}))
     .sort((a, b) => a.energie - b.energie).slice(0, 5);
   if (!fertig.length) {
-    liste.innerHTML = '<li><span class="pos"></span><span>noch keiner</span><span class="e"></span></li>';
+    liste.innerHTML = '<li><span class="pos"></span><span>None yet</span><span class="e"></span></li>';
     return;
   }
   liste.innerHTML = fertig.map((m, i) =>
     `<li class="${m.energie <= data.stark_kcal ? "stark" : ""}"><span class="pos">${i + 1}</span>`
-    + `<span>${m.name}</span><span class="e">${num.format(m.energie)} kcal/mol</span></li>`).join("");
+    + `<span>${moleculeName(m.name)}</span><span class="e">${num.format(m.energie)} kcal/mol</span></li>`).join("");
 }
 
 function showRoute(data, done) {
@@ -52,50 +66,50 @@ function showRoute(data, done) {
   }
   let handoff = "";
   if (data.return_at) {
-    handoff = "Haus braucht wieder Wärme · Rückkehr ab Molekül " + data.return_at;
+    handoff = "House needs heat again · resuming at molecule " + data.return_at;
   } else if (data.state === "übergeben") {
-    handoff = "Das Haus nutzt gespeicherte Wärme, während das Sportbad dockt.";
+    handoff = "The house draws heat from storage while screening runs at the sports pool.";
   } else if (data.state === "Übergabe läuft") {
-    handoff = "Speicher voll · Prüfstand nach Molekül " + done + " wird gesendet.";
+    handoff = "Tank full · checkpoint after molecule " + done + " is being sent.";
   } else if (data.state === "Übergabe offen") {
-    handoff = "Das Haus pausiert. Ihr könnt denselben Prüfstand erneut senden.";
+    handoff = "The house is paused. You can resend the same checkpoint.";
   } else if (data.resumed_after > 0) {
-    handoff = "Vom Haus übernommen · weiter ab Molekül " + (data.resumed_after + 1);
+    handoff = "Received from house · starting at molecule " + (data.resumed_after + 1);
   } else if (!data.control) {
-    handoff = "Wartet auf den Prüfstand aus dem Haus.";
+    handoff = "Waiting for the checkpoint from the house.";
   } else if (data.state === "rechnet") {
-    handoff = "Bei vollem Hausspeicher übernimmt das Sportbad.";
+    handoff = "The sports pool takes over when the house tank fills.";
   }
   get("handoff").textContent = handoff;
   const local = data.local_ranges.reduce((count, [first, last]) => count + last - first + 1, 0);
   const ranges = data.local_ranges.map(([first, last]) => first === last ? String(first) : first + "–" + last);
   get("recent").textContent = local
-    ? "Hier getestet · " + local + (local === 1 ? " Molekül" : " Moleküle") + " (Nr. " + ranges.join(", ") + ")"
-    : "Hier getestet · noch kein Molekül";
+    ? "Tested here · " + local + (local === 1 ? " molecule" : " molecules") + " (no. " + ranges.join(", ") + ")"
+    : "Tested here · no molecules yet";
 }
 
 function showHeat(heat) {
-  get("heat-time").textContent = heat.time.slice(11, 16) + " Uhr";
-  get("outdoor").textContent = num.format(heat.outside_c) + " °C draussen";
+  get("heat-time").textContent = heat.time.slice(11, 16);
+  get("outdoor").textContent = num.format(heat.outside_c) + " °C outdoors";
   get("heat-power").textContent = num.format(heat.heat_kw) + " kW";
   get("heat-forward").textContent = heat.forward_c == null ? "–" : heat.forward_c + " °C";
   get("heat-room-target").textContent = num.format(heat.room_target_c) + " °C";
   get("heat-tank").textContent = num.format(heat.tank_kwh) + " kWh";
-  get("tank-capacity").textContent = "von " + num.format(heat.tank_max_kwh) + " kWh Kapazität";
+  get("tank-capacity").textContent = "of " + num.format(heat.tank_max_kwh) + " kWh capacity";
 }
 
 async function refresh() {
   const response = await fetch("/status");
-  if (!response.ok) throw Error("Anzeige nicht erreichbar.");
+  if (!response.ok) throw Error("Screen is unavailable.");
   const data = await response.json();
   const done = data.job?.next ?? 0;
   const stark = data.job?.rejects ?? 0;
   get("site").textContent = data.site;
   get("schloss").textContent = data.schloss;
   let state = statusLabels[data.state];
-  if (!data.control && data.state === "bereit") state = "Wartet auf das Haus";
-  if (data.heat.scheduled_pause) state = "Docking pausiert · Router gibt keine Rechenzeit frei";
-  if (data.sync_pending) state = "Haus pausiert · warte auf die Verbindung zum Sportbad";
+  if (!data.control && data.state === "bereit") state = "Waiting for the house";
+  if (data.heat.scheduled_pause) state = "Docking paused · router has paused compute";
+  if (data.sync_pending) state = "House paused · waiting for the sports pool connection";
   get("state").textContent = state;
   get("count").textContent = done + " / " + data.total;
   const percent = Math.round(100 * done / data.total);
@@ -138,7 +152,7 @@ async function poll() {
   try {
     await refresh();
   } catch {
-    get("state").textContent = "Verbindung unterbrochen";
+    get("state").textContent = "Connection lost";
     get("start").disabled = get("move").disabled = true;
   } finally {
     setTimeout(poll, 350);

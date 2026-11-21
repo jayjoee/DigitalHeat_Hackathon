@@ -21,7 +21,7 @@ from src.scheduler.jahr import Haus
 from src.scheduler.live import anteil,waehle_server
 
 ROOT=Path(__file__).resolve().parents[1]
-DAYS=[('2025-01-15','Winter: Wärme wird gebraucht'),('2025-07-15','Sommer: nur Warmwasser'),('2025-03-07','Speicher voll: Auftrag pausiert')]
+DAYS=[('2025-01-15','Winter: high heat demand'),('2025-07-15','Summer: hot water only'),('2025-03-07','Tank full: job pauses')]
 
 def build_case():
     house=Haus(8,'spot','rechnen');days={date:[] for date,_ in DAYS}
@@ -34,14 +34,14 @@ def build_case():
         segments.append({'date':date,'title':title,'slot':k+1,
                          'hours':[{**r,'duty':anteil(r['strom_kwh'],k)} for r in rows]})
     result={'year':house.bilanz(),'segments':segments,
-            'assumptions':['Basel 2025, Referenzhaus, acht 1-kW-Server, 80 % Wärmerückgewinnung, 35-kWh-Speicher ohne Verluste.',
-                'Spot-Szenario: unbegrenzt flexible Aufträge, kurze Aufträge nach Alibaba-Muster. Keine bewiesene Kundenabnahme.',
-                'Rechenlast und Preis sind Annahmen. NVIDIA-L4-Hardware und nutzbare Heiztemperatur sind nicht gemessen.',
-                'Die Live-Demo nutzt dieselbe Funktion Haus.schritt → kern.entscheide wie die Jahresbilanz.',
-                'Ein repräsentativer modellierter Serverplatz steuert einen echten CPU-Prozess. Häuser und Wärme sind simuliert.',
-                'Zeit wird beschleunigt. Der Job pausiert, der Rechner wird nicht ausgeschaltet. Keine Energiemessung in der Demo.',
-                'Pharma-Daten werden nicht verarbeitet: öffentlicher Nachrichtentext, allgemeines Embedding-Modell.'],
-            'explanation':'Ein echter Suchindex-Auftrag läuft dann, wenn der modellierte Serverplatz Wärme liefern soll.'}
+            'assumptions':['Basel reference house, 2025. Eight 1 kW servers, 80% heat recovery, lossless 35 kWh tank.',
+                'Plentiful-work scenario: unlimited flexible jobs, plus short jobs based on the Alibaba trace. Customer demand is unconfirmed.',
+                'Workload and prices are assumptions. L4 operating power and usable water temperature are unmeasured.',
+                'The live run and annual model both use Haus.schritt → kern.entscheide.',
+                'A modelled server slot controls a real CPU process. Houses and heat are simulated.',
+                'The model clock is accelerated. The job pauses while the laptop stays on. No live energy meter is used.',
+                'The embedding demo uses public news text and a general-purpose model.'],
+            'explanation':'A real search-indexing job runs when the modelled server slot is scheduled to provide heat.'}
     return result
 
 def find_python():
@@ -59,7 +59,7 @@ def atomic(path,data):
 class Demo:
     def __init__(self,case,seconds=1.2):
         self.case=case;self.seconds=seconds;self.lock=threading.RLock();self.stop=threading.Event();self.thread=None
-        self.state={'active':False,'stage':'Bereit','process':'Noch nicht gestartet','texts':0,'completed':False,'events':[], 'current':None,'error':None}
+        self.state={'active':False,'stage':'Ready','process':'Waiting to start','texts':0,'completed':False,'events':[], 'current':None,'error':None}
     def snapshot(self):
         with self.lock:return json.loads(json.dumps(self.state))
     def update(self,**kwargs):
@@ -67,7 +67,7 @@ class Demo:
     def launch(self):
         with self.lock:
             if self.state['active']:return False
-            self.stop.clear();self.state={'active':True,'stage':'Modell vorbereiten','process':'Wird geladen','texts':0,'completed':False,'events':[],'current':None,'error':None}
+            self.stop.clear();self.state={'active':True,'stage':'Preparing model','process':'Loading','texts':0,'completed':False,'events':[],'current':None,'error':None}
             self.thread=threading.Thread(target=self.run,daemon=True);self.thread.start();return True
     def run(self):
         job=None;log=None;folder=ROOT/'messungen'/'gesamtdemo'/datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S_%fZ')
@@ -86,9 +86,9 @@ class Demo:
             while time.monotonic()<deadline:
                 pid,status=os.waitpid(job.pid,os.WUNTRACED|os.WNOHANG)
                 if pid and os.WIFSTOPPED(status):paused=True;return
-                if pid and os.WIFEXITED(status):raise RuntimeError('Rechenprozess unerwartet beendet.')
+                if pid and os.WIFEXITED(status):raise RuntimeError('The compute process exited unexpectedly.')
                 time.sleep(.01)
-            raise RuntimeError('Pause konnte nicht bestätigt werden.')
+            raise RuntimeError('Could not verify the pause.')
         def resume():
             nonlocal paused
             if paused:job.send_signal(signal.SIGCONT);paused=False
@@ -104,11 +104,11 @@ class Demo:
                 pid,status=os.waitpid(job.pid,os.WUNTRACED|os.WNOHANG)
                 if pid and os.WIFSTOPPED(status):break
                 if pid and (os.WIFEXITED(status) or os.WIFSIGNALED(status)):
-                    raise RuntimeError('Modellstart fehlgeschlagen. Vorhandenen Modellcache und Prozessprotokoll prüfen.')
-                if time.monotonic()>deadline or self.stop.wait(.05):raise RuntimeError('Modellstart abgebrochen oder Zeitlimit erreicht.')
-            if not ready.exists():raise RuntimeError('Bereitschaftsmeldung fehlt.')
+                    raise RuntimeError('Model startup failed. Check the model cache and process log.')
+                if time.monotonic()>deadline or self.stop.wait(.05):raise RuntimeError('Model startup stopped or timed out.')
+            if not ready.exists():raise RuntimeError('The ready signal is missing.')
             emit('ready',pid=job.pid,model='BAAI/bge-small-en-v1.5')
-            self.update(pid=job.pid,process='Pausiert',run_folder=str(folder.relative_to(ROOT)))
+            self.update(pid=job.pid,process='Paused',run_folder=str(folder.relative_to(ROOT)))
             for segment in self.case['segments']:
                 pause();self.update(stage=segment['title'],segment_date=segment['date'],slot=segment['slot'])
                 emit('segment',date=segment['date'])
@@ -117,11 +117,11 @@ class Demo:
                     duty=row['duty'];active=duty*self.seconds;rest=self.seconds-active
                     current={**row,'date':segment['date'],'slot':segment['slot']}
                     if active>1e-6:
-                        resume();self.update(process='Rechnet',current=current,texts=progress())
+                        resume();self.update(process='Computing',current=current,texts=progress())
                         emit('compute',model_time=row['zeit'],duty=duty,texts=progress())
                         if self.stop.wait(active):break
                     if rest>1e-6:
-                        pause();before=progress();self.update(process='Pausiert',current=current,texts=before)
+                        pause();before=progress();self.update(process='Paused',current=current,texts=before)
                         emit('pause',model_time=row['zeit'],reason='Modellierter Serverplatz wird nicht benötigt',texts=before)
                         if self.stop.wait(rest):break
                         after=progress()
@@ -138,13 +138,13 @@ class Demo:
                     # Resume first so an outstanding block can finish and save its checkpoint.
                     job.send_signal(signal.SIGCONT);job.send_signal(signal.SIGTERM)
                     code=job.wait(timeout=30)
-                    if code not in (0,3):self.update(error='Rechenprozess mit Fehler beendet. Prozessprotokoll prüfen.')
+                    if code not in (0,3):self.update(error='The compute process failed. Check the process log.')
                 except ProcessLookupError:pass
                 except subprocess.TimeoutExpired:
-                    job.kill();job.wait();self.update(error='Rechenprozess musste nach Zeitlimit beendet werden.')
+                    job.kill();job.wait();self.update(error='The compute process was stopped after timing out.')
             if log is not None:log.close()
             final_texts=progress();self.update(active=False,completed=not stopped and not self.state.get('error'),
-                   process='Checkpoint gespeichert',stage='Demo abgeschlossen' if not stopped else 'Demo beendet',texts=final_texts)
+                   process='Checkpoint saved',stage='Demo complete' if not stopped else 'Demo stopped',texts=final_texts)
             if folder.exists():atomic(folder/'demo.json',self.snapshot())
 
 class Handler(BaseHTTPRequestHandler):
@@ -162,29 +162,29 @@ class Handler(BaseHTTPRequestHandler):
     def dispatch(self,post):
         try:
             origin=f'http://127.0.0.1:{self.server.server_port}'
-            if self.headers.get('Host')!=origin[7:] or self.headers.get('Origin') not in (None,origin):return self.reply(403,{'error':'Nur lokaler Zugriff erlaubt.'})
+            if self.headers.get('Host')!=origin[7:] or self.headers.get('Origin') not in (None,origin):return self.reply(403,{'error':'Local access only.'})
             if post:
-                if not secrets.compare_digest(self.headers.get('X-DigitalHeat-CSRF',''),self.server.csrf):return self.reply(403,{'error':'Seite neu laden.'})
-                if self.headers.get('Transfer-Encoding') or len(self.headers.get_all('Content-Length',[]))!=1:return self.reply(400,{'error':'Ungültige Anfrage.'})
+                if not secrets.compare_digest(self.headers.get('X-DigitalHeat-CSRF',''),self.server.csrf):return self.reply(403,{'error':'Reload the page.'})
+                if self.headers.get('Transfer-Encoding') or len(self.headers.get_all('Content-Length',[]))!=1:return self.reply(400,{'error':'Invalid request.'})
                 size=int(self.headers['Content-Length'])
-                if not 0<size<=1024:return self.reply(413,{'error':'Anfrage zu gross.'})
-                if self.headers.get('Content-Type','').split(';')[0]!='application/json':return self.reply(415,{'error':'JSON erwartet.'})
+                if not 0<size<=1024:return self.reply(413,{'error':'Request too large.'})
+                if self.headers.get('Content-Type','').split(';')[0]!='application/json':return self.reply(415,{'error':'Expected JSON.'})
                 body=self.rfile.read(size)
-                if len(body)!=size or not isinstance(json.loads(body),dict):return self.reply(400,{'error':'Ungültige Anfrage.'})
+                if len(body)!=size or not isinstance(json.loads(body),dict):return self.reply(400,{'error':'Invalid request.'})
                 if self.path=='/api/start':return self.reply(202 if self.server.demo.launch() else 409,{'accepted':True})
                 if self.path=='/api/stop':self.server.demo.stop.set();return self.reply(200,{'stopping':True})
-                return self.reply(404,{'error':'Nicht gefunden.'})
+                return self.reply(404,{'error':'Not found.'})
             if self.path=='/api/session':return self.reply(200,{'csrf':self.server.csrf})
             if self.path=='/api/case':return self.reply(200,self.server.demo.case)
             if self.path=='/api/live':return self.reply(200,self.server.demo.snapshot())
             files={'/':ROOT/'dashboard/gesamt/index.html','/app.js':ROOT/'dashboard/gesamt/app.js',
                    '/style.css':ROOT/'dashboard/gesamt/style.css','/wallpaper.svg':ROOT/'dashboard/gesamt/wallpaper.svg'}
             p=files.get(self.path)
-            if p is None:return self.reply(404,{'error':'Nicht gefunden.'})
+            if p is None:return self.reply(404,{'error':'Not found.'})
             return self.reply(200,p.read_bytes(),(mimetypes.guess_type(str(p))[0] or 'application/octet-stream')+'; charset=utf-8')
-        except (ValueError,TypeError):self.reply(400,{'error':'Ungültige Anfrage.'})
+        except (ValueError,TypeError):self.reply(400,{'error':'Invalid request.'})
         except (BrokenPipeError,ConnectionResetError,TimeoutError):pass
-        except Exception:self.reply(500,{'error':'Interner Fehler.'})
+        except Exception:self.reply(500,{'error':'Internal error.'})
 
 def make_server(port=18200,seconds=1.2):
     server=ThreadingHTTPServer(('127.0.0.1',port),Handler)
@@ -192,8 +192,8 @@ def make_server(port=18200,seconds=1.2):
 
 def main():
     p=argparse.ArgumentParser();p.add_argument('--port',type=int,default=18200);p.add_argument('--seconds',type=float,default=1.2);p.add_argument('--open',action='store_true');a=p.parse_args()
-    if not .1<=a.seconds<=10:p.error('0,1 bis 10 Sekunden pro Modellstunde wählen.')
-    server=make_server(a.port,a.seconds);url=f'http://127.0.0.1:{server.server_port}';print(f'Gesamtdemo: {url}',flush=True)
+    if not .1<=a.seconds<=10:p.error('Choose 0.1 to 10 seconds per model hour.')
+    server=make_server(a.port,a.seconds);url=f'http://127.0.0.1:{server.server_port}';print(f'Guided demo: {url}',flush=True)
     if a.open:
         import webbrowser
         webbrowser.open(url)

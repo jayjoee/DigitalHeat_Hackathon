@@ -1,55 +1,55 @@
 <!doctype html>
-<html lang="de">
+<html lang="en">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>DigitalHeat · Blisterprüfung</title>
+<title>DigitalHeat · Blister inspection</title>
 <link rel="stylesheet" href="/screen.css">
 <script src="/screen.js" defer></script>
 <main>
-  <header><strong>DigitalHeat</strong><span id="site">Standort wird geladen</span></header>
-  <h1>Blisterprüfung</h1>
-  <p class="intro">Qualitätskontrolle an synthetischen Kamerabildern. Acht Tablettenfächer pro Packung.</p>
+  <header><strong>DigitalHeat</strong><span id="site">Loading site</span></header>
+  <h1>Blister inspection</h1>
+  <p class="intro">Quality control on synthetic camera images. Eight tablet pockets per pack.</p>
   <section class="heat" aria-labelledby="heat-heading">
-    <h2 id="heat-heading">Wärmeverlauf · Simulation</h2>
+    <h2 id="heat-heading">Heat timeline · Simulation</h2>
     <dl>
-      <div><dt>Modellzeit · 25. Mai</dt><dd id="heat-time">–</dd><p id="outdoor">–</p></div>
-      <div><dt>Wärme ins Wasser hier</dt><dd id="heat-power">–</dd><p>Für einen Modellserver</p></div>
-      <div><dt>Vorlauf hier</dt><dd id="heat-forward">–</dd><p>Angenommene Temperatur</p></div>
-      <div><dt>Raum-Sollwert</dt><dd id="heat-room-target">–</dd><p>Referenzhaus im Case</p></div>
-      <div><dt>Speicher im Haus</dt><dd id="heat-tank">–</dd><p id="tank-capacity">–</p></div>
+      <div><dt>Model time · 25 May</dt><dd id="heat-time">–</dd><p id="outdoor">–</p></div>
+      <div><dt>Heat transferred to water</dt><dd id="heat-power">–</dd><p>For one modelled server</p></div>
+      <div><dt>Supply water temperature</dt><dd id="heat-forward">–</dd><p>Assumed temperature</p></div>
+      <div><dt>Indoor setpoint</dt><dd id="heat-room-target">–</dd><p>Case reference house</p></div>
+      <div><dt>House heat storage</dt><dd id="heat-tank">–</dd><p id="tank-capacity">–</p></div>
     </dl>
   </section>
   <div class="layout">
-    <section class="image" aria-label="Prüfbild">
+    <section class="image" aria-label="Inspection image">
       <div class="image-head">
-        <h2 id="image-title">Prüfbild</h2>
-        <span id="verdict" class="verdict">Wartet</span>
+        <h2 id="image-title">Inspection image</h2>
+        <span id="verdict" class="verdict">Waiting</span>
       </div>
       <div class="camera">
-        <canvas id="frame" width="720" height="432" aria-label="Letztes geprüftes Blisterbild"></canvas>
-        <p id="empty-camera">Das erste Prüfbild erscheint hier.</p>
+        <canvas id="frame" width="720" height="432" aria-label="Last inspected blister image"></canvas>
+        <p id="empty-camera">The first inspection image will appear here.</p>
       </div>
-      <p id="image-note">Warte auf das erste Bild</p>
+      <p id="image-note">Waiting for the first image</p>
     </section>
-    <section class="metrics" aria-label="Batchfortschritt">
-      <div class="route" aria-label="Standorte der Blisterprüfung">
-        <span id="route-house">Haus</span><span id="route-arrow" aria-hidden="true">→</span><span id="route-pool">Sportbad</span>
+    <section class="metrics" aria-label="Batch progress">
+      <div class="route" aria-label="Inspection sites">
+        <span id="route-house">House</span><span id="route-arrow" aria-hidden="true">→</span><span id="route-pool">Sports pool</span>
       </div>
-      <h2 id="state" role="status">Verbinde …</h2>
+      <h2 id="state" role="status">Connecting…</h2>
       <p id="handoff"></p>
       <p id="count">0 / 30</p>
       <div id="progress" role="progressbar" aria-valuemin="0" aria-valuemax="30"
-           aria-valuenow="0" aria-label="Geprüfte Packungen im Batch">
+           aria-valuenow="0" aria-label="Packs inspected in this batch">
         <div id="progress-fill"></div>
       </div>
-      <p class="progress-caption"><span>Geprüfte Packungen im Batch</span><span id="percent">0 %</span></p>
+      <p class="progress-caption"><span>Packs inspected in this batch</span><span id="percent">0 %</span></p>
       <dl class="results">
-        <div><dt>Freigegeben</dt><dd id="passed">0</dd></div>
-        <div><dt>Beanstandet</dt><dd id="rejects">0</dd></div>
+        <div><dt>Passed</dt><dd id="passed">0</dd></div>
+        <div><dt>Rejected</dt><dd id="rejects">0</dd></div>
       </dl>
-      <p id="recent">Hier geprüft · noch keine Packung</p>
-      <button id="start" type="button" hidden>Batch starten</button>
-      <button id="move" type="button" hidden>Übergabe wiederholen</button>
+      <p id="recent">No packs inspected here yet</p>
+      <button id="start" type="button" hidden>Start batch</button>
+      <button id="move" type="button" hidden>Retry handoff</button>
       <p id="error" role="alert"></p>
     </section>
   </div>

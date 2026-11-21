@@ -16,13 +16,13 @@ const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
 const scanDuration = 650;
 
 const statusLabels = {
-  bereit: "Bereit zum Start",
-  rechnet: "Prüfung läuft",
-  "Übergabe läuft": "Haus pausiert · Checkpoint unterwegs",
-  "Übergabe offen": "Bestätigung ausstehend",
-  übergeben: "Haus pausiert · Sportbad prüft",
-  zurückgegeben: "Sportbad pausiert · zurück ans Haus",
-  fertig: "Prüfung abgeschlossen",
+  bereit: "Ready to start",
+  rechnet: "Inspection in progress",
+  "Übergabe läuft": "House paused · sending checkpoint",
+  "Übergabe offen": "Awaiting confirmation",
+  übergeben: "House paused · sports pool inspecting",
+  zurückgegeben: "Sports pool paused · returned to house",
+  fertig: "Inspection complete",
 };
 
 function draw(frame) {
@@ -38,8 +38,8 @@ function draw(frame) {
   }
   rasterContext.putImageData(image, 0, 0);
   get("empty-camera").hidden = true;
-  get("image-title").textContent = "Packung " + (frame.index + 1);
-  setVerdict("Prüfbild wird eingeblendet", "scan", "Die Markierungen zeigen das Ergebnis der Pixelprüfung.");
+  get("image-title").textContent = "Pack " + (frame.index + 1);
+  setVerdict("Displaying inspection image", "scan", "The markers show which pockets passed inspection.");
   schedulePaint();
 }
 
@@ -81,7 +81,7 @@ function animate(now) {
         context.fillStyle = "#201516";
         context.font = "bold 19px system-ui";
         context.textAlign = "center";
-        context.fillText("FEHLT", x * sx, (y + 20) * sy);
+        context.fillText("MISSING", x * sx, (y + 20) * sy);
       } else {
         context.fillStyle = "#8ae8ba";
         context.beginPath();
@@ -94,10 +94,10 @@ function animate(now) {
     } else {
       const missing = activeFrame.boxes.flatMap((box, index) => box[2] ? [index + 1] : []);
       const filled = activeFrame.boxes.length - missing.length;
-      const note = filled + " von " + activeFrame.boxes.length + " Fächern befüllt";
-      setVerdict(missing.length ? "Beanstandet" : "Vollständig",
+      const note = filled + " of " + activeFrame.boxes.length + " pockets filled";
+      setVerdict(missing.length ? "Rejected" : "Complete",
         missing.length ? "reject" : "pass",
-        missing.length ? note + " · Fehlt in " + (missing.length === 1 ? "Fach " : "den Fächern ") +
+        missing.length ? note + " · Missing from " + (missing.length === 1 ? "pocket " : "pockets ") +
           missing.join(", ") : note);
     }
   }
@@ -113,51 +113,51 @@ function showRoute(data, done) {
   }
   let handoff = "";
   if (data.return_at) {
-    handoff = "Haus braucht wieder Wärme · Rückkehr ab Packung " + data.return_at;
+    handoff = "House needs heat again · resuming at pack " + data.return_at;
   } else if (data.state === "übergeben") {
-    handoff = "Das Haus nutzt gespeicherte Wärme, während das Sportbad rechnet.";
+    handoff = "The house draws heat from storage while the sports pool computes.";
   } else if (data.state === "Übergabe läuft") {
-    handoff = "Speicher voll · Prüfstand nach Packung " + done + " wird gesendet.";
+    handoff = "Tank full · checkpoint after pack " + done + " is being sent.";
   } else if (data.state === "Übergabe offen") {
-    handoff = "Das Haus pausiert. Ihr könnt denselben Prüfstand erneut senden.";
+    handoff = "The house is paused. You can resend the same checkpoint.";
   } else if (data.resumed_after > 0) {
-    handoff = "Vom Haus übernommen · Weiter ab Packung " + (data.resumed_after + 1);
+    handoff = "Received from house · starting at pack " + (data.resumed_after + 1);
   } else if (!data.control) {
-    handoff = "Wartet auf den Prüfstand aus dem Haus.";
+    handoff = "Waiting for the checkpoint from the house.";
   } else if (data.state === "rechnet") {
-    handoff = "Bei vollem Hausspeicher übernimmt das Sportbad.";
+    handoff = "The sports pool takes over when the house tank fills.";
   }
   get("handoff").textContent = handoff;
   const local = data.local_ranges.reduce((count, [first, last]) => count + last - first + 1, 0);
   const ranges = data.local_ranges.map(([first, last]) => first === last ? String(first) : first + "–" + last);
   get("recent").textContent = local
-    ? "Hier geprüft · " + local + (local === 1 ? " Packung" : " Packungen") + " (Nr. " + ranges.join(", ") + ")"
-    : "Hier geprüft · noch keine Packung";
+    ? "Inspected here · " + local + (local === 1 ? " pack" : " packs") + " (no. " + ranges.join(", ") + ")"
+    : "Inspected here · no packs yet";
 }
 
-const heatNumber = new Intl.NumberFormat("de-CH", {maximumFractionDigits: 2});
+const heatNumber = new Intl.NumberFormat("en-GB", {maximumFractionDigits: 2});
 
 function showHeat(heat) {
-  get("heat-time").textContent = heat.time.slice(11, 16) + " Uhr";
-  get("outdoor").textContent = heatNumber.format(heat.outside_c) + " °C draussen";
+  get("heat-time").textContent = heat.time.slice(11, 16);
+  get("outdoor").textContent = heatNumber.format(heat.outside_c) + " °C outdoors";
   get("heat-power").textContent = heatNumber.format(heat.heat_kw) + " kW";
   get("heat-forward").textContent = heat.forward_c == null ? "–" : heat.forward_c + " °C";
   get("heat-room-target").textContent = heatNumber.format(heat.room_target_c) + " °C";
   get("heat-tank").textContent = heatNumber.format(heat.tank_kwh) + " kWh";
-  get("tank-capacity").textContent = "von " + heatNumber.format(heat.tank_max_kwh) + " kWh Kapazität";
+  get("tank-capacity").textContent = "of " + heatNumber.format(heat.tank_max_kwh) + " kWh capacity";
 }
 
 async function refresh() {
   const response = await fetch("/status");
-  if (!response.ok) throw Error("Anzeige nicht erreichbar.");
+  if (!response.ok) throw Error("Screen is unavailable.");
   const data = await response.json();
   const done = data.job?.next ?? 0;
   const rejects = data.job?.rejects ?? 0;
   get("site").textContent = data.site;
   let state = statusLabels[data.state];
-  if (!data.control && data.state === "bereit") state = "Wartet auf das Haus";
-  if (data.heat.scheduled_pause) state = "Prüfung pausiert · Router gibt keine Rechenzeit frei";
-  if (data.sync_pending) state = "Haus pausiert · warte auf die Verbindung zum Sportbad";
+  if (!data.control && data.state === "bereit") state = "Waiting for the house";
+  if (data.heat.scheduled_pause) state = "Inspection paused · router has paused compute";
+  if (data.sync_pending) state = "House paused · waiting for the sports pool connection";
   get("state").textContent = state;
   get("count").textContent = done + " / " + data.total;
   const percent = Math.round(100 * done / data.total);
@@ -206,7 +206,7 @@ async function poll() {
   } catch {
     isRunning = false;
     schedulePaint();
-    get("state").textContent = "Verbindung unterbrochen";
+    get("state").textContent = "Connection lost";
     get("start").disabled = get("move").disabled = true;
   } finally {
     setTimeout(poll, 350);

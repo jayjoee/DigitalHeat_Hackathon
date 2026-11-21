@@ -2,7 +2,7 @@
 
 Säule «Firma». Ergänzt die Sicht des Hausbesitzers ([HAUSBESITZER.md](../kunden/HAUSBESITZER.md)), die Pharma-Sicht (`PHARMA_SICHT.md`) und die Rechnung für die ganze Firma (`FIRMA.md`). Das Angebot selbst ist in `L4_ANGEBOT.md` festgelegt. **Alle Beträge in CHF.** Dollar- und Euro-Quellen sind mit 0,84 CHF/$ und 0,92 CHF/€ umgerechnet (Mitte November 2026). Gerechnet wird mit `src/wirtschaft.py`, alle Zahlen dieses Dokuments erzeugt `src/kosten_dh.py` (Ergebnis in `daten/ergebnisse/kosten_dh.json`).
 
-**Rechenbasis ist das Abschaltmodell**, wie in `PITCH.md`, `README.md` und `FIRMA.md`: Server ohne Arbeit werden abgeschaltet, im Leerlauf ziehen sie angenommene 230 W, im Standby 10 W, ein Start dauert 5 Minuten (`src/scheduler/serverbetrieb.py`, `ERGEBNISSE.md`, Abschnitt «Leerlauf und Abschalten im Referenzhaus»). Das Idealmodell des Case (0 W Leerlauf) steht jeweils zum Vergleich daneben.
+**Rechenbasis ist das Abschaltmodell**, wie in `README.md` und `FIRMA.md`: Server ohne Arbeit werden abgeschaltet, im Leerlauf ziehen sie angenommene 230 W, im Standby 10 W, ein Start dauert 5 Minuten (`src/scheduler/serverbetrieb.py`, `ERGEBNISSE.md`, Abschnitt «Leerlauf und Abschalten im Referenzhaus»). Das Idealmodell des Case (0 W Leerlauf) steht jeweils zum Vergleich daneben.
 
 **Preismodell:** Ein Ankerkunde (Roche) kauft 60 % der Server-Stunden zu **0,50 CHF pro L4-Stunde** mit Mengenrabatt und festem Preis über 5 Jahre. Die übrigen 40 % gehen an Kunden ohne Mindestmenge zu **0,55 CHF**, dieser Preis sinkt 10 % pro Jahr.
 

@@ -154,44 +154,44 @@ class Store:
     def get(self, jid, customer=None):
         with self.lock:
             if jid not in self.jobs or (customer is not None and self.jobs[jid]['_customer']!=customer):
-                raise APIError(404, "Auftrag nicht gefunden oder bereits entfernt.")
+                raise APIError(404, "Job not found or already removed.")
             return self.snapshot(self.jobs[jid])
 
     def submit(self, data, customer='demo'):
         if not isinstance(data, dict):
-            raise APIError(400, "Ein JSON-Objekt wird erwartet.")
+            raise APIError(400, "Expected a JSON object.")
         if set(data)&{'customer_id','priority','security_approved','maintenance_state','allow_customer_anonymized','public_only'}:
-            raise APIError(403,'Kunde, Priorität und Freigaben werden aus dem Zugang und der Betreiberkonfiguration bestimmt.')
+            raise APIError(403,'The access key and operator configuration determine customer, priority and permissions.')
         try:
             requirements=Requirements.parse(data.get('requirements',{}))
         except ValueError as exc:raise APIError(400,str(exc))
         # This prototype's intake receives the payload on a privately hosted CPU device.
         # Restricted data must use a separate, validated metadata-first control plane.
         if requirements.classification!='public':
-            raise APIError(403,'Dieser CPU-Demozugang nimmt nur öffentliche oder synthetische Daten an.')
+            raise APIError(403,'This CPU demo accepts public or synthetic data.')
         task_type = data.get("task_type", "text_analysis")
         if task_type not in ("text_analysis", "virtual_screening", "microscopy", "literature"):
-            raise APIError(400, "Unbekannte Auftragsvorlage.")
+            raise APIError(400, "Unknown job template.")
         count, target = data.get("sample_count", 1000), data.get("target", "Öffentliches Demo-Target")
         if task_type in ("virtual_screening", "microscopy"):
             if type(count) is not int or not 1 <= count <= 1_000_000:
-                raise APIError(400, "Die Anzahl muss zwischen 1 und 1'000'000 liegen.")
+                raise APIError(400, "Count must be between 1 and 1,000,000.")
             if not isinstance(target, str) or not 1 <= len(target.strip()) <= 80:
-                raise APIError(400, "Die Bezeichnung muss 1 bis 80 Zeichen enthalten.")
+                raise APIError(400, "The name must contain 1–80 characters.")
         text, title, duration = data.get("text", f"{task_type}: {count} / {target}" if task_type in ("virtual_screening", "microscopy") else None), data.get("title", "Textanalyse"), data.get("duration", 10)
         if not isinstance(text, str) or not text.strip() or len(text) > MAX_TEXT:
-            raise APIError(400, "Bitte Text mit 1 bis 200'000 Zeichen angeben.")
+            raise APIError(400, "Enter 1–200,000 characters of text.")
         if not isinstance(title, str) or not 1 <= len(title.strip()) <= 80:
-            raise APIError(400, "Der Titel muss 1 bis 80 Zeichen enthalten.")
+            raise APIError(400, "The title must contain 1–80 characters.")
         if type(duration) is not int or not 2 <= duration <= 60:
-            raise APIError(400, "Die Simulationsdauer muss zwischen 2 und 60 Sekunden liegen.")
+            raise APIError(400, "The simulation must run for 2–60 seconds.")
         deadline=data.get('deadline_seconds',86400)
         if type(deadline) is not int or not 1<=deadline<=604800:
-            raise APIError(400,'Die Frist muss zwischen 1 Sekunde und 7 Tagen liegen.')
+            raise APIError(400,'The deadline must be between 1 second and 7 days.')
         with self.lock:
             self._prune()
             if len(self.jobs) >= MAX_JOBS:
-                raise APIError(429, "30 Aufträge gespeichert. Bitte abgeschlossene Aufträge entfernen.")
+                raise APIError(429, "30 jobs are stored. Remove completed jobs to continue.")
             jid = str(uuid.uuid4())
             now = time.time()
             try:
@@ -212,11 +212,11 @@ class Store:
     def submit_confidential(self, data, customer):
         from src.confidential.envelope import validate
         if self.scheduler.public_only:
-            raise APIError(403,'Das gewählte L4-Angebot nimmt keine vertraulichen Aufträge an.')
+            raise APIError(403,'This L4 service excludes confidential workloads.')
         if self.confidential_executor is None:
-            raise APIError(503,'Kein geschützter Executor eingerichtet. Keine vertraulichen Daten an die CPU-Demo senden.')
+            raise APIError(503,'No protected executor configured. Use public or synthetic data for the CPU demo.')
         if not isinstance(data,dict) or set(data)!={'envelope','requirements','runtime_seconds','deadline_seconds'}:
-            raise APIError(400,'Nur verschlüsseltes Paket, Ressourcen und Laufzeit-/Fristmetadaten sind erlaubt.')
+            raise APIError(400,'Only the encrypted payload, resource requirements, runtime and deadline are accepted.')
         try:
             sealed=validate(data['envelope'],direction='input',customer=customer)
             requirements=Requirements.parse(data['requirements'])
@@ -225,10 +225,10 @@ class Store:
             if type(runtime) is not int or not 1<=runtime<=86400 or type(deadline) is not int or not 1<=deadline<=604800:
                 raise ValueError('Ungültige Laufzeit oder Frist.')
         except PermissionError as exc:raise APIError(403,str(exc))
-        except (ValueError,TypeError,KeyError):raise APIError(400,'Ungültige verschlüsselte Auftragsmetadaten.')
+        except (ValueError,TypeError,KeyError):raise APIError(400,'Invalid encrypted job metadata.')
         with self.lock:
             self._prune()
-            if len(self.jobs)>=MAX_JOBS:raise APIError(429,'Auftragsspeicher ist belegt.')
+            if len(self.jobs)>=MAX_JOBS:raise APIError(429,'The job queue is full.')
             jid=sealed['job_id'];now=time.time()
             try:self.scheduler.submit(jid,customer,requirements,'literature',runtime,now+deadline)
             except PermissionError as exc:raise APIError(403,str(exc))
@@ -262,16 +262,16 @@ class Store:
             job = self.jobs[jid]
             protected=self.scheduler.jobs[jid].requirements.classification=='confidential'
             if protected and action in ('pause','resume'):
-                raise APIError(409,'Geschützte Aufträge unterstützen noch keine sicheren Zwischenstände; Abbrechen ist möglich.')
+                raise APIError(409,'Protected jobs can be cancelled. Secure checkpoints are unavailable.')
             if action == "delete":
                 if job["state"] not in TERMINAL:
-                    raise APIError(409, "Laufenden Auftrag zuerst abbrechen.")
-                if self.scheduler.jobs[jid].state=='running':raise APIError(409,'Abbruch wird noch bestätigt; Ressourcen bleiben bis dahin reserviert.')
+                    raise APIError(409, "Cancel the running job first.")
+                if self.scheduler.jobs[jid].state=='running':raise APIError(409,'Resources remain reserved until cancellation is confirmed.')
                 del self.jobs[jid]
                 self.scheduler.jobs.pop(jid,None)
                 return {"deleted": True}
             if job["state"] in TERMINAL:
-                raise APIError(409, "Dieser Auftrag ist bereits beendet.")
+                raise APIError(409, "This job has already ended.")
             if action == "pause":
                 job["_pause"] = True
                 self.scheduler.jobs[jid].paused=True
@@ -287,7 +287,7 @@ class Store:
                 if protected:self.scheduler.jobs[jid].paused=True
                 if self.scheduler.jobs[jid].state!='running':self.scheduler.finish(jid,'cancelled')
             else:
-                raise APIError(404, "Unbekannte Aktion.")
+                raise APIError(404, "Unknown action.")
             job["updated_at"] = time.time()
             self.wakeup.set()
             return self.snapshot(job)
@@ -358,21 +358,21 @@ class Store:
                         "top_words": [{"word": word, "count": count}
                                       for word, count in Counter(words).most_common(12)],
                         "sha256": hashlib.sha256(text.encode("utf-8")).hexdigest(),
-                        "description": "Textstatistik plus simulierte CPU-Rechenlast. Kein KI- oder Pharma-Modell.",
+                        "description": "Text statistics with simulated CPU load.",
                     }
                     if job["task_type"] == "virtual_screening":
                         # Deterministic synthetic scores. No molecular model or affinity prediction.
                         seed = hashlib.sha256(text.encode()).digest()
-                        result = {"description": "Synthetisches Screening: keine Docking-Berechnung, keine Bindungsaffinität.",
+                        result = {"description": "Synthetic screening results for interface testing.",
                                   "simulated": True, "sample_count": job["sample_count"],
                                   "ranking": [{"compound": f"DEMO-{i+1:04d}", "demo_score": round(1 - (seed[i] / 255) * .3 - i * .01, 3)} for i in range(min(5, job["sample_count"]))]}
                         result["ranking"].sort(key=lambda r: r["demo_score"], reverse=True)
                     elif job["task_type"] == "microscopy":
-                        result = {"description": "Synthetisches Cell-Painting-Ergebnis. Keine Bilder analysiert, kein trainiertes Modell.",
+                        result = {"description": "Synthetic Cell Painting results for interface testing.",
                                   "simulated": True, "images": job["sample_count"],
                                   "demo_cells": job["sample_count"] * 42, "demo_quality_percent": 96.4}
                     elif job["task_type"] == "literature":
-                        result["description"] = "Tatsächliche Textstatistik mit simulierter CPU-Last. Keine Embeddings, keine wissenschaftliche Bewertung."
+                        result["description"] = "Actual word counts and text statistics with simulated CPU load."
                     job.update(state="completed", progress=100, result=result,
                                updated_at=time.time(), _text=None)
                     print(f"Auftrag {jid[:8]}: abgeschlossen; Ergebnis bereit.", flush=True)
@@ -383,7 +383,7 @@ class Store:
 
     def set_heat(self, enabled):
         if type(enabled) is not bool:
-            raise APIError(400, "Wärmebedarf muss ein Wahrheitswert sein.")
+            raise APIError(400, "Heat demand must be a boolean.")
         with self.lock:
             self.heat_enabled = enabled
             for node in self.scheduler.nodes.values():node.heat_enabled=enabled
@@ -445,22 +445,22 @@ class Handler(BaseHTTPRequestHandler):
 
     def body(self):
         if self.headers.get("Transfer-Encoding"):
-            raise APIError(400, "Transfer-Encoding wird nicht unterstützt.")
+            raise APIError(400, "Transfer-Encoding is unsupported.")
         if self.headers.get("Content-Type", "").split(";")[0] != "application/json":
-            raise APIError(415, "Content-Type application/json ist erforderlich.")
+            raise APIError(415, "Content-Type must be application/json.")
         lengths = self.headers.get_all("Content-Length", [])
         if len(lengths) != 1:
-            raise APIError(400, "Eine eindeutige Content-Length ist erforderlich.")
+            raise APIError(400, "A single Content-Length is required.")
         try:
             size = int(lengths[0])
             if not 0 < size <= MAX_BODY:
-                raise APIError(413, "Die Anfrage ist zu gross.")
+                raise APIError(413, "Request too large.")
             raw = self.rfile.read(size)
             if len(raw) != size:
-                raise APIError(400, "Unvollständige Anfrage.")
+                raise APIError(400, "Incomplete request.")
             return json.loads(raw)
         except (ValueError, UnicodeError):
-            raise APIError(400, "Ungültige JSON-Daten.")
+            raise APIError(400, "Invalid JSON.")
 
     def do_GET(self):
         self.dispatch("GET")
@@ -476,7 +476,7 @@ class Handler(BaseHTTPRequestHandler):
         except (BrokenPipeError, ConnectionResetError, TimeoutError):
             pass
         except Exception:
-            self.reply(500, {"error": "Interner Fehler. Keine Auftragsdaten wurden protokolliert."})
+            self.reply(500, {"error": "Internal error. Job data was kept out of the log."})
 
 
 class WorkerHandler(Handler):
@@ -486,7 +486,7 @@ class WorkerHandler(Handler):
         digest=hashlib.sha256(token.encode()).hexdigest()
         customer=next((cid for key,cid in self.server.identities.items() if hmac.compare_digest(key,digest)),None)
         if customer is None:
-            raise APIError(401, "Ungültiger Zugangsschlüssel.")
+            raise APIError(401, "Invalid access key.")
         path = self.path
         store = self.server.store
         if method == "GET" and path == "/v1/status":
@@ -506,9 +506,9 @@ class WorkerHandler(Handler):
             if method == "POST" and action:
                 body = self.body()
                 if not isinstance(body, dict):
-                    raise APIError(400, "Ein JSON-Objekt wird erwartet.")
+                    raise APIError(400, "Expected a JSON object.")
                 return self.reply(200, store.control(jid, action,customer))
-        raise APIError(404, "Endpunkt nicht gefunden.")
+        raise APIError(404, "Endpoint not found.")
 
 
 def tls_context(cert=None, key=None):
@@ -558,9 +558,9 @@ class SenderHandler(Handler):
         # Reject foreign origins and DNS-rebinding hostnames, including for read operations.
         origin = f"http://127.0.0.1:{self.server.server_port}"
         if self.headers.get("Host") != origin.removeprefix("http://"):
-            raise APIError(403, "Diese Oberfläche ist nur lokal erreichbar.")
+            raise APIError(403, "This interface is local only.")
         if self.headers.get("Origin") not in (None, origin):
-            raise APIError(403, "Anfrage von einer fremden Seite abgelehnt.")
+            raise APIError(403, "Request denied from a different origin.")
         path = self.path
         if method == "GET" and path in ("/", "/pharma.js", "/platform.css", "/wallpaper.svg"):
             file = "pharma.html" if path == "/" else path[1:]
@@ -572,13 +572,13 @@ class SenderHandler(Handler):
             return self.proxy("GET", "/v1/status")
         if method == "POST":
             if not hmac.compare_digest(self.headers.get("X-DigitalHeat-CSRF", ""), self.server.csrf):
-                raise APIError(403, "Sitzung ungültig. Bitte Seite neu laden.")
+                raise APIError(403, "Invalid session. Reload the page.")
             data = self.body()
             if path == "/api/jobs":
                 return self.proxy("POST", "/v1/jobs", data)
             if re.fullmatch(r"/api/jobs/[0-9a-f-]{36}/(pause|resume|cancel|delete)", path):
                 return self.proxy("POST", path.replace("/api/", "/v1/", 1), data)
-        raise APIError(404, "Endpunkt nicht gefunden.")
+        raise APIError(404, "Endpoint not found.")
 
     def proxy(self, method, path, payload=None):
         target = self.server.worker_target
@@ -592,11 +592,11 @@ class SenderHandler(Handler):
             raw = response.read(2_000_000)
             return self.reply(response.status, json.loads(raw))
         except ssl.SSLCertVerificationError:
-            raise APIError(502, "Zertifikat oder Gerätename passt nicht. Bitte Sender-Zertifikat und Empfängeradresse prüfen.")
+            raise APIError(502, "Certificate or hostname mismatch. Check the sender certificate and receiver address.")
         except ssl.SSLError:
-            raise APIError(502, "Verschlüsselte Verbindung fehlgeschlagen. Beide Geräte benötigen TLS 1.3.")
+            raise APIError(502, "Encrypted connection failed. Both devices need TLS 1.3.")
         except (OSError, http.client.HTTPException, ValueError):
-            raise APIError(502, "Empfänger nicht erreichbar. Adresse, Netzwerk und gestarteten Empfänger prüfen.")
+            raise APIError(502, "Receiver unavailable. Check its address, network and process.")
         finally:
             connection.close()
 
@@ -605,7 +605,7 @@ class HostHandler(Handler):
     def route(self, method):
         origin = f"http://127.0.0.1:{self.server.server_port}"
         if self.headers.get("Host") != origin.removeprefix("http://") or self.headers.get("Origin") not in (None, origin):
-            raise APIError(403, "Diese Oberfläche ist nur lokal erreichbar.")
+            raise APIError(403, "This interface is local only.")
         if method == "GET" and self.path in ("/", "/host.js", "/platform.css", "/wallpaper.svg"):
             file = "host.html" if self.path == "/" else self.path[1:]
             kind = "text/html" if file.endswith("html") else "text/javascript" if file.endswith("js") else "text/css" if file.endswith("css") else "image/svg+xml"
@@ -616,12 +616,12 @@ class HostHandler(Handler):
             return self.reply(200, self.server.host_store.host_status())
         if method == "POST" and self.path == "/api/host/heat":
             if not hmac.compare_digest(self.headers.get("X-DigitalHeat-CSRF", ""), self.server.csrf):
-                raise APIError(403, "Sitzung ungültig. Bitte Seite neu laden.")
+                raise APIError(403, "Invalid session. Reload the page.")
             data = self.body()
             if not isinstance(data, dict):
-                raise APIError(400, "Ein JSON-Objekt wird erwartet.")
+                raise APIError(400, "Expected a JSON object.")
             return self.reply(200, self.server.host_store.set_heat(data.get("enabled")))
-        raise APIError(404, "Endpunkt nicht gefunden.")
+        raise APIError(404, "Endpoint not found.")
 
 
 def make_host(port, store):

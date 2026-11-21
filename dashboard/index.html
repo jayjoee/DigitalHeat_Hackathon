@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="de">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Rechnen, das heizt</title>
+<title>Computing that heats</title>
 <style>
 :root {
   color-scheme: light;
@@ -100,21 +100,21 @@ details summary { cursor: pointer; font-weight: 600; }
 </head>
 <body>
 <main>
-<p><a href="http://127.0.0.1:18200/">Geführte Gesamtdemo (Dienst starten)</a> · <a href="ml/index.html">ML-Energievergleich</a></p>
-  <h1>Rechnen, das heizt</h1>
-  <p class="sub">Referenzhaus Basel 2025: Server im Keller rechnen KI-Jobs und heizen das Haus. Der Scheduler der Jahresrechnung steuert auch den echten Job in der Live-Demo.</p>
+<p><a href="http://127.0.0.1:18200/">Guided demo (start the service first)</a> · <a href="ml/index.html">ML energy comparison</a></p>
+  <h1>Computing that heats</h1>
+  <p class="sub">Basel reference house, 2025. Basement servers run computing jobs and heat the house. The annual scheduler also controls a real job in the live demo.</p>
 
   <div class="controls card">
-    <div class="ctl"><label for="n">Server pro Haus</label>
+    <div class="ctl"><label for="n">Servers per house</label>
       <div class="range"><input id="n" type="range" min="1" max="13" value="8"><output id="nOut">8</output></div></div>
-    <div class="ctl"><label>Nachfrage nach Rechenzeit</label>
+    <div class="ctl"><label>Compute demand</label>
       <div class="seg" data-key="sz">
-        <button data-v="spot" aria-pressed="true">Genug Aufträge</button>
-        <button data-v="alibaba" aria-pressed="false">Nur Jobs mit Frist</button></div></div>
-    <div class="ctl"><label>Wärme nicht gebraucht, Frist drängt</label>
+        <button data-v="spot" aria-pressed="true">Plentiful work</button>
+        <button data-v="alibaba" aria-pressed="false">Deadline jobs only</button></div></div>
+    <div class="ctl"><label>Urgent job when heat is not needed</label>
       <div class="seg" data-key="regel">
-        <button data-v="rechnen" aria-pressed="true">trotzdem rechnen</button>
-        <button data-v="abgeben" aria-pressed="false">an anderen Standort</button></div></div>
+        <button data-v="rechnen" aria-pressed="true">Run locally</button>
+        <button data-v="abgeben" aria-pressed="false">Move to another site</button></div></div>
   </div>
 
   <div class="tiles" id="tiles"></div>
@@ -122,122 +122,122 @@ details summary { cursor: pointer; font-weight: 600; }
   <div class="verdict card" id="verdict"></div>
 
   <div class="controls card">
-    <div class="ctl"><label for="pStrom">Strompreis</label>
+    <div class="ctl"><label for="pStrom">Electricity tariff</label>
       <div class="range"><input id="pStrom" type="range" min="10" max="60" step="0.25" value="33.25"><output id="pStromOut"></output></div></div>
-    <div class="ctl"><label for="pRechen">Roche-Preis pro L4-Stunde (fester Anteil)</label>
+    <div class="ctl"><label for="pRechen">Anchor price per L4-hour (reserved share)</label>
       <div class="range"><input id="pRechen" type="range" min="0.15" max="1.00" step="0.01" value="0.50"><output id="pRechenOut"></output></div></div>
-    <div class="ctl"><label for="pFest">Fest gebucht</label>
+    <div class="ctl"><label for="pFest">Reserved share</label>
       <div class="range"><input id="pFest" type="range" min="20" max="100" step="5" value="60"><output id="pFestOut"></output></div></div>
-    <div class="ctl"><label for="pHw">Kaufpreis pro Server (8 L4)</label>
+    <div class="ctl"><label for="pHw">Purchase price per server (8 L4s)</label>
       <div class="range"><input id="pHw" type="range" min="15000" max="50000" step="5" value="32245"><output id="pHwOut"></output></div></div>
-    <div class="ctl"><label for="pWaerme">Wärmepreis an den Haushalt</label>
+    <div class="ctl"><label for="pWaerme">Heat price for the household</label>
       <div class="range"><input id="pWaerme" type="range" min="0" max="13.3" step="0.1" value="0"><output id="pWaermeOut"></output></div></div>
   </div>
 
   <section class="card" style="margin-bottom:16px">
-    <h2>Annahmen auf einen Blick</h2>
-    <div class="note">Darauf beruhen alle Zahlen dieser Seite. Fett = stärkste Annahmen, die das Ergebnis am meisten verändern.</div>
+    <h2>Key assumptions</h2>
+    <div class="note">These assumptions drive the figures below.</div>
     <div class="annahmen" id="annahmenKurz"></div>
   </section>
 
   <div class="grid3">
     <section class="card">
-      <h2>Wärme übers Jahr</h2>
-      <div class="note">kWh pro Monat, Heizung und Warmwasser</div>
-      <div class="legend"><span><i style="background:var(--s1)"></i>Serverwärme genutzt</span>
-        <span><i style="background:var(--s2)"></i>Holzofen (Reserve)</span>
-        <span><i style="background:var(--s3)"></i>abgeführt</span></div>
+      <h2>Heat across the year</h2>
+      <div class="note">kWh per month, including space heating and hot water</div>
+      <div class="legend"><span><i style="background:var(--s1)"></i>Server heat used</span>
+        <span><i style="background:var(--s2)"></i>Wood stove (backup)</span>
+        <span><i style="background:var(--s3)"></i>Rejected</span></div>
       <div id="chMonate"></div>
-      <button class="toggle" data-table="tblMonate">Tabelle zeigen</button><div id="tblMonate" hidden></div>
+      <button class="toggle" data-table="tblMonate">Show table</button><div id="tblMonate" hidden></div>
     </section>
     <section class="card">
-      <h2>Auslastung der Server</h2>
-      <div class="note">Anteil der Stunden, in denen ein Server rechnet</div>
+      <h2>Server utilisation</h2>
+      <div class="note">Share of time a server spends computing</div>
       <div id="chAuslast"></div>
     </section>
   </div>
 
   <section class="card" style="margin-bottom:16px">
-    <h2>Wie viele Server?</h2>
-    <div class="note">Mehr Server decken mehr Wärme, rechnen aber seltener. Punkt = aktuelle Wahl.</div>
-    <div class="legend"><span><i style="background:var(--s1)"></i>Deckung des Wärmebedarfs</span>
-      <span><i style="background:var(--s2)"></i>Auslastung</span></div>
+    <h2>How many servers?</h2>
+    <div class="note">More servers cover more heat and compute less often. The dot marks the current selection.</div>
+    <div class="legend"><span><i style="background:var(--s1)"></i>Share of heat demand covered</span>
+      <span><i style="background:var(--s2)"></i>Utilisation</span></div>
     <div id="chServer"></div>
   </section>
 
   <section class="card" style="margin-bottom:16px" id="serverbetrieb" hidden>
-    <h2>Server pausieren oder abschalten?</h2>
+    <h2>Pause jobs or shut down servers?</h2>
     <p class="note" id="serverbetriebHinweis"></p>
     <div style="overflow-x:auto" id="serverbetriebTabelle"></div>
   </section>
 
   <section class="card" style="margin-bottom:16px">
-    <h2>Lohnt sich ein Server mehr?</h2>
+    <h2>Is an extra server worth it?</h2>
     <div class="note" id="nGrenz"></div>
-    <div class="legend"><span><i style="background:var(--s1)"></i>Was dieser Server zum Ergebnis von DigitalHeat beiträgt, CHF pro Jahr (alle Kosten, Steuern, Zins)</span></div>
+    <div class="legend"><span><i style="background:var(--s1)"></i>Contribution of each server to DigitalHeat's annual result, including costs, tax and interest</span></div>
     <div id="chGrenz"></div>
   </section>
 
   <section class="card" style="margin-bottom:16px" id="flotte">
-    <h2>Flotte: 20 Häuser und das Sportbad St. Jakob</h2>
+    <h2>Fleet: 20 houses and the St. Jakob sports pool</h2>
     <div class="note" id="nFlotte"></div>
     <div class="controls" style="margin:12px 0 8px">
-      <div class="ctl"><label>Nachfrage nach Rechenzeit</label><div class="seg" id="segFlotteSz">
-        <button data-v="alibaba" aria-pressed="true">Nur Jobs mit Frist</button>
-        <button data-v="spot" aria-pressed="false">Genug Aufträge</button></div></div>
-      <div class="ctl"><label>Sommer-Senke</label><div class="seg" id="segVariante"></div></div>
-      <div class="ctl" id="ctlFlottenBetrieb" hidden><label>Serverbetrieb</label><div class="seg" id="segFlottenBetrieb">
-        <button data-v="abschalten" aria-pressed="true">Bedarfsgerecht abschalten</button>
-        <button data-v="case" aria-pressed="false">Case-Idealmodell</button></div></div>
+      <div class="ctl"><label>Compute demand</label><div class="seg" id="segFlotteSz">
+        <button data-v="alibaba" aria-pressed="true">Deadline jobs only</button>
+        <button data-v="spot" aria-pressed="false">Plentiful work</button></div></div>
+      <div class="ctl"><label>Summer heat sink</label><div class="seg" id="segVariante"></div></div>
+      <div class="ctl" id="ctlFlottenBetrieb" hidden><label>Operating mode</label><div class="seg" id="segFlottenBetrieb">
+        <button data-v="abschalten" aria-pressed="true">Shut down as needed</button>
+        <button data-v="case" aria-pressed="false">Case ideal model</button></div></div>
     </div>
     <div class="tiles" id="tilesFlotte"></div>
     <div class="grid3" id="flottenDiagramme">
       <div>
-        <h2 style="font-size:15px">Wo die Rechenarbeit läuft</h2>
-        <div class="note">Server-Stunden pro Monat. Häuser haben Vorrang, das Bad nimmt nur, was kein Haus als Wärme braucht.</div>
-        <div class="legend"><span><i style="background:var(--s1)"></i>Server in den Häusern</span>
-          <span><i style="background:var(--s2)"></i>Server im Sportbad</span>
-          <span><i style="background:var(--s3)"></i>an andere Cloud abgegeben (kein Erlös)</span></div>
+        <h2 style="font-size:15px">Where computing runs</h2>
+        <div class="note">Monthly server-hours. Houses have priority; the pool receives jobs whose heat the houses cannot use.</div>
+        <div class="legend"><span><i style="background:var(--s1)"></i>Servers in houses</span>
+          <span><i style="background:var(--s2)"></i>Servers at the pool</span>
+          <span><i style="background:var(--s3)"></i>Moved to an external cloud (no revenue)</span></div>
         <div id="chFlotte"></div>
-        <button class="toggle" data-table="tblFlotte">Tabelle zeigen</button><div id="tblFlotte" hidden></div>
+        <button class="toggle" data-table="tblFlotte">Show table</button><div id="tblFlotte" hidden></div>
       </div>
       <div id="flottenSuche">
-        <h2 style="font-size:15px">Wie gross soll das Bad sein?</h2>
-        <div class="note">Ergebnis der Flotte pro Jahr bei «Nur Jobs mit Frist», nach Serverzahl im Bad</div>
+        <h2 style="font-size:15px">How many servers should the pool host?</h2>
+        <div class="note">Annual fleet result with deadline jobs only, by number of servers at the pool</div>
         <div id="chSuche"></div>
         <div class="note" id="nSuche"></div>
       </div>
     </div>
-    <h2 style="font-size:15px">Zusage am Vortag: zugesagt und geliefert</h2>
+    <h2 style="font-size:15px">Day-ahead commitment versus delivery</h2>
     <div class="note" id="nZusage"></div>
-    <div class="legend"><span><i style="background:var(--s1)"></i>geliefert (Server-h pro Tag)</span>
-      <span><i style="background:var(--s2)"></i>am Vortag um 12 Uhr zugesagt</span></div>
+    <div class="legend"><span><i style="background:var(--s1)"></i>delivered (server-hours per day)</span>
+      <span><i style="background:var(--s2)"></i>committed at noon the previous day</span></div>
     <div id="chZusage"></div>
   </section>
 
   <div class="tage3">
-    <section class="card"><h2 id="tJan">Ein Januartag</h2><div class="note" id="nJan"></div>
-      <div class="legend"><span><i style="background:var(--s2)"></i>Wärmebedarf</span>
-        <span><i style="background:var(--s1)"></i>Serverwärme</span></div>
-      <div id="chJan"></div><div class="note">Speicher (kWh)</div><div id="spJan"></div></section>
-    <section class="card"><h2 id="tUeb">Ein Übergangstag</h2><div class="note" id="nUeb"></div>
-      <div class="legend"><span><i style="background:var(--s2)"></i>Wärmebedarf</span>
-        <span><i style="background:var(--s1)"></i>Serverwärme</span></div>
-      <div id="chUeb"></div><div class="note">Speicher (kWh)</div><div id="spUeb"></div></section>
-    <section class="card"><h2 id="tJul">Ein Julitag</h2><div class="note" id="nJul"></div>
-      <div class="legend"><span><i style="background:var(--s2)"></i>Wärmebedarf</span>
-        <span><i style="background:var(--s1)"></i>Serverwärme</span></div>
-      <div id="chJul"></div><div class="note">Speicher (kWh)</div><div id="spJul"></div></section>
+    <section class="card"><h2 id="tJan">A January day</h2><div class="note" id="nJan"></div>
+      <div class="legend"><span><i style="background:var(--s2)"></i>Heat demand</span>
+        <span><i style="background:var(--s1)"></i>Server heat</span></div>
+      <div id="chJan"></div><div class="note">Heat storage (kWh)</div><div id="spJan"></div></section>
+    <section class="card"><h2 id="tUeb">A shoulder-season day</h2><div class="note" id="nUeb"></div>
+      <div class="legend"><span><i style="background:var(--s2)"></i>Heat demand</span>
+        <span><i style="background:var(--s1)"></i>Server heat</span></div>
+      <div id="chUeb"></div><div class="note">Heat storage (kWh)</div><div id="spUeb"></div></section>
+    <section class="card"><h2 id="tJul">A July day</h2><div class="note" id="nJul"></div>
+      <div class="legend"><span><i style="background:var(--s2)"></i>Heat demand</span>
+        <span><i style="background:var(--s1)"></i>Server heat</span></div>
+      <div id="chJul"></div><div class="note">Heat storage (kWh)</div><div id="spJul"></div></section>
   </div>
 
   <section class="card" style="margin-bottom:16px">
-    <h2>Echter Job, live gesteuert</h2>
-    <div class="note">Ein Server ist ein echter Prozess auf diesem Laptop (Text-Embeddings). Der Scheduler pausiert ihn mit SIGSTOP und setzt ihn mit SIGCONT fort, je nach Wärmebedarf.</div>
+    <h2>Live scheduler-controlled job</h2>
+    <div class="note">The scheduler pauses and resumes a real process on this laptop using SIGSTOP and SIGCONT, based on heat demand.</div>
     <div class="live" id="live"></div>
   </section>
 
   <details class="card">
-    <summary>Alle Annahmen mit Quelle</summary>
+    <summary>All assumptions and sources</summary>
     <div id="annahmen" style="margin-top:10px"></div>
   </details>
 </main>
@@ -246,11 +246,11 @@ details summary { cursor: pointer; font-weight: 600; }
 <script>
 const D = window.DATEN;
 const S = { n: 8, sz: "spot", regel: "rechnen" };
-const fmt = (v, d = 0) => v.toLocaleString("de-CH", { minimumFractionDigits: d, maximumFractionDigits: d });
+const fmt = (v, d = 0) => v.toLocaleString("en-GB", { minimumFractionDigits: d, maximumFractionDigits: d });
 const pct = (v, d = 1) => fmt(v * 100, d) + " %";
 const chf = (v, d = 0) => "CHF " + fmt(v, d);
 const $ = (id) => document.getElementById(id);
-const MON = ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"];
+const MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const lauf = (n = S.n) => D.laeufe[`${S.sz}|${S.regel}|${n}`];
 
 // ---------- Tooltip ----------
@@ -281,7 +281,7 @@ function saeule(svg, x, y, w, h, fill, rundOben = true) {
 
 // ---------- Kennzahlen und Wirtschaftlichkeit ----------
 // Gleiche Formel wie src/wirtschaft.py (alles in CHF): Gewinn pro Haus über 5 Jahre, mit Zins, Steuer, Restwert.
-// ueber.strom_kwh = gesamter Stromverbrauch (Rechnen, Leerlauf, Standby, Starts); ohne Angabe Server-h × Serverleistung.
+// ueber.strom_kwh = gesamter Stromverbrauch (Rechnen, Leerlauf, Standby, Starts); ohne Angabe server-h × Serverleistung.
 function wirtschaft(n, serverH, waermeKwh, ueber = {}) {
   const a = (k) => (k in ueber ? ueber[k] : D.annahmen[k].wert);
   const J = a("abschreibung_jahre"), i = a("zins"), k = a("karten_pro_server");
@@ -334,7 +334,7 @@ function oekonomie(b, n) {
   const serverH = b.strom_kwh, waermeKwh = b.genutzt_kwh_genau;
   const strom = serverH * r.strompreis_chf_kwh, waermeCase = waermeKwh * r.strompreis_chf_kwh / 2.5;
   const beCase = serverH ? (strom - waermeCase) / serverH : 0;
-  let lo = 0, hi = 5;  // nötiger Vertragspreis pro L4-Stunde (Ergebnis = 0)
+  let lo = 0, hi = 5;  // nötiger Vertragspreis per L4-hour (Ergebnis = 0)
   for (let s = 0; s < 60; s++) { const m = (lo + hi) / 2;
     if (ergebnisHaus(n, { ...r, vertragspreis_chf_karte_h: m }).ergebnis < 0) lo = m; else hi = m; }
   // Anteil der Rechenstunden, der mindestens verkauft sein muss (Strom läuft trotzdem)
@@ -347,40 +347,40 @@ function oekonomie(b, n) {
 function kacheln() {
   const L = lauf(), b = L.bilanz, o = oekonomie(b, S.n);
   const t = [
-    ["Server pro Haus", fmt(S.n), "1 kW Strom → 0,8 kW Wärme pro Server"],
-    ["Wärmebedarf gedeckt", pct(b.deckungsgrad), `Case-Modell: ${fmt(b.waerme_genutzt_kwh)} von ${fmt(b.waermebedarf_kwh)} kWh, Rest Holzofen` +
-      (o.g.ab ? `. Mit Abschalten ${pct(o.g.ab.deckungsgrad)}` : "")],
-    ["Wärme abgeführt", fmt(b.waerme_abgefuehrt_kwh) + " kWh", "Case-Modell: 0 W im Leerlauf"],
-    ["Auslastung", pct(b.auslastung), `${fmt(b.server_h)} Server-h von ${fmt(S.n * 8760)}`],
-    ["Verpasste Fristen", pct(b.verpasste_fristen_anteil, 2), (S.sz === "spot"
-      ? `${fmt(b.jobs_mit_frist)} Aufträge B mit Frist (A als Winterkontingent ohne feste Stundenfrist)`
-      : `${fmt(b.jobs_mit_frist)} Aufträge A und B mit Frist`) +
-      (b.jobs_abgegeben ? `, ${fmt(b.jobs_abgegeben)} abgegeben` : "")],
-    ["Break-even (Case)", chf(o.beCase, 3), "pro Server-h = (Strom − Wärmewert) ÷ Server-h, ohne Hardware"],
-    ["Ergebnis DigitalHeat", chf(o.ergebnis), "pro Haus und Jahr, nach allen Kosten, Steuern und Zins" +
-      (o.g.ab ? `. Server schalten ab, ${fmt(o.g.serverH)} Server-h verkauft` : "")],
-    ["Nötiger Vertragspreis", chf(o.beKarte, 2), `pro L4-Stunde = ${chf(o.beKarte * o.karten, 2)} pro Server-h, mit allen Kosten`],
+    ["Servers per house", fmt(S.n), "1 kW electricity → 0.8 kW heat per server"],
+    ["Heat demand covered", pct(b.deckungsgrad), `Case model: ${fmt(b.waerme_genutzt_kwh)} of ${fmt(b.waermebedarf_kwh)} kWh, with wood-stove backup` +
+      (o.g.ab ? `. With shutdown ${pct(o.g.ab.deckungsgrad)}` : "")],
+    ["Heat rejected", fmt(b.waerme_abgefuehrt_kwh) + " kWh", "Case model: 0 W while idle"],
+    ["Utilisation", pct(b.auslastung), `${fmt(b.server_h)} server-hours out of ${fmt(S.n * 8760)}`],
+    ["Missed deadlines", pct(b.verpasste_fristen_anteil, 2), (S.sz === "spot"
+      ? `${fmt(b.jobs_mit_frist)} Type B jobs with deadlines (Type A has a winter allowance)`
+      : `${fmt(b.jobs_mit_frist)} Type A and B jobs with deadlines`) +
+      (b.jobs_abgegeben ? `, ${fmt(b.jobs_abgegeben)} transferred` : "")],
+    ["Break-even (Case)", chf(o.beCase, 3), "per server-hour = (electricity cost − heat value) ÷ server-hours; excludes hardware"],
+    ["DigitalHeat result", chf(o.ergebnis), "per house per year, after all costs, tax and interest" +
+      (o.g.ab ? `. Servers shut down as needed, ${fmt(o.g.serverH)} server-hours sold` : "")],
+    ["Required contract price", chf(o.beKarte, 2), `per L4-hour = ${chf(o.beKarte * o.karten, 2)} per server-hour including all costs`],
   ];
   $("tiles").innerHTML = t.map(([l, v, h]) =>
     `<div class="tile card"><div class="lab">${l}</div><div class="val">${v}</div><div class="hint">${h}</div></div>`).join("");
   const ok = o.ergebnis >= 0, j1 = o.jahre[0];
   $("verdict").className = "verdict card " + (ok ? "ok" : "nein");
-  $("verdict").innerHTML = `<div class="icon">${ok ? "✓" : "✕"}</div><div><b>${ok ? "Rechnet sich" : "Rechnet sich nicht"}: ${chf(o.ergebnis)} pro Haus und Jahr</b>
-    Investition ${chf(o.inv)} für ${S.n} Server (${S.n * o.karten} L4). Im 1. Jahr: Erlös ${chf(j1.erloes)}${j1.waerme ? ` + Wärme ${chf(j1.waerme)}` : ""}
-    − Strom ${chf(j1.strom)} − laufende Kosten ${chf(j1.laufend)} − Abschreibung ${chf(j1.abschr)}.
-    Gewinn nach Steuern im Mittel ${chf(o.mittel)} pro Jahr, nach Zins ${chf(o.ergebnis)}.
-    Nötig sind mindestens <b style="display:inline">${chf(o.beKarte, 2)} pro L4-Stunde</b>, Roche zahlt ${chf(o.r.vertragspreis_chf_karte_h, 2)} für ${pct(o.r.anteil_fest_gebucht, 0)} der Stunden, die übrigen bringen ${chf(D.annahmen.spotpreis_chf_karte_h.wert, 2)}.
-    Schweizer GPU-Clouds verlangen ab rund 0,68 CHF, US-Clouds mit festem Vertrag 0,53–0,55 CHF.
-    ${S.sz === "spot" ? `Annahme: Es gibt genug Aufträge, jede Rechenstunde ist verkauft (Roche-Anteil fest, die übrigen Stunden an Kunden ohne Mindestmenge).${
-      o.absatzMin != null ? ` Unter ${pct(o.absatzMin, 0)} verkauften Stunden wird das Ergebnis negativ.` : ""}`
-      : "Nur Jobs mit Frist: weniger Stunden, im Sommer fehlt der Wärmeabnehmer."}
-    ${o.g.ab ? `Gerechnet mit Servern, die ohne Arbeit abschalten (${fmt(D.abschalt_profil.leerlauf_watt)} W Leerlauf, ${fmt(D.abschalt_profil.standby_watt)} W Standby, Annahme ohne L4-Messung):
-      ${fmt(o.g.stromKwh)} kWh Strom, Wärmedeckung ${pct(o.g.ab.deckungsgrad)}. Im Case-Modell ohne Leerlauf wären es ${chf(o.ideal)}.` : ""}</div>`;
-  $("pStromOut").textContent = fmt(+$("pStrom").value, 2) + " Rp./kWh";
+  $("verdict").innerHTML = `<div class="icon">${ok ? "✓" : "✕"}</div><div><b>${ok ? "Profitable" : "Loss-making"}: ${chf(o.ergebnis)} per house per year</b>
+    Investment of ${chf(o.inv)} for ${S.n} servers (${S.n * o.karten} L4). First-year revenue ${chf(j1.erloes)}${j1.waerme ? ` + heat revenue ${chf(j1.waerme)}` : ""}
+    − electricity ${chf(j1.strom)} − operating costs ${chf(j1.laufend)} − depreciation ${chf(j1.abschr)}.
+    Average after-tax profit of ${chf(o.mittel)} per year. Equivalent annual result after interest: ${chf(o.ergebnis)}.
+    The minimum contract price is <b style="display:inline">${chf(o.beKarte, 2)} per L4-hour</b>, The model assumes the anchor pays ${chf(o.r.vertragspreis_chf_karte_h, 2)} for ${pct(o.r.anteil_fest_gebucht, 0)} of hours, and other hours earn ${chf(D.annahmen.spotpreis_chf_karte_h.wert, 2)}.
+    The comparison uses Swiss GPU cloud prices from about CHF 0.68 and US contracted prices of CHF 0.53–0.55.
+    ${S.sz === "spot" ? `Assumption: enough jobs to sell every compute hour. The anchor share is reserved and other hours have no minimum purchase.${
+      o.absatzMin != null ? ` The modeled result turns negative below ${pct(o.absatzMin, 0)} of hours sold.` : ""}`
+      : "Deadline jobs only: fewer hours, with limited demand for heat in summer."}
+    ${o.g.ab ? `Assuming servers shut down when idle (${fmt(D.abschalt_profil.leerlauf_watt)} W idle, ${fmt(D.abschalt_profil.standby_watt)} W standby, assumptions pending L4 measurement):
+      ${fmt(o.g.stromKwh)} kWh of electricity, heat coverage ${pct(o.g.ab.deckungsgrad)}. The zero-idle-power case gives ${chf(o.ideal)}.` : ""}</div>`;
+  $("pStromOut").textContent = fmt(+$("pStrom").value, 2) + " ct/kWh";
   $("pRechenOut").textContent = chf(+$("pRechen").value, 2);
   $("pFestOut").textContent = fmt(+$("pFest").value) + " %";
   $("pHwOut").textContent = chf(+$("pHw").value);
-  $("pWaermeOut").textContent = fmt(+$("pWaerme").value, 1) + " Rp./kWh";
+  $("pWaermeOut").textContent = fmt(+$("pWaerme").value, 1) + " ct/kWh";
 }
 
 // ---------- Diagramm: Monate (gestapelt) ----------
@@ -398,19 +398,19 @@ function monate() {
       const p = saeule(svg, x, y + (j ? 0 : 0), w, Math.max(0, h - (j < teile.length - 1 ? 0 : 0)), c, j === teile.length - 1);
       if (j > 0) el("line", { x1: x, x2: x + w, y1: y + h, y2: y + h, stroke: "var(--surface)", "stroke-width": 2 }, svg); });
     const hit = el("rect", { x: x0 + i * bw, y: y1, width: bw, height: y0 - y1, fill: "transparent" }, svg);
-    hover(hit, `<b>${MON[i]} 2025</b><br><span class="k">Bedarf</span> ${fmt(m.bedarf_kwh)} kWh<br>
-      <span class="k">Serverwärme genutzt</span> ${fmt(m.genutzt_kwh)} kWh (${pct(m.genutzt_kwh / m.bedarf_kwh, 0)})<br>
-      <span class="k">Holzofen</span> ${fmt(m.backup_kwh)} kWh<br><span class="k">abgeführt</span> ${fmt(m.abgefuehrt_kwh)} kWh`);
+    hover(hit, `<b>${MON[i]} 2025</b><br><span class="k">Demand</span> ${fmt(m.bedarf_kwh)} kWh<br>
+      <span class="k">Server heat used</span> ${fmt(m.genutzt_kwh)} kWh (${pct(m.genutzt_kwh / m.bedarf_kwh, 0)})<br>
+      <span class="k">Wood stove</span> ${fmt(m.backup_kwh)} kWh<br><span class="k">Rejected</span> ${fmt(m.abgefuehrt_kwh)} kWh`);
     const t = el("text", { x: x + w / 2, y: H - 6, "text-anchor": "middle" }, svg); t.textContent = MON[i];
   });
   $("tblMonate").innerHTML = `<table><tr><th>Monat</th><th class="num">Bedarf</th><th class="num">Server genutzt</th>
-    <th class="num">Holzofen</th><th class="num">abgeführt</th><th class="num">Auslastung</th></tr>` +
+    <th class="num">Holzofen</th><th class="num">Rejected</th><th class="num">Utilisation</th></tr>` +
     M.map((m, i) => `<tr><td>${MON[i]}</td><td class="num">${fmt(m.bedarf_kwh)}</td><td class="num">${fmt(m.genutzt_kwh)}</td>
       <td class="num">${fmt(m.backup_kwh)}</td><td class="num">${fmt(m.abgefuehrt_kwh)}</td>
       <td class="num">${pct(m.strom_kwh / (S.n * m.stunden), 0)}</td></tr>`).join("") + "</table>";
 }
 
-// ---------- Diagramm: Auslastung pro Monat ----------
+// ---------- Diagramm: Utilisation pro Monat ----------
 function auslastung() {
   const M = lauf().monate, W = 320, H = 250, x0 = 40, x1 = W - 6, y0 = H - 22, y1 = 10;
   const svg = svgNeu($("chAuslast"), W, H);
@@ -419,7 +419,7 @@ function auslastung() {
   M.forEach((m, i) => { const a = m.strom_kwh / (S.n * m.stunden), x = x0 + i * bw + (bw - w) / 2;
     saeule(svg, x, y0 - a * sk, w, a * sk, "var(--s1)");
     const hit = el("rect", { x: x0 + i * bw, y: y1, width: bw, height: y0 - y1, fill: "transparent" }, svg);
-    hover(hit, `<b>${MON[i]}</b><br>Auslastung ${pct(a, 0)}`);
+    hover(hit, `<b>${MON[i]}</b><br>Utilisation ${pct(a, 0)}`);
     const t = el("text", { x: x + w / 2, y: H - 6, "text-anchor": "middle" }, svg); t.textContent = MON[i][0]; });
 }
 
@@ -429,7 +429,7 @@ function serverkurve() {
   const svg = svgNeu($("chServer"), W, H);
   yAchse(svg, x0, x1, y0, y1, 1, 4, (v) => fmt(v * 100) + " %");
   const xs = (n) => x0 + (n - 1) * (x1 - x0) / 12, ys = (v) => y0 - v * (y0 - y1);
-  const reihen = [["deckungsgrad", "var(--s1)", "Deckung"], ["auslastung", "var(--s2)", "Auslastung"]];
+  const reihen = [["deckungsgrad", "var(--s1)", "Deckung"], ["auslastung", "var(--s2)", "Utilisation"]];
   for (let n = 1; n <= 13; n++) { const t = el("text", { x: xs(n), y: H - 8, "text-anchor": "middle" }, svg); t.textContent = n; }
   reihen.forEach(([k, c, name]) => {
     const pts = []; for (let n = 1; n <= 13; n++) pts.push([xs(n), ys(lauf(n).bilanz[k])]);
@@ -443,11 +443,11 @@ function serverkurve() {
     const hit = el("rect", { x: xs(n) - (x1 - x0) / 24, y: y1, width: (x1 - x0) / 12, height: y0 - y1, fill: "transparent",
       style: "cursor:pointer" }, svg);
     hover(hit, `<b>${n} Server</b><br><span class="k">Deckung</span> ${pct(b.deckungsgrad)}<br>
-      <span class="k">Auslastung</span> ${pct(b.auslastung)}<br><span class="k">abgeführt</span> ${fmt(b.waerme_abgefuehrt_kwh)} kWh`);
+      <span class="k">Utilisation</span> ${pct(b.auslastung)}<br><span class="k">Rejected</span> ${fmt(b.waerme_abgefuehrt_kwh)} kWh`);
     hit.addEventListener("click", () => { $("n").value = n; S.n = n; alles(); }); }
 }
 
-// ---------- Diagramm: Lohnt sich ein Server mehr? ----------
+// ---------- Diagramm: Is an extra server worth it? ----------
 // Zusatzergebnis des n-ten Servers = Ergebnis(n) − Ergebnis(n−1), mit allen Kosten (wirtschaft()).
 // Ein Server mehr lohnt sich, solange dieser Betrag positiv ist. Server 1 trägt auch die Fixkosten des Hauses.
 function serverbetrieb() {
@@ -458,10 +458,10 @@ function serverbetrieb() {
   $("serverbetrieb").hidden = false;
   $("serverbetriebHinweis").textContent =
     "Referenzhaus mit 8 Servern, fristkritische Jobs laufen lokal. " +
-    (leistung ? `${fmt(leistung.standby_watt, 1)} W Standby, ${fmt(leistung.start_minuten, 1)} min Startzeit. Leistungswerte sind Annahmen.` : "");
+    (leistung ? `${fmt(leistung.standby_watt, 1)} W standby, ${fmt(leistung.start_minuten, 1)} min startup. Leistungswerte sind Annahmen.` : "");
   $("serverbetriebTabelle").innerHTML = `<table><thead><tr>
     <th scope="col">Betrieb</th><th scope="col">Leerlauf</th><th scope="col">Strom</th>
-    <th scope="col">Wärme abgeführt</th><th scope="col">Wärme gedeckt</th>
+    <th scope="col">Heat rejected</th><th scope="col">Heat covered</th>
     <th scope="col">Fristen verpasst</th></tr></thead><tbody>${ergebnisse.map((r) => `<tr>
     <th scope="row">${label[r.strategie]}</th>
     <td class="num">${fmt(r.leistungsprofil?.leerlauf_watt ?? 0)} W</td>
@@ -491,19 +491,19 @@ function grenzwert() {
     if (n === S.n) el("rect", { x: x - 3, y: y1, width: w + 6, height: y0 - y1, fill: "none", stroke: "var(--axis)", rx: 4 }, svg);
     const t = el("text", { x: x + w / 2, y: H - 6, "text-anchor": "middle" }, svg); t.textContent = n;
     const hit = el("rect", { x: x0 + i * bw, y: y1, width: bw, height: y0 - y1, fill: "transparent", style: "cursor:pointer" }, svg);
-    hover(hit, `<b>Server Nr. ${n}</b><br><span class="k">verändert das Ergebnis um</span> ${chf(v)} pro Jahr<br>
-      ${v >= 0 ? "lohnt sich" : "lohnt sich nicht"}${n === 1 ? "<br>(trägt auch Einbau, Internet, Firmenanteil)" : ""}`);
+    hover(hit, `<b>Server no. ${n}</b><br><span class="k">changes the result by</span> ${chf(v)} per year<br>
+      ${v >= 0 ? "profitable" : "loss-making"}${n === 1 ? "<br>(includes installation, connectivity and allocated overhead)" : ""}`);
     hit.addEventListener("click", () => { $("n").value = n; S.n = n; alles(); }); });
   let bis = 0; while (bis < 13 && zus[bis] >= 0) bis++;
   let best = 1; for (let n = 2; n <= 13; n++) if (erg[n] > erg[best]) best = n;
   $("nGrenz").textContent = (bis === 0
-    ? `Bei diesen Preisen lohnt sich schon der erste Server nicht.`
-    : `Bei diesen Preisen lohnt sich jeder Server bis Nr. ${bis}` + (bis < 13 ? `, der ${bis + 1}. verändert das Ergebnis um ${chf(zus[bis])}.` : "."))
-    + ` Am meisten verdient DH mit ${best} Server${best > 1 ? "n" : ""} (${chf(erg[best])} pro Jahr). Mehr Server decken mehr Wärme, rechnen aber seltener.`;
+    ? `At these prices the first server is already loss-making.`
+    : `At these prices, each server is profitable through no. ${bis}` + (bis < 13 ? `, while server ${bis + 1} changes the result by ${chf(zus[bis])}.` : "."))
+    + ` DigitalHeat earns most with ${best} server${best > 1 ? "s" : ""} (${chf(erg[best])} per year). More servers cover more heat and run less often.`;
 }
 
 // ---------- Diagramm: Tag ----------
-const TAGNAME = { januar: "Ein Januartag", uebergang: "Ein Übergangstag", juli: "Ein Julitag" };
+const TAGNAME = { januar: "A January day", uebergang: "A shoulder-season day", juli: "A July day" };
 function tag(name, box, sp, titel, notiz) {
   const T = lauf().tage[name], W = 520, H = 200, x0 = 38, x1 = W - 8, y0 = H - 22, y1 = 10;
   const svg = svgNeu($(box), W, H);
@@ -518,9 +518,9 @@ function tag(name, box, sp, titel, notiz) {
     t.textContent = String(h).padStart(2, "0") + ":00"; }
   T.forEach((z, h) => { const hit = el("rect", { x: xs(h) - (x1 - x0) / 48, y: y1, width: (x1 - x0) / 24, height: y0 - y1,
     fill: "transparent" }, svg);
-    hover(hit, `<b>${z.zeit.slice(11, 16)} Uhr, ${fmt(z.temp_c, 1)} °C</b><br><span class="k">Bedarf</span> ${fmt(z.bedarf_kwh, 2)} kWh
-      <br><span class="k">Serverwärme</span> ${fmt(z.waerme_kwh, 2)} kWh<br><span class="k">Server an</span> ${fmt(z.server_laufend, 2)}
-      <br><span class="k">Speicher</span> ${fmt(z.speicher_kwh, 1)} kWh<br><span class="k">Holzofen</span> ${fmt(z.backup_kwh, 2)} kWh`); });
+    hover(hit, `<b>${z.zeit.slice(11, 16)}, ${fmt(z.temp_c, 1)} °C</b><br><span class="k">Demand</span> ${fmt(z.bedarf_kwh, 2)} kWh
+      <br><span class="k">Server heat</span> ${fmt(z.waerme_kwh, 2)} kWh<br><span class="k">Servers running</span> ${fmt(z.server_laufend, 2)}
+      <br><span class="k">Storage</span> ${fmt(z.speicher_kwh, 1)} kWh<br><span class="k">Wood stove</span> ${fmt(z.backup_kwh, 2)} kWh`); });
   // Speicherstreifen
   const s2 = svgNeu($(sp), W, 46), w = (x1 - x0) / 24;
   T.forEach((z, h) => { const a = z.speicher_kwh / 35;
@@ -529,44 +529,44 @@ function tag(name, box, sp, titel, notiz) {
   const t0 = el("text", { x: x0 - 6, y: 21, "text-anchor": "end" }, s2); t0.textContent = "35";
   const mitt = T.reduce((s, z) => s + z.temp_c, 0) / 24, srv = T.reduce((s, z) => s + z.server_laufend, 0) / 24;
   $(titel).textContent = TAGNAME[name] + ` (${D.tage[name].split("-").reverse().join(".")})`;
-  $(notiz).textContent = `Ø ${fmt(mitt, 1)} °C, im Mittel ${fmt(srv, 1)} von ${S.n} Servern an, kWh pro Stunde` +
-    (name === "uebergang" ? ". Mittags ist der Speicher voll, die Server drosseln und laufen abends wieder hoch." : "");
+  $(notiz).textContent = `Average ${fmt(mitt, 1)} °C, ${fmt(srv, 1)} of ${S.n} servers running on average, kWh per hour` +
+    (name === "uebergang" ? ". The tank fills at midday. The servers slow down and ramp up again in the evening." : "");
 }
 
 // ---------- Flotte (Wärme-Router, src/scheduler/router.py + flotte.py) ----------
 S.variante = 1; S.szF = "alibaba"; S.betriebF = D.flotte_abschalten ? "abschalten" : "case";
 function flotte() {
   const F = S.betriebF === "abschalten" ? D.flotte_abschalten : D.flotte;
-  if (!F) { $("flotte").innerHTML = `<h2>Flotte</h2><div class="note">Noch keine Flottenrechnung: <code>python3 src/scheduler/flotte.py</code>, dann <code>python3 src/dashboard_daten.py</code>.</div>`; return; }
+  if (!F) { $("flotte").innerHTML = `<h2>Fleet</h2><div class="note">To generate the fleet results, run <code>python3 src/scheduler/flotte.py</code>, then <code>python3 src/dashboard_daten.py</code>.</div>`; return; }
   const V = F.ergebnisse.filter((b) => b.szenario === S.szF);
   S.variante = Math.min(S.variante, V.length - 1);
   const b = V[S.variante], ohne = V[0], g = b.gruppen, leistung = F.leistungsprofil;
   $("ctlFlottenBetrieb").hidden = !D.flotte_abschalten;
   $("segVariante").innerHTML = V.map((v, i) => `<button data-i="${i}" aria-pressed="${i === S.variante}">${
-    v.server_bad ? `Sportbad ${v.server_bad} Server${leistung ? "" :
-      (v.server_bad === F.server_bad_regel ? " (Senkenregel)" : " (nach Nachfrage)")}` : "Ohne Bad"}</button>`).join("");
+    v.server_bad ? `Pool: ${v.server_bad} servers${leistung ? "" :
+      (v.server_bad === F.server_bad_regel ? " (heat-based sizing)" : " (demand-based sizing)")}` : "Without pool"}</button>`).join("");
   $("segVariante").querySelectorAll("button").forEach((x) => x.addEventListener("click", () => { S.variante = +x.dataset.i; flotte(); }));
-  $("nFlotte").textContent = `Ein gemeinsamer Auftragspool für ${g.haus.standorte} Häuser mit je ${F.server_pro_haus} Servern` +
-    (g.bad ? ` und das Sportbad (offen 26.4.–5.10., ca. 650 MWh/Jahr, Schätzung ±30 %)` : "") +
-    `. Wohnhäuser haben bei der Auftragsverteilung Vorrang. Fristkritische Aufträge können an eine andere Cloud gehen. ` +
-    (leistung ? `Annahmen je Server: ${fmt(leistung.leerlauf_watt)} W Leerlauf, ${fmt(leistung.standby_watt)} W Standby, ${fmt(leistung.start_minuten)} min Startzeit.`
-      : "Case-Idealmodell mit 0 W Leerlauf.");
+  $("nFlotte").textContent = `One job queue for ${g.haus.standorte} houses with ${F.server_pro_haus} servers each` +
+    (g.bad ? ` and the sports pool (26 April–5 October, estimated 650 MWh/year ±30%)` : "") +
+    `. Houses have priority. Urgent jobs may go to another cloud. ` +
+    (leistung ? `Assumptions per server: ${fmt(leistung.leerlauf_watt)} W idle, ${fmt(leistung.standby_watt)} W standby, ${fmt(leistung.start_minuten)} min startup.`
+      : "Case ideal model with 0 W idle power.");
   const d = b.dh_ergebnis_pro_jahr_chf - ohne.dh_ergebnis_pro_jahr_chf;
   const t = [
-    ["An andere Cloud abgegeben", fmt(b.abgegeben_server_h) + " h", b === ohne ? "Server-h ohne Erlös, weil kein Haus Wärme braucht"
-      : `statt ${fmt(ohne.abgegeben_server_h)} h ohne Bad`],
-    ["Auslastung Haus-Server", pct(g.haus.auslastung), `Deckung der Häuser ${pct(g.haus.deckungsgrad)}`],
-    ["Auslastung Bad-Server", g.bad ? pct(g.bad.auslastung) : "–", g.bad ? `Wärmebedarf des Bads gedeckt: ${pct(g.bad.deckungsgrad)}` : "Ohne Bad"],
-    ["Migrationen", fmt(b.migrationen), "Job wandert per Checkpoint an einen anderen Standort"],
-    ["Verpasste Fristen", pct(b.verpasste_fristen_anteil, 2), `${fmt(b.jobs_mit_frist)} Aufträge mit Frist`],
-    ["Ergebnis Flotte, CHF pro Jahr", (b.dh_ergebnis_pro_jahr_chf < 0 ? "−" : "") + fmt(Math.abs(b.dh_ergebnis_pro_jahr_chf)),
-      b === ohne ? "alle Standorte, alle Kosten, Steuern und Zins" : `${d >= 0 ? "+" : "−"}${chf(Math.abs(d))} gegenüber ohne Bad`],
+    ["Transferred to an external cloud", fmt(b.abgegeben_server_h) + " h", b === ohne ? "Unpaid server-hours when no house needs heat"
+      : `versus ${fmt(ohne.abgegeben_server_h)} h without the pool`],
+    ["House server utilisation", pct(g.haus.auslastung), `Heat coverage at houses ${pct(g.haus.deckungsgrad)}`],
+    ["Pool server utilisation", g.bad ? pct(g.bad.auslastung) : "–", g.bad ? `Pool heat demand covered: ${pct(g.bad.deckungsgrad)}` : "Without pool"],
+    ["Job transfers", fmt(b.migrationen), "Jobs move between sites using checkpoints"],
+    ["Missed deadlines", pct(b.verpasste_fristen_anteil, 2), `${fmt(b.jobs_mit_frist)} jobs with deadlines`],
+    ["Fleet result, CHF per year", (b.dh_ergebnis_pro_jahr_chf < 0 ? "−" : "") + fmt(Math.abs(b.dh_ergebnis_pro_jahr_chf)),
+      b === ohne ? "all sites, including costs, tax and interest" : `${d >= 0 ? "+" : "−"}${chf(Math.abs(d))} compared with no pool`],
   ];
   if (leistung) {
-    t.push(["Strom Flotte", fmt(b.strom_kwh) + " kWh", "Rechnen, Leerlauf, Standby und Starts"]);
+    t.push(["Fleet electricity", fmt(b.strom_kwh) + " kWh", "Computing, idle, standby and startup"]);
     if (g.bad) {
-      t.push(["Bad-Server in Standby", pct(g.bad.server_h_aus / (g.bad.server * 8760)),
-        `${fmt(g.bad.serverstarts)} Starts im Jahr`]);
+      t.push(["Pool servers in standby", pct(g.bad.server_h_aus / (g.bad.server * 8760)),
+        `${fmt(g.bad.serverstarts)} startups per year`]);
     }
   }
   $("tilesFlotte").innerHTML = t.map(([l, v, h]) =>
@@ -582,7 +582,7 @@ function flotteMonate(b) {
   const mitStrom = b.strom_kwh != null;
   const mitBad = mitStrom && b.server_bad > 0;
   const svg = svgNeu($("chFlotte"), W, H);
-  const teile = [["haus_server_h", "var(--s1)", "Häuser"], ["senke_server_h", "var(--s2)", "Sportbad"], ["abgegeben_server_h", "var(--s3)", "abgegeben"]];
+  const teile = [["haus_server_h", "var(--s1)", "Houses"], ["senke_server_h", "var(--s2)", "Sports pool"], ["abgegeben_server_h", "var(--s3)", "Transferred"]];
   const max = niceMax(Math.max(...M.map((m) => teile.reduce((s, [k]) => s + (m[k] || 0), 0))));
   yAchse(svg, x0, x1, y0, y1, max, 4, (v) => fmt(v));
   const bw = (x1 - x0) / 12, w = bw * 0.62, sk = (y0 - y1) / max;
@@ -593,12 +593,12 @@ function flotteMonate(b) {
       saeule(svg, x, y, w, h, c, j === da.length - 1);
       if (j > 0) el("line", { x1: x, x2: x + w, y1: y + h, y2: y + h, stroke: "var(--surface)", "stroke-width": 2 }, svg); });
     const hit = el("rect", { x: x0 + i * bw, y: y1, width: bw, height: y0 - y1, fill: "transparent" }, svg);
-    hover(hit, `<b>${MON[i]} 2025</b><br>` + teile.map(([k, , n]) => `<span class="k">${n}</span> ${fmt(m[k] || 0)} Server-h`).join("<br>") +
-      `<br><span class="k">Wärme Häuser gedeckt</span> ${pct((m.haus_genutzt_kwh || 0) / (m.haus_bedarf_kwh || 1), 0)}`);
+    hover(hit, `<b>${MON[i]} 2025</b><br>` + teile.map(([k, , n]) => `<span class="k">${n}</span> ${fmt(m[k] || 0)} server-h`).join("<br>") +
+      `<br><span class="k">House heat demand covered</span> ${pct((m.haus_genutzt_kwh || 0) / (m.haus_bedarf_kwh || 1), 0)}`);
     const t = el("text", { x: x + w / 2, y: H - 6, "text-anchor": "middle" }, svg); t.textContent = MON[i];
   });
-  $("tblFlotte").innerHTML = `<table><tr><th>Monat</th><th>Häuser (h)</th><th>Sportbad (h)</th><th>Abgegeben (h)</th>
-    <th>Wärme Häuser gedeckt</th>${mitStrom ? "<th>Strom (kWh)</th>" : ""}${mitBad ? "<th>Bad in Standby</th>" : ""}</tr>` +
+  $("tblFlotte").innerHTML = `<table><tr><th>Month</th><th>Houses (h)</th><th>Sports pool (h)</th><th>Transferred (h)</th>
+    <th>House heat demand covered</th>${mitStrom ? "<th>Electricity (kWh)</th>" : ""}${mitBad ? "<th>Pool in standby</th>" : ""}</tr>` +
     M.map((m, i) => `<tr><td>${MON[i]}</td><td class="num">${fmt(m.haus_server_h)}</td>
     <td class="num">${fmt(m.senke_server_h)}</td><td class="num">${fmt(m.abgegeben_server_h || 0)}</td>
     <td class="num">${pct((m.haus_genutzt_kwh || 0) / (m.haus_bedarf_kwh || 1), 0)}</td>
@@ -621,10 +621,10 @@ function flotteSuche(F) {
     if (p) { p.setAttribute("transform", `translate(0 ${2 * ys(0) + h}) scale(1 -1)`); if (r.server_bad !== best) p.setAttribute("opacity", 0.45); }
     const t = el("text", { x: x + w / 2, y: H - 6, "text-anchor": "middle" }, svg); t.textContent = r.server_bad;
     const hit = el("rect", { x: x0 + i * bw, y: y1, width: bw, height: y0 - y1, fill: "transparent" }, svg);
-    hover(hit, `<b>${r.server_bad ? r.server_bad + " Server im Bad" : "ohne Bad"}</b><br><span class="k">Ergebnis Flotte</span> ${chf(r.ergebnis_chf)} pro Jahr` +
-      (r.abgegeben_server_h != null ? `<br><span class="k">abgegeben</span> ${fmt(r.abgegeben_server_h)} Server-h` : "")); });
-  $("nSuche").textContent = `Am besten: ${best} Server. Die Senkenregel (Wärmebedarf im Sommer) ergäbe ${F.server_bad_regel} Server, ` +
-    `viel mehr, als Aufträge da sind. Mit Alibaba-Nachfrage bleibt die Flotte im Minus: Der Engpass sind die Aufträge, nicht die Wärme.`;
+    hover(hit, `<b>${r.server_bad ? r.server_bad + " servers at the pool" : "without pool"}</b><br><span class="k">Fleet result</span> ${chf(r.ergebnis_chf)} per year` +
+      (r.abgegeben_server_h != null ? `<br><span class="k">Transferred</span> ${fmt(r.abgegeben_server_h)} server-h` : "")); });
+  $("nSuche").textContent = `Best result: ${best} servers. Sizing for summer heat demand would give ${F.server_bad_regel} servers, ` +
+    `more than there is work for. The fleet remains loss-making under Alibaba-trace demand.`;
 }
 function flotteZusage(F, b) {
   const Z = F.zusage[b.variante] || F.zusage[Object.keys(F.zusage)[0]], name = F.zusage[b.variante] ? b.variante : Object.keys(F.zusage)[0];
@@ -645,17 +645,20 @@ function flotteZusage(F, b) {
     const i = Math.max(0, Math.min(T.length - 1, Math.floor((vx - x0) / (x1 - x0) * T.length))), t = T[i];
     kreuz.setAttribute("x1", xs(i)); kreuz.setAttribute("x2", xs(i)); kreuz.setAttribute("visibility", "visible");
     const fehl = Math.max(0, f * t[1] - t[2]);
-    zeigeTip(e, `<b>${t[0].split("-").reverse().join(".")}</b><br><span class="k">zugesagt</span> ${fmt(f * t[1], 1)} Server-h<br>
-      <span class="k">geliefert</span> ${fmt(t[2], 1)} Server-h${fehl > 0.01 ? `<br><span class="k">Fehlmenge</span> ${fmt(fehl, 1)} Server-h` : ""}`); });
+    zeigeTip(e, `<b>${t[0].split("-").reverse().join(".")}</b><br><span class="k">committed</span> ${fmt(f * t[1], 1)} server-h<br>
+      <span class="k">delivered</span> ${fmt(t[2], 1)} server-h${fehl > 0.01 ? `<br><span class="k">Shortfall</span> ${fmt(fehl, 1)} server-h` : ""}`); });
   hit.addEventListener("mouseleave", () => { versteckeTip(); kreuz.setAttribute("visibility", "hidden"); });
   const j = Z.jahr;
-  const standorte = F.leistungsprofil ? name.replace(" (nach Nachfrage)", "") : name;
-  $("nZusage").innerHTML = `${standorte}, verfügbare Kapazität («Genug Aufträge»). Prognose ECMWF vom Vortag, Sicherheitsfaktor ${fmt(f, 2)} ` +
-    `(kalibriert Januar–Juni). <b>${pct(j.zusagbarer_anteil, 0)} der Server-h sind zusagbar</b>, fest verkauft werden ${pct(j.anteil_fest_gebucht, 0)}. ` +
-    `Juli–Dezember fehlte an ${pct(Z.fehltage_auswertung, 1)} der Tage etwas. Ergebnis mit Zusage und Gutschrift: ${chf(Z.ergebnis_mit_zusage_chf)} pro Jahr.`;
+  const standorte = name.replace("0 Senken", "Without pool").replace("Sportbad", "Sports pool")
+    .replace(" (nach Nachfrage)", F.leistungsprofil ? "" : " (demand-based sizing)")
+    .replace(" (Senkenregel)", " (heat-based sizing)");
+  $("nZusage").innerHTML = `${standorte}, capacity with plentiful work. Based on the previous day's ECMWF forecast, with a safety factor of ${fmt(f, 2)} ` +
+    `(calibrated from January to June). <b>${pct(j.zusagbarer_anteil, 0)} of server hours can be committed</b>, and ${pct(j.anteil_fest_gebucht, 0)} are sold on contract. ` +
+    `From July to December, ${pct(Z.fehltage_auswertung, 1)} of days had a shortfall. Annual result with commitments and service credits: ${chf(Z.ergebnis_mit_zusage_chf)}.`;
 }
 
 // ---------- Live ----------
+const liveSite = value => value?.replace("Haus", "House").replace("Sportbad St. Jakob", "St. Jakob sports pool");
 let liveZuletzt = null;
 async function live() {
   const box = $("live");
@@ -670,26 +673,26 @@ async function live() {
     liveZuletzt = L;
     const z = L.jetzt || (L.stunden && L.stunden[L.stunden.length - 1]) || {};
     const an = L.aktiv && L.prozess === "läuft", aus = L.aktiv && L.prozess === "pausiert", FL = L.modus === "flotte";
-    const migr = (L.migrationen || []).map((m) => `${m.zeit.slice(11, 16)} Uhr: ${m.von} → ${m.nach}, Checkpoint bei ${fmt(m.checkpoint_texte)} Texten, neuer Prozess PID ${m.neue_pid}`);
+    const migr = (L.migrationen || []).map((m) => `${m.zeit.slice(11, 16)}: ${liveSite(m.von)} → ${liveSite(m.nach)}, checkpoint at ${fmt(m.checkpoint_texte)} texts, new process PID ${m.neue_pid}`);
     const W = 700, H = 120, x0 = 34, x1 = W - 8, y0 = H - 20, y1 = 8;
     const st = (L.stunden || []).concat(L.aktiv && L.jetzt ? [{ ...L.jetzt, anteil_echter_server: L.anteil }] : []);
     box.innerHTML = `<div><div class="lamp"><span class="dot ${an ? "an" : aus ? "aus" : ""}"></span>
-      ${L.aktiv ? (an ? "Job rechnet" : "Job pausiert") : "Job angehalten"}</div>
-      <dl><dt>Tag</dt><dd>${L.tag}${z.zeit ? ", " + z.zeit.slice(11, 16) + " Uhr" : ""}</dd>
-      <dt>Aussen</dt><dd>${z.temp_c != null ? fmt(z.temp_c, 1) + " °C" : "–"}</dd>
-      <dt>Wärmebedarf</dt><dd>${z.bedarf_kwh != null ? fmt(z.bedarf_kwh, 2) + " kWh" : "–"}</dd>
-      ${FL ? `<dt>Standort</dt><dd><b>${L.standort}</b></dd>` : ""}
-      <dt>Speicher</dt><dd>${z.speicher_kwh != null ? fmt(z.speicher_kwh, 1) + (FL ? " kWh" : " von 35 kWh") : "–"}</dd>
-      <dt>Rechenleistung</dt><dd>${z.server_laufend != null ? fmt(z.server_laufend, 2) + " Server" : "–"}</dd>
+      ${L.aktiv ? (an ? "Job running" : "Job paused") : "Job stopped"}</div>
+      <dl><dt>Date</dt><dd>${L.tag}${z.zeit ? ", " + z.zeit.slice(11, 16)  : ""}</dd>
+      <dt>Outdoors</dt><dd>${z.temp_c != null ? fmt(z.temp_c, 1) + " °C" : "–"}</dd>
+      <dt>Heat demand</dt><dd>${z.bedarf_kwh != null ? fmt(z.bedarf_kwh, 2) + " kWh" : "–"}</dd>
+      ${FL ? `<dt>Site</dt><dd><b>${liveSite(L.standort)}</b></dd>` : ""}
+      <dt>Heat storage</dt><dd>${z.speicher_kwh != null ? fmt(z.speicher_kwh, 1) + (FL ? " kWh" : " of 35 kWh") : "–"}</dd>
+      <dt>Compute capacity</dt><dd>${z.server_laufend != null ? fmt(z.server_laufend, 2) + " Server" : "–"}</dd>
       ${z.bad_server_eingeschaltet != null ?
-        `<dt>Haus an / Standby</dt><dd>${z.haus_server_eingeschaltet} / ${z.haus_server_standby} (simuliert)</dd>
-         <dt>Bad an / Standby</dt><dd>${z.bad_server_eingeschaltet} / ${z.bad_server_standby} (simuliert)</dd>` : ""}
-      <dt>Echter Job</dt><dd>${FL ? "markierter Job im Pool" : "Server " + L.echter_server}, PID ${L.pid}, ${L.prozess}</dd>
-      <dt>Fertig</dt><dd>${fmt(L.texte_fertig || 0)} Texte${L.aktiv ? "" : " (Checkpoint)"}</dd></dl></div>
-      <div><div class="note">Anteil jeder Stunde, in dem der echte Job rechnen durfte${window.LIVE_AUFZEICHNUNG ?
-        ` (Aufzeichnung eines echten Laufs auf dem Laptop, ${FL ? "Flotte mit Sportbad" : L.server + " Server"}, 1 h = ${L.sekunden_pro_stunde} s)` : ""}</div>
-        ${FL ? `<div class="legend"><span><i style="background:var(--s1)"></i>rechnet in ${L.standort_start}</span>
-          <span><i style="background:var(--s2)"></i>rechnet im ${L.bad}</span></div>` : ""}
+        `<dt>House on / standby</dt><dd>${z.haus_server_eingeschaltet} / ${z.haus_server_standby} (simulated)</dd>
+         <dt>Pool on / standby</dt><dd>${z.bad_server_eingeschaltet} / ${z.bad_server_standby} (simulated)</dd>` : ""}
+      <dt>Live job</dt><dd>${FL ? "tracked job in the queue" : "Server " + L.echter_server}, PID ${L.pid}</dd>
+      <dt>Completed</dt><dd>${fmt(L.texte_fertig || 0)} ${L.auftrag === "docking" ? "molecules" : "texts"}${L.aktiv ? "" : " (Checkpoint)"}</dd></dl></div>
+      <div><div class="note">Share of each hour allocated to the live job${window.LIVE_AUFZEICHNUNG ?
+        ` (recording of a real laptop run, ${FL ? "fleet with sports pool" : L.server + " Server"}, 1 h = ${L.sekunden_pro_stunde} s)` : ""}</div>
+        ${FL ? `<div class="legend"><span><i style="background:var(--s1)"></irunning at ${liveSite(L.standort_start)}</span>
+          <span><i style="background:var(--s2)"></irunning at ${liveSite(L.bad)}</span></div>` : ""}
         <div id="chLive"></div>${migr.length ? `<div class="note">Migration: ${migr.join("; ")}</div>` : ""}</div>`;
     const svg = svgNeu($("chLive"), W, H);
     yAchse(svg, x0, x1, y0, y1, 1, 2, (v) => fmt(v * 100) + " %");
@@ -697,101 +700,101 @@ async function live() {
     st.forEach((s, i) => { const a = s.anteil_echter_server ?? 0;
       const b = saeule(svg, x0 + i * bw + bw * 0.18, y0 - a * (y0 - y1), bw * 0.64, a * (y0 - y1), s.standort_typ === "bad" ? "var(--s2)" : "var(--s1)");
       const hit = el("rect", { x: x0 + i * bw, y: y1, width: bw, height: y0 - y1, fill: "transparent" }, svg);
-      hover(hit, `<b>${(s.zeit || "").slice(11, 16)} Uhr</b><br>${s.standort ? `<span class="k">Standort</span> ${s.standort}<br>` : ""}<span class="k">Job rechnet</span> ${pct(a, 0)} der Stunde`); });
+      hover(hit, `<b>${(s.zeit || "").slice(11, 16)}</b><br>${s.standort ? `<span class="k">Site</span> ${liveSite(s.standort)}<br>` : ""}<span class="k">Job computing</span> ${pct(a, 0)} of this hour`); });
     for (let h = 0; h < 24; h += 3) { const t = el("text", { x: x0 + (h + 0.5) * bw, y: H - 4, "text-anchor": "middle" }, svg);
       t.textContent = String(h).padStart(2, "0"); }
   } catch (e) {
-    box.innerHTML = `<div class="note" style="grid-column:1/-1">Noch kein Live-Lauf. Start im Terminal:<br>
-      <code>.venv/bin/python src/scheduler/live.py --tag 2025-03-07 --server ${S.n} --sekunden 3</code><br>
-      Flotte, Job wandert vom Haus ins Sportbad: <code>.venv/bin/python src/scheduler/live.py --flotte</code><br>
-      (7.3.2025: Der echte Job pausiert mittags 7 h bei vollem Speicher und läuft abends weiter.)<br>
-      Die Seite muss dafür über <code>bash dashboard/starten.sh</code> geöffnet sein.</div>`;
+    box.innerHTML = `<div class="note" style="grid-column:1/-1">No live run is active. Start it in a terminal:<br>
+      <code>python3 src/scheduler/live.py --tag 2025-03-07 --server ${S.n} --sekunden 3 --job docking</code><br>
+      Fleet example, moving a job from house to pool: <code>.venv/bin/python src/scheduler/live.py --flotte</code><br>
+      (7 March 2025: the job pauses when the tank fills and resumes in the evening.)<br>
+      Serve this page with <code>bash dashboard/starten.sh</code> to see live status.</div>`;
   }
 }
 
-// ---------- Annahmen auf einen Blick ----------
+// ---------- Key assumptions ----------
 function annahmenKurz() {
   const a = (k) => D.annahmen[k].wert;
   const M = D.messung_a, JA = D.jobtypen.find((t) => t.id === "A"), JB = D.jobtypen.find((t) => t.id === "B");
   const s = (t) => `<span class="src">${t}</span>`;
   const gruppen = [
-    ["Haus (Referenz Basel)", [
-      `Wetter Basel 2025, stündlich ${s("Open-Meteo")}`,
-      `Heizung ${s("max(0, 10 kW × (20 − T) ÷ 25,6), nur an 206 Heiztagen")} = 26'851 kWh/Jahr`,
-      `Warmwasser 12 kWh pro Tag, gleichmässig über den Tag = 4'380 kWh/Jahr`,
-      `Wassertank ${fmt(a("speicher_kwh"))} kWh, <b>ohne Verluste</b>`,
-      `Was die Server nicht decken, liefert ein Holzofen ausserhalb des Modells (keine Ölheizung mehr)`]],
+    ["Basel reference house", [
+      `Hourly Basel weather in 2025 ${s("Open-Meteo")}`,
+      `Space heating ${s("max(0, 10 kW × (20 − T) ÷ 25.6), on 206 heating days")} = 26'851 kWh/Jahr`,
+      `Hot water: 12 kWh per day, distributed evenly = 4'380 kWh/Jahr`,
+      `Water tank ${fmt(a("speicher_kwh"))} kWh, <b>no losses</b>`,
+      `A wood stove supplies backup heat separately`]],
     ["Server", [
-      `1 Server = ${fmt(a("server_kw"))} kW Strom, ${pct(a("waermerueckgewinnung"), 0)} davon als nutzbare Wärme`,
-      `Wärme ohne Wärmepumpe direkt für Heizung und Warmwasser ${s("Case")}`,
-      `<b>Läuft ein Server, läuft er voll</b> (Aufträge dicht gepackt)`,
-      `1 Server = ${a("karten_pro_server")}× NVIDIA L4 (72 W) + Prozessor ≈ 1 kW ${s("Einheitsserver für alle Branchen")}`,
-      `Wärme-Kennzahlen: Case-Modell mit <b>0 W Leerlauf</b> ${s("so verlangt es der Case")}`,
-      `Geld: Server schalten ohne Arbeit ab, <b>${fmt(D.abschalt_profil?.leerlauf_watt ?? 0)} W Leerlauf</b>, ${fmt(D.abschalt_profil?.standby_watt ?? 0)} W Standby, ` +
-        `${fmt(D.abschalt_profil?.start_minuten ?? 0)} min Start ${s("Annahme aus einer H100-Messung, keine Messung an L4")}`]],
-    ["So baut DigitalHeat", [
-      `Direkte Flüssigkeitskühlung an den Prozessoren, eigener Kühlkreis ${s("digitalheat.ch")}`,
-      `Wärmetauscher trennt Kühlkreis und Heizwasser: Das Heizwasser kommt nie an die Server`,
-      `50–70 °C Vorlauf: reicht für Heizung und Warmwasser ohne Wärmepumpe`,
-      `5–20 kW pro Einheit: <b>unsere 8 Server = eine Einheit von 8 kW</b>`,
-      `DigitalHeat besitzt und bezahlt alles, der Haushalt bekommt die Wärme <b>gratis</b> ${s("Pilot in ehemaligen Öl-Häusern, HAUSBESITZER.md")}`,
-      `Nicht angegeben: Kühlmittel, Anteil zurückgewonnener Wärme, Preise`]],
-    ["Geld (alles in CHF)", [
-      `Strom ${fmt(a("strompreis_chf_kwh") * 100, 2)} Rp./kWh ${s("ElCom 2026, IWB Basel, H4")}`,
-      `Wärmewert ${fmt(a("waermewert_chf_kwh") * 100, 1)} Rp./kWh = Strompreis ÷ 2,5 ${s("Case: ersetzt Wärmepumpe, nur für den Break-even des Case")}`,
-      `<b>Ankerkunde ${chf(a("vertragspreis_chf_karte_h"), 2)} pro L4-Stunde</b>, ${pct(a("anteil_fest_gebucht"), 0)} fest gebucht ` +
-        `${s("Roche, unbestätigt; Schweizer Clouds ab ≈ 0,68 CHF; KOSTEN_DH.md, L4_ANGEBOT.md")}`,
-      `übrige Stunden zu ${chf(a("spotpreis_chf_karte_h"), 2)}, sinkt ${pct(a("spot_preisverfall"), 0)} pro Jahr ${s("Kunden ohne Mindestmenge; Untergrenze L4-Spot 0,29 CHF")}`,
-      `<b>Server ${chf(a("server_preis_chf"))}</b> pro 8 L4 inkl. Prozessor und Speicher ${s("Gigabyte G293-Z43, 16× L4: 76'774 $")}`,
-      `Kühlung ${chf(a("kuehlung_chf_pro_kw"))}/kW, Einbau ${chf(a("einbau_chf"))}, Speicher ${chf(a("speicher_chf"))}, Netzwerk ${chf(a("netzwerk_chf"))}`,
-      `${a("abschreibung_jahre")} Jahre, Zins ${pct(a("zins"), 1)}, Restwert ${pct(a("restwert_anteil"), 0)}, Gewinnsteuer ${pct(a("gewinnsteuer"), 1)}`,
-      `Laufend: Ersatzteile, Einsätze, Service, Monitoring, Internet, Versicherung ${pct(a("versicherung_anteil"), 1)}, Firmenanteil ${s("KOSTEN_DH.md")}`]],
-    ["Aufträge", [
-      `A: ${fmt(M.texte_pro_kwh / 1e6, 1)} Mio. Texte pro kWh einbetten, 1 Auftrag = ${fmt(JA.einheiten_pro_job / 1e6)} Mio. Texte ` +
-        `= ${fmt(a("job_a_kwh"), 3)} kWh ≈ ${fmt(JA.laufzeit_min_1kw, 1)} min auf 1 kW, pausierbar, Frist ${a("job_a_frist_h")} h`,
-      `Gemessen auf dem Laptop: ${fmt(M.texte)} Texte in ${fmt(M.rechenzeit_s, 1)} s = ${fmt(M.durchsatz_laptop_texte_s, 1)} Texte/s ` +
-        `bei ${fmt(M.leistung_w, 1)} W ${s("powermetrics CPU+GPU+ANE; volle Chip-Leistung statt nur 27,5 W Mehrleistung, also vorsichtig")}`,
-      `B: 1 Auftrag = ${fmt(JB.einheiten_pro_job / 1e6)} Mio. Bilder = ${fmt(a("job_b_kwh"), 3)} kWh ≈ ${fmt(JB.laufzeit_min_1kw, 1)} min, ` +
-        `nicht unterbrechbar, Frist ${a("job_b_frist_h")} h ${s("MLPerf v5.0: 11'106 Bilder/s bei 4'849 W")}`,
-      `Umrechnung auf 1 kW: gleiche Arbeit pro kWh wie gemessen`,
-      `Fristen und Auftragsgrössen selbst festgelegt`]],
-    ["Nachfrage nach Rechenzeit", [
-      `<b>Genug Aufträge</b> (Standard): Roche bucht 60 % als Winterkontingent fest, die übrigen Stunden gehen an Kunden ohne Mindestmenge. Jede Rechenstunde gilt als verkauft ${s("Annahme, kein Nachfragebeleg")}`,
-      `Alternative: nur Aufträge mit Frist, ${fmt(a("nachfrage_server_h_pro_server_tag"), 1)} Server-h pro Server und Tag ${s("Alibaba-GPU-Trace 2020")}`,
-      `Kurze Aufträge (B) = ${pct(a("anteil_kurze_jobs_gpu_h"), 0)} der Rechenzeit ${s("Alibaba")}`,
-      `Ankünfte über den Tag nach Alibaba-Tagesform, feste Zufallssaat`]],
+      `1 Server = ${fmt(a("server_kw"))} kW electricity, ${pct(a("waermerueckgewinnung"), 0)} recovered as useful heat`,
+      `Direct use for space heating and hot water ${s("Case")}`,
+      `<b>Active servers run at full load</b> (jobs are packed together)`,
+      `1 Server = ${a("karten_pro_server")}× NVIDIA L4 (72 W) + CPU ≈ 1 kW ${s("Reference server")}`,
+      `Heat metrics use the case model with <b>0 W idle</b> ${s("case baseline")}`,
+      `Business case: servers shut down when idle, <b>${fmt(D.abschalt_profil?.leerlauf_watt ?? 0)} W idle</b>, ${fmt(D.abschalt_profil?.standby_watt ?? 0)} W standby, ` +
+        `${fmt(D.abschalt_profil?.start_minuten ?? 0)} min startup ${s("Assumed from an H100 measurement; L4 values are unmeasured")}`]],
+    ["Heat recovery system", [
+      `Direct-to-chip liquid cooling in a separate loop ${s("digitalheat.ch")}`,
+      `A heat exchanger separates coolant from home heating water`,
+      `Indicative 50–70 °C supply water; actual temperature needs a pilot measurement`,
+      `5–20 kW per unit; <b>eight reference servers form an 8 kW unit</b>`,
+      `DigitalHeat owns and pays for the system and supplies heat to the household for free ${s("Pilot in homes previously heated with oil, HAUSBESITZER.md")}`,
+      `Coolant, actual recovery rate and installation prices require verification`]],
+    ["Economics (CHF)", [
+      `Electricity ${fmt(a("strompreis_chf_kwh") * 100, 2)} ct/kWh ${s("ElCom 2026, IWB Basel, H4")}`,
+      `Heat value ${fmt(a("waermewert_chf_kwh") * 100, 1)} ct/kWh = electricity tariff ÷ 2.5 ${s("Case heat-pump comparison; used for the energy-only break-even")}`,
+      `<b>Anchor customer ${chf(a("vertragspreis_chf_karte_h"), 2)} per L4-hour</b>, ${pct(a("anteil_fest_gebucht"), 0)} reserved ` +
+        `${s("Hypothetical anchor customer; Swiss clouds from about CHF 0.68; KOSTEN_DH.md, L4_ANGEBOT.md")}`,
+      `remaining hours at ${chf(a("spotpreis_chf_karte_h"), 2)}, declining ${pct(a("spot_preisverfall"), 0)} per year ${s("No minimum purchase; CHF 0.29 spot floor")}`,
+      `<b>Server ${chf(a("server_preis_chf"))}</b> per eight L4s including CPU and storage ${s("Gigabyte G293-Z43, 16× L4: 76'774 $")}`,
+      `Cooling ${chf(a("kuehlung_chf_pro_kw"))}/kW, installation ${chf(a("einbau_chf"))}, storage ${chf(a("speicher_chf"))}, networking ${chf(a("netzwerk_chf"))}`,
+      `${a("abschreibung_jahre")} years, discount rate ${pct(a("zins"), 1)}, residual value ${pct(a("restwert_anteil"), 0)}, profit tax ${pct(a("gewinnsteuer"), 1)}`,
+      `Operating costs: parts, visits, maintenance, monitoring, internet, insurance ${pct(a("versicherung_anteil"), 1)}, allocated overhead ${s("KOSTEN_DH.md")}`]],
+    ["Workloads", [
+      `A: ${fmt(M.texte_pro_kwh / 1e6, 1)} million texts embedded per kWh, one job = ${fmt(JA.einheiten_pro_job / 1e6)} million texts ` +
+        `= ${fmt(a("job_a_kwh"), 3)} kWh ≈ ${fmt(JA.laufzeit_min_1kw, 1)} min at 1 kW, pausable, deadline ${a("job_a_frist_h")} h`,
+      `Measured on a laptop: ${fmt(M.texte)} texts in ${fmt(M.rechenzeit_s, 1)} s = ${fmt(M.durchsatz_laptop_texte_s, 1)} texts/s ` +
+        `at ${fmt(M.leistung_w, 1)} W ${s("powermetrics CPU + GPU + ANE; uses total chip power")}`,
+      `B: one job = ${fmt(JB.einheiten_pro_job / 1e6)} million images = ${fmt(a("job_b_kwh"), 3)} kWh ≈ ${fmt(JB.laufzeit_min_1kw, 1)} min, ` +
+        `non-interruptible, deadline ${a("job_b_frist_h")} h ${s("MLPerf v5.0: 11'106 images/s at 4'849 W")}`,
+      `Scaling to 1 kW assumes the measured work per kWh`,
+      `Deadlines and batch sizes are model assumptions`]],
+    ["Compute demand", [
+      `<b>Plentiful work</b> by default: the anchor reserves 60% of compute hours and other customers buy the rest without a minimum volume. The scenario assumes all compute is sold ${s("Demand assumption")}`,
+      `Alternative: deadline jobs only, ${fmt(a("nachfrage_server_h_pro_server_tag"), 1)} server-hours per server per day ${s("Alibaba-GPU-Trace 2020")}`,
+      `Short jobs (B) = ${pct(a("anteil_kurze_jobs_gpu_h"), 0)} of computing time ${s("Alibaba")}`,
+      `Hourly arrivals use the Alibaba profile and a fixed seed`]],
     ["Scheduler", [
-      `Rechnet Stunde für Stunde, kennt nur den Bedarf der laufenden Stunde (<b>keine Wetterprognose</b>)`,
-      `Warum das reicht: Mit verlustfreiem Speicher und genug Aufträgen ist «Speicher immer füllen» schon die beste Deckung. ` +
-        `Eine Prognose hilft erst, wenn Aufträge knapp sind oder der Speicher Wärme verliert`,
-      `Zuerst Aufträge, deren Frist sonst reisst (2 h Puffer), dann so viel, wie Haus und Speicher Wärme brauchen`,
-      `Wärme nicht gebraucht: trotzdem rechnen (abführen) oder Auftrag an anderen Standort`]],
+      `The baseline scheduler acts hourly on current heat demand`,
+      `With lossless storage and plentiful jobs, filling the tank maximises coverage in this model. ` +
+        `Forecasting can help when work is scarce or storage loses heat`,
+      `Urgent jobs go first with a two-hour buffer. Flexible jobs fill the remaining heat demand and storage.`,
+      `When heat is surplus, reject it or move the job to another site.`]],
   ];
   const ali = D.laeufe[`alibaba|${S.regel}|${S.n}`].bilanz, o = oekonomie(lauf().bilanz, S.n);
   const e50 = ergebnisHaus(S.n, { ...o.r, vertragspreis_chf_karte_h: 0.5 }).ergebnis;
   const vorsichtig = o.r.vertragspreis_chf_karte_h <= 0.5 ? null : o.ergebnis > 0 && e50 > 0
-    ? `verdient DH rund ${pct(1 - e50 / o.ergebnis, 0)} weniger (${chf(e50)} statt ${chf(o.ergebnis)})`
-    : `liegt das Ergebnis bei ${chf(e50)}`;
+    ? `the result falls by about ${pct(1 - e50 / o.ergebnis, 0)} (${chf(e50)} versus ${chf(o.ergebnis)})`
+    : `the result is ${chf(e50)}`;
   const grenzen = [
-    `Gibt es weniger flexible Aufträge als angenommen, sinkt die Deckung bei ${S.n} Servern auf ${pct(ali.deckungsgrad, 0)} (Umschalter «Nur Jobs mit Frist»).`,
-    `Unter ${chf(o.beCase, 3)} pro Server-h (Break-even des Case) deckt der Erlös nicht einmal den Strom.`,
-    `Mit allen Kosten braucht es mindestens ${chf(o.beKarte, 2)} pro L4-Stunde. Darunter lohnt es sich nicht.`,
-    `Am stärksten wirken Absatz, Vertragspreis und fest gebuchter Anteil.` + (vorsichtig ? ` Im vorsichtigen Fall (0,50 CHF) ${vorsichtig}.` : ""),
-    o.absatzMin != null ? `Jede Rechenstunde gilt als verkauft. Finden weniger als ${pct(o.absatzMin, 0)} der Stunden einen Käufer, ist das Ergebnis negativ.`
-      : `Jede Rechenstunde gilt als verkauft. Schon damit ist das Ergebnis bei diesen Preisen negativ.`,
-    `Der Zielpreis ist mit keinem Kunden bestätigt. US-Clouds mit festem Vertrag kosten 0,53–0,55 CHF.`,
-    `Im Pilot mit wenigen Häusern sind die Firmenkosten (Zertifikat, Software, Personal) pro Haus viel höher als hier angenommen.`,
-    "Im Sommer fehlt im Einfamilienhaus der Wärmeabnehmer. Ohne zweiten Standort (Hotel, Landwirtschaft) bleiben die Server dann fast still.",
-    "DigitalHeat zielt auf feste Rechenkunden (Firmen, Forschung, Hochschulen) statt auf einen Spot-Markt. Das Szenario «Nur Jobs mit Frist» liegt deshalb womöglich näher an der Realität.",
+    `With deadline jobs only, heat coverage falls to ${pct(ali.deckungsgrad, 0)} with ${S.n} servers.`,
+    `The case needs ${chf(o.beCase, 3)} per server-hour to break even on electricity after the heat credit.`,
+    `Including all costs, the model requires at least ${chf(o.beKarte, 2)} per L4-hour.`,
+    `Sales volume, contract price and the reserved share have the largest effect.` + (vorsichtig ? ` At CHF 0.50 ${vorsichtig}.` : ""),
+    o.absatzMin != null ? `The model assumes all hours sell. The result turns negative below ${pct(o.absatzMin, 0)}.`
+      : `The result is negative at these prices even if all hours sell.`,
+    `Customer prices are unconfirmed. The comparison uses US committed prices of CHF 0.53–0.55.`,
+    `Per-house overhead is higher in a small pilot.`,
+    "Summer demand at a detached house is limited. Servers run less without another heat sink.",
+    "The business targets contracted customers. The deadline-only scenario tests the impact of less flexible demand.",
   ];
   $("annahmenKurz").innerHTML = gruppen.map(([t, l]) =>
     `<div><h3>${t}</h3><ul>${l.map((x) => `<li>${x}</li>`).join("")}</ul></div>`).join("") +
-    `<div class="grenze"><h3>Wo die Annahmen nicht mehr gelten</h3><ul>${grenzen.map((x) => `<li>${x}</li>`).join("")}</ul></div>`;
+    `<div class="grenze"><h3>Limits and break-even</h3><ul>${grenzen.map((x) => `<li>${x}</li>`).join("")}</ul></div>`;
 }
 
 // ---------- Annahmen (Tabelle mit Quelle) ----------
 function annahmen() {
-  $("annahmen").innerHTML = "<table><tr><th>Annahme</th><th>Wert</th><th>Quelle</th></tr>" +
+  $("annahmen").innerHTML = "<table><tr><th>Model key</th><th>Value</th><th>Original source note</th></tr>" +
     Object.entries(D.annahmen).map(([k, a]) => `<tr><td>${k.replaceAll("_", " ")}</td>
       <td class="num">${typeof a.wert === "number" ? fmt(a.wert, a.wert < 10 ? 4 : 1) : a.wert}</td><td>${a.quelle}</td></tr>`).join("") +
     "</table>";
@@ -809,7 +812,7 @@ document.querySelectorAll(".seg[data-key]").forEach((seg) => seg.addEventListene
   seg.querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", x === b));
   S[seg.dataset.key] = b.dataset.v; alles(); }));
 document.querySelectorAll("[data-table]").forEach((b) => b.addEventListener("click", () => {
-  const t = $(b.dataset.table); t.hidden = !t.hidden; b.textContent = t.hidden ? "Tabelle zeigen" : "Tabelle ausblenden"; }));
+  const t = $(b.dataset.table); t.hidden = !t.hidden; b.textContent = t.hidden ? "Show table" : "Hide table"; }));
 for (const [id, key] of [["segFlotteSz", "szF"], ["segFlottenBetrieb", "betriebF"]]) {
   $(id).addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return;
     $(id).querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", x === b));

@@ -1,139 +1,121 @@
-# DigitalHeat · zwei getrennte Oberflächen
+# DigitalHeat application prototype
 
-Der Prototyp trennt die Serverhalter von den Nutzern der Rechenleistung. Die Gestaltung greift die ruhige Kachelansicht von Apple Home auf und verwendet einen eigenen Landschaftshintergrund. Die Oberflächen laden keine externen Ressourcen.
+The prototype has separate interfaces for the server host and the customer who submits work. Both load their assets locally.
 
-| Rolle | Oberfläche | Aufgaben |
+| Role | Interface | What it does |
 |---|---|---|
-| Serverhalter | **Mein Zuhause**, lokal auf dem Empfänger, Port 8090 | Betriebsstatus sehen, Wärmebedarf ein-/ausschalten, anonyme Auftragszahlen sehen |
-| Pharma-Kunde | **Forschungsaufträge**, lokal auf dem Sender, Port 8080 | Pharma-Vorlage wählen, Auftrag senden, Fortschritt verfolgen, Ergebnis ansehen, eigenen Auftrag pausieren/fortsetzen/abbrechen/entfernen |
+| Server host | **My home**, on the receiving device, port 8090 | Shows operating status and aggregate job counts, and lets the host set heat demand |
+| Pharma customer | **Research jobs**, on the sending device, port 8080 | Starts jobs from templates, shows progress and results, and lets the customer pause, resume, cancel or remove jobs |
 
-Es gibt keinen Rollenumschalter und keine vermischte Navigation. Die Serverhalter-Schnittstelle liefert keine Projekttitel, Eingabetexte, Target-Namen, Auftrags-IDs oder Ergebnisse. Der Pharma-Arbeitsbereich bietet keine globale Heizungssteuerung. Das ist eine Trennung der Anwendungsoberflächen und ihrer Schnittstellen, keine Absicherung des Arbeitsspeichers gegen den Besitzer des Empfängergeräts.
+The host interface exposes operating data in aggregate. The customer interface controls individual jobs. An administrator of the receiving device can still inspect the processes and memory.
 
-## Virtuelles Screening auf zwei Leinwänden (Standard)
+## Virtual screening on two screens
 
-Zwei Laptops docken Moleküle gegen die Abl-Kinase; der Auftrag wandert mit vollem Wärmespeicher vom Haus ins Sportbad und zurück. Details und Quellen: [daten/docking/README.md](../daten/docking/README.md).
+The default demo shows a screening job moving from a house to the sports pool and back as the simulated heat demand changes. It exchanges checkpoint state between devices and replays recorded Vina scores. See the [docking guide](../daten/docking/README.md) for details.
 
 ```sh
-python3 prototyp/schwimmbad.py     # Laptop B: zeigt einen Code
-python3 prototyp/haus.py           # Laptop A: Code eingeben, «Screening starten»
+python3 prototyp/schwimmbad.py     # Laptop B: get the pairing code
+python3 prototyp/haus.py           # Laptop A: enter the code, then click Start screening
 ```
 
-Auf einem Laptop zum Ausprobieren: `python3 prototyp/docking_demo.py demo --open`. Für die Bildprüfung statt Docking überall `--job blister` anhängen.
+Run from the repository root. To try both screens on one laptop, run `python3 prototyp/docking_demo.py demo --open`. Append `--job blister` to both two-device commands to switch to image inspection.
 
-## Animierte Tablettenprüfung
+## Animated blister inspection
 
-Im Ordner `prototyp` starten:
+From the `prototyp` directory:
 
 ```sh
 python3 digitalheat.py demo --port 8081 --host-port 8091 --worker-port 8444 --open
 ```
 
-Auf [Haus · Laptop A](http://127.0.0.1:8081) **Batch starten**.
-Beim automatischen Wechsel läuft die Prüfung auf [Sportbad · Laptop B](http://127.0.0.1:8091)
-beim nächsten Bild weiter. Für zwei physische Geräte siehe [Blister-Demo](blister/README.md).
+Click **Start batch** on [the house screen](http://127.0.0.1:8081). When the job transfers, it continues at the next image on [the sports pool screen](http://127.0.0.1:8091). See the [two-device blister demo](blister/README.md).
 
-## Klassischen Pharma-Prototyp ausprobieren
+## Pharma workspace
 
-Voraussetzungen: Python 3.10 oder neuer mit TLS 1.3 sowie `openssl` für die erstmalige Zertifikaterstellung. Keine Python-Zusatzpakete. Unter Windows gegebenenfalls `python` statt `python3` verwenden und OpenSSL separat bereitstellen.
+Use Python 3.10 or later with TLS 1.3 and OpenSSL for certificate setup. The prototype has no extra Python dependencies. On Windows, use `python` if the Python launcher is installed under that name and install OpenSSL separately.
 
-Eine laufende ältere Version mit `Ctrl+C` beenden. Im entpackten Anwendungsordner starten:
+From the `prototyp` directory:
 
 ```sh
 python3 digitalheat.py demo --pharma --open
 ```
 
-Auf macOS öffnet ein Doppelklick auf `Demo_starten.command` die animierte Blisterprüfung, wenn Python verfügbar ist.
+The command opens the [Pharma workspace](http://127.0.0.1:8080). Open [My home](http://127.0.0.1:8090) in a second window. Both services run on the same machine and communicate over the encrypted interface used for two devices. On macOS, double-click `Demo_starten.command` to launch the separate animated blister demo.
 
-- Pharma: [http://127.0.0.1:8080](http://127.0.0.1:8080)
-- Serverhalter: [http://127.0.0.1:8090](http://127.0.0.1:8090)
+1. In the Pharma workspace, choose **Virtual screening**, name a project and submit it.
+2. Open the completed job to see the synthetic ranking.
+3. Turn **Heat demand** off in **My home**.
+4. Submit a **Cell Painting** job with 384 demo images. It waits at 0%.
+5. Turn **Heat demand** on. The job starts and displays a synthetic microscopy result when it finishes.
+6. Choose **Process literature** and enter a public or fictional text. The prototype computes word statistics and a SHA-256 checksum.
+7. Check **My home** for operating status and aggregate counts.
 
-`--open` öffnet nur den Pharma-Arbeitsbereich. Die Serverhalter-Adresse separat in einem zweiten Fenster öffnen. Beide Rollen laufen in dieser Demo auf demselben Rechner, kommunizieren aber über die verschlüsselte Schnittstelle für den späteren Betrieb auf zwei Geräten.
+Press `Ctrl+C` to stop. The worker keeps jobs and results in memory. They are lost when it shuts down, and this version has no result file download.
 
-### Ein kompletter Testablauf
-
-1. In Pharma **Virtuelles Screening** auswählen, Projekt benennen und senden.
-2. Auftragskachel öffnen und das ausdrücklich synthetische Ranking ansehen.
-3. Auf der Serverhalter-Seite **Wärmebedarf** ausschalten.
-4. In Pharma einen **Cell-Painting**-Auftrag mit beispielsweise 384 Demo-Bildern senden. Er wartet bei 0 %.
-5. Auf der Serverhalter-Seite Wärmebedarf einschalten. Die Verarbeitung läuft weiter.
-6. In Pharma das synthetische Mikroskopie-Ergebnis ansehen.
-7. **Literatur verarbeiten** wählen und einen öffentlichen oder erfundenen Text eingeben. Hier sind Wortzahl, häufige Begriffe und SHA-256-Prüfsumme tatsächlich berechnet.
-8. Auf der Serverhalter-Seite prüfen: Es erscheinen nur Betriebszustände und Zahlen, keine Forschungsinhalte.
-
-Mit `Ctrl+C` beenden. Aufträge und Ergebnisse gehen beim Beenden des Empfängers verloren. Diese Version bietet keinen Ergebnisdatei-Download.
-
-Bei belegten Ports können alle drei Ports gewählt werden:
+If the default ports are in use, select all three explicitly:
 
 ```sh
 python3 digitalheat.py demo --pharma --port 8081 --host-port 8091 --worker-port 8444
 ```
 
-## Auf zwei Geräten im selben Netzwerk
+## Separate devices on the same network
 
-Die Anwendung auf beide Geräte kopieren. Beispiel-IP des Empfängers: `192.168.1.42`. Sie muss durch seine tatsächliche LAN-/WLAN-Adresse ersetzt werden.
+Copy the application to both devices and run the following commands from `prototyp`. Substitute the receiver's LAN address for `192.168.1.42`.
 
-### 1. Zugangsdaten auf dem Empfänger erstellen
+### 1. Create credentials on the receiver
 
 ```sh
 python3 digitalheat.py init --host 192.168.1.42
 ```
 
-Das erzeugt `credentials/worker` mit Zertifikat, privatem Schlüssel und Token sowie `credentials/sender` mit Zertifikat und Token. **Nur den Sender-Unterordner sicher zum Sender übertragen. Den privaten Worker-Schlüssel niemals mitgeben.** Keine Zugangsdaten öffentlich hochladen oder in Git aufnehmen.
+The command creates `credentials/worker` with the certificate, private key and token, and `credentials/sender` with the certificate and token. Transfer only the sender folder through a private channel. Keep the receiver's key on the receiver and keep all credentials out of Git.
 
-Das Zertifikat ist 30 Tage gültig und an die gewählte Adresse gebunden. Bei geänderter Adresse oder Ablauf neue Zugangsdaten in einem neuen Ordner erzeugen und verteilen. Bestehende Ordner werden nicht überschrieben.
+The certificate is valid for 30 days and tied to the chosen address. If the address changes or the certificate expires, generate new credentials in a new directory. Existing directories are preserved.
 
-### 2. Empfänger starten
+### 2. Run the receiver
 
 ```sh
 python3 digitalheat.py worker --credentials credentials/worker
 ```
 
-Die verschlüsselte Auftragsschnittstelle läuft auf Port 8443. Die lokale Serverhalter-Seite ist auf diesem Gerät unter [http://127.0.0.1:8090](http://127.0.0.1:8090) erreichbar. Bei Bedarf `--host-port 8091` angeben.
+The worker accepts jobs on port 8443. Open [My home](http://127.0.0.1:8090) locally on the receiver or set a different local port with `--host-port`.
 
-Beide Geräte müssen sich im privaten Netzwerk erreichen können. Falls die Firewall fragt, den vorgesehenen privaten Zugriff zulassen. Keine Router-Portweiterleitung nötig. Gastnetze können Geräte voneinander trennen. Der Prozess protokolliert nur Auftrags-IDs und Fortschritt, keine Texte oder Target-Namen.
+Use a private network where the devices can reach each other. Guest networks can isolate devices. The worker logs job IDs and progress. It processes one job at a time by default, and a paused job holds its slot. Use `--workers 2` through `--workers 4` for multiple CPU simulations.
 
-Standardmässig wird ein Auftrag gleichzeitig verarbeitet. Weitere warten. Ein pausierter Auftrag behält seinen Rechenplatz. Mit `--workers 2` bis `--workers 4` sind mehrere parallele CPU-Simulationen möglich.
-
-### 3. Sender starten
+### 3. Run the sender
 
 ```sh
 python3 digitalheat.py sender --worker https://192.168.1.42:8443 --credentials credentials/sender --open
 ```
 
-Pharma öffnet auf dem Sender [http://127.0.0.1:8080](http://127.0.0.1:8080). Beide Browseroberflächen sind nur auf ihrem jeweiligen Gerät erreichbar. Zwischen Senderdienst und Empfänger wird TLS 1.3 mit Zertifikats- und Namensprüfung verwendet.
+The [Pharma workspace](http://127.0.0.1:8080) opens locally on the sender. The sender and receiver use TLS 1.3 and verify the certificate and host name. Jobs continue on the receiver when the sender stops. Restart the sender with the same credentials to see their current state.
 
-Wird der Sender beendet, rechnet der Empfänger weiter. Nach erneutem Senderstart mit denselben Zugangsdaten wird der aktuelle Stand angezeigt.
+## What each customer template does
 
-## Die drei Pharma-Vorlagen
-
-| Vorlage | Eingabe | Ergebnis / Grenze |
+| Template | Input | Result |
 |---|---|---|
-| Virtuelles Screening | Demo-Target, Anzahl Demo-Moleküle | Deterministisches synthetisches Ranking von bis zu fünf Demo-Kandidaten. Kein Docking, keine echte Molekülbibliothek, keine Bindungsaffinität. |
-| Cell Painting | Demo-Datensatzname, Anzahl Demo-Bilder | Synthetische Zellanzahl und Qualitätsquote. Keine Bilddateien, keine Bildanalyse, kein trainiertes Modell. |
-| Literatur | Öffentlicher oder künstlicher Text | Tatsächliche Wortstatistik und Prüfsumme. Keine Embeddings und keine wissenschaftliche Bewertung. |
+| Virtual screening | Demo target and molecule count | A deterministic synthetic ranking of up to five demo candidates |
+| Cell Painting | Demo dataset name and image count | Synthetic cell counts and quality figures |
+| Literature | Public or fictional text | Computed word statistics and a SHA-256 checksum |
 
-Alle Vorlagen erzeugen zusätzlich reale CPU-Last durch PBKDF2 für die gewählte Demo-Dauer. Die Zahl der Moleküle beziehungsweise Bilder ist eine Szenarioangabe und bestimmt keine tatsächliche Analysemenge. Die aktive Zeit misst CPU-Rechenabschnitte; sie ist keine GPU-Abrechnung und keine Energiemessung. Es wird ein Auftrag übertragen, keine physische Rechenleistung.
+The templates generate CPU activity with PBKDF2. Molecule and image counts are scenario inputs. Active time measures CPU activity and does not represent billable GPU time or measured energy. The **Heat demand** toggle pauses the job loop. GPU execution, physical heating, billing and the annual scheduler are separate from this workspace. The worker accepts only the built-in templates.
 
-**NVIDIA-Ausführung, echte Pharma-Modelle, Jahres-/Fristen-Scheduler, Abrechnung und die physische Heizung sind noch nicht angeschlossen.** Wärmebedarf ist ein manueller Demo-Schalter und pausiert die CPU-Schleife. Er schaltet keine Hardware aus und misst keine Temperatur. Die drei Vorlagen lassen sich ausschliesslich über fest implementierte Funktionen verarbeiten; es werden keine Programme oder Shellbefehle angenommen.
+## Security and scope
 
-## Sicherheit und Grenzen
+- The worker requires a random bearer token across TLS 1.3. Anyone with the sender token can view and manage all customer jobs on this demo worker.
+- The two local interfaces check the request host and origin. Each requires its own session key for changes.
+- Jobs and results live in memory. The limits are 200,000 text characters, 300,000 bytes per request, 30 jobs and up to 1,000,000 demo molecules or images. Unicode can reach the byte limit sooner.
+- Completed jobs expire about an hour after the last state change. Running and paused jobs do not expire. The demo does not control swap or crash dumps.
+- Credentials are created with restricted permissions. On Windows, check NTFS permissions. The private key is unencrypted and there is no key management service.
 
-- Sender und Empfänger verwenden mindestens TLS 1.3 mit geprüftem Zertifikat. Kein unverschlüsselter Ersatzweg und keine abgeschaltete Zertifikatsprüfung.
-- Ein zufälliges Bearer-Token schützt den Empfänger. Es bleibt auf dem Senderdienst und wird nicht an die Browseroberfläche ausgeliefert. Wer den Sender-Token besitzt, kann alle Kundenaufträge dieses Demonstrators sehen und steuern.
-- Beide lokalen Oberflächen prüfen Host und Herkunft. Änderungen benötigen zusätzlich ihren jeweils eigenen CSRF-Sitzungsschlüssel. Die Kundenoberfläche kann die Serverhalter-Schnittstelle nicht auf ihrem eigenen Dienst aufrufen und umgekehrt.
-- Der Serverhalter erhält über seine Oberfläche ausschliesslich aggregierte Zustände. Er besitzt jedoch den verarbeitenden Rechner; die UI-Trennung schützt nicht gegen Betriebssystem-/Administratorzugriff auf RAM oder Prozesse.
-- Eingaben und Ergebnisse werden nicht als Dateien gespeichert. Grenzen: 200'000 Textzeichen, 300'000 Byte pro Anfrage, 30 gespeicherte Aufträge, 1 bis 1'000'000 Demo-Moleküle/-Bilder. Die Byte-Grenze kann bei Unicode früher greifen.
-- Beendete Aufträge werden ungefähr eine Stunde nach der letzten Zustandsänderung entfernt; die Bereinigung läuft alle 30 Sekunden und auch beim Lesen. Laufende/pausierte Aufträge laufen nicht automatisch ab. Python garantiert keine sichere RAM-Löschung; Swap und Crash-Dumps werden nicht kontrolliert.
-- Zugangsdaten werden mit eingeschränkten Dateirechten erstellt. Auf Windows NTFS-Rechte prüfen. Der private Schlüssel hat kein Passwort. Kein Schlüsseldienst und keine verschlüsselte dauerhafte Datenspeicherung.
+Use only public or fictional data. The demo has a shared customer access token and no customer isolation, MFA, confidential computing or hardware attestation. Run it on a private network.
 
-**Nur öffentliche oder erfundene Testdaten verwenden.** Es gibt einen gemeinsamen Kundenzugang, keine Anmeldung mit individuellen Benutzerrollen, keine Trennung mehrerer Pharma-Kunden, kein MFA, kein Confidential Computing und keine Hardwareattestierung. Die Pharma-Sicherheitsanforderungen sind damit erst teilweise erfüllt. Der Python-Demoserver ist für lokale/LAN-Tests vorgesehen und nicht für eine öffentliche Produktionsbereitstellung.
+## Tests
 
-## Automatisch prüfen
+From the repository root:
 
 ```sh
-python3 -m unittest discover -s tests -v
+python3 -m unittest discover -s prototyp/tests -v
 ```
 
-Zwölf Integrationstests prüfen reale lokale HTTPS-Verbindungen, Ergebnisse aller drei Vorlagen, Wärmebedarf/Pausen, Fortsetzen/Abbrechen/Entfernen, die getrennten Schnittstellen samt Datenprojektion, Eingabegrenzen, Ablauf, CSRF, Host-/Herkunftsprüfung, Tokenpflicht und Ablehnung fremder Zertifikate. Die Tests verwenden temporäre Zugangsdaten und zufällige lokale Ports.
-
-Bei Startproblemen: richtige IP, passende Zugangsdaten, laufenden Empfänger und freie Ports prüfen. Ein Zertifikatsfehler wird durch korrekt neu eingerichtete Zugangsdaten behoben, nicht durch Abschalten der Prüfung.
+The tests use temporary credentials and local ports to verify the HTTPS connection, templates, heat demand and job states, separation of the interfaces and rejection of invalid requests and certificates.

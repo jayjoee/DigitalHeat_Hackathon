@@ -1,60 +1,60 @@
 <!doctype html>
-<html lang="de">
+<html lang="en">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>DigitalHeat · Virtuelles Screening</title>
+<title>DigitalHeat · Virtual screening</title>
 <link rel="stylesheet" href="/screen.css">
 <script src="/screen.js" defer></script>
 <main>
-  <header><strong>DigitalHeat</strong><span id="site">Standort wird geladen</span></header>
-  <h1>Virtuelles Screening</h1>
-  <p class="intro">Schlüssel-Schloss-Prinzip: Jedes Molekül (Schlüssel) wird in die Bindetasche der <span id="schloss">Abl-Kinase</span> (Schloss) gedockt. Je negativer die Bindungsenergie, desto besser passt der Schlüssel. Werte aus echten AutoDock-Vina-Läufen.</p>
+  <header><strong>DigitalHeat</strong><span id="site">Loading site</span></header>
+  <h1>Virtual screening</h1>
+  <p class="intro">Each molecule is fitted into the binding pocket of <span id="schloss">Abl kinase</span>. More negative scores suggest a stronger fit. Scores come from AutoDock Vina runs.</p>
   <section class="heat" aria-labelledby="heat-heading">
-    <h2 id="heat-heading">Wärmeverlauf · Simulation</h2>
+    <h2 id="heat-heading">Heat timeline · Simulation</h2>
     <dl>
-      <div><dt>Modellzeit · 25. Mai</dt><dd id="heat-time">–</dd><p id="outdoor">–</p></div>
-      <div><dt>Wärme ins Wasser hier</dt><dd id="heat-power">–</dd><p>Für einen Modellserver</p></div>
-      <div><dt>Vorlauf hier</dt><dd id="heat-forward">–</dd><p>Angenommene Temperatur</p></div>
-      <div><dt>Raum-Sollwert</dt><dd id="heat-room-target">–</dd><p>Referenzhaus im Case</p></div>
-      <div><dt>Speicher im Haus</dt><dd id="heat-tank">–</dd><p id="tank-capacity">–</p></div>
+      <div><dt>Model time · 25 May</dt><dd id="heat-time">–</dd><p id="outdoor">–</p></div>
+      <div><dt>Heat transferred to water</dt><dd id="heat-power">–</dd><p>For one modelled server</p></div>
+      <div><dt>Supply water temperature</dt><dd id="heat-forward">–</dd><p>Assumed temperature</p></div>
+      <div><dt>Indoor setpoint</dt><dd id="heat-room-target">–</dd><p>Case reference house</p></div>
+      <div><dt>House heat storage</dt><dd id="heat-tank">–</dd><p id="tank-capacity">–</p></div>
     </dl>
   </section>
   <div class="layout">
-    <section class="image" aria-label="Aktuelles Molekül">
+    <section class="image" aria-label="Current molecule">
       <div class="image-head">
-        <h2 id="image-title">Molekül</h2>
-        <span id="verdict" class="verdict">Wartet</span>
+        <h2 id="image-title">Molecule</h2>
+        <span id="verdict" class="verdict">Waiting</span>
       </div>
       <div class="molekuel">
         <p class="name" id="mol-name">–</p>
-        <p class="gruppe" id="mol-gruppe">Das erste Molekül erscheint hier.</p>
+        <p class="gruppe" id="mol-gruppe">The first molecule will appear here.</p>
         <div class="energiebalken" aria-hidden="true"><div id="energie-fill"></div></div>
         <p class="energiewert"><span id="energie-wert">–</span> <span style="font-size:1rem;color:var(--muted)">kcal/mol</span></p>
-        <div class="skala"><span>0 (passt nicht)</span><span>−15 (passt sehr gut)</span></div>
+        <div class="skala"><span>0 (poor fit)</span><span>−15 (strong fit)</span></div>
       </div>
-      <p id="image-note">Warte auf das erste Molekül</p>
+      <p id="image-note">Waiting for the first molecule</p>
     </section>
-    <section class="metrics" aria-label="Fortschritt">
-      <div class="route" aria-label="Standorte des Screenings">
-        <span id="route-house">Haus</span><span id="route-arrow" aria-hidden="true">→</span><span id="route-pool">Sportbad</span>
+    <section class="metrics" aria-label="Progress">
+      <div class="route" aria-label="Screening sites">
+        <span id="route-house">House</span><span id="route-arrow" aria-hidden="true">→</span><span id="route-pool">Sports pool</span>
       </div>
-      <h2 id="state" role="status">Verbinde …</h2>
+      <h2 id="state" role="status">Connecting…</h2>
       <p id="handoff"></p>
       <p id="count">0 / 0</p>
       <div id="progress" role="progressbar" aria-valuemin="0" aria-valuemax="0"
-           aria-valuenow="0" aria-label="Getestete Moleküle">
+           aria-valuenow="0" aria-label="Molecules tested">
         <div id="progress-fill"></div>
       </div>
-      <p class="progress-caption"><span>Getestete Moleküle</span><span id="percent">0 %</span></p>
+      <p class="progress-caption"><span>Molecules tested</span><span id="percent">0 %</span></p>
       <dl class="results">
-        <div><dt>Getestet</dt><dd id="passed">0</dd></div>
-        <div><dt>Starke Treffer</dt><dd id="rejects">0</dd></div>
+        <div><dt>Tested</dt><dd id="passed">0</dd></div>
+        <div><dt>Strong hits</dt><dd id="rejects">0</dd></div>
       </dl>
-      <h2 style="margin-top:1rem">Beste Schlüssel bisher</h2>
-      <ol class="rangliste" id="rangliste"><li><span class="pos"></span><span>noch keiner</span><span class="e"></span></li></ol>
-      <p id="recent">Hier getestet · noch kein Molekül</p>
-      <button id="start" type="button" hidden>Screening starten</button>
-      <button id="move" type="button" hidden>Übergabe wiederholen</button>
+      <h2 style="margin-top:1rem">Top candidates so far</h2>
+      <ol class="rangliste" id="rangliste"><li><span class="pos"></span><span>None yet</span><span class="e"></span></li></ol>
+      <p id="recent">No molecules tested here yet</p>
+      <button id="start" type="button" hidden>Start screening</button>
+      <button id="move" type="button" hidden>Retry handoff</button>
       <p id="error" role="alert"></p>
     </section>
   </div>

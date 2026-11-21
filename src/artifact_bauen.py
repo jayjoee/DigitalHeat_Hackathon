@@ -1,7 +1,7 @@
 """Baut aus dashboard/index.html eine eigenständige Seite zum Veröffentlichen.
 
 - Daten (dashboard/daten.js) direkt eingebettet
-- Live-Panel zeigt den aufgezeichneten Flottenlauf aus dem Repo (Wechsel Haus → Sportbad, wie in PITCH.md).
+- Live-Panel zeigt den aufgezeichneten Flottenlauf aus dem Repo (Wechsel Haus → Sportbad).
   Die lokale, nicht eingecheckte dashboard/live.json nur mit --lokal, damit der Build reproduzierbar bleibt.
 - Ohne doctype/html/head/body (die Veröffentlichung legt sie selbst an)
 
@@ -29,8 +29,8 @@ def main():
     kopf = re.search(r"<head>(.*?)</head>", html, re.S).group(1)
     kopf = re.sub(r'<meta charset="utf-8">\s*', "", kopf)
     kopf = re.sub(r'<meta name="viewport"[^>]*>\s*', "", kopf)
-    kopf = kopf.replace("<title>Rechnen, das heizt</title>",
-                        '<title>Rechnen, das heizt</title>\n<meta name="claude:viewport-fit-sides" content="cover">')
+    kopf = kopf.replace("<title>Computing that heats</title>",
+                        '<title>Computing that heats</title>\n<meta name="claude:viewport-fit-sides" content="cover">')
     rumpf = re.search(r"<body>(.*?)</body>", html, re.S).group(1)
     rumpf = rumpf.replace('<script src="daten.js"></script>',
                           "<script>\n" + daten + "\nwindow.LIVE_AUFZEICHNUNG = " +

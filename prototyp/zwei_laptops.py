@@ -66,7 +66,7 @@ def starte(demo, rolle, *argumente):
     """Die gewählte Demo (blister_demo.py oder docking_demo.py) als Kindprozess starten und auf «bereit» warten."""
     p = subprocess.Popen([sys.executable, str(demo), rolle, *argumente], stdout=subprocess.PIPE, text=True)
     if not p.stdout.readline():
-        raise SystemExit(f"Der {rolle} konnte nicht starten. Läuft schon eine Demo? Ports 8082/8092/8445 prüfen.")
+        raise SystemExit(f"Could not start {rolle}. Is a demo already running? Check ports 8082, 8092 and 8445.")
     return p
 
 
@@ -87,19 +87,19 @@ def laufen_lassen(prozess, aufraeumen):
 class PaarHandler(Handler):
     def route(self, method):
         if method != "POST" or self.path != "/paar":
-            raise APIError(404, "Endpunkt nicht gefunden.")
+            raise APIError(404, "Endpoint not found.")
         s = self.server
         with s.lock:
             if s.fehlversuche >= 10:
-                raise APIError(429, "Zu viele falsche Codes. Schwimmbad neu starten.")
+                raise APIError(429, "Too many incorrect codes. Restart the sports pool demo.")
         daten = self.body()
         code = str(daten.get("code", "")).replace(" ", "") if isinstance(daten, dict) else ""
         if not hmac.compare_digest(code.encode(), s.code.encode()):
             with s.lock:
                 s.fehlversuche += 1
             time.sleep(1)
-            raise APIError(403, "Falscher Code.")
-        print(f"Haus verbunden: {self.client_address[0]}", flush=True)
+            raise APIError(403, "Incorrect code.")
+        print(f"House connected: {self.client_address[0]}", flush=True)
         self.reply(200, {"cert": s.cert, "token": s.token})
 
 
@@ -134,11 +134,11 @@ def schwimmbad(args):
 
         prozess = starte(DEMOS[args.job], "worker", "--credentials", str(zugang / "worker"),
                          "--port", str(PORT_UEBERGABE), "--screen-port", str(BILDSCHIRM_BAD))
-        kasten("SCHWIMMBAD bereit (Laptop B)",
-               f"Code für das Haus:   {code[:3]} {code[3:]}",
-               f"Adresse:             {adresse}",
-               f"Leinwand:            http://127.0.0.1:{BILDSCHIRM_BAD}",
-               "Beenden mit Ctrl+C")
+        kasten("SPORTS POOL ready (laptop B)",
+               f"Code for the house:   {code[:3]} {code[3:]}",
+               f"Address:             {adresse}",
+               f"Screen:            http://127.0.0.1:{BILDSCHIRM_BAD}",
+               "Stop with Ctrl+C")
         if not args.kein_browser:
             webbrowser.open(f"http://127.0.0.1:{BILDSCHIRM_BAD}")
 
@@ -159,7 +159,7 @@ def suche_schwimmbad(sekunden):
     s.bind(("", PORT_SUCHE))
     s.settimeout(0.5)
     gefunden, start = {}, time.time()
-    print("Suche das Schwimmbad im WLAN …", flush=True)
+    print("Looking for the sports pool on the local network…", flush=True)
     while time.time() - start < sekunden and not (gefunden and time.time() - start > 3):
         try:
             daten, (absender, _) = s.recvfrom(256)
@@ -176,11 +176,11 @@ def suche_schwimmbad(sekunden):
 def waehle(adressen):
     if len(adressen) == 1:
         return adressen[0]
-    print("Mehrere Schwimmbäder gefunden:")
+    print("Found multiple sports pools:")
     for n, a in enumerate(adressen, 1):
         print(f"  {n}) {a}")
     while True:
-        wahl = input("Nummer wählen (Adresse steht auf dem Schwimmbad-Laptop): ").strip()
+        wahl = input("Choose a number (check the address shown on the sports pool laptop): ").strip()
         if wahl.isdigit() and 1 <= int(wahl) <= len(adressen):
             return adressen[int(wahl) - 1]
 
@@ -196,25 +196,25 @@ def paaren(adresse, code):
         antwort = conn.getresponse()
         daten = json.loads(antwort.read(65536) or b"{}")
     except (OSError, ValueError, http.client.HTTPException) as e:
-        raise SystemExit(f"Schwimmbad unter {adresse} nicht erreichbar ({e}). Gleiches WLAN? Firewall?")
+        raise SystemExit(f"Could not reach the sports pool at {adresse} ({e}). Check the network and firewall.")
     finally:
         conn.close()
     if antwort.status != 200:
-        raise SystemExit("Paarung abgelehnt: " + daten.get("error", f"HTTP {antwort.status}"))
+        raise SystemExit("Pairing refused: " + daten.get("error", f"HTTP {antwort.status}"))
     if ssl.PEM_cert_to_DER_cert(daten["cert"]) != vorgezeigt:
-        raise SystemExit("Das Zertifikat passt nicht zum Gerät. Abbruch.")
+        raise SystemExit("The certificate does not match the device. Pairing stopped.")
     return daten
 
 
 def haus(args):
     adressen = [args.bad] if args.bad else suche_schwimmbad(args.suchzeit)
     if not adressen:
-        raise SystemExit("Kein Schwimmbad gefunden. Läuft schwimmbad.py auf dem anderen Laptop?\n"
-                         "Beide im selben WLAN? Viele Gast-WLANs trennen Geräte, dann Handy-Hotspot nehmen.\n"
-                         "Oder die Adresse direkt angeben: python3 prototyp/haus.py --bad 192.168.1.42")
+        raise SystemExit("Sports pool not found. Is schwimmbad.py running on the other laptop?\n"
+                         "Connect both laptops to the same network. If guest Wi-Fi isolates devices, try a phone hotspot.\n"
+                         "Or enter the address directly: python3 prototyp/haus.py --bad 192.168.1.42")
     adresse = waehle(adressen)
-    print(f"Schwimmbad gefunden: {adresse}", flush=True)
-    code = (args.code or input("Code vom Schwimmbad-Laptop: ")).replace(" ", "").strip()
+    print(f"Sports pool found: {adresse}", flush=True)
+    code = (args.code or input("Code from the sports pool laptop: ")).replace(" ", "").strip()
     daten = paaren(adresse, code)
 
     with tempfile.TemporaryDirectory() as ordner:
@@ -224,11 +224,12 @@ def haus(args):
         private_write(zugang / "token.txt", daten["token"].encode())
         prozess = starte(DEMOS[args.job], "sender", "--credentials", str(zugang),
                          "--target", f"https://{adresse}:{PORT_UEBERGABE}", "--screen-port", str(BILDSCHIRM_HAUS))
-        kasten("HAUS bereit (Laptop A)",
-               f"Verbunden mit Schwimmbad {adresse}",
-               f"Leinwand: http://127.0.0.1:{BILDSCHIRM_HAUS}",
-               "Dort «Batch starten». Das Sportbad übernimmt automatisch.",
-               "Beenden mit Ctrl+C")
+        start_button = "Start batch" if args.job == "blister" else "Start screening"
+        kasten("HOUSE ready (laptop A)",
+               f"Connected to sports pool {adresse}",
+               f"Screen: http://127.0.0.1:{BILDSCHIRM_HAUS}",
+               f"Click {start_button}. The sports pool takes over automatically.",
+               "Stop with Ctrl+C")
         if not args.kein_browser:
             webbrowser.open(f"http://127.0.0.1:{BILDSCHIRM_HAUS}")
         laufen_lassen(prozess, lambda: None)

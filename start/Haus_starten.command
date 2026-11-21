@@ -3,4 +3,4 @@
 cd "$(dirname "$0")/.."
 python3 prototyp/haus.py
 echo
-read -n 1 -s -r -p "Taste drücken zum Schliessen"
+read -n 1 -s -r -p "Press any key to close"
