@@ -472,20 +472,22 @@ function baueHaus(h) {
   o.tankFuell = mesh(new THREE.CylinderGeometry(0.63, 0.63, 1, 40), o.tankMat, o.tank.x, KBODEN + 0.1, o.tank.z, scene, false);
   for (const y of [2.75, 0.12]) mesh(new THREE.CylinderGeometry(0.75, 0.75, 0.12, 40), mat('#6b7487', { metalness: 0.5 }), o.tank.x, KBODEN + y, o.tank.z);
   for (const m of [glas, o.tankFuell]) { m.userData = { art: 'speicher', haus: h.n }; klickbar.push(m); }
-  // Vorhandener Holzofen mit Holzstapel; der Ölkessel ist zurückgebaut
-  o.kessel = { x: h.x1 - 1.05, z: 7.1 };
-  const kk = mesh(new THREE.BoxGeometry(0.85, 1.35, 0.75), mat('#2a2c33', { roughness: 0.45, metalness: 0.5 }), o.kessel.x, KBODEN + 0.76, o.kessel.z);
-  mesh(new THREE.BoxGeometry(0.5, 0.45, 0.02), new THREE.MeshBasicMaterial({ color: '#120c0a' }), o.kessel.x, KBODEN + 0.7, o.kessel.z + 0.385, scene, false);
+  // Holzofen im Wohnzimmer (Erdgeschoss), mit Rauchrohr und Holzkorb. Im Keller steht keine Ölheizung mehr.
+  o.kessel = { x: h.x0 + 0.95, z: 7.0 };
+  const ofenMat = mat('#24262c', { roughness: 0.4, metalness: 0.55 });
+  const kk = mesh(new THREE.BoxGeometry(0.7, 1.0, 0.55), ofenMat, o.kessel.x, 0.67, o.kessel.z);
+  mesh(new THREE.BoxGeometry(0.8, 0.06, 0.62), ofenMat, o.kessel.x, 1.2, o.kessel.z);
+  mesh(new THREE.BoxGeometry(0.44, 0.36, 0.02), new THREE.MeshBasicMaterial({ color: '#140c08' }), o.kessel.x, 0.6, o.kessel.z + 0.285, scene, false);
+  mesh(new THREE.CylinderGeometry(0.075, 0.075, 1.62, 12), mat('#2f3238', { metalness: 0.6 }), o.kessel.x, 2.04, o.kessel.z - 0.05);
   for (let n = 0; n < 6; n++) {
-    const log = mesh(new THREE.CylinderGeometry(0.07, 0.07, 0.5, 8), mat(n % 2 ? '#7a5634' : '#8b6440'),
-      o.kessel.x - 0.75 + (n % 3) * 0.15, KBODEN + 0.16 + Math.floor(n / 3) * 0.14, o.kessel.z + 0.1);
+    const log = mesh(new THREE.CylinderGeometry(0.06, 0.06, 0.42, 8), mat(n % 2 ? '#7a5634' : '#8b6440'),
+      o.kessel.x + 0.62 + (n % 3) * 0.13, 0.24 + Math.floor(n / 3) * 0.12, o.kessel.z + 0.05);
     log.rotation.x = Math.PI / 2;
   }
-  mesh(new THREE.CylinderGeometry(0.09, 0.09, 1.5, 10), mat('#6b7487', { metalness: 0.6 }), o.kessel.x, KBODEN + 2.3, o.kessel.z - 0.1);
-  o.flamme = mesh(new THREE.ConeGeometry(0.12, 0.32, 12), new THREE.MeshBasicMaterial({ color: '#ff7a1a', transparent: true, opacity: 0.95 }),
-    o.kessel.x, KBODEN + 0.62, o.kessel.z + 0.36, scene, false);
+  o.flamme = mesh(new THREE.ConeGeometry(0.1, 0.26, 12), new THREE.MeshBasicMaterial({ color: '#ff7a1a', transparent: true, opacity: 0.95 }),
+    o.kessel.x, 0.55, o.kessel.z + 0.27, scene, false);
   o.kesselLicht = new THREE.PointLight('#ff6a1a', 0, 6, 1.6);
-  o.kesselLicht.position.set(o.kessel.x, KBODEN + 1, o.kessel.z + 0.9); scene.add(o.kesselLicht);
+  o.kesselLicht.position.set(o.kessel.x, 0.9, o.kessel.z + 0.9); scene.add(o.kesselLicht);
   kk.userData = { art: 'kessel', haus: h.n }; klickbar.push(kk);
   // Haus
   mesh(new THREE.BoxGeometry(breite, GESCHOSS * 2, 0.25), wandMat, mx, GESCHOSS, KZ0);
@@ -1058,7 +1060,7 @@ function zeigeDetail(info, fliegen = true) {
         ['Kosten Holz (≈ 250 CHF/Ster)', fmt(ster(jahr) * 250) + ' CHF'], ['Heizöl ersetzt', fmt(oelSpar[info.haus - 1][N - 1]) + ' l'],
       ], 'Ölkessel und Tank werden zurückgebaut. An den kältesten Tagen heizt der Holzofen, den viele ältere Häuser schon haben (Team-Annahme, keine Kosten für DigitalHeat). Damit ist das Haus ganz ohne fossile Energie. Holzpreis und Heizwert sind Schätzungen (docs/FIRMA.md).');
     miniChart(fenster(n => kessel(hd, n)), 4, '#ff5d4a');
-    if (fliegen) fliegeZu(V(o.kessel.x - 0.8, KBODEN + 1, o.kessel.z + 0.5), V(-3.2, 1.4, 7.5));
+    if (fliegen) fliegeZu(V(o.kessel.x, 0.9, o.kessel.z), V(2.6, 1.0, 4.8));
   } else {
     const ri = info.art === 'badrack' ? info.r : null, offen = S.b_bed[i] > 0;
     const fl = K.flotte, mit = fl['spot|Sportbad 50 (nach Nachfrage)'], ohne = fl['spot|0 Senken'];
@@ -1087,7 +1089,7 @@ const TOUR = [
   { tag: '01-15T08', kam: [HOME.target, null], text: 'Ein kalter Januartag in Basel. Zwei Häuser der Flotte im Schnitt, rechts das Sportbad, hinten 18 weitere Häuser.', s: 7 },
   { tag: '01-15T08', play: true, tempo: 1, kam: [V(CLOUD.x - 7, CLOUD.y - 1, CLOUD.z), V(1, 0, 25)], text: 'Ein Pharma-Kunde schickt Rechenaufträge in die DigitalHeat-Cloud. Der Wärme-Router verteilt sie auf die Häuser, die gerade Wärme brauchen.', s: 8 },
   { tag: '01-15T08', kam: [V(-1.2, -2, 5.8), V(1.6, 0.6, 5.2)], text: 'Im Keller rechnen 8 Server KI-Aufträge. 80 % ihrer Abwärme gehen über den Speicher in die Heizkörper.', s: 7 },
-  { tag: '01-15T03', kam: [V(2.6, -2.0, 7.6), V(-3.2, 1.4, 7.5)], text: 'In den kältesten Stunden, hier −5 °C in der Nacht, reicht das nicht ganz. Dann heizt ein Holzofen mit, Öl braucht es keines mehr.', s: 7 },
+  { tag: '01-15T03', kam: [V(-3.65, 0.9, 7.0), V(2.6, 1.0, 4.8)], text: 'In den kältesten Stunden, hier −5 °C in der Nacht, reicht das nicht ganz. Dann heizt ein Holzofen mit, Öl braucht es keines mehr.', s: 7 },
   { tag: '03-07T13', tempo: 1, play: true, kam: [V(2.5, -1.8, 8.5), V(2.6, 0.8, 6)], text: '7. März: Am Nachmittag ist der Speicher voll. Server gehen in den Standby, Aufträge warten oder wandern weiter.', s: 8 },
   { tag: '07-15T10', tempo: 3, play: true, kam: [V(14, 1, 2), V(-2, 10, 34)], text: 'Im Sommer braucht das Haus nur Warmwasser, 1 Server reicht. Die übrige Arbeit fliegt ins Sportbad.', s: 9 },
   { tag: '07-15T13', tempo: 3, play: true, kam: [V(TR.x, 1.2, TR.z), V(3, 2, 8)], text: 'Im Sportbad rechnen 50 Server und heizen das 50-m-Becken, von Ende April bis Anfang Oktober.', s: 7 },
