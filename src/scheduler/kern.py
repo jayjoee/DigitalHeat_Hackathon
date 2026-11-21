@@ -25,6 +25,9 @@ class Job:
     rest_kwh: float
     unterbrechbar: bool
     gelaufen_kwh: float = 0.0
+    letzter_lauf_h: int | None = None
+    erstmals_verschoben_h: int | None = None
+    pausiert: bool = False
 
 
 @dataclass

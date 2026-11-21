@@ -56,8 +56,10 @@ class Pool:
         self.mehrere_standorte = False
         self.plan, self.raten = ankuenfte(n_nachfrage, szenario, A.wert("zufallssaat") if saat is None else saat)
         self.q, self.nid = [], 0
-        self.z = dict(jobs=0, mit_frist=0, fertig=0, verpasst=0, abgegeben=0, abgegeben_kwh=0.0,
-                      verpasst_kwh=0.0, server_h_a=0.0, server_h_b=0.0, migrationen=0, migration_kwh=0.0)
+        self.z = dict(verschobene_jobs=0, verschobene_jobstunden=0, verschobene_jobs_gestartet=0,
+                      wartezeit_bis_start_h=0, verschobene_jobs_fertig=0,
+                      verschobene_jobs_am_stueck_fertig=0, jobs=0, mit_frist=0, fertig=0, verpasst=0, abgegeben=0, abgegeben_kwh=0.0,
+                      verpasst_kwh=0.0, pausierte_fortsetzungen=0, server_h_a=0.0, server_h_b=0.0, migrationen=0, migration_kwh=0.0)
 
     def _neuer_job(self, typ, h, frist):
         j = Job(self.nid, typ, h, frist, A.wert(f"job_{typ.lower()}_kwh"), typ == "A")
@@ -95,7 +97,7 @@ class Flotte:
     """
 
     def __init__(self, standorte, szenario="spot", bei_ueberschuss="rechnen", nachfrage_server=None,
-                 migration_min=None, saat=None):
+                 migration_min=None, saat=None, prognose=None):
         self.st, self.szenario, self.regel = standorte, szenario, bei_ueberschuss
         n_haus = sum(s.n for s in standorte if s.typ == "haus")
         self.n_alle = sum(s.n for s in standorte)
@@ -107,12 +109,27 @@ class Flotte:
         self.migration_kwh = mm / 60 * self.kw
         self.mig_st = [0.0] * len(standorte)       # Migrationsenergie pro Zielstandort
         self.profil = standorte[0].profil         # Zeitachse (für zusage.py)
+        self.vorausschau = None
+        if prognose is not None:
+            from src.scheduler.vorausschau import Vorausschau
+            if [p["zeit"] for p in prognose] != [p["zeit"] for p in self.profil]:
+                raise ValueError("Zeitachsen von Vorausschau und Flotte stimmen nicht überein")
+            self.vorausschau = Vorausschau(prognose, self.pool.raten,
+                                           n_haus if nachfrage_server is None else nachfrage_server)
 
     # --- eine Stunde -------------------------------------------------------------------------------
     def schritt(self, h):
         pool, kw, st = self.pool, self.kw, self.st
         pool.vorbereiten(h)
         q = sorted(pool.q, key=_schluessel)
+        if self.vorausschau is not None:
+            warten = self.vorausschau.zurueckhalten(h, st, q, kw)
+            pool.z["verschobene_jobstunden"] += len(warten)
+            for j in q:
+                if j.id in warten and j.erstmals_verschoben_h is None:
+                    j.erstmals_verschoben_h = h
+                    pool.z["verschobene_jobs"] += 1
+            q = [j for j in q if j.id not in warten]
         lagen = [s.lage(h) for s in st]
         haus = [s.typ == "haus" for s in st]
         ziel = [min(l.n_server * l.server_kw, (l.bedarf_kwh + l.speicher_max_kwh - l.speicher_kwh) / l.eta)
@@ -200,6 +217,13 @@ class Flotte:
                     pool.z["migration_kwh"] += self.migration_kwh
                     self.mig_st[i] += self.migration_kwh
                     j.rest_kwh += self.migration_kwh
+                if j.letzter_lauf_h is not None and j.letzter_lauf_h < h - 1:
+                    pool.z["pausierte_fortsetzungen"] += 1
+                    j.pausiert = True
+                if j.erstmals_verschoben_h is not None and j.letzter_lauf_h is None:
+                    pool.z["verschobene_jobs_gestartet"] += 1
+                    pool.z["wartezeit_bis_start_h"] += h - j.erstmals_verschoben_h
+                j.letzter_lauf_h = h
                 j.standort = i
             alle_laeufe += e.laeufe
             alle_abgegeben += e.abgegeben
@@ -209,6 +233,10 @@ class Flotte:
         if len(ids) != len(set(ids)):
             raise RuntimeError(f"Stunde {h}: ein Job wurde mehrfach zugeteilt")
         fristen_buchen(pool.q, pool.z, h, alle_abgegeben, alle_laeufe)
+        for j, _ in alle_laeufe:
+            if j.erstmals_verschoben_h is not None and j.rest_kwh <= 1e-9:
+                pool.z["verschobene_jobs_fertig"] += 1
+                pool.z["verschobene_jobs_am_stueck_fertig"] += int(not j.pausiert)
         zeilen = [s.verbuchen(h, e) for s, e in zip(st, entscheidungen)]
         return {"zeit": zeilen[0]["zeit"], "stunde": h,
                 "server_laufend": round(sum(z["server_laufend"] for z in zeilen), 3),

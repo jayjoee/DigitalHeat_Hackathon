@@ -63,7 +63,7 @@ def kosten_bad(n):
     return {"speicher_chf": 0, "einbau_chf": A.wert("einbau_chf") * n / 8}
 
 
-def baue(n_haeuser, n_haus, szenario, regel, profil, bad=None, n_bad=0):
+def baue(n_haeuser, n_haus, szenario, regel, profil, bad=None, n_bad=0, prognose=None):
     st = [Haus(n_haus, szenario, regel, profil, name=f"Haus {i + 1:02d}", mit_ankuenften=False)
           for i in range(n_haeuser)]
     kosten = {}
@@ -72,7 +72,7 @@ def baue(n_haeuser, n_haus, szenario, regel, profil, bad=None, n_bad=0):
                        name="Sportbad St. Jakob", typ="bad", mit_ankuenften=False))
         kosten["Sportbad St. Jakob"] = kosten_bad(n_bad)
     # derselbe Jobstrom in allen Varianten: Alibaba-Rate × Server der Häuser
-    return Flotte(st, szenario, regel, nachfrage_server=n_haeuser * n_haus), kosten
+    return Flotte(st, szenario, regel, nachfrage_server=n_haeuser * n_haus, prognose=prognose), kosten
 
 
 def lauf(n_h, n_haus, sz, regel, profil, bad, n_bad, name, monatlich=True):
