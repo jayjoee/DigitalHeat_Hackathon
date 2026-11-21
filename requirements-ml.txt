@@ -1,0 +1,6 @@
+# Separat vom optionalen Embedding-/Live-Demo-Setup installieren.
+numpy==2.2.5
+scipy==1.15.2
+scikit-learn==1.6.1
+joblib==1.4.2
+threadpoolctl==3.6.0

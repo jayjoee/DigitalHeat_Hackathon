@@ -107,6 +107,29 @@ def break_even(n_server, server_h, waerme_kwh, fehlmenge_server_h=0.0, **uebersc
     return round(hi, 4)
 
 
+def variable_bilanz(strom_kwh, verkaufte_gpu_h, strompreis=None):
+    """Actual-period contribution, not annual profit/NPV. Explicit kWh independent of sold hours.
+
+    Normalises completed work to standard GPU-hours: slower processing earns no extra revenue.
+    Assumes all completed reference work finds paying customers.
+    Fixed costs, depreciation, taxes, investment, SLA credits and heat sales excluded.
+    """
+    import math
+    if not all(isinstance(x,(int,float)) and not isinstance(x,bool) and math.isfinite(x) and x>=0
+               for x in (strom_kwh,verkaufte_gpu_h)):
+        raise ValueError('Energie und verkaufte GPU-Stunden müssen endlich und nicht negativ sein.')
+    preis=A.wert('strompreis_chf_kwh') if strompreis is None else strompreis
+    if not isinstance(preis,(int,float)) or not math.isfinite(preis) or preis<0:
+        raise ValueError('Ungültiger Strompreis.')
+    mix=A.wert('anteil_fest_gebucht')*A.wert('vertragspreis_chf_karte_h')+(1-A.wert('anteil_fest_gebucht'))*A.wert('spotpreis_chf_karte_h')
+    revenue=verkaufte_gpu_h*mix*(1-A.wert('plattform_anteil'))
+    cost=strom_kwh*preis
+    return {'sold_reference_gpu_hours':verkaufte_gpu_h,'electricity_kwh':strom_kwh,'revenue_chf':revenue,
+            'electricity_chf':cost,'contribution_chf':revenue-cost,
+            'label':'Periodenbeitrag vor Fixkosten, Investition und Steuern; kein Jahresgewinn',
+            'assumption':'Alle vollendete Referenzarbeit verkauft; Preis pro Standard-GPU-Stunde normalisiert. Kein Nachfragebeleg.'}
+
+
 if __name__ == "__main__":
     import json
     r = rechne(8, 36290, 29027)

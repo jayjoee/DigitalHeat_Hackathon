@@ -1,0 +1,972 @@
+{
+ "active": false,
+ "stage": "Demo abgeschlossen",
+ "process": "Checkpoint gespeichert",
+ "texts": 1152,
+ "completed": true,
+ "events": [
+  {
+   "action": "ready",
+   "real_time": 1795264048.2923589,
+   "pid": 18118,
+   "model": "BAAI/bge-small-en-v1.5"
+  },
+  {
+   "action": "segment",
+   "real_time": 1795264048.2925692,
+   "date": "2025-01-15"
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264048.292691,
+   "model_time": "2025-01-15T00:00",
+   "duty": 1.0,
+   "texts": 0
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264048.543498,
+   "model_time": "2025-01-15T01:00",
+   "duty": 1.0,
+   "texts": 0
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264048.798475,
+   "model_time": "2025-01-15T02:00",
+   "duty": 1.0,
+   "texts": 0
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264049.049867,
+   "model_time": "2025-01-15T03:00",
+   "duty": 1.0,
+   "texts": 0
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264049.3051991,
+   "model_time": "2025-01-15T04:00",
+   "duty": 1.0,
+   "texts": 0
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264049.5566301,
+   "model_time": "2025-01-15T05:00",
+   "duty": 1.0,
+   "texts": 64
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264049.819577,
+   "model_time": "2025-01-15T06:00",
+   "duty": 1.0,
+   "texts": 64
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264050.075426,
+   "model_time": "2025-01-15T07:00",
+   "duty": 1.0,
+   "texts": 64
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264050.328356,
+   "model_time": "2025-01-15T08:00",
+   "duty": 1.0,
+   "texts": 64
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264050.582262,
+   "model_time": "2025-01-15T09:00",
+   "duty": 1.0,
+   "texts": 128
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264050.8331242,
+   "model_time": "2025-01-15T10:00",
+   "duty": 1.0,
+   "texts": 128
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264051.088164,
+   "model_time": "2025-01-15T11:00",
+   "duty": 1.0,
+   "texts": 192
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264051.339295,
+   "model_time": "2025-01-15T12:00",
+   "duty": 1.0,
+   "texts": 192
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264051.594971,
+   "model_time": "2025-01-15T13:00",
+   "duty": 1.0,
+   "texts": 192
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264051.849798,
+   "model_time": "2025-01-15T14:00",
+   "duty": 1.0,
+   "texts": 256
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264052.105161,
+   "model_time": "2025-01-15T15:00",
+   "duty": 1.0,
+   "texts": 256
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264052.357789,
+   "model_time": "2025-01-15T16:00",
+   "duty": 1.0,
+   "texts": 256
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264052.613759,
+   "model_time": "2025-01-15T17:00",
+   "duty": 1.0,
+   "texts": 256
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264052.867989,
+   "model_time": "2025-01-15T18:00",
+   "duty": 1.0,
+   "texts": 320
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264053.123074,
+   "model_time": "2025-01-15T19:00",
+   "duty": 1.0,
+   "texts": 320
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264053.375548,
+   "model_time": "2025-01-15T20:00",
+   "duty": 1.0,
+   "texts": 384
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264053.6316679,
+   "model_time": "2025-01-15T21:00",
+   "duty": 1.0,
+   "texts": 384
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264053.8854048,
+   "model_time": "2025-01-15T22:00",
+   "duty": 1.0,
+   "texts": 384
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264054.1394382,
+   "model_time": "2025-01-15T23:00",
+   "duty": 1.0,
+   "texts": 448
+  },
+  {
+   "action": "segment",
+   "real_time": 1795264054.393562,
+   "date": "2025-07-15"
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264054.3937438,
+   "model_time": "2025-07-15T00:00",
+   "duty": 0.625,
+   "texts": 448
+  },
+  {
+   "action": "pause",
+   "real_time": 1795264054.55537,
+   "model_time": "2025-07-15T00:00",
+   "reason": "Modellierter Serverplatz wird nicht benötigt",
+   "texts": 448
+  },
+  {
+   "action": "pause_verified",
+   "real_time": 1795264054.6518242,
+   "model_time": "2025-07-15T00:00",
+   "texts": 448,
+   "duration_seconds": 0.09375
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264054.652125,
+   "model_time": "2025-07-15T01:00",
+   "duty": 0.625,
+   "texts": 448
+  },
+  {
+   "action": "pause",
+   "real_time": 1795264054.814185,
+   "model_time": "2025-07-15T01:00",
+   "reason": "Modellierter Serverplatz wird nicht benötigt",
+   "texts": 448
+  },
+  {
+   "action": "pause_verified",
+   "real_time": 1795264054.913207,
+   "model_time": "2025-07-15T01:00",
+   "texts": 448,
+   "duration_seconds": 0.09375
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264054.9133902,
+   "model_time": "2025-07-15T02:00",
+   "duty": 0.625,
+   "texts": 448
+  },
+  {
+   "action": "pause",
+   "real_time": 1795264055.0745852,
+   "model_time": "2025-07-15T02:00",
+   "reason": "Modellierter Serverplatz wird nicht benötigt",
+   "texts": 512
+  },
+  {
+   "action": "pause_verified",
+   "real_time": 1795264055.1726148,
+   "model_time": "2025-07-15T02:00",
+   "texts": 512,
+   "duration_seconds": 0.09375
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264055.1728241,
+   "model_time": "2025-07-15T03:00",
+   "duty": 0.625,
+   "texts": 512
+  },
+  {
+   "action": "pause",
+   "real_time": 1795264055.3359969,
+   "model_time": "2025-07-15T03:00",
+   "reason": "Modellierter Serverplatz wird nicht benötigt",
+   "texts": 512
+  },
+  {
+   "action": "pause_verified",
+   "real_time": 1795264055.4309142,
+   "model_time": "2025-07-15T03:00",
+   "texts": 512,
+   "duration_seconds": 0.09375
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264055.431097,
+   "model_time": "2025-07-15T04:00",
+   "duty": 0.625,
+   "texts": 512
+  },
+  {
+   "action": "pause",
+   "real_time": 1795264055.590034,
+   "model_time": "2025-07-15T04:00",
+   "reason": "Modellierter Serverplatz wird nicht benötigt",
+   "texts": 512
+  },
+  {
+   "action": "pause_verified",
+   "real_time": 1795264055.689087,
+   "model_time": "2025-07-15T04:00",
+   "texts": 512,
+   "duration_seconds": 0.09375
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264055.689312,
+   "model_time": "2025-07-15T05:00",
+   "duty": 0.625,
+   "texts": 512
+  },
+  {
+   "action": "pause",
+   "real_time": 1795264055.850949,
+   "model_time": "2025-07-15T05:00",
+   "reason": "Modellierter Serverplatz wird nicht benötigt",
+   "texts": 512
+  },
+  {
+   "action": "pause_verified",
+   "real_time": 1795264055.950034,
+   "model_time": "2025-07-15T05:00",
+   "texts": 512,
+   "duration_seconds": 0.09375
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264055.950279,
+   "model_time": "2025-07-15T06:00",
+   "duty": 0.625,
+   "texts": 512
+  },
+  {
+   "action": "pause",
+   "real_time": 1795264056.111446,
+   "model_time": "2025-07-15T06:00",
+   "reason": "Modellierter Serverplatz wird nicht benötigt",
+   "texts": 512
+  },
+  {
+   "action": "pause_verified",
+   "real_time": 1795264056.205968,
+   "model_time": "2025-07-15T06:00",
+   "texts": 512,
+   "duration_seconds": 0.09375
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264056.2062342,
+   "model_time": "2025-07-15T07:00",
+   "duty": 0.625,
+   "texts": 512
+  },
+  {
+   "action": "pause",
+   "real_time": 1795264056.3651881,
+   "model_time": "2025-07-15T07:00",
+   "reason": "Modellierter Serverplatz wird nicht benötigt",
+   "texts": 512
+  },
+  {
+   "action": "pause_verified",
+   "real_time": 1795264056.464285,
+   "model_time": "2025-07-15T07:00",
+   "texts": 512,
+   "duration_seconds": 0.09375
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264056.4644961,
+   "model_time": "2025-07-15T08:00",
+   "duty": 0.625,
+   "texts": 512
+  },
+  {
+   "action": "pause",
+   "real_time": 1795264056.623581,
+   "model_time": "2025-07-15T08:00",
+   "reason": "Modellierter Serverplatz wird nicht benötigt",
+   "texts": 576
+  },
+  {
+   "action": "pause_verified",
+   "real_time": 1795264056.7224698,
+   "model_time": "2025-07-15T08:00",
+   "texts": 576,
+   "duration_seconds": 0.09375
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264056.7226439,
+   "model_time": "2025-07-15T09:00",
+   "duty": 0.625,
+   "texts": 576
+  },
+  {
+   "action": "pause",
+   "real_time": 1795264056.881855,
+   "model_time": "2025-07-15T09:00",
+   "reason": "Modellierter Serverplatz wird nicht benötigt",
+   "texts": 576
+  },
+  {
+   "action": "pause_verified",
+   "real_time": 1795264056.980802,
+   "model_time": "2025-07-15T09:00",
+   "texts": 576,
+   "duration_seconds": 0.09375
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264056.980983,
+   "model_time": "2025-07-15T10:00",
+   "duty": 0.625,
+   "texts": 576
+  },
+  {
+   "action": "pause",
+   "real_time": 1795264057.14026,
+   "model_time": "2025-07-15T10:00",
+   "reason": "Modellierter Serverplatz wird nicht benötigt",
+   "texts": 576
+  },
+  {
+   "action": "pause_verified",
+   "real_time": 1795264057.239468,
+   "model_time": "2025-07-15T10:00",
+   "texts": 576,
+   "duration_seconds": 0.09375
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264057.239712,
+   "model_time": "2025-07-15T11:00",
+   "duty": 0.625,
+   "texts": 576
+  },
+  {
+   "action": "pause",
+   "real_time": 1795264057.401331,
+   "model_time": "2025-07-15T11:00",
+   "reason": "Modellierter Serverplatz wird nicht benötigt",
+   "texts": 576
+  },
+  {
+   "action": "pause_verified",
+   "real_time": 1795264057.4986691,
+   "model_time": "2025-07-15T11:00",
+   "texts": 576,
+   "duration_seconds": 0.09375
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264057.498881,
+   "model_time": "2025-07-15T12:00",
+   "duty": 0.625,
+   "texts": 576
+  },
+  {
+   "action": "pause",
+   "real_time": 1795264057.657005,
+   "model_time": "2025-07-15T12:00",
+   "reason": "Modellierter Serverplatz wird nicht benötigt",
+   "texts": 640
+  },
+  {
+   "action": "pause_verified",
+   "real_time": 1795264057.756032,
+   "model_time": "2025-07-15T12:00",
+   "texts": 640,
+   "duration_seconds": 0.09375
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264057.756212,
+   "model_time": "2025-07-15T13:00",
+   "duty": 0.625,
+   "texts": 640
+  },
+  {
+   "action": "pause",
+   "real_time": 1795264057.915211,
+   "model_time": "2025-07-15T13:00",
+   "reason": "Modellierter Serverplatz wird nicht benötigt",
+   "texts": 640
+  },
+  {
+   "action": "pause_verified",
+   "real_time": 1795264058.014427,
+   "model_time": "2025-07-15T13:00",
+   "texts": 640,
+   "duration_seconds": 0.09375
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264058.014614,
+   "model_time": "2025-07-15T14:00",
+   "duty": 0.625,
+   "texts": 640
+  },
+  {
+   "action": "pause",
+   "real_time": 1795264058.173554,
+   "model_time": "2025-07-15T14:00",
+   "reason": "Modellierter Serverplatz wird nicht benötigt",
+   "texts": 640
+  },
+  {
+   "action": "pause_verified",
+   "real_time": 1795264058.270766,
+   "model_time": "2025-07-15T14:00",
+   "texts": 640,
+   "duration_seconds": 0.09375
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264058.271456,
+   "model_time": "2025-07-15T15:00",
+   "duty": 0.625,
+   "texts": 640
+  },
+  {
+   "action": "pause",
+   "real_time": 1795264058.434483,
+   "model_time": "2025-07-15T15:00",
+   "reason": "Modellierter Serverplatz wird nicht benötigt",
+   "texts": 640
+  },
+  {
+   "action": "pause_verified",
+   "real_time": 1795264058.53374,
+   "model_time": "2025-07-15T15:00",
+   "texts": 640,
+   "duration_seconds": 0.09375
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264058.533951,
+   "model_time": "2025-07-15T16:00",
+   "duty": 0.625,
+   "texts": 640
+  },
+  {
+   "action": "pause",
+   "real_time": 1795264058.695584,
+   "model_time": "2025-07-15T16:00",
+   "reason": "Modellierter Serverplatz wird nicht benötigt",
+   "texts": 640
+  },
+  {
+   "action": "pause_verified",
+   "real_time": 1795264058.790303,
+   "model_time": "2025-07-15T16:00",
+   "texts": 640,
+   "duration_seconds": 0.09375
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264058.7904918,
+   "model_time": "2025-07-15T17:00",
+   "duty": 0.625,
+   "texts": 640
+  },
+  {
+   "action": "pause",
+   "real_time": 1795264058.948482,
+   "model_time": "2025-07-15T17:00",
+   "reason": "Modellierter Serverplatz wird nicht benötigt",
+   "texts": 704
+  },
+  {
+   "action": "pause_verified",
+   "real_time": 1795264059.047709,
+   "model_time": "2025-07-15T17:00",
+   "texts": 704,
+   "duration_seconds": 0.09375
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264059.047909,
+   "model_time": "2025-07-15T18:00",
+   "duty": 0.625,
+   "texts": 704
+  },
+  {
+   "action": "pause",
+   "real_time": 1795264059.2068548,
+   "model_time": "2025-07-15T18:00",
+   "reason": "Modellierter Serverplatz wird nicht benötigt",
+   "texts": 704
+  },
+  {
+   "action": "pause_verified",
+   "real_time": 1795264059.306066,
+   "model_time": "2025-07-15T18:00",
+   "texts": 704,
+   "duration_seconds": 0.09375
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264059.306305,
+   "model_time": "2025-07-15T19:00",
+   "duty": 0.625,
+   "texts": 704
+  },
+  {
+   "action": "pause",
+   "real_time": 1795264059.46687,
+   "model_time": "2025-07-15T19:00",
+   "reason": "Modellierter Serverplatz wird nicht benötigt",
+   "texts": 704
+  },
+  {
+   "action": "pause_verified",
+   "real_time": 1795264059.565999,
+   "model_time": "2025-07-15T19:00",
+   "texts": 704,
+   "duration_seconds": 0.09375
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264059.566248,
+   "model_time": "2025-07-15T20:00",
+   "duty": 0.625,
+   "texts": 704
+  },
+  {
+   "action": "pause",
+   "real_time": 1795264059.727892,
+   "model_time": "2025-07-15T20:00",
+   "reason": "Modellierter Serverplatz wird nicht benötigt",
+   "texts": 704
+  },
+  {
+   "action": "pause_verified",
+   "real_time": 1795264059.8235772,
+   "model_time": "2025-07-15T20:00",
+   "texts": 704,
+   "duration_seconds": 0.09375
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264059.823803,
+   "model_time": "2025-07-15T21:00",
+   "duty": 0.625,
+   "texts": 704
+  },
+  {
+   "action": "pause",
+   "real_time": 1795264059.9825091,
+   "model_time": "2025-07-15T21:00",
+   "reason": "Modellierter Serverplatz wird nicht benötigt",
+   "texts": 704
+  },
+  {
+   "action": "pause_verified",
+   "real_time": 1795264060.0807948,
+   "model_time": "2025-07-15T21:00",
+   "texts": 704,
+   "duration_seconds": 0.09375
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264060.081033,
+   "model_time": "2025-07-15T22:00",
+   "duty": 0.625,
+   "texts": 704
+  },
+  {
+   "action": "pause",
+   "real_time": 1795264060.242632,
+   "model_time": "2025-07-15T22:00",
+   "reason": "Modellierter Serverplatz wird nicht benötigt",
+   "texts": 704
+  },
+  {
+   "action": "pause_verified",
+   "real_time": 1795264060.339235,
+   "model_time": "2025-07-15T22:00",
+   "texts": 704,
+   "duration_seconds": 0.09375
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264060.339436,
+   "model_time": "2025-07-15T23:00",
+   "duty": 0.625,
+   "texts": 704
+  },
+  {
+   "action": "pause",
+   "real_time": 1795264060.498462,
+   "model_time": "2025-07-15T23:00",
+   "reason": "Modellierter Serverplatz wird nicht benötigt",
+   "texts": 768
+  },
+  {
+   "action": "pause_verified",
+   "real_time": 1795264060.594168,
+   "model_time": "2025-07-15T23:00",
+   "texts": 768,
+   "duration_seconds": 0.09375
+  },
+  {
+   "action": "segment",
+   "real_time": 1795264060.5942478,
+   "date": "2025-03-07"
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264060.594403,
+   "model_time": "2025-03-07T00:00",
+   "duty": 1.0,
+   "texts": 768
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264060.848924,
+   "model_time": "2025-03-07T01:00",
+   "duty": 1.0,
+   "texts": 768
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264061.101811,
+   "model_time": "2025-03-07T02:00",
+   "duty": 1.0,
+   "texts": 768
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264061.356066,
+   "model_time": "2025-03-07T03:00",
+   "duty": 1.0,
+   "texts": 832
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264061.6111722,
+   "model_time": "2025-03-07T04:00",
+   "duty": 1.0,
+   "texts": 832
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264061.8656828,
+   "model_time": "2025-03-07T05:00",
+   "duty": 1.0,
+   "texts": 832
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264062.117504,
+   "model_time": "2025-03-07T06:00",
+   "duty": 1.0,
+   "texts": 896
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264062.372533,
+   "model_time": "2025-03-07T07:00",
+   "duty": 1.0,
+   "texts": 896
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264062.623979,
+   "model_time": "2025-03-07T08:00",
+   "duty": 1.0,
+   "texts": 896
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264062.878242,
+   "model_time": "2025-03-07T09:00",
+   "duty": 1.0,
+   "texts": 960
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264063.132231,
+   "model_time": "2025-03-07T10:00",
+   "duty": 1.0,
+   "texts": 960
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264063.388046,
+   "model_time": "2025-03-07T11:00",
+   "duty": 1.0,
+   "texts": 960
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264063.643809,
+   "model_time": "2025-03-07T12:00",
+   "duty": 1.0,
+   "texts": 1024
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264063.897718,
+   "model_time": "2025-03-07T13:00",
+   "duty": 1.0,
+   "texts": 1024
+  },
+  {
+   "action": "pause",
+   "real_time": 1795264064.154697,
+   "model_time": "2025-03-07T14:00",
+   "reason": "Modellierter Serverplatz wird nicht benötigt",
+   "texts": 1024
+  },
+  {
+   "action": "pause_verified",
+   "real_time": 1795264064.406538,
+   "model_time": "2025-03-07T14:00",
+   "texts": 1024,
+   "duration_seconds": 0.25
+  },
+  {
+   "action": "pause",
+   "real_time": 1795264064.406834,
+   "model_time": "2025-03-07T15:00",
+   "reason": "Modellierter Serverplatz wird nicht benötigt",
+   "texts": 1024
+  },
+  {
+   "action": "pause_verified",
+   "real_time": 1795264064.662366,
+   "model_time": "2025-03-07T15:00",
+   "texts": 1024,
+   "duration_seconds": 0.25
+  },
+  {
+   "action": "pause",
+   "real_time": 1795264064.662493,
+   "model_time": "2025-03-07T16:00",
+   "reason": "Modellierter Serverplatz wird nicht benötigt",
+   "texts": 1024
+  },
+  {
+   "action": "pause_verified",
+   "real_time": 1795264064.91909,
+   "model_time": "2025-03-07T16:00",
+   "texts": 1024,
+   "duration_seconds": 0.25
+  },
+  {
+   "action": "pause",
+   "real_time": 1795264064.919733,
+   "model_time": "2025-03-07T17:00",
+   "reason": "Modellierter Serverplatz wird nicht benötigt",
+   "texts": 1024
+  },
+  {
+   "action": "pause_verified",
+   "real_time": 1795264065.175195,
+   "model_time": "2025-03-07T17:00",
+   "texts": 1024,
+   "duration_seconds": 0.25
+  },
+  {
+   "action": "pause",
+   "real_time": 1795264065.175495,
+   "model_time": "2025-03-07T18:00",
+   "reason": "Modellierter Serverplatz wird nicht benötigt",
+   "texts": 1024
+  },
+  {
+   "action": "pause_verified",
+   "real_time": 1795264065.431511,
+   "model_time": "2025-03-07T18:00",
+   "texts": 1024,
+   "duration_seconds": 0.25
+  },
+  {
+   "action": "pause",
+   "real_time": 1795264065.433915,
+   "model_time": "2025-03-07T19:00",
+   "reason": "Modellierter Serverplatz wird nicht benötigt",
+   "texts": 1024
+  },
+  {
+   "action": "pause_verified",
+   "real_time": 1795264065.690363,
+   "model_time": "2025-03-07T19:00",
+   "texts": 1024,
+   "duration_seconds": 0.25
+  },
+  {
+   "action": "pause",
+   "real_time": 1795264065.690946,
+   "model_time": "2025-03-07T20:00",
+   "reason": "Modellierter Serverplatz wird nicht benötigt",
+   "texts": 1024
+  },
+  {
+   "action": "pause_verified",
+   "real_time": 1795264065.9443572,
+   "model_time": "2025-03-07T20:00",
+   "texts": 1024,
+   "duration_seconds": 0.25
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264065.944598,
+   "model_time": "2025-03-07T21:00",
+   "duty": 0.16800000000000015,
+   "texts": 1024
+  },
+  {
+   "action": "pause",
+   "real_time": 1795264065.9888551,
+   "model_time": "2025-03-07T21:00",
+   "reason": "Modellierter Serverplatz wird nicht benötigt",
+   "texts": 1024
+  },
+  {
+   "action": "pause_verified",
+   "real_time": 1795264066.2012942,
+   "model_time": "2025-03-07T21:00",
+   "texts": 1024,
+   "duration_seconds": 0.20799999999999996
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264066.205143,
+   "model_time": "2025-03-07T22:00",
+   "duty": 0.9980000000000002,
+   "texts": 1024
+  },
+  {
+   "action": "pause",
+   "real_time": 1795264066.461039,
+   "model_time": "2025-03-07T22:00",
+   "reason": "Modellierter Serverplatz wird nicht benötigt",
+   "texts": 1088
+  },
+  {
+   "action": "pause_verified",
+   "real_time": 1795264066.4617758,
+   "model_time": "2025-03-07T22:00",
+   "texts": 1088,
+   "duration_seconds": 0.0004999999999999449
+  },
+  {
+   "action": "compute",
+   "real_time": 1795264066.461959,
+   "model_time": "2025-03-07T23:00",
+   "duty": 1.0,
+   "texts": 1088
+  }
+ ],
+ "current": {
+  "zeit": "2025-03-07T23:00",
+  "temp_c": 4.1,
+  "bedarf_kwh": 6.711,
+  "heizung_kwh": 6.211,
+  "warmwasser_kwh": 0.5,
+  "strom_kwh": 8.0,
+  "waerme_kwh": 6.4,
+  "genutzt_kwh": 6.711,
+  "speicher_vorher_kwh": 35.0,
+  "speicher_kwh": 34.689,
+  "abgefuehrt_kwh": 0.0,
+  "backup_kwh": 0.0,
+  "server_laufend": 8.0,
+  "warteschlange": 1,
+  "abgegeben": 0,
+  "duty": 1.0,
+  "date": "2025-03-07",
+  "slot": 8
+ },
+ "error": null,
+ "pid": 18118,
+ "run_folder": "messungen/gesamtdemo_nachweis",
+ "segment_date": "2025-03-07",
+ "slot": 8
+}

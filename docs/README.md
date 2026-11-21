@@ -1,9 +1,14 @@
 # Dokumente: Was steht wo?
 
-**Neu hier?** Lies zuerst `RESULTATE_EINFACH.md`, danach `PITCH.md`.
+**Neu hier?** Lies zuerst [PROJEKTUEBERSICHT.md](PROJEKTUEBERSICHT.md) und [START_HIER.md](START_HIER.md). Die Ergebnisdetails und der bestehende Pitch folgen danach.
 
 | Datei | In einem Satz |
 |---|---|
+| [PROJEKTUEBERSICHT.md](PROJEKTUEBERSICHT.md) | Alle Bausteine, Nachweise und offenen Punkte im gemeinsamen Stand |
+| [START_HIER.md](START_HIER.md) | Der Zweck und die drei Stationen der Gesamtdemo |
+| [GESAMTDEMO.md](GESAMTDEMO.md) | Start, Prozesssteuerung und Grenzen der geführten Demo |
+| [ML_SYSTEM.md](ML_SYSTEM.md) | Aufbau und Aussagekraft der separaten ML-Untersuchung |
+| [ML_ERGEBNISSE.md](ML_ERGEBNISSE.md) | Der kleine zusätzliche ML-Effekt im bisherigen Szenario |
 | [`RESULTATE_EINFACH.md`](RESULTATE_EINFACH.md) | Alle Resultate ohne Fachbegriffe erklärt. **Hier anfangen.** |
 | [`PITCH.md`](PITCH.md) | Was wir im 5-Minuten-Pitch sagen, Demo-Befehle und Antworten auf Fragen der Jury |
 | [`CASE.md`](CASE.md) | Die Aufgabe von DigitalHeat, so wie wir sie bekommen haben |
@@ -13,6 +18,7 @@
 | [`CustomerView_Joel.md`](CustomerView_Joel.md) | Die Sicht des Hausbesitzers: Was hat der Haushalt davon? |
 | [`ANNAHMEN_PRUEFUNG.md`](ANNAHMEN_PRUEFUNG.md) | Jede Annahme kritisch geprüft: Hält sie, und was passiert, wenn nicht? |
 | [`designs/waerme-router-basel.md`](designs/waerme-router-basel.md) | Bauplan für den Wärme-Router und unsere Entscheide |
+| [TODO_KURZ.md](TODO_KURZ.md) | Die sechs nächsten gemeinsamen Aufgaben |
 | [`TODOS.md`](TODOS.md) | Was noch offen ist |
 | [`NOTIZEN.md`](NOTIZEN.md) | Erste Ideen vom Hackathon-Start |
 

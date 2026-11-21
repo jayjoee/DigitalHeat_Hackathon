@@ -1,92 +1,88 @@
-# Rechnen, das heizt 🔥💻
+# Rechnen, das heizt
 
-**Computer, die KI-Aufträge rechnen, werden warm. Wir stellen sie in Basler Keller und heizen damit Häuser – im Sommer das Sportbad.**
+**DigitalHeat erledigt Rechenaufträge und nutzt ihre Abwärme zum Heizen von Häusern und im Sommer eines Sportbads.** Das Hackathon-Projekt verbindet Jahresmodell, Wärme-Router, echte Laptop-Aufträge und getrennte Produktoberflächen.
 
-Hackathon-Projekt von Team Holyhackers zum Case *«Useful Load ⇒ Useful Heat»* von DigitalHeat.
+**Neu hier?** [Projektübersicht](docs/PROJEKTUEBERSICHT.md) lesen. Sie zeigt, welche Teile vorhanden sind, was gemessen ist und was noch simuliert wird.
 
-![Übersicht: Wo die Rechenarbeit läuft und wie der echte Job vom Haus ins Bad wandert](docs/bilder/uebersicht.png)
+## Die geführte Gesamtdemo starten
 
-## Die Idee in 4 Sätzen
+Die Gesamtdemo beantwortet drei Fragen: Wie viel Wärme decken die Server? Steuert der Wärmebedarf einen echten Auftrag? Unter welchen Annahmen lohnt sich das Geschäft?
 
-1. Ein Server macht aus Strom fast nur Wärme. Normalerweise wird sie weggekühlt, das ist verschwendet.
-2. Wir stellen pro Haus **8 Server** in den Keller. Sie rechnen nur dann, wenn das Haus Wärme braucht, und decken so **93 %** von Heizung und Warmwasser. Der Haushalt bekommt die Wärme gratis.
-3. Im Sommer braucht das Haus kaum Wärme. Darum schickt ein **Wärme-Router** die Arbeit dann ins **Sportbad St. Jakob**, das genau im Sommer geheizt werden muss.
-4. Bezahlt wird die Rechenzeit von Firmen, deren Daten in der Schweiz bleiben müssen (Pharma, Banken, Spitäler). Wir sagen ihnen am Vortag verbindlich zu, wie viele Stunden sie bekommen. Grundlage ist die Wetterprognose.
-
-## In 3 Schritten starten
-
-Du brauchst einen Mac oder Linux-Rechner mit **Python 3.10 oder neuer**.
+Python 3.10 oder neuer, macOS oder Linux. Einmalig eine Umgebung mit FastEmbed und dem öffentlichen Modell einrichten:
 
 ```sh
-# 1. Einmalig: Umgebung einrichten (lädt beim ersten Mal ein kleines KI-Modell aus dem Internet)
 python3 -m venv .venv
-.venv/bin/pip install -r requirements.txt
-
-# 2. Dashboard öffnen → http://localhost:8765
-bash dashboard/starten.sh
-
-# 3. In einem zweiten Terminal: Live-Demo, der echte Job wandert vom Haus ins Bad (ca. 2 Minuten)
-.venv/bin/python src/scheduler/live.py --flotte --sekunden 3
+.venv/bin/python -m pip install -r requirements-live.txt
+.venv/bin/python -c 'from fastembed import TextEmbedding; TextEmbedding("BAAI/bge-small-en-v1.5")'
+.venv/bin/python demo_start.py --open
 ```
 
-Während die Demo läuft, zeigt das Dashboard unten bei **«Echter Job, live gesteuert»**, wo der Job gerade rechnet.
+Danach reicht auf macOS `Gesamtdemo_starten.command`. Die Oberfläche läuft unter **http://127.0.0.1:18200**. Dort **Live-Demo starten** drücken. Winter, Sommer und voller Speicher werden in etwa 90 Sekunden gezeigt. Der Embedding-Prozess und seine Pausen sind echt; Haus und Wärme sind simuliert.
 
-Ohne Installation geht es auch: `dashboard/artifact/index.html` direkt im Browser öffnen. Diese Fassung zeigt eine Aufzeichnung der Demo.
+[Kurze Orientierung](docs/START_HIER.md) · [Ablauf und Methode](docs/GESAMTDEMO.md)
 
-## Was liegt wo?
+## Welche Ansicht wofür?
 
-| Ordner | Was drin ist | Wichtigste Datei |
-|---|---|---|
-| `docs/` | Alles zum Lesen: Case, Ergebnisse, Kosten, Pitch | **[`docs/RESULTATE_EINFACH.md`](docs/RESULTATE_EINFACH.md)**, erklärt alle Resultate ohne Fachbegriffe |
-| `src/` | Der Code. Der Scheduler entscheidet jede Stunde, welcher Server rechnet | `src/scheduler/kern.py` (die Regel), `router.py` (verteilt auf Standorte) |
-| `dashboard/` | Die Webseite mit allen Diagrammen und Schiebereglern | `dashboard/index.html` |
-| `daten/` | Eingangsdaten (Wetter, Strompreise, Aufträge) und Ergebnisse als JSON/CSV | `daten/ergebnisse/` |
-| `messungen/` | Was wir auf dem Laptop selbst gemessen haben (Strom, Tempo, Migration) | `messungen/MESSUNG.md` |
-| `tests/` | Automatische Prüfungen, ob der Code richtig rechnet | `tests/test_scheduler.py` |
-| `prototyp/` | Klick-Prototyp mit zwei Oberflächen: Pharma-Kunde und Hausbesitzer | `prototyp/README.md` |
-| `submission/` | Vorübergehend: Texte und Bild für die Abgabe | `submission/SUBMISSION.md` |
-
-Eine Liste aller Dokumente mit je einem Satz steht in [`docs/README.md`](docs/README.md).
-
-## Die wichtigsten Zahlen
-
-| | |
+| Zweck | Einstieg |
 |---|---|
-| Server pro Haus | 8 (je 8 Grafikkarten NVIDIA L4, zusammen 8 kW) |
-| Wärme gedeckt | 93 % im Case-Idealmodell, 90,5 % mit Abschalten (Referenzhaus Basel 2025) |
-| Weggekühlte Wärme | 5 kWh im Case-Idealmodell (0 W Leerlauf) |
-| Angenommener Vertragspreis | 4,80 CHF pro Server-Stunde |
-| Ergebnis für DigitalHeat | +29'400 CHF pro Haus und Jahr mit Abschalten, vor Day-ahead-Gutschriften |
+| Projekt als Ganzes verstehen | Gesamtdemo, Port 18200 |
+| Jahreszahlen, Flotte und Serverbetrieb untersuchen | `bash dashboard/starten.sh`, Port 8765; alternativ `dashboard/artifact/index.html` mit Aufzeichnung |
+| Echten Auftrag im Wärme-Router zeigen | `.venv/bin/python src/scheduler/live.py --flotte --sekunden 3`; mit `--abschalten` auch Serverzustände simulieren |
+| Pharma-Kunde und Serverhalter getrennt bedienen | [prototyp/README.md](prototyp/README.md) |
+| Tablettenprüfung mit zwei Leinwänden und Checkpoint-Übergabe zeigen | [prototyp/blister/README.md](prototyp/blister/README.md) |
+| ML-Energievergleich untersuchen | [docs/ML_SYSTEM.md](docs/ML_SYSTEM.md), eigener Dienst auf Port 18100 |
+| Reale Laptop-Laufzeiten und Chip-Energieschätzungen vergleichen | [messwerkzeug/README.md](messwerkzeug/README.md) |
 
-**Ehrlich gesagt:** Gibt es zu wenig Aufträge, macht das System Verlust, auch mit Bad. Der Engpass sind die Aufträge, nicht die Wärme. Details und alle Grenzen stehen in [`docs/ERGEBNISSE.md`](docs/ERGEBNISSE.md).
+Die Ansichten haben verschiedene Zwecke. Die Blister-Übergabe wird manuell ausgelöst; sie ist noch nicht automatisch an den Jahresrouter angeschlossen. Die Produktoberflächen, Gesamtdemo und ML-Untersuchung bleiben eigenständige Abläufe.
 
-**Serverbetrieb im Referenzhaus:** Bei angenommenen 230 W Leerlauf spart bedarfsgerechtes Abschalten rund **5'200 kWh Strom pro Jahr** gegenüber dem blossen Pausieren der Jobs. Die Wärmedeckung sinkt von 91,3 % auf 90,5 %. Das Dashboard zeigt den Vergleich für drei Leerlaufleistungen.
+## Die wichtigsten Modellzahlen
 
-Im Dashboard vergleicht der Abschnitt **Flotte** 20 Häuser mit und ohne 50 Server am Sportbad. «Bedarfsgerecht abschalten» berücksichtigt Startzeit, Leerlauf und Standby an beiden Standorttypen. Für die Live-Demo mit diesen simulierten Zuständen `--abschalten` an den Flottenbefehl anhängen.
-
-## Was ist echt, was ist simuliert?
-
-| Echt | Simuliert |
+| Kennzahl | Einordnung |
 |---|---|
-| Ein KI-Job (Texte in Vektoren umwandeln) läuft wirklich auf dem Laptop. Er wird pausiert, fortgesetzt und per Checkpoint an einen neuen Ort verschoben | Die Häuser, das Sportbad und die 20 Standorte. Jedes Haus ist ein Rechenmodell, kein echter Keller |
-| Strom und Tempo des Jobs sind gemessen | Die Aufträge. Sie kommen nach dem Muster eines echten Rechenzentrums (Alibaba-Trace) |
-| Wetter Basel 2025 und die Prognosen dazu (Open-Meteo, ECMWF) | Der Wärmebedarf des Sportbads, eine Schätzung (±30 %) |
-| Strompreis Basel 2026 (ElCom) und Hardwarepreise (Offerten aus dem Netz) | Ortswechsel, Netzübertragung und Stromzustände der Server. Der Prozess startet lokal neu |
+| 8 Referenzserver pro Haus | Je 1 kW im Case; 8 L4-Karten pro Server im Hardwarekonzept |
+| Rund 93 % Wärmedeckung, 5 kWh weggekühlt | Case-Idealmodell, genügend flexible Aufträge, 0 W Leerlauf |
+| Rund 90,5 % Wärmedeckung mit Abschalten | Erweiterte Rechnung mit angenommenen Betriebszuständen |
+| Rund 5'200 kWh weniger Strom pro Jahr durch Abschalten statt Prozesspause | Simulationsvergleich bei angenommenen 230 W Leerlauf |
+| Rund CHF 290'000 Investition pro Haus | Hardware-/Einbauannahmen, keine gemessene Pilotinstallation |
+| CHF 4,80 pro Serverstunde | Angenommener Vertragspreis, kein belegter Kundenauftrag |
+| Rund CHF 29'400 jährliches Modellergebnis mit Abschalten | Vor Day-ahead-Gutschriften; Annahmen zu Absatz und Preisen gelten weiterhin |
 
-## Selber nachrechnen
+Die Unternehmenskennzahl wird als jährliches Kapitalwertäquivalent berechnet. Sie ist kein bereits erzielter realer Jahresgewinn. Bei knapper Nachfrage kann das System Verlust machen. [Ergebnisse und Grenzen](docs/ERGEBNISSE.md)
 
-Jede Zahl kommt aus dem Code. Alle Annahmen mit Quelle stehen in `src/scheduler/annahmen.py`.
+## Was ist echt und was ist simuliert?
+
+- **Echt:** Text-Embeddings auf dem Laptop, Prozesspause/Weiterlauf, Checkpoint-Neustart, gemessene Laufzeiten und macOS-Chip-Leistungsschätzungen.
+- **Echt auf künstlichen Daten:** Die Blister-Demo prüft Pixel mit einer Helligkeitsregel und übergibt den Bearbeitungsstand per TLS. Kein trainiertes oder validiertes Pharma-Modell.
+- **Simuliert:** Häuser, Sportbad, Heizsystem, NVIDIA-Leistung, Rechenauftragsmengen und viele Kosten-/Vertragswerte.
+- **ML tatsächlich trainiert:** Das zusätzliche Modell lernt den berechneten Case-Wärmebedarf. Im bisherigen Vergleich ist der zusätzliche Energieeffekt sehr klein und kein belastbarer Effizienznachweis.
+- **Noch offen:** Verbindliche Kundenabnahme, echte L4-Messungen, geeignete Heiztemperatur und vollständige Sicherheit für vertrauliche Pharma-Daten.
+
+Transportverschlüsselung und getrennte Oberflächen schützen nicht automatisch vor Administratorzugriff auf den verarbeitenden Rechner.
+
+## Rechnen und prüfen
+
+Der bisherige Jahres-Scheduler benötigt keine zusätzlichen Python-Pakete. Für die ML-Tests separat `requirements-ml.txt` installieren; das Embedding-Setup bleibt in `.venv`.
 
 ```sh
-python3 -m unittest discover -s tests       # Scheduler- und Regressionstests
-python3 src/scheduler/jahr.py --server 8    # ein Haus, ganzes Jahr
+python3 src/scheduler/jahr.py --server 8
 python3 -m src.scheduler.serverbetrieb --ausgabe daten/ergebnisse/serverbetrieb.json
-python3 src/scheduler/zusage.py             # Zusage am Vortag
-python3 src/scheduler/flotte.py             # 20 Häuser + Sportbad (ca. 5 min)
-python3 src/scheduler/flotte.py --abschalten # Flotte mit Leerlauf, Standby und Startzeit
-python3 src/dashboard_daten.py              # Zahlen fürs Dashboard neu erzeugen
+python3 src/scheduler/zusage.py
+python3 src/scheduler/flotte.py --abschalten
+
+# ML-Umgebung separat einrichten
+python3 -m venv .venv-ml
+.venv-ml/bin/python -m pip install -r requirements-ml.txt
+.venv-ml/bin/python -m unittest discover -s tests -v
+
+# Produktprototyp und Messauswertung separat prüfen
+python3 -m unittest discover -s prototyp/tests -v
+python3 -m unittest discover -s messwerkzeug/tests -v
 ```
 
-## Mit KI gebaut
+Die vollständige stündliche ML-Auswertung und neue Live-Vektoren werden lokal erzeugt. Kompakte Referenzergebnisse und Messprotokolle sind versioniert; Zugangsdaten und virtuelle Umgebungen nicht.
 
-Code, Analysen und Texte entstanden mit **Claude Code** (Anthropic). Für die Design-Reviews haben wir die **gstack**-Skills verwendet (`/office-hours`, `/plan-ceo-review`). Vorlagen gab es keine. Der Prototyp in `prototyp/` wurde separat gebaut und hochgeladen.
+## Dokumente und Abgabe
+
+[Dokumentenverzeichnis](docs/README.md) · [Case](docs/CASE.md) · [Pitch](docs/PITCH.md) · [Pharma-Sicht](docs/PHARMA_SICHT.md) · [Kundensicht](docs/CustomerView_Joel.md) · [Kosten](docs/KOSTEN_DH.md) · [Nächste Aufgaben](docs/TODO_KURZ.md) · [Abgabevorschläge](submission/SUBMISSION.md)
+
+Code, Analysen und Texte wurden mit Claude Code und Codex erarbeitet. Der ursprüngliche Wärme-Router, die neue Serverbetriebssimulation und die Blister-Demo sind erhalten; Gesamtdemo, ML-Untersuchung und Messwerkzeug ergänzen diesen gemeinsamen Stand.

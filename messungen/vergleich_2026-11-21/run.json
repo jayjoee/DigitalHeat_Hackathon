@@ -1,0 +1,113 @@
+{
+  "model": "BAAI/bge-small-en-v1.5",
+  "texts": 2048,
+  "repeats": 3,
+  "input_sha256": "bafc1a73ef8cfb49980d5f5fc9212f6d1b240e6a5a22af91e0881d738530659c",
+  "hardware": {
+    "machine": "arm64",
+    "os": "macOS-15.0.1-arm64-arm-64bit-Mach-O",
+    "logical_cpus": 8
+  },
+  "load_average_before": [
+    3.59765625,
+    4.26611328125,
+    4.77783203125
+  ],
+  "variants": [
+    {
+      "id": "standard",
+      "name": "Standard",
+      "threads": 6,
+      "batch": 16
+    },
+    {
+      "id": "weniger_threads",
+      "name": "Weniger CPU-Threads",
+      "threads": 2,
+      "batch": 16
+    },
+    {
+      "id": "groessere_pakete",
+      "name": "Grössere Verarbeitungspakete",
+      "threads": 6,
+      "batch": 64
+    }
+  ],
+  "trials": [
+    {
+      "id": "01_standard",
+      "variant": "standard",
+      "repeat": 1,
+      "process_start": 1795262520.8926342,
+      "process_end": 1795262545.533473,
+      "full_process_seconds": 24.640840291016502
+    },
+    {
+      "id": "01_weniger_threads",
+      "variant": "weniger_threads",
+      "repeat": 1,
+      "process_start": 1795262548.540341,
+      "process_end": 1795262609.837163,
+      "full_process_seconds": 61.296843292017
+    },
+    {
+      "id": "01_groessere_pakete",
+      "variant": "groessere_pakete",
+      "repeat": 1,
+      "process_start": 1795262612.8455439,
+      "process_end": 1795262646.904454,
+      "full_process_seconds": 34.05891312498716
+    },
+    {
+      "id": "02_weniger_threads",
+      "variant": "weniger_threads",
+      "repeat": 2,
+      "process_start": 1795262649.913002,
+      "process_end": 1795262707.203695,
+      "full_process_seconds": 57.29070000001229
+    },
+    {
+      "id": "02_standard",
+      "variant": "standard",
+      "repeat": 2,
+      "process_start": 1795262710.211175,
+      "process_end": 1795262733.989769,
+      "full_process_seconds": 23.77859816601267
+    },
+    {
+      "id": "02_groessere_pakete",
+      "variant": "groessere_pakete",
+      "repeat": 2,
+      "process_start": 1795262736.997642,
+      "process_end": 1795262772.9240232,
+      "full_process_seconds": 35.92639362500631
+    },
+    {
+      "id": "03_standard",
+      "variant": "standard",
+      "repeat": 3,
+      "process_start": 1795262775.932827,
+      "process_end": 1795262800.423172,
+      "full_process_seconds": 24.49034458299866
+    },
+    {
+      "id": "03_weniger_threads",
+      "variant": "weniger_threads",
+      "repeat": 3,
+      "process_start": 1795262803.429402,
+      "process_end": 1795262863.6349928,
+      "full_process_seconds": 60.205600957997376
+    },
+    {
+      "id": "03_groessere_pakete",
+      "variant": "groessere_pakete",
+      "repeat": 3,
+      "process_start": 1795262866.641643,
+      "process_end": 1795262904.761777,
+      "full_process_seconds": 38.120143583015306
+    }
+  ],
+  "python_version": "3.13.9",
+  "idle_start": 1795262510.883598,
+  "idle_end": 1795262520.888923
+}

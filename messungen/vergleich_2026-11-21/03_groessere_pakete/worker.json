@@ -1,0 +1,27 @@
+{
+  "texts": 2048,
+  "input_sha256": "bafc1a73ef8cfb49980d5f5fc9212f6d1b240e6a5a22af91e0881d738530659c",
+  "model": "BAAI/bge-small-en-v1.5",
+  "provider": "CPUExecutionProvider",
+  "threads": 6,
+  "batch": 64,
+  "model_load_start": 1795262867.181377,
+  "model_load_end": 1795262867.3500469,
+  "warmup_end": 1795262869.5876842,
+  "compute_start": 1795262869.587685,
+  "compute_end": 1795262904.6604118,
+  "compute_seconds": 35.07271545799449,
+  "cpu_seconds": 199.43288199999998,
+  "texts_per_second": 58.39296938535673,
+  "worker_seconds": 37.48542283300776,
+  "output_shape": [
+    2048,
+    384
+  ],
+  "output_sha256": "1e2d2a6d7056f86b5895bd17868fbcd6b90ca83c741bd598417bdc4c9567e76d",
+  "versions": {
+    "numpy": "2.5.5",
+    "onnxruntime": "1.32.0",
+    "fastembed": "0.9.1"
+  }
+}
