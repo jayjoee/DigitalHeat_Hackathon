@@ -12,11 +12,14 @@ Säule «Firma». Ergänzt Joëls Kundensicht (`CustomerView_Joel.md`) und die P
 | Wärme an den Haushalt | gratis | gratis |
 | Ergebnis DH pro Jahr (Vertragspreis 0,60 CHF, 60 % fest gebucht) | **+34'500 CHF** | +19'000 / +15'300 CHF |
 | Vorsichtiger Fall (0,50 CHF) | +20'300 CHF | +11'200 / +6'900 CHF |
+| **Mit Zusage am Vortag** (Fehlmenge + 50 % Gutschrift, Abschnitt 8) | **+34'300 CHF** | – |
 | Investition zurück nach | **3,0 Jahren** | 2,9 / 3,4 Jahren |
 | **Nötiger Vertragspreis (Break-even)** | **0,36 CHF pro L4-Stunde** (= 2,87 CHF pro Server-Stunde) | 0,36 / 0,42 CHF |
 | Was Kunden mit Datenstandort Schweiz heute zahlen | Schweizer GPU-Clouds ab ≈ 0,68 CHF (Hikube) bis 2,13 CHF (Everyware) | gleich |
 
 **In einem Satz:** DigitalHeat ist eine Schweizer Cloud für Kunden, deren Daten in der Schweiz bleiben müssen (Pharma, Banken, Spitäler). Mit 0,60 CHF pro L4-Stunde, rund 12 % unter Schweizer GPU-Clouds, und 60 % fest gebuchten Stunden verdient DH beim Referenzhaus rund 34'500 CHF pro Jahr nach allen Kosten, Steuern und Zinsen, gibt dem Haushalt die Wärme gratis und hat die Investition nach 3 Jahren zurück. Die Grenze liegt bei 0,36 CHF (Spanne 0,26–0,55 CHF).
+
+**Preise pro Server-Stunde (für den Pitch):** Ein Server hat 8 L4-Karten. 0,60 CHF pro L4-Stunde = **4,80 CHF pro Server-Stunde**. Hikube 0,68 CHF = 5,44 CHF, Spot 0,294 CHF = 2,35 CHF, Break-even 0,36 CHF = 2,87 CHF pro Server-Stunde. Im Code und in `annahmen.py` bleibt alles pro L4-Stunde, nur die Anzeige rechnet × 8.
 
 **Zwei Break-even-Zahlen:** Der Case definiert den Break-even als (Strom − Wert der genutzten Wärme) ÷ Server-Stunden = **0,23 CHF pro Server-Stunde** (ohne Hardware). Mit allen Kosten braucht DH **2,87 CHF pro Server-Stunde**, also 0,36 CHF pro L4-Karte und Stunde.
 
@@ -192,6 +195,35 @@ Für diese Posten gibt es keine öffentliche Zahl, weil sie pro Firma oder pro O
 | Kreditzins | Hausbank | ±2'000 CHF/Jahr |
 | Versicherung (Inventar, Elektronik, Haftpflicht, Cyber) | Zurich, Mobiliar, AXA, Helvetia | ±1'500 CHF/Jahr |
 | Einbau | Heizungsinstallateur Basel | ±1'000 CHF/Jahr |
+
+## 8. Zusage am Vortag und Flotte mit Sportbad (Stand 21.11.2026)
+
+**Neue Kostenposition Fehlmenge** (`src/wirtschaft.py`, gleiche Formel im Dashboard):
+Fehlmenge CHF = nicht gelieferte, zugesagte Server-h × 8 Karten × Vertragspreis × 50 % Gutschrift × (1 + Kostensteigerung)^(t−1).
+Die fehlende Stunde wird nicht bezahlt. Zusätzlich gibt es 50 % Gutschrift. Das ist eine Schätzung: AWS EC2 schreibt je nach Ausfall 10, 30 oder 100 % der Monatsrechnung gut. Die Position ist vor Steuer abzugsfähig.
+
+**Referenzhaus mit Zusage** (`src/scheduler/zusage.py`, `daten/ergebnisse/zusage_8_spot.json`):
+
+| | ohne Zusage (Annahme 60 % fest) | mit Zusage am Vortag |
+|---|---|---|
+| Zusagbar | – | 93 % der Server-h (Sicherheitsfaktor 0,95) |
+| Tatsächlich fest gebucht | 60 % | 59,8 % |
+| Fehlmenge | 0 | 57 Server-h pro Jahr, Gutschrift 138 CHF im 1. Jahr |
+| **Ergebnis pro Jahr** | **+34'543 CHF** | **+34'276 CHF** |
+
+Die Preisprämisse kostet also nur rund 270 CHF pro Jahr, wenn man sie ehrlich mit einer Zusage am Vortag absichert.
+
+**Flotte: 20 Häuser + Sportbad St. Jakob** (`src/scheduler/flotte.py`, `daten/ergebnisse/flotte.json`). Die Kosten des Bads sind eine Schätzung: kein neuer Speicher (das Becken speichert), Einbau 9'000 CHF pro 8 Server wie im Haus, sonst gleiche Kostensätze.
+
+| | Investition | Ergebnis pro Jahr «Nur Jobs mit Frist» | Ergebnis pro Jahr «Genug Aufträge» |
+|---|---|---|---|
+| 20 Häuser ohne Bad | 5,80 Mio. CHF | −176'600 CHF | +690'500 CHF |
+| 20 Häuser + Bad mit 50 Servern | 7,60 Mio. CHF | **−101'400 CHF** | +851'600 CHF |
+| 20 Häuser + Bad mit 170 Servern (Senkenregel) | 11,90 Mio. CHF | −1'066'700 CHF | +1'203'700 CHF |
+
+- Das Bad mit 50 Servern kostet rund 1,8 Mio. CHF und bringt der Flotte **+75'200 CHF pro Jahr** bei knapper Nachfrage und +161'000 CHF bei genug Aufträgen.
+- Mit Zusage am Vortag (genug Aufträge): 846'400 statt 851'600 CHF pro Jahr.
+- Bei knapper Nachfrage fehlen die Aufträge, nicht die Wärme. Der Router verschiebt Arbeit, er erzeugt keine neue. Darum hängt das Geschäft weiterhin am Vertrag mit festen Kunden (Abschnitt 5).
 
 ## Quellen
 

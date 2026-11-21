@@ -29,7 +29,21 @@ Ein Server braucht Strom und macht daraus fast vollständig Wärme. Normalerweis
 ## Das Problem: der Sommer
 - Im Winter laufen die Server fast pausenlos (96 % Auslastung).
 - Im Sommer braucht das Haus nur Warmwasser, die Server laufen dann nur zu **8 %**.
-- **Lösung:** Im Sommer gehen die Aufträge an Orte, die dann Wärme brauchen, etwa ein Hotel mit Spa oder eine Trocknungsanlage in der Landwirtschaft.
+- **Lösung:** Im Sommer gehen die Aufträge an Orte, die dann Wärme brauchen. In Basel ist das das **Sportbad St. Jakob**: ein beheiztes 50-m-Becken, offen von Ende April bis Anfang Oktober, also genau dann, wenn die Häuser keine Wärme brauchen. Ein Hallenbad passt nicht, denn das Rialto macht im Sommer Pause.
+
+## Der Wärme-Router: 20 Häuser und ein Sportbad
+- Alle Aufträge kommen in einen gemeinsamen Topf. Jede Stunde verteilt der **Wärme-Router** sie dorthin, wo die Wärme gebraucht wird.
+- **Die Häuser haben immer Vorrang.** Das Bad bekommt nur Arbeit, deren Wärme gerade kein Haus brauchen kann.
+- Ohne Bad gehen im Jahr rund **180'000 Server-Stunden** an andere Clouds, weil im Sommer niemand die Wärme braucht. Mit einem Bad mit 50 Servern sind es nur noch **12'500**. Die Häuser bekommen trotzdem fast gleich viel Wärme wie vorher (51 % statt 52 % bei knapper Nachfrage).
+- Das bringt DigitalHeat rund **75'000 CHF mehr pro Jahr**.
+- **Wie gross soll das Bad sein?** Nach der Wärme wären es 170 Server, nach den Aufträgen sind es **50**. Mehr Server bringen nur etwas, wenn es auch mehr Aufträge gibt.
+- **Ehrlich:** Wenn es nur Aufträge mit Frist gibt, macht die Flotte trotzdem Verlust, weil Aufträge fehlen und nicht Wärme. Der Router verteilt die Arbeit besser, er schafft aber keine neue. Entscheidend bleibt der feste Vertrag mit Pharma, Banken und Spitälern.
+
+## Planbar: die Zusage am Vortag
+- Pharma zahlt 0,60 CHF nur für Stunden, die DigitalHeat **am Vortag um 12 Uhr verbindlich zusagt**.
+- Die Zusage stützt sich auf die Wetterprognose vom Vortag (ECMWF). Im Test zählen nur Prognosen, die um 12 Uhr schon veröffentlicht waren.
+- Ergebnis Referenzhaus: **93 % der Stunden lassen sich zusagen**, verkauft werden 60 %. An rund 2 % der Tage fehlt etwas. Dafür gibt es eine Gutschrift, die rund 270 CHF pro Jahr kostet.
+- Damit bleibt das Ergebnis bei **34'300 CHF pro Haus und Jahr**. Der Preis ist also nicht nur angenommen, sondern abgesichert.
 
 ## Lohnt es sich?
 - **Der Strom ist nicht das Problem.** Nur für Strom (abzüglich Wärmewert) reichen schon 0,23 CHF pro Server-Stunde.
@@ -60,10 +74,13 @@ Ein Server braucht Strom und macht daraus fast vollständig Wärme. Normalerweis
   - **7. März:** Am Nachmittag ist der Speicher voll. Der Auftrag pausiert 7 Stunden lang und rechnet am Abend weiter, sobald das Haus wieder Wärme braucht.
 - Nach einem Stopp macht der Auftrag genau dort weiter, wo er aufgehört hat. Das Ergebnis ist identisch.
 
+- **Der Job wandert echt.** Am 25. Mai rechnet der echte Auftrag bis 10 Uhr im Haus. Dann ist der Wassertank voll, und der Router schickt ihn ins Sportbad. Der Auftrag speichert seinen Stand, ein neuer Prozess macht dort weiter. Ein Vergleich mit einem Lauf ohne Unterbruch ergibt exakt dieselben Ergebnisse.
+
 ## Wichtigste Annahmen
 - Es gibt genug Rechenaufträge: Eine Pharmafirma bucht 60 % der Stunden fest, der Rest wird günstiger verkauft. Ohne genug Aufträge sinkt die Deckung auf 52 %.
 - Strompreis 33,25 Rp./kWh (IWB Basel 2026). Die Wärme ist 13,3 Rp./kWh wert, weil sie eine Wärmepumpe ersetzt (Case-Regel).
 - Ein Server mit 8 Grafikkarten kostet 32'245 CHF und hält 5 Jahre. Alle Beträge in CHF, Herleitung in `KOSTEN_DH.md`.
+- Der Wärmebedarf des Sportbads ist geschätzt: rund 650'000 kWh im Jahr, auf ±30 % genau (Kennwert des Verbands Hallen- und Freibäder, `daten/HALLENBAD.md`).
 
 ## In einem Satz
-**8 Server pro Haus decken 93 % der Wärme, verschwenden fast nichts und geben dem Haushalt die Wärme gratis. Als Schweizer Cloud für Pharma, Banken und Spitäler verdient DigitalHeat daran rund 34'500 CHF pro Haus und Jahr und hat die Investition nach 3 Jahren zurück.**
+**8 Server pro Haus decken 93 % der Wärme, und der Haushalt bekommt sie gratis. Im Sommer schickt der Wärme-Router die Arbeit ins Sportbad, statt sie zu verschenken. Als Schweizer Cloud mit verbindlicher Zusage am Vortag verdient DigitalHeat rund 34'300 CHF pro Haus und Jahr und hat die Investition nach 3 Jahren zurück.**
