@@ -4,12 +4,13 @@ Bewertung: Transparenz 25 %, Machbarkeit 25 %, Scheduling 20 %, Kreativität 20 
 Alle Zahlen stammen aus dem Code (`ERGEBNISSE.md`, `KOSTEN_DH.md`) und sind in CHF pro **Server-Stunde** angegeben. Ein Server hat 8 L4-Karten, darum gilt: Server-Stunde = 8 × L4-Stunde.
 
 ## Der Satz
-**Server heizen Basler Häuser im Winter und das Sportbad im Sommer. Ein Wärme-Router verkauft die Rechenzeit einen Tag im Voraus verbindlich an Kunden, deren Daten in der Schweiz bleiben müssen.**
+**Server heizen Basler Häuser im Winter und das Sportbad im Sommer. Ein Wärme-Router verkauft die Rechenzeit einen Tag im Voraus verbindlich: als festes Winterkontingent an einen Ankerkunden und als unterbrechbare Rechenzeit für öffentliche oder freigegebene Aufgaben.**
 
 ## Ablauf (5 Minuten)
 
 **1. Einstieg mit den Kennzahlen (30 s)**, so verlangt es der Case
-«Im Case-Modell decken 8 Server pro Haus 93 % der Wärme. Bei idealisierten 0 Watt Leerlauf fallen 5 kWh ungenutzte Wärme an. Die Server sind zu 52 % ausgelastet und verpassen keine Frist. Der Break-even nach Case-Formel liegt bei 0,23 CHF pro Server-Stunde.»
+«8 Server pro Haus. Im Case-Modell decken sie 93 % der Wärme, es werden nur 5 kWh im Jahr weggekühlt, die Server sind zu 52 % ausgelastet und verpassen keine Frist. Der Break-even nach Case-Formel liegt bei 0,23 CHF pro Server-Stunde. Realistisch, mit Leerlauf und Abschalten, sind es 90,5 % Deckung, und es wird praktisch nichts weggekühlt.»
+Die beiden Modelle immer beim Namen nennen: «Case-Modell» (0 W Leerlauf) und «realistisch mit Abschalten» (230 W Leerlauf). Das Geld rechnen wir immer realistisch.
 Danach in einem Satz das Problem: Server machen aus Strom fast nur Wärme, und die wird heute weggekühlt, während Basler Ölheizungen Öl für dieselbe Wärme verbrennen.
 
 **2. Lösung im Haus (45 s)**
@@ -32,6 +33,7 @@ Danach in einem Satz das Problem: Server machen aus Strom fast nur Wärme, und d
 - Angebot: L4-Rechenzeit für öffentliche, synthetische oder vom Kunden anonymisierte und freigegebene Aufgaben (`docs/kunden/L4_ANGEBOT.md`). Vertrauliche Daten gehören nicht dazu.
 - Angenommene Preise: Ankerkunde Roche nimmt 60 % der Stunden fest zu **0,50 CHF pro L4-h** (= 4,00 CHF pro Server-h), die übrigen Stunden gehen zu **0,55 CHF** (= 4,40 CHF) an Kunden ohne Mindestmenge. Beides sind Zielpreise, kein Kunde hat sie bestätigt.
 - **Zusage am Vortag um 12 Uhr** aus der ECMWF-Wetterprognose. Im Abschaltmodell mit Bad sind rund 91 % der Stunden zusagbar. Knapp 60 % gehen in der Rechnung als Festbuchung ein.
+- **82 % der Rechenstunden fallen in die Heizsaison.** Roche plus ein Kunde für die übrigen Winterstunden ergibt **+27'500 CHF pro Jahr**, auch wenn der Sommer unverkauft bleibt. Pro Haus müsste Roche nur 0,54 % seiner heutigen GPU-Kapazität auslagern (`docs/wirtschaft/KOSTEN_DH.md`, Abschnitt 9).
 - Das Einzelhaus mit Abschalten erreicht rund **+35'000 CHF pro Jahr**, bei rund 290'000 CHF Investition, wenn jede Stunde verkauft ist (`docs/wirtschaft/KOSTEN_DH.md`). Bei 66 % verkauften Stunden ist es bei null.
 - Bringen die übrigen Stunden nur den Spot-Preis (0,294 CHF), braucht DH von Roche mindestens **0,38 CHF pro L4-h**.
 - **Firma** (`docs/wirtschaft/FIRMA.md`): Ab **6 Häusern** trägt DigitalHeat ihre Fixkosten. Ausbau auf 170 Häuser bis 2031, jedes Haus 5 Jahre: Projekt-IRR **19,9 %** ohne Kredit und ohne Endwert, Kapitalbedarf **23,4 Mio. CHF**, Payback 2033. Gerechnet mit einem halben ersten Betriebsjahr pro Haus und Fixkosten, die jedes Jahr 4,5 % steigen. Der Förderbeitrag wie für eine Wärmepumpe (rund 7'200 CHF pro Haus) hilft wenig, Skaleneffekte vor allem bei den Fixkosten.
@@ -40,11 +42,22 @@ Danach in einem Satz das Problem: Server machen aus Strom fast nur Wärme, und d
 - Bei der knappen Nachfrage aus dem Alibaba-Trace bleibt die Flotte mit Bad bei rund **−79’000 CHF pro Jahr**. Der feste Absatz von Rechenzeit entscheidet, ob sich die Investition trägt.
 - Roche als Ankerkunde und der Absatz der übrigen Stunden sind Annahmen, die wir mit Kunden prüfen müssen. Unter rund 85 % verkauften Stunden liegt die Projekt-IRR unter den 12 %, die Investoren erwarten: bei 80 % 9,3 %, mit nur Roche (das ist auch der Fall knapper Nachfrage) −1,1 %. Nächster Schritt: ein bezahltes Winterkontingent.
 - Der Wärmebedarf des Bads ist eine Schätzung (±30 %). Ein Messwert vom Sportamt würde sie ersetzen.
+- **Darum ein Pilot mit klarer Entscheidung** (`docs/wirtschaft/PILOTPLAN.md`): 1 Haus, 2 Server, ein Winter, 81'500 CHF. Weiter nur, wenn mindestens 66 % der Stunden verkauft sind, der Ankerkunde mindestens 0,38 CHF pro L4-h zahlt und ein Server in der Schweiz höchstens 55'800 CHF kostet.
 
 **7. Schluss (15 s)**
 «Wir verkaufen planbare Rechenzeit in Basel, die das Haus heizt. Das Öl kommt raus, der Holzofen bleibt für die kältesten Abende.»
 
 ## Live-Demo
+
+**Hauptdemo: die Gesamtdemo (60–90 s).** Sie zeigt genau, was der Case verlangt: einen Januartag, einen Julitag und einen echten Prozess, den der Scheduler auf das Wärmesignal hin pausiert und weiterlaufen lässt.
+```sh
+.venv/bin/python start/demo_start.py --open     # oder start/Gesamtdemo_starten.command doppelklicken
+```
+- Vor dem Pitch einmal starten und **Live-Demo starten** testen. Oben steht die Jahresbilanz des Referenzhauses, dazu die Karte «Was heisst das für Ihr Haus?» für Hausbesitzer.
+- Während der Demo erzählen: Januar, alle Server rechnen. Juli, nur Warmwasser, der Prozess rechnet nur einen Teil jeder Stunde. 7. März, der Speicher ist voll, der Prozess wird angehalten und läuft später am Checkpoint weiter.
+- Falls etwas hängt: Die Seite zeigt die Jahresbilanz auch ohne Live-Lauf; als Rückfall die Aufzeichnung im Dashboard (unten).
+
+**Zugabe, falls Zeit bleibt: Migration ins Sportbad.**
 
 **Vorbereitung (vor dem Pitch, Terminal im Repo):**
 ```sh
@@ -54,7 +67,7 @@ Browser öffnen und zum Abschnitt «Echter Job, live gesteuert» scrollen.
 
 **Zuerst im Dashboard (20 s):** Januartag und Julitag zeigen, die Diagramme «Ein Januartag» und «Ein Julitag». Im Januar laufen alle 8 Server, im Juli im Mittel 0,6.
 
-**Demo A: Der Job wird unterbrochen und wandert vom Haus ins Bad** (ca. 90 s, zweites Terminal):
+**Zugabe A: Der Job wird unterbrochen und wandert vom Haus ins Bad** (ca. 90 s, zweites Terminal):
 ```sh
 .venv/bin/python src/scheduler/live.py --flotte --sekunden 3 --arbeitsordner "messungen/live_job_flotte/$(date +%s)"
 ```
@@ -64,7 +77,7 @@ Browser öffnen und zum Abschnitt «Echter Job, live gesteuert» scrollen.
 - Danach rechnet er im Bad: voll, wenn genug Wärmebedarf frei ist, gedrosselt, wenn Aufträge mit Frist Vorrang haben.
 - Für eine Demo mit simulierten Ein/Aus-Zuständen `--abschalten` ergänzen. Mit `--nur-tag` lässt sich vorab der Ablauf ohne Embedding-Prozess prüfen. Das Dashboard zeigt dann Haus und Bad mit Anzahl eingeschalteter Server und Server im Standby.
 
-**Demo B (Reserve): Pause und Weiterlauf im Haus**, 7. März:
+**Zugabe B (Reserve): Pause und Weiterlauf im Haus**, 7. März:
 ```sh
 .venv/bin/python src/scheduler/live.py --tag 2025-03-07 --server 8 --sekunden 3
 ```
@@ -85,6 +98,11 @@ Browser öffnen und zum Abschnitt «Echter Job, live gesteuert» scrollen.
 | Woher kommen die 230 W? | Sensitivität aus einem H100-Vergleich. Beim Pilot messen wir Leerlauf, Standby und Startzeit am geplanten L4-Server. |
 | Datensicherheit im Privatkeller? | Verplombtes Gehäuse, Verschlüsselung, ISO 27001 (Premise im Design-Doc). Der Prototyp trennt die Oberflächen für Serverhalter und Pharma (`prototyp/`). |
 | Warum kein Hallenbad? | Das Rialto macht im Sommer Pause, das Hallenbad Eglisee steht nur im Winter. Das Sportbad St. Jakob ist offen, wenn die Häuser keine Wärme brauchen. |
+| Wer kauft die übrigen 40 %? | 82 % der Stunden fallen im Winter an. Wir brauchen neben Roche einen Kunden, der im Winter unterbrechbare Rechenzeit kauft: Hochschul-Rechengruppen, Rendering, KI-Startups mit Training im Batch. Selbst wenn der Sommer unverkauft bleibt, trägt sich das Haus (+27'500 CHF). Unter 66 % verkauften Stunden nicht mehr. |
+| Ist die Serverwärme warm genug für Warmwasser? | Der Case nimmt es an. Flüssigkühlung liefert je nach System rund 45–60 °C. Für Heizkörper reicht das; für Warmwasser braucht es periodisch rund 60 °C gegen Legionellen, eventuell mit kleiner Nachheizung. Das messen wir im Pilot zuerst (`PILOTPLAN.md`). |
+| 5 Jahre Abschreibung, aber der Pilotvertrag läuft 1 Jahr? | Die Server sind nicht ans Haus gebunden. Nach dem Pilot ziehen sie ins nächste Haus um. Der Einbau ist der einzige Betrag, der im Haus bleibt. |
+| Nutzt ihr die Wetterprognose? | Ja: für die verbindliche Zusage am Vortag (ECMWF). Im Router verschiebt sie zusätzlich Aufträge auf vorhergesagte Wärmestunden; die Jahresbilanz ändert das nicht, weil die Menge der Aufträge der Engpass ist. Das haben wir geprüft und offen dokumentiert. |
+| Was passiert bei einem Leck? | Fällt der Durchfluss im Kühlkreis auf null, sperrt der Scheduler den Server sofort. Im Pilot kommt ein Leckagesensor dazu. |
 | Ist 2025 repräsentativ? | 2025 war ein milder Winter. In den Jahren 2010–2025 schwankt die Deckung zwischen 84,5 % und 95,9 % (`ANNAHMEN_PRUEFUNG.md`). |
 
 ## Nachweise (für Rückfragen)

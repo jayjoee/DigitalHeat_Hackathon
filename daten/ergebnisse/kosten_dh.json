@@ -684,5 +684,34 @@
   "gutschrift_jahr1_chf": 115,
   "anteil_fest_gebucht": 0.5984,
   "fehlmenge_server_h": 57.33
+ },
+ "nachfrage_szenarien": {
+  "heizsaison_monate": [
+   10,
+   11,
+   12,
+   1,
+   2,
+   3
+  ],
+  "anteil_stunden_heizsaison": 0.8198,
+  "genug_auftraege": 34970,
+  "winterkunde_sommer_spot": 31515,
+  "winterkunde_sommer_unverkauft": 27548,
+  "anteil_verkauft_sommer_unverkauft": 0.9279,
+  "nur_roche": -6359
+ },
+ "pilot_schwellen": {
+  "verkaufte_stunden_min": 0.6604,
+  "roche_preis_min_rest_spot_chf_karte_h": 0.384,
+  "roche_preis_min_rest_055_chf_karte_h": 0.2438,
+  "rest_preis_min_chf_karte_h": 0.083,
+  "serverpreis_max_chf": 55791,
+  "serverpreis_gerechnet_chf": 32245,
+  "l4_stunden_pro_haus": 276093,
+  "roche_l4_stunden_pro_haus": 165656,
+  "roche_gpus": 3500,
+  "anteil_roche_kapazitaet": 0.0054,
+  "pilot_investition_2_server_chf": 81530
  }
 }

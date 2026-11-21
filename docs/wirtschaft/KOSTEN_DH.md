@@ -39,6 +39,7 @@ Die +35'000 CHF gelten nur, wenn alle fünf Punkte zutreffen. Die ersten beiden 
    Roche nimmt seine 60 % immer ab, es fehlen Stunden aus dem Rest (gleiche Regel wie `FIRMA.md`).
 
    Roche allein (60 %) trägt das Haus nicht: −6'400 CHF pro Jahr. Mit der Nachfrage aus dem Alibaba-Trace ist die Flotte negativ (Abschnitt 8).
+   **Der Sommer entscheidet aber wenig:** 82 % der Rechenstunden fallen in die Heizsaison Oktober–März. Roche plus ein Kunde für die übrigen Winterstunden ergibt +27'500 CHF pro Jahr, auch wenn der Rest im Sommer unverkauft bleibt (Abschnitt 9).
 2. **Die übrigen 40 % bringen 0,55 CHF pro L4-Stunde.** Das ist der am wenigsten belegte Wert, und er trägt das Ergebnis: Bringt der Rest nur den Spot-Preis, bleiben +15'800 CHF. Die Kunden dafür (ohne Mindestmenge, unterbrechbar, Lieferung nur in Heizstunden) sind noch nicht gefunden. Nach `L4_ANGEBOT.md` rechnet DH nur öffentliche, synthetische oder vom Kunden freigegebene anonymisierte Aufgaben.
 3. **Der Roche-Preis bleibt 5 Jahre fest**, während der Preis der übrigen Stunden 10 % pro Jahr fällt. Fällt auch der Roche-Preis 10 % pro Jahr, bleiben +23'200 CHF.
 4. **Firmenkosten von 1'200 CHF pro Haus.** Das gilt erst bei grosser Stückzahl. `FIRMA.md` rechnet mit 5'400 CHF pro Haus bei 170 Häusern und 77'000 CHF bei 5 Häusern.
@@ -306,6 +307,38 @@ Die Zusage kostet rund 130 CHF pro Jahr. Der Betrag ist so klein, weil Roche im 
 Auch mit den neuen Preisen bleibt 50 Server die beste Badgrösse bei knapper Nachfrage (Suche über 10–80 Server).
 
 Die Firmenrechnung über 10 Jahre mit Ausbauplan, Fixkosten, Förderung und Finanzierung steht in `FIRMA.md` (noch mit den alten Preisen).
+
+## 9. Nachfrage zwischen den Extremen und Schwellen für den Pilotentscheid
+
+Zahlen aus `src/kosten_dh.py` (`daten/ergebnisse/kosten_dh.json`, Felder `nachfrage_szenarien` und `pilot_schwellen`), Referenzhaus im Abschaltmodell.
+
+**Wann die Rechenstunden anfallen:** Die Server laufen wärmegeführt. Darum fallen **82 % der 34'512 Server-Stunden in die Heizsaison** Oktober–März (Case: Heizung Oktober–März). Für den Absatz zählt vor allem der Winter.
+
+| Nachfrage | Verkaufte Stunden | Ergebnis pro Jahr |
+|---|---|---|
+| Genug Aufträge: Roche 60 %, Rest 0,55 CHF | 100 % | **+35'000 CHF** |
+| Roche 60 % + Winterkunde für die übrigen Stunden Oktober–März (0,55 CHF), Sommerrest zum Spot-Preis | 100 % | **+31'500 CHF** |
+| Roche 60 % + Winterkunde, Sommerrest unverkauft | 92,8 % | **+27'500 CHF** |
+| Nur Roche | 60 % | −6'400 CHF |
+
+Das mittlere Szenario ist realistischer als «genug Aufträge»: Es braucht neben Roche nur einen Kunden, der im Winter unterbrechbare Rechenzeit kauft. Der Sommer muss gar nicht verkauft werden.
+
+**Grösse der Nachfrage:** Ein Haus liefert rund 276'000 L4-Stunden pro Jahr, davon gehen 60 % (166'000) an Roche. Roche betreibt über 3'500 GPUs (`docs/kunden/PHARMA_SICHT.md`), also rund 30,7 Mio. GPU-Stunden pro Jahr. Pro Haus müsste Roche **0,54 % dieser Kapazität** auslagern. Ob Roche das tut, ist nicht bestätigt; die Menge ist aber klein.
+
+**Schwellen für den Pilotentscheid** (alle anderen Werte wie gerechnet):
+
+| Grösse | Gerechnet | Schwelle, ab der das Haus nicht mehr trägt |
+|---|---|---|
+| Verkaufte Stunden | 100 % | **unter 66 %** |
+| Roche-Preis, wenn der Rest 0,55 CHF bringt | 0,50 CHF pro L4-h | unter 0,24 CHF |
+| Roche-Preis, wenn der Rest nur Spot bringt | 0,50 CHF pro L4-h | **unter 0,38 CHF** |
+| Preis der übrigen Stunden (Roche 0,50 CHF) | 0,55 CHF pro L4-h | unter 0,08 CHF |
+| Serverpreis mit 8 L4 | 32'245 CHF | **über 55'800 CHF** |
+| Leerlauf pro Server (mit Abschalten) | 230 W | nicht kritisch: bei 350 W noch +33'700 CHF |
+
+**Pilot mit 2 Servern:** Einbau, Speicher und Netzwerk für 8 kW, aber nur 2 Server bestückt: **81'500 CHF** Investition. Die Server ziehen nach dem Pilot ins nächste Haus um.
+
+Wie der Pilot diese Schwellen prüft, steht in [PILOTPLAN.md](PILOTPLAN.md).
 
 ## Quellen
 

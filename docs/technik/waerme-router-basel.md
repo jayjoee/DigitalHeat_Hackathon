@@ -23,7 +23,7 @@ Alle Anbieter von Abwärme-Rechenzeit verkaufen sie als billige Restkapazität. 
 - Kein Cluster-Setup (k3s, Kueue). Die Verteilung wird simuliert; nur der Demo-Job ist ein echter Prozess.
 
 ## Premises
-1. **(angepasst)** Kunden mit Datenstandort Schweiz (Pharma, Banken, Spitäler) zahlen 0,60 CHF pro L4-Stunde **nur für Stunden, die DigitalHeat einen Tag im Voraus verbindlich zusagt** (Grundlage: Wetterprognose). Alle übrigen Stunden sind Spot (0,294 CHF, −10 % pro Jahr).
+1. **(überholt, siehe [L4_ANGEBOT.md](../kunden/L4_ANGEBOT.md) und [KOSTEN_DH.md](../wirtschaft/KOSTEN_DH.md): vertrauliche Daten sind ausgeschlossen; Ankerkunde 0,50 CHF, übrige Stunden 0,55 CHF)** Ursprünglich: Kunden mit Datenstandort Schweiz (Pharma, Banken, Spitäler) zahlen 0,60 CHF pro L4-Stunde **nur für Stunden, die DigitalHeat einen Tag im Voraus verbindlich zusagt** (Grundlage: Wetterprognose). Alle übrigen Stunden sind Spot (0,294 CHF, −10 % pro Jahr).
 2. Wärme zuerst: Server laufen nur, wenn ein Standort die Wärme brauchen kann. Dauerbetrieb mit Rückkühler ist ausgeschlossen.
 3. Der Engpass ist die Nachfrage, nicht die Technik.
 4. Datensicherheit im Privatkeller lässt sich glaubwürdig lösen (Verschlüsselung, verplombtes Gehäuse, ISO 27001).

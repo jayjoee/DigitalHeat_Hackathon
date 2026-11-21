@@ -94,7 +94,7 @@ Von Juni bis August laufen die Server nur noch für das Warmwasser (0,6 Server).
 
 ## Wann es sich nicht lohnt
 1. **Rechenpreis unter 0,226 CHF pro Server-h:** Dann deckt der Erlös nicht einmal den Strom abzüglich Wärmewert. Das gilt unabhängig von der Serverzahl, solange keine Wärme abgeführt wird.
-2. **Mit allen Kosten** (Hardware, Kühlung, Einbau, Wartung, Versicherung, Steuern, Zins): Roche-Preis unter **0,24 CHF pro L4-Stunde** bei 0,55 CHF für den Rest, unter **0,38 CHF**, wenn der Rest nur den Spot-Preis bringt, oder weniger als **68 % der Rechenstunden verkauft** (`KOSTEN_DH.md`). Über einen Marktplatz statt Direktvertrag bräuchte es rund 0,47 CHF. Mit neuen H100 statt L4 verliert DigitalHeat selbst im günstigen Fall Geld.
+2. **Mit allen Kosten** (Hardware, Kühlung, Einbau, Wartung, Versicherung, Steuern, Zins): Roche-Preis unter **0,24 CHF pro L4-Stunde** bei 0,55 CHF für den Rest, unter **0,38 CHF**, wenn der Rest nur den Spot-Preis bringt, oder weniger als **66 % der Rechenstunden verkauft** (`KOSTEN_DH.md`). Über einen Marktplatz statt Direktvertrag bräuchte es rund 0,47 CHF. Mit neuen H100 statt L4 verliert DigitalHeat selbst im günstigen Fall Geld.
 3. **Ohne flexible Nachfrage (Szenario Alibaba):** Kommen alle Jobs mit Frist nach Alibaba-Trace, sinkt die Deckung bei 8 Servern auf 51,7 %. Im Sommer müssen 7'506 kWh Wärme abgeführt werden, weil die Jobs vor ihrer Frist laufen müssen. Der Break-even steigt auf 0,260 CHF.
    Mit der Regel «abgeben» gehen 9'608 Jobs (8'990 Server-h) an andere Standorte. Abgeführt werden nur noch 316 kWh. **Genau diese 9'000 Server-h im Sommer bräuchten einen Abnehmer mit Sommerwärmebedarf** (Hotel mit Spa, Maistrockner).
 
@@ -118,6 +118,12 @@ Alle Annahmen mit Quelle stehen in `src/scheduler/annahmen.py` und in jeder Erge
 - Stündliche Auflösung, perfekte Kenntnis des Bedarfs der laufenden Stunde, keine Prognose über die Stunde hinaus.
 - Speicher ohne Verluste, Warmwasser gleichmässig über den Tag (0,5 kWh pro Stunde).
 - Ankünfte nach Alibaba-Tagesform in UTC+8, nicht auf Basel umgerechnet.
+
+## Nachfrage zwischen den Extremen
+Die beiden Szenarien oben sind Extreme: unbegrenzt flexible Aufträge oder nur Aufträge nach Alibaba-Trace. Weil die Server wärmegeführt laufen, fallen **82 % der Rechenstunden in die Heizsaison** Oktober–März. Roche (60 %) plus ein Kunde, der die übrigen Winterstunden kauft, ergibt im Abschaltmodell **+27'500 CHF pro Jahr**, auch wenn die übrigen Sommerstunden unverkauft bleiben. Nur Roche: −6'400 CHF. Herleitung, Grösse der Nachfrage im Vergleich zur GPU-Flotte von Roche und Schwellen für den Pilotentscheid: [KOSTEN_DH.md, Abschnitt 9](../wirtschaft/KOSTEN_DH.md#9-nachfrage-zwischen-den-extremen-und-schwellen-für-den-pilotentscheid), [PILOTPLAN.md](../wirtschaft/PILOTPLAN.md).
+
+## Wetterprognose im Router (geprüft 21.11.2026)
+Der Router kann frische Aufträge mit Hilfe des archivierten ECMWF-Profils auf vorhergesagte Wärmestunden verschieben (`src/scheduler/vorausschau.py`, Option `prognose=` der Flotte). Im Referenzhaus mit Nachfrage nach Alibaba verschiebt er damit 3'017 Auftragsstunden. **Die Jahresbilanz ändert sich dadurch nicht:** gleiche Deckung (51,7 %), gleiche abgeführte bzw. abgegebene Wärme, keine verpassten Fristen. Der Engpass ist die Menge der Aufträge, nicht ihr Zeitpunkt innerhalb eines Tages. Die Prognose wird darum vor allem für die Zusage am Vortag genutzt (nächster Abschnitt).
 
 ## Day-ahead-Zusage (Stand 21.11.2026, `src/scheduler/zusage.py`)
 Frage: Wie viele Server-Stunden kann DigitalHeat einen Tag im Voraus verbindlich zum Roche-Preis von 0,50 CHF pro L4-h (= 4,00 CHF pro Server-h) verkaufen?

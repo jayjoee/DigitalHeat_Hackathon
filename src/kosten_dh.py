@@ -28,12 +28,16 @@ def simuliere(n, profil, strategie="abschalten", leerlauf_watt=230):
     else:
         haus = HausMitServerbetrieb(n, "spot", profil, Leistungsprofil(leerlauf_watt, 10, 5),
                                     abschalten=strategie == "abschalten")
+    monate = [0.0] * 12
     for h in range(len(profil)):
+        vorher = haus.z.get("rechenstrom", haus.z["strom"])
         haus.schritt(h)
+        monate[int(profil[h]["zeit"][5:7]) - 1] += haus.z.get("rechenstrom", haus.z["strom"]) - vorher
     z = haus.z
-    return {"n": n, "server_h": z.get("rechenstrom", z["strom"]) / A.wert("server_kw"),
+    kw = A.wert("server_kw")
+    return {"n": n, "server_h": z.get("rechenstrom", z["strom"]) / kw,
             "waerme_kwh": z["genutzt"], "strom_kwh": z["strom"],
-            "deckung": z["genutzt"] / z["bedarf"]}
+            "deckung": z["genutzt"] / z["bedarf"], "monate_server_h": [m / kw for m in monate]}
 
 
 def rueckzahlung(r):
@@ -146,6 +150,55 @@ def zusage_idealmodell(profil):
             "anteil_fest_gebucht": z["anteil_fest_gebucht"], "fehlmenge_server_h": z["fehlmenge_server_h"]}
 
 
+HEIZSAISON = (10, 11, 12, 1, 2, 3)  # Case: Heizung Oktober–März
+
+
+def nachfrage_szenarien(s):
+    """Zwischen «genug Aufträge» und «nur Roche»: Roche nimmt seinen Anteil aller wärmegeführten Stunden,
+    ein Winterkunde die übrigen Stunden der Heizsaison zum Preis der übrigen Stunden."""
+    H = s["server_h"]
+    fest = A.wert("anteil_fest_gebucht")
+    rest_preis = A.wert("spotpreis_chf_karte_h")
+    winter = sum(s["monate_server_h"][m - 1] for m in HEIZSAISON)
+    rest_w, rest_s = (1 - fest) * winter, (1 - fest) * (H - winter)
+    a = (s["n"], s["waerme_kwh"])
+
+    def erg(verkauft, preis_rest):
+        return rechne(a[0], verkauft, a[1], strom_kwh=s["strom_kwh"], anteil_fest_gebucht=fest * H / verkauft,
+                      spotpreis_chf_karte_h=preis_rest)["ergebnis_pro_jahr_chf"]
+    return {
+        "heizsaison_monate": list(HEIZSAISON),
+        "anteil_stunden_heizsaison": round(winter / H, 4),
+        "genug_auftraege": erg(H, rest_preis),
+        "winterkunde_sommer_spot": erg(H, (rest_w * rest_preis + rest_s * SPOT) / (rest_w + rest_s)),
+        "winterkunde_sommer_unverkauft": erg(fest * H + rest_w, rest_preis),
+        "anteil_verkauft_sommer_unverkauft": round((fest * H + rest_w) / H, 4),
+        "nur_roche": erg(fest * H, rest_preis),
+    }
+
+
+def pilot_schwellen(s, sens, r):
+    """Werte, ab denen sich das Referenzhaus nicht mehr trägt (alles andere wie gerechnet)."""
+    a = (s["n"], s["server_h"], s["waerme_kwh"])
+    erg = lambda **k: rechne(*a, strom_kwh=s["strom_kwh"], **k)["ergebnis_pro_jahr_chf"]  # noqa: E731
+    l4_h = s["server_h"] * A.wert("karten_pro_server")
+    roche_gpus = 3500  # «über 3'500 GPUs» (docs/kunden/PHARMA_SICHT.md)
+    return {
+        "verkaufte_stunden_min": sens["verkaufte_stunden_nullpunkt"],
+        "roche_preis_min_rest_spot_chf_karte_h": r["break_even_anker_rest_spot_chf_karte_h"],
+        "roche_preis_min_rest_055_chf_karte_h": r["break_even_anker_chf_karte_h"],
+        "rest_preis_min_chf_karte_h": r["break_even_rest_chf_karte_h"],
+        "serverpreis_max_chf": round(nullstelle(lambda x: -erg(server_preis_chf=x), 0, 200000)),
+        "serverpreis_gerechnet_chf": A.wert("server_preis_chf"),
+        "l4_stunden_pro_haus": round(l4_h),
+        "roche_l4_stunden_pro_haus": round(l4_h * A.wert("anteil_fest_gebucht")),
+        "roche_gpus": roche_gpus,
+        "anteil_roche_kapazitaet": round(l4_h * A.wert("anteil_fest_gebucht") / (roche_gpus * 8760), 4),
+        # Pilot: Einbau, Speicher und Netzwerk wie für 8 kW, aber nur 2 Server bestückt
+        "pilot_investition_2_server_chf": rechne(2, 1.0, 0.0)["investition_chf"],
+    }
+
+
 def main():
     profil = profil_laden()
     efh, _ = profil_haus2(profil)
@@ -168,7 +221,9 @@ def main():
         "pausieren_230w": haus_kennzahlen(simuliere(8, profil, "pausieren", 230))["ergebnis_chf"],
         "sensitivitaeten": sensitivitaeten(ref[8]),
         "zusage_idealmodell": zusage_idealmodell(profil),
+        "nachfrage_szenarien": nachfrage_szenarien(ref[8]),
     }
+    daten["pilot_schwellen"] = pilot_schwellen(ref[8], daten["sensitivitaeten"], daten["referenzhaus"])
     AUS.write_text(json.dumps(daten, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
     r = daten["referenzhaus"]
     print(f"Referenzhaus: {r['ergebnis_chf']:,} CHF/J, Rest nur Spot {r['ergebnis_rest_spot_chf']:,}, "

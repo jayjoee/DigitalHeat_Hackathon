@@ -68,6 +68,8 @@ Der Blister-Batch wechselt im Demo-Wärmeverlauf automatisch vom Haus zum Sportb
 | Rund CHF 290'000 Investition pro Haus | Hardware-/Einbauannahmen, keine gemessene Pilotinstallation |
 | CHF 0,50 pro L4-Stunde (Roche, 60 %) und 0,55 für den Rest | Angenommene Zielpreise, kein belegter Kundenauftrag |
 | Rund CHF 35'000 jährliches Modellergebnis mit Abschalten | Nur wenn jede Stunde verkauft ist; bei 66 % verkauften Stunden null |
+| Rund CHF 27'500 mit Roche und einem Winterkunden | 82 % der Rechenstunden fallen in die Heizsaison; der Sommerrest darf unverkauft bleiben |
+| Pilot: 1 Haus, 2 Server, ein Winter, CHF 81'500 | Klare Schwellen für den Ausbauentscheid in [PILOTPLAN.md](docs/wirtschaft/PILOTPLAN.md) |
 
 Massgebend sind [KOSTEN_DH.md](docs/wirtschaft/KOSTEN_DH.md) und [ERGEBNISSE.md](docs/ergebnisse/ERGEBNISSE.md); diese Tabelle fasst sie nur zusammen. Die Unternehmenskennzahl wird als jährliches Kapitalwertäquivalent berechnet. Sie ist kein bereits erzielter realer Jahresgewinn. Bei knapper Nachfrage kann das System Verlust machen.
 
@@ -154,6 +156,7 @@ Die gemeinsame Aufgabenliste steht in [docs/TODO.md](docs/TODO.md). Die wichtigs
 | | [ML_ERGEBNISSE.md](docs/ergebnisse/ML_ERGEBNISSE.md) | Der kleine zusätzliche ML-Effekt im bisherigen Szenario |
 | `docs/wirtschaft/` | [KOSTEN_DH.md](docs/wirtschaft/KOSTEN_DH.md) | Was DigitalHeat investiert, was es kostet und was es verdient |
 | | [FIRMA.md](docs/wirtschaft/FIRMA.md) | Rechnung für die ganze Firma über 10 Jahre mit Ausbauplan und Finanzierung |
+| | [PILOTPLAN.md](docs/wirtschaft/PILOTPLAN.md) | Ein Winter, ein Haus: was gemessen wird und ab welchen Werten ausgebaut wird |
 | | [ANNAHMEN_PRUEFUNG.md](docs/wirtschaft/ANNAHMEN_PRUEFUNG.md) | Jede Annahme kritisch geprüft: Hält sie, und was passiert, wenn nicht? |
 | `docs/kunden/` | [L4_ANGEBOT.md](docs/kunden/L4_ANGEBOT.md) | Gewählte Ausrichtung: L4 für öffentliche/synthetische oder kundenseitig anonymisierte und freigegebene Aufgaben |
 | | [PHARMA_SICHT.md](docs/kunden/PHARMA_SICHT.md) | Wer die Rechenzeit kauft, was Kunden heute zahlen und welche Verträge üblich sind |
