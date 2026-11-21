@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1200" preserveAspectRatio="xMidYMid slice">
+<defs>
+<linearGradient id="sky" x2=".75" y2="1"><stop stop-color="#dc9a91"/><stop offset=".45" stop-color="#a9869e"/><stop offset="1" stop-color="#587d99"/></linearGradient>
+<radialGradient id="sun"><stop stop-color="#f9d9af" stop-opacity=".9"/><stop offset="1" stop-color="#e4b095" stop-opacity="0"/></radialGradient>
+<linearGradient id="back" x2="0" y2="1"><stop stop-color="#7b7995"/><stop offset="1" stop-color="#4c6785"/></linearGradient>
+<linearGradient id="mid" x2="1" y2="1"><stop stop-color="#7b6d84"/><stop offset="1" stop-color="#385c7a"/></linearGradient>
+<linearGradient id="front" x2=".8" y2="1"><stop stop-color="#3d5b75"/><stop offset="1" stop-color="#203c57"/></linearGradient>
+<linearGradient id="near" x2="1" y2="1"><stop stop-color="#29475d"/><stop offset="1" stop-color="#172b43"/></linearGradient>
+<filter id="haze"><feGaussianBlur stdDeviation="25"/></filter>
+</defs>
+<path fill="url(#sky)" d="M0 0h1920v1200H0z"/><ellipse cx="1430" cy="240" rx="650" ry="520" fill="url(#sun)"/>
+<g filter="url(#haze)" opacity=".3" fill="#efd2bc"><path d="M950 120c260-60 500 75 780 25l280 60c-430 50-650-20-1060-85Z"/><path d="M-200 330c430-50 570 65 840 30l80 70c-310 25-510-50-920-20Z"/></g>
+<path fill="url(#back)" d="M0 660 160 595 320 640 495 490 650 575 810 430 995 575 1185 450 1410 590 1630 430 1780 520 1920 485V1200H0Z"/>
+<path fill="url(#mid)" d="M0 725c240-190 370-90 560-165s310 55 490 130 360-75 550-35 230 80 320 25v520H0Z"/>
+<path fill="url(#front)" d="M0 810c250-85 330 65 570 30s340-225 580-180 455 250 770 150v390H0Z"/>
+<path fill="url(#near)" d="M0 990c260-145 445-75 660-5s355-10 555-15 420 190 705 45v185H0Z"/>
+<path d="M0 1100c470-155 560 30 900-35s625-30 1020 90v45H0Z" fill="#172c40" opacity=".8"/>
+</svg>

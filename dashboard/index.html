@@ -100,8 +100,9 @@ details summary { cursor: pointer; font-weight: 600; }
 </head>
 <body>
 <main>
+<p><a href="http://127.0.0.1:18200/">Geführte Gesamtdemo (Dienst starten)</a> · <a href="ml/index.html">ML-Energievergleich</a></p>
   <h1>Rechnen, das heizt</h1>
-  <p class="sub">Referenzhaus Basel 2025: Server im Keller rechnen KI-Jobs und heizen dabei das Haus. Alle Zahlen aus derselben Jahressimulation, die auch den echten Job steuert.</p>
+  <p class="sub">Referenzhaus Basel 2025: Server im Keller rechnen KI-Jobs und heizen das Haus. Der Scheduler der Jahresrechnung steuert auch den echten Job in der Live-Demo.</p>
 
   <div class="controls card">
     <div class="ctl"><label for="n">Server pro Haus</label>
@@ -164,6 +165,12 @@ details summary { cursor: pointer; font-weight: 600; }
     <div id="chServer"></div>
   </section>
 
+  <section class="card" style="margin-bottom:16px" id="serverbetrieb" hidden>
+    <h2>Server pausieren oder abschalten?</h2>
+    <p class="note" id="serverbetriebHinweis"></p>
+    <div style="overflow-x:auto" id="serverbetriebTabelle"></div>
+  </section>
+
   <section class="card" style="margin-bottom:16px">
     <h2>Lohnt sich ein Server mehr?</h2>
     <div class="note" id="nGrenz"></div>
@@ -179,9 +186,12 @@ details summary { cursor: pointer; font-weight: 600; }
         <button data-v="alibaba" aria-pressed="true">Nur Jobs mit Frist</button>
         <button data-v="spot" aria-pressed="false">Genug Aufträge</button></div></div>
       <div class="ctl"><label>Sommer-Senke</label><div class="seg" id="segVariante"></div></div>
+      <div class="ctl" id="ctlFlottenBetrieb" hidden><label>Serverbetrieb</label><div class="seg" id="segFlottenBetrieb">
+        <button data-v="abschalten" aria-pressed="true">Bedarfsgerecht abschalten</button>
+        <button data-v="case" aria-pressed="false">Case-Idealmodell</button></div></div>
     </div>
     <div class="tiles" id="tilesFlotte"></div>
-    <div class="grid3">
+    <div class="grid3" id="flottenDiagramme">
       <div>
         <h2 style="font-size:15px">Wo die Rechenarbeit läuft</h2>
         <div class="note">Server-Stunden pro Monat. Häuser haben Vorrang, das Bad nimmt nur, was kein Haus als Wärme braucht.</div>
@@ -191,7 +201,7 @@ details summary { cursor: pointer; font-weight: 600; }
         <div id="chFlotte"></div>
         <button class="toggle" data-table="tblFlotte">Tabelle zeigen</button><div id="tblFlotte" hidden></div>
       </div>
-      <div>
+      <div id="flottenSuche">
         <h2 style="font-size:15px">Wie gross soll das Bad sein?</h2>
         <div class="note">Ergebnis der Flotte pro Jahr bei «Nur Jobs mit Frist», nach Serverzahl im Bad</div>
         <div id="chSuche"></div>
@@ -319,7 +329,7 @@ function kacheln() {
   const t = [
     ["Server pro Haus", fmt(S.n), "1 kW Strom → 0,8 kW Wärme pro Server"],
     ["Wärmebedarf gedeckt", pct(b.deckungsgrad), `${fmt(b.waerme_genutzt_kwh)} von ${fmt(b.waermebedarf_kwh)} kWh, Rest Backup`],
-    ["Wärme abgeführt", fmt(b.waerme_abgefuehrt_kwh) + " kWh", pct(b.anteil_abgefuehrt_von_serverwaerme, 2) + " der Serverwärme"],
+    ["Wärme abgeführt", fmt(b.waerme_abgefuehrt_kwh) + " kWh", "Case-Modell: 0 W im Leerlauf"],
     ["Auslastung", pct(b.auslastung), `${fmt(b.server_h)} Server-h von ${fmt(S.n * 8760)}`],
     ["Verpasste Fristen", pct(b.verpasste_fristen_anteil, 2), (S.sz === "spot"
       ? `${fmt(b.jobs_mit_frist)} Aufträge B mit Frist (A als Winterkontingent ohne feste Stundenfrist)`
@@ -414,6 +424,28 @@ function serverkurve() {
 // ---------- Diagramm: Lohnt sich ein Server mehr? ----------
 // Zusatzergebnis des n-ten Servers = Ergebnis(n) − Ergebnis(n−1), mit allen Kosten (wirtschaft()).
 // Ein Server mehr lohnt sich, solange dieser Betrag positiv ist. Server 1 trägt auch die Fixkosten des Hauses.
+function serverbetrieb() {
+  const ergebnisse = D.serverbetrieb?.ergebnisse.filter((r) => r.szenario === S.sz);
+  if (!ergebnisse?.length) return;
+  const leistung = ergebnisse.find((r) => r.leistungsprofil)?.leistungsprofil;
+  const label = { case: "Case-Idealwert", pausieren: "Jobs pausieren", abschalten: "Server abschalten" };
+  $("serverbetrieb").hidden = false;
+  $("serverbetriebHinweis").textContent =
+    "Referenzhaus mit 8 Servern, fristkritische Jobs laufen lokal. " +
+    (leistung ? `${fmt(leistung.standby_watt, 1)} W Standby, ${fmt(leistung.start_minuten, 1)} min Startzeit. Leistungswerte sind Annahmen.` : "");
+  $("serverbetriebTabelle").innerHTML = `<table><thead><tr>
+    <th scope="col">Betrieb</th><th scope="col">Leerlauf</th><th scope="col">Strom</th>
+    <th scope="col">Wärme abgeführt</th><th scope="col">Wärme gedeckt</th>
+    <th scope="col">Fristen verpasst</th></tr></thead><tbody>${ergebnisse.map((r) => `<tr>
+    <th scope="row">${label[r.strategie]}</th>
+    <td class="num">${fmt(r.leistungsprofil?.leerlauf_watt ?? 0)} W</td>
+    <td class="num">${fmt(r.strom_kwh)} kWh</td>
+    <td class="num">${fmt(r.waerme_abgefuehrt_kwh, 1)} kWh</td>
+    <td class="num">${pct(r.deckungsgrad)}</td>
+    <td class="num">${fmt(r.jobs_frist_verpasst)}</td>
+    </tr>`).join("")}</tbody></table>`;
+}
+
 function grenzwert() {
   const W = 1100, H = 200, x0 = 56, x1 = W - 8, y0 = H - 24, y1 = 10;
   const svg = svgNeu($("chGrenz"), W, H), r = regler();
@@ -477,36 +509,53 @@ function tag(name, box, sp, titel, notiz) {
 }
 
 // ---------- Flotte (Wärme-Router, src/scheduler/router.py + flotte.py) ----------
-S.variante = 1; S.szF = "alibaba";  // Hauptszenario der Flotte: «Nur Jobs mit Frist» (eigener Umschalter)
-function flotteVarianten() { return D.flotte.ergebnisse.filter((b) => b.szenario === S.szF); }
+S.variante = 1; S.szF = "alibaba"; S.betriebF = D.flotte_abschalten ? "abschalten" : "case";
 function flotte() {
-  const F = D.flotte;
+  const F = S.betriebF === "abschalten" ? D.flotte_abschalten : D.flotte;
   if (!F) { $("flotte").innerHTML = `<h2>Flotte</h2><div class="note">Noch keine Flottenrechnung: <code>python3 src/scheduler/flotte.py</code>, dann <code>python3 src/dashboard_daten.py</code>.</div>`; return; }
-  const V = flotteVarianten(), b = V[Math.min(S.variante, V.length - 1)], ohne = V[0], g = b.gruppen;
+  const V = F.ergebnisse.filter((b) => b.szenario === S.szF);
+  S.variante = Math.min(S.variante, V.length - 1);
+  const b = V[S.variante], ohne = V[0], g = b.gruppen, leistung = F.leistungsprofil;
+  $("ctlFlottenBetrieb").hidden = !D.flotte_abschalten;
   $("segVariante").innerHTML = V.map((v, i) => `<button data-i="${i}" aria-pressed="${i === S.variante}">${
-    v.server_bad ? `Sportbad ${v.server_bad} Server ${v.server_bad === F.server_bad_regel ? "(Senkenregel)" : "(nach Nachfrage)"}` : "keine"}</button>`).join("");
+    v.server_bad ? `Sportbad ${v.server_bad} Server${leistung ? "" :
+      (v.server_bad === F.server_bad_regel ? " (Senkenregel)" : " (nach Nachfrage)")}` : "Ohne Bad"}</button>`).join("");
   $("segVariante").querySelectorAll("button").forEach((x) => x.addEventListener("click", () => { S.variante = +x.dataset.i; flotte(); }));
   $("nFlotte").textContent = `Ein gemeinsamer Auftragspool für ${g.haus.standorte} Häuser mit je ${F.server_pro_haus} Servern` +
     (g.bad ? ` und das Sportbad (offen 26.4.–5.10., ca. 650 MWh/Jahr, Schätzung ±30 %)` : "") +
-    `. Der Wärme-Router verteilt jede Stunde die Aufträge, der Kern pro Standort bleibt derselbe. Wohnhäuser haben Vorrang. ` +
-    `Wärme nicht gebraucht und Frist drängt: Auftrag an eine andere Schweizer Cloud. Nachfrage: «${S.szF === "spot" ? "Genug Aufträge" : "Nur Jobs mit Frist"}».`;
+    `. Wohnhäuser haben bei der Auftragsverteilung Vorrang. Fristkritische Aufträge können an eine andere Cloud gehen. ` +
+    (leistung ? `Annahmen je Server: ${fmt(leistung.leerlauf_watt)} W Leerlauf, ${fmt(leistung.standby_watt)} W Standby, ${fmt(leistung.start_minuten)} min Startzeit.`
+      : "Case-Idealmodell mit 0 W Leerlauf.");
   const d = b.dh_ergebnis_pro_jahr_chf - ohne.dh_ergebnis_pro_jahr_chf;
   const t = [
     ["An andere Cloud abgegeben", fmt(b.abgegeben_server_h) + " h", b === ohne ? "Server-h ohne Erlös, weil kein Haus Wärme braucht"
       : `statt ${fmt(ohne.abgegeben_server_h)} h ohne Bad`],
     ["Auslastung Haus-Server", pct(g.haus.auslastung), `Deckung der Häuser ${pct(g.haus.deckungsgrad)}`],
-    ["Auslastung Bad-Server", g.bad ? pct(g.bad.auslastung) : "–", g.bad ? "übers Jahr; offen ist das Bad 163 von 365 Tagen" : "kein Bad"],
+    ["Auslastung Bad-Server", g.bad ? pct(g.bad.auslastung) : "–", g.bad ? `Wärmebedarf des Bads gedeckt: ${pct(g.bad.deckungsgrad)}` : "Ohne Bad"],
     ["Migrationen", fmt(b.migrationen), "Job wandert per Checkpoint an einen anderen Standort"],
     ["Verpasste Fristen", pct(b.verpasste_fristen_anteil, 2), `${fmt(b.jobs_mit_frist)} Aufträge mit Frist`],
     ["Ergebnis Flotte, CHF pro Jahr", (b.dh_ergebnis_pro_jahr_chf < 0 ? "−" : "") + fmt(Math.abs(b.dh_ergebnis_pro_jahr_chf)),
       b === ohne ? "alle Standorte, alle Kosten, Steuern und Zins" : `${d >= 0 ? "+" : "−"}${chf(Math.abs(d))} gegenüber ohne Bad`],
   ];
+  if (leistung) {
+    t.push(["Strom Flotte", fmt(b.strom_kwh) + " kWh", "Rechnen, Leerlauf, Standby und Starts"]);
+    if (g.bad) {
+      t.push(["Bad-Server in Standby", pct(g.bad.server_h_aus / (g.bad.server * 8760)),
+        `${fmt(g.bad.serverstarts)} Starts im Jahr`]);
+    }
+  }
   $("tilesFlotte").innerHTML = t.map(([l, v, h]) =>
     `<div class="tile card"><div class="lab">${l}</div><div class="val">${v}</div><div class="hint">${h}</div></div>`).join("");
-  flotteMonate(b); flotteSuche(F); flotteZusage(F, b);
+  $("flottenSuche").hidden = Boolean(leistung);
+  $("flottenDiagramme").style.gridTemplateColumns = leistung ? "1fr" : "";
+  flotteMonate(b);
+  if (!leistung) flotteSuche(F);
+  flotteZusage(F, b);
 }
 function flotteMonate(b) {
   const M = b.monate, W = 640, H = 250, x0 = 52, x1 = W - 8, y0 = H - 22, y1 = 10;
+  const mitStrom = b.strom_kwh != null;
+  const mitBad = mitStrom && b.server_bad > 0;
   const svg = svgNeu($("chFlotte"), W, H);
   const teile = [["haus_server_h", "var(--s1)", "Häuser"], ["senke_server_h", "var(--s2)", "Sportbad"], ["abgegeben_server_h", "var(--s3)", "abgegeben"]];
   const max = niceMax(Math.max(...M.map((m) => teile.reduce((s, [k]) => s + (m[k] || 0), 0))));
@@ -523,10 +572,13 @@ function flotteMonate(b) {
       `<br><span class="k">Wärme Häuser gedeckt</span> ${pct((m.haus_genutzt_kwh || 0) / (m.haus_bedarf_kwh || 1), 0)}`);
     const t = el("text", { x: x + w / 2, y: H - 6, "text-anchor": "middle" }, svg); t.textContent = MON[i];
   });
-  $("tblFlotte").innerHTML = `<table><tr><th>Monat</th><th class="num">Häuser</th><th class="num">Sportbad</th><th class="num">abgegeben</th>
-    <th class="num">Wärme Häuser gedeckt</th></tr>` + M.map((m, i) => `<tr><td>${MON[i]}</td><td class="num">${fmt(m.haus_server_h)}</td>
+  $("tblFlotte").innerHTML = `<table><tr><th>Monat</th><th>Häuser (h)</th><th>Sportbad (h)</th><th>Abgegeben (h)</th>
+    <th>Wärme Häuser gedeckt</th>${mitStrom ? "<th>Strom (kWh)</th>" : ""}${mitBad ? "<th>Bad in Standby</th>" : ""}</tr>` +
+    M.map((m, i) => `<tr><td>${MON[i]}</td><td class="num">${fmt(m.haus_server_h)}</td>
     <td class="num">${fmt(m.senke_server_h)}</td><td class="num">${fmt(m.abgegeben_server_h || 0)}</td>
-    <td class="num">${pct((m.haus_genutzt_kwh || 0) / (m.haus_bedarf_kwh || 1), 0)}</td></tr>`).join("") + "</table>";
+    <td class="num">${pct((m.haus_genutzt_kwh || 0) / (m.haus_bedarf_kwh || 1), 0)}</td>
+    ${mitStrom ? `<td class="num">${fmt(m.strom_kwh)}</td>` : ""}
+    ${mitBad ? `<td class="num">${pct(1 - m.bad_eingeschaltet_h / (b.server_bad * m.stunden), 0)}</td>` : ""}</tr>`).join("") + "</table>";
 }
 function flotteSuche(F) {
   const R = [{ server_bad: 0, ergebnis_chf: D.flotte.ergebnisse.find((b) => b.szenario === "alibaba" && !b.server_bad).dh_ergebnis_pro_jahr_chf }]
@@ -572,7 +624,8 @@ function flotteZusage(F, b) {
       <span class="k">geliefert</span> ${fmt(t[2], 1)} Server-h${fehl > 0.01 ? `<br><span class="k">Fehlmenge</span> ${fmt(fehl, 1)} Server-h` : ""}`); });
   hit.addEventListener("mouseleave", () => { versteckeTip(); kreuz.setAttribute("visibility", "hidden"); });
   const j = Z.jahr;
-  $("nZusage").innerHTML = `${name}, verfügbare Kapazität («Genug Aufträge»). Prognose ECMWF vom Vortag, Sicherheitsfaktor ${fmt(f, 2)} ` +
+  const standorte = F.leistungsprofil ? name.replace(" (nach Nachfrage)", "") : name;
+  $("nZusage").innerHTML = `${standorte}, verfügbare Kapazität («Genug Aufträge»). Prognose ECMWF vom Vortag, Sicherheitsfaktor ${fmt(f, 2)} ` +
     `(kalibriert Januar–Juni). <b>${pct(j.zusagbarer_anteil, 0)} der Server-h sind zusagbar</b>, fest verkauft werden ${pct(j.anteil_fest_gebucht, 0)}. ` +
     `Juli–Dezember fehlte an ${pct(Z.fehltage_auswertung, 1)} der Tage etwas. Ergebnis mit Zusage und Gutschrift: ${chf(Z.ergebnis_mit_zusage_chf)} pro Jahr.`;
 }
@@ -602,7 +655,10 @@ async function live() {
       <dt>Wärmebedarf</dt><dd>${z.bedarf_kwh != null ? fmt(z.bedarf_kwh, 2) + " kWh" : "–"}</dd>
       ${FL ? `<dt>Standort</dt><dd><b>${L.standort}</b></dd>` : ""}
       <dt>Speicher</dt><dd>${z.speicher_kwh != null ? fmt(z.speicher_kwh, 1) + (FL ? " kWh" : " von 35 kWh") : "–"}</dd>
-      <dt>Server an</dt><dd>${z.server_laufend != null ? fmt(z.server_laufend, 2) + (FL ? "" : " von " + L.server) : "–"}</dd>
+      <dt>Rechenleistung</dt><dd>${z.server_laufend != null ? fmt(z.server_laufend, 2) + " Server" : "–"}</dd>
+      ${z.bad_server_eingeschaltet != null ?
+        `<dt>Haus an / Standby</dt><dd>${z.haus_server_eingeschaltet} / ${z.haus_server_standby} (simuliert)</dd>
+         <dt>Bad an / Standby</dt><dd>${z.bad_server_eingeschaltet} / ${z.bad_server_standby} (simuliert)</dd>` : ""}
       <dt>Echter Job</dt><dd>${FL ? "markierter Job im Pool" : "Server " + L.echter_server}, PID ${L.pid}, ${L.prozess}</dd>
       <dt>Fertig</dt><dd>${fmt(L.texte_fertig || 0)} Texte${L.aktiv ? "" : " (Checkpoint)"}</dd></dl></div>
       <div><div class="note">Anteil jeder Stunde, in dem der echte Job rechnen durfte${window.LIVE_AUFZEICHNUNG ?
@@ -645,7 +701,7 @@ function annahmenKurz() {
       `Wärme ohne Wärmepumpe direkt für Heizung und Warmwasser ${s("Case")}`,
       `<b>Läuft ein Server, läuft er voll</b> (Aufträge dicht gepackt)`,
       `1 Server = ${a("karten_pro_server")}× NVIDIA L4 (72 W) + Prozessor ≈ 1 kW ${s("Einheitsserver für alle Branchen")}`,
-      `Server werden <b>ausgeschaltet</b>, wenn keine Wärme gebraucht wird ${s("sonst 23 % Leerlaufstrom")}`]],
+      `Case-Idealmodell: <b>0 W Leerlauf</b> ${s("Der Vergleich unten zeigt Leerlauf und Abschalten als eigene Szenarien")}`]],
     ["So baut DigitalHeat", [
       `Direkte Flüssigkeitskühlung an den Prozessoren, eigener Kühlkreis ${s("digitalheat.ch")}`,
       `Wärmetauscher trennt Kühlkreis und Heizwasser: Das Heizwasser kommt nie an die Server`,
@@ -710,7 +766,7 @@ function annahmen() {
 
 // ---------- Steuerung ----------
 function preise() { kacheln(); grenzwert(); annahmenKurz(); }
-function alles() { $("nOut").textContent = S.n; preise(); monate(); auslastung(); serverkurve(); flotte();
+function alles() { $("nOut").textContent = S.n; preise(); monate(); auslastung(); serverkurve(); serverbetrieb(); flotte();
   tag("januar", "chJan", "spJan", "tJan", "nJan"); tag("uebergang", "chUeb", "spUeb", "tUeb", "nUeb");
   tag("juli", "chJul", "spJul", "tJul", "nJul"); }
 $("n").addEventListener("input", (e) => { S.n = +e.target.value; alles(); });
@@ -721,9 +777,11 @@ document.querySelectorAll(".seg[data-key]").forEach((seg) => seg.addEventListene
   S[seg.dataset.key] = b.dataset.v; alles(); }));
 document.querySelectorAll("[data-table]").forEach((b) => b.addEventListener("click", () => {
   const t = $(b.dataset.table); t.hidden = !t.hidden; b.textContent = t.hidden ? "Tabelle zeigen" : "Tabelle ausblenden"; }));
-$("segFlotteSz").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return;
-  $("segFlotteSz").querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", x === b));
-  S.szF = b.dataset.v; flotte(); });
+for (const [id, key] of [["segFlotteSz", "szF"], ["segFlottenBetrieb", "betriebF"]]) {
+  $(id).addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return;
+    $(id).querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", x === b));
+    S[key] = b.dataset.v; flotte(); });
+}
 $("pRechen").value = D.annahmen.vertragspreis_chf_karte_h.wert;
 $("pFest").value = D.annahmen.anteil_fest_gebucht.wert * 100;
 $("pHw").value = D.annahmen.server_preis_chf.wert;

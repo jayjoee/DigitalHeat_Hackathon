@@ -49,6 +49,9 @@ def main():
     ap.add_argument("--block", type=int, default=128, help="Texte pro Checkpoint")
     ap.add_argument("--batch", type=int, default=16, help="Texte pro Modellaufruf (16 war am schnellsten)")
     ap.add_argument("--threads", type=int, default=6, help="6 = Leistungskerne des M1 Pro")
+    ap.add_argument("--offline", action="store_true", help="Vorhandenes Modell verwenden, kein Download")
+    ap.add_argument("--ready-file", help="Bereitschaft nach Modellinitialisierung melden")
+    ap.add_argument("--start-paused", action="store_true", help="Nach Initialisierung bis SIGCONT warten")
     a = ap.parse_args()
 
     signal.signal(signal.SIGTERM, _sigterm)
@@ -65,11 +68,17 @@ def main():
 
     from fastembed import TextEmbedding
     t0 = time.perf_counter()
-    modell = TextEmbedding(MODELL, threads=a.threads or None)
+    options = {"local_files_only": True, "providers": ["CPUExecutionProvider"]} if a.offline else {}
+    modell = TextEmbedding(MODELL, threads=a.threads or None, **options)
     stand["starts"][-1]["modell_laden_s"] = round(time.perf_counter() - t0, 3)
 
     texte = texte_laden(stand["anzahl"])
     print(f"[job {os.getpid()}] start bei {stand['naechster']}/{stand['anzahl']}", flush=True)
+
+    if a.ready_file:
+        Path(a.ready_file).write_text(json.dumps({"pid": os.getpid(), "model": MODELL, "ready": True}))
+    if a.start_paused:
+        os.kill(os.getpid(), signal.SIGSTOP)
 
     while stand["naechster"] < stand["anzahl"]:
         i = stand["naechster"]

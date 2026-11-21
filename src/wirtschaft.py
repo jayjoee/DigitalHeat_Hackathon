@@ -7,7 +7,7 @@ Formel pro Jahr t = 1..J:
   Erlös     = Server-h × Karten × (1 − Plattform) × Verfügbarkeit
               × [fest gebucht × Vertragspreis + Rest × Spot-Preis × (1 − Preisverfall)^(t−1)]
   Wärme     = genutzte Wärme × Wärmepreis an den Haushalt
-  Strom     = Server-h × Strompreis
+  Strom     = gesamter Stromverbrauch × Strompreis
   Fehlmenge = Fehlmenge Server-h × Karten × Vertragspreis × SLA-Gutschrift × (1 + Kostensteigerung)^(t−1)
               (Day-ahead-Zusage nicht geliefert, src/scheduler/zusage.py; Standard 0)
   Laufend   = (Ersatzteile + Einsätze + Service + Monitoring + Internet + Versicherung + Lizenz
@@ -39,10 +39,11 @@ def parameter(**ueberschreiben):
     return p
 
 
-def rechne(n_server, server_h, waerme_kwh, fehlmenge_server_h=0.0, **ueberschreiben):
+def rechne(n_server, server_h, waerme_kwh, fehlmenge_server_h=0.0, *, strom_kwh=None, **ueberschreiben):
     """Gibt Kennzahlen und die Jahre einzeln zurück (alles in CHF).
 
     `fehlmenge_server_h`: zugesagte, aber nicht gelieferte Server-h pro Jahr (Day-ahead-Zusage).
+    `strom_kwh`: Gesamtverbrauch. Ohne Angabe ergibt er sich aus Rechenstunden × Serverleistung.
     """
     p = parameter(**ueberschreiben)
     J, i = p["abschreibung_jahre"], p["zins"]
@@ -51,6 +52,8 @@ def rechne(n_server, server_h, waerme_kwh, fehlmenge_server_h=0.0, **ueberschrei
                    + p["einbau_chf"] + p["speicher_chf"] + p["netzwerk_chf"])
     restwert = hardware * p["restwert_anteil"]
     abschreibung = (investition - restwert) / J
+    stromverbrauch = server_h * p["server_kw"] if strom_kwh is None else strom_kwh
+    strom = stromverbrauch * p["strompreis_chf_kwh"]
     barwert, jahre = -investition, []
     for t in range(1, J + 1):
         preis = (p["anteil_fest_gebucht"] * p["vertragspreis_chf_karte_h"]
@@ -58,7 +61,6 @@ def rechne(n_server, server_h, waerme_kwh, fehlmenge_server_h=0.0, **ueberschrei
         erloes = (server_h * p["karten_pro_server"] * (1 - p["plattform_anteil"])
                   * p["verfuegbarkeit"] * preis)
         waerme = waerme_kwh * p["waermepreis_haushalt_chf_kwh"]
-        strom = server_h * p["strompreis_chf_kwh"]
         e = (1 + p["kostensteigerung"]) ** (t - 1)
         teile = {
             "gpu_ersatz": (n_server * p["karten_pro_server"] * p["gpu_ausfall"] * p["gpu_preis_chf"]) if t > 3 else 0,
@@ -103,6 +105,29 @@ def break_even(n_server, server_h, waerme_kwh, fehlmenge_server_h=0.0, **uebersc
         else:
             hi = m
     return round(hi, 4)
+
+
+def variable_bilanz(strom_kwh, verkaufte_gpu_h, strompreis=None):
+    """Actual-period contribution, not annual profit/NPV. Explicit kWh independent of sold hours.
+
+    Normalises completed work to standard GPU-hours: slower processing earns no extra revenue.
+    Assumes all completed reference work finds paying customers.
+    Fixed costs, depreciation, taxes, investment, SLA credits and heat sales excluded.
+    """
+    import math
+    if not all(isinstance(x,(int,float)) and not isinstance(x,bool) and math.isfinite(x) and x>=0
+               for x in (strom_kwh,verkaufte_gpu_h)):
+        raise ValueError('Energie und verkaufte GPU-Stunden müssen endlich und nicht negativ sein.')
+    preis=A.wert('strompreis_chf_kwh') if strompreis is None else strompreis
+    if not isinstance(preis,(int,float)) or not math.isfinite(preis) or preis<0:
+        raise ValueError('Ungültiger Strompreis.')
+    mix=A.wert('anteil_fest_gebucht')*A.wert('vertragspreis_chf_karte_h')+(1-A.wert('anteil_fest_gebucht'))*A.wert('spotpreis_chf_karte_h')
+    revenue=verkaufte_gpu_h*mix*(1-A.wert('plattform_anteil'))
+    cost=strom_kwh*preis
+    return {'sold_reference_gpu_hours':verkaufte_gpu_h,'electricity_kwh':strom_kwh,'revenue_chf':revenue,
+            'electricity_chf':cost,'contribution_chf':revenue-cost,
+            'label':'Periodenbeitrag vor Fixkosten, Investition und Steuern; kein Jahresgewinn',
+            'assumption':'Alle vollendete Referenzarbeit verkauft; Preis pro Standard-GPU-Stunde normalisiert. Kein Nachfragebeleg.'}
 
 
 if __name__ == "__main__":

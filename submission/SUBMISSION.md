@@ -31,20 +31,20 @@ THE PROBLEM (in DigitalHeat's words)
 "Servers turn almost all electricity into heat, which is usually cooled away with more energy. Homes spend money and energy to produce heat." The open questions: which workloads fit, how to schedule them against a home's heat demand across the year, and when it pays off.
 
 OUR SOLUTION
-We put 8 liquid-cooled servers (8× NVIDIA L4 each, 8 kW total) into the reference house in Basel. A scheduler only runs AI jobs when the house or its 35 kWh water tank can use the heat. Result for 2025 weather: 93 % of heating and hot water covered, 5 kWh of heat dumped in the whole year, 0 % missed deadlines, 52 % utilisation. Break-even (case definition): 0.23 CHF per server-hour.
-The summer gap is the real problem: houses only need hot water, servers drop to 8 % utilisation. Our answer is a heat router: one shared job pool for 20 houses plus the Sportbad St. Jakob, a heated 50 m outdoor pool that is open exactly when houses need no heat (late April to early October). Houses always have priority; the pool only takes work whose heat no house can use. Work given away to other clouds without revenue drops from 180,000 to 12,500 server-hours per year.
-Customers are companies whose data must stay in Switzerland (pharma, banks, hospitals). We sell 4.80 CHF per server-hour (12 % below Swiss GPU clouds) – but only for hours we commit to at noon the day before, based on the ECMWF weather forecast. 93 % of hours can be committed, shortfalls happen on about 2 % of days. Net result after all costs, taxes and interest: +34,300 CHF per house and year, payback in 3 years.
+We model 8 liquid-cooled servers (8× NVIDIA L4 each, 8 kW total) in the Basel reference house. The scheduler uses heat demand, a 35 kWh tank and job deadlines to decide when to run AI jobs. The idealised case with zero idle draw covers 93 % of heating and hot water, dumps 5 kWh of heat, meets all deadlines and reaches 52 % utilisation. Break-even (case definition): 0.23 CHF per server-hour. At an assumed 230 W idle draw per server, switching off unused servers saves about 5,200 kWh per year compared with leaving them powered on.
+Our heat router shares a job pool across 20 houses and Sportbad St. Jakob, a heated 50 m outdoor pool. Homes get priority. The model starts servers where there is work and demand for heat. The pool's servers stay in standby outside its season. With 50 servers at the pool, annual work passed to other clouds falls from about 195,000 to 30,000 server-hours under the limited-demand scenario.
+Pharma, banks and hospitals are potential customers. The model assumes a contract price of 4.80 CHF per server-hour and 60 % of capacity sold at this rate. At noon the day before, the ECMWF forecast helps estimate available capacity. About 91 % of modelled capacity can be committed in the fleet with the pool. The reference house with power management yields an annualised result of about CHF 29,400 before day-ahead credits, assuming enough jobs.
 Where it does not pay off, we say so: with demand limited to deadline jobs (Alibaba trace), even the fleet with the pool loses money. The bottleneck is demand, not heat.
 
 HOW IT WORKS – REAL VS. MOCKED
 Real: an AI job (text embeddings, fastembed) runs on our laptop with measured power (28.9 W) and speed. The same scheduler code that computes the yearly balance pauses it (SIGSTOP/SIGCONT) and migrates it via checkpoint and restart. Live demo: on 25 May 2025 the job runs in house 01 until 10:00, the tank is full, the router moves it to the pool – results are bit-identical to an uninterrupted run. Weather (Open-Meteo), forecasts (ECMWF previous runs), electricity price (ElCom 2026) and hardware prices are real data.
-Simulated: the houses, the pool and the 20-site fleet (hourly models); the job stream (based on the Alibaba GPU trace 2020); the pool's heat demand (estimate ±30 % from the Swiss pool association guideline); the network between sites during migration.
-Reproducible: every number comes from code, every assumption has a source in one file (src/scheduler/annahmen.py), 22 automated tests incl. regression tests and a check that no forecast published after the decision is used.
+Simulated: the 20 houses and the pool, server power states, job arrivals based on the 2020 Alibaba GPU trace, pool heat demand (estimate ±30 %), and the network between sites during migration.
+Reproducible: simulation and costs can be rerun from code. Automated tests cover scheduling, forecasts, and server power states.
 
 NEXT FOUR WEEKS
 1. Replace the pool estimate with measured district-heating data from the Sportamt Basel-Stadt.
 2. Talk to 2–3 Basel pharma/biotech companies: would they buy day-ahead committed Swiss compute at 4.80 CHF per server-hour, and for how many hours?
-3. Pilot one real server with liquid cooling in an oil-heated house: measure supply temperature, idle power and real heat recovery.
+3. Pilot one real server with liquid cooling in an oil-heated house: measure supply temperature, heat recovery, idle and standby power, and time from power-on to job readiness.
 4. Different houses (heat load, tank size) and a second summer sink (hotel with spa), plus the network cost of migrating jobs.
 ```
 

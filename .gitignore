@@ -13,3 +13,16 @@ messungen/live_job_flotte/
 prototyp/demo-credentials/
 prototyp/credentials/
 **/credentials/
+
+# Local environments and generated experiment data
+.venv-ml/
+.env
+.env.*
+**/token.txt
+**/worker-key.pem
+**/worker-cert.pem
+messungen/gesamtdemo/
+messwerkzeug/laeufe/
+messwerkzeug/.venv/
+daten/ergebnisse/ml/vergleich.json
+daten/ergebnisse/ml/stunden.csv

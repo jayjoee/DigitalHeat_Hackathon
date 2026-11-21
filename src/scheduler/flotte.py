@@ -10,8 +10,12 @@
   «Nur Jobs mit Frist») und beide Varianten werden ausgewiesen.
 - Vergleich: dieselben 20 Häuser mit und ohne Senke, derselbe Jobstrom (Alibaba-Rate × Server der Häuser).
 
-Aufruf: python3 src/scheduler/flotte.py        → daten/ergebnisse/flotte.json
+Aufruf: python3 src/scheduler/flotte.py               → daten/ergebnisse/flotte.json
+        python3 src/scheduler/flotte.py --abschalten  → daten/ergebnisse/flotte_abschalten.json
 """
+import argparse
+from concurrent.futures import ProcessPoolExecutor
+from dataclasses import asdict
 import json
 import math
 import statistics
@@ -23,6 +27,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 from src.scheduler import annahmen as A  # noqa: E402
 from src.scheduler.jahr import Haus, profil_laden, simuliere  # noqa: E402
 from src.scheduler.router import Flotte  # noqa: E402
+from src.scheduler.serverbetrieb import HausMitServerbetrieb, Leistungsprofil  # noqa: E402
 
 AUS = A.ROOT / "daten" / "ergebnisse"
 DECKUNG_ZIEL = 0.929  # Design-Doc: kleinste Serverzahl mit Deckung ≥ 92,9 % (Referenzhaus → 8)
@@ -63,20 +68,37 @@ def kosten_bad(n):
     return {"speicher_chf": 0, "einbau_chf": A.wert("einbau_chf") * n / 8}
 
 
-def baue(n_haeuser, n_haus, szenario, regel, profil, bad=None, n_bad=0, prognose=None):
-    st = [Haus(n_haus, szenario, regel, profil, name=f"Haus {i + 1:02d}", mit_ankuenften=False)
-          for i in range(n_haeuser)]
+def baue(n_haeuser, n_haus, szenario, regel, profil, bad=None, n_bad=0,
+         *, leistung=None, prognose=None):
+
+    def standort(n, p, **optionen):
+        if leistung is None:
+            return Haus(n, szenario, regel, p,
+                        mit_ankuenften=False, **optionen)
+
+        return HausMitServerbetrieb(
+            n, szenario, p, leistung,
+            abschalten=True,
+            bei_ueberschuss=regel,
+            mit_ankuenften=False,
+            **optionen
+        )
+
+    st = [
+        standort(n_haus, profil, name=f"Haus {i + 1:02d}")
+        for i in range(n_haeuser)
+    ]
     kosten = {}
     if n_bad:
-        st.append(Haus(n_bad, szenario, regel, bad, speicher_kwh=A.wert("bad_speicher_kwh"),
-                       name="Sportbad St. Jakob", typ="bad", mit_ankuenften=False))
+        st.append(standort(n_bad, bad, speicher_kwh=A.wert("bad_speicher_kwh"),
+                           name="Sportbad St. Jakob", typ="bad"))
         kosten["Sportbad St. Jakob"] = kosten_bad(n_bad)
     # derselbe Jobstrom in allen Varianten: Alibaba-Rate × Server der Häuser
     return Flotte(st, szenario, regel, nachfrage_server=n_haeuser * n_haus, prognose=prognose), kosten
 
 
-def lauf(n_h, n_haus, sz, regel, profil, bad, n_bad, name, monatlich=True):
-    f, kosten = baue(n_h, n_haus, sz, regel, profil, bad, n_bad)
+def lauf(n_h, n_haus, sz, regel, profil, bad, n_bad, name, monatlich=True, *, leistung=None):
+    f, kosten = baue(n_h, n_haus, sz, regel, profil, bad, n_bad, leistung=leistung)
     f.simuliere(monatlich)
     b = f.bilanz(kosten=kosten)
     b["variante"], b["server_bad"] = name, n_bad
@@ -94,8 +116,38 @@ def zeile(b):
             f"  Ergebnis {b['dh_ergebnis_pro_jahr_chf']:>10,} CHF/J")
 
 
-def main():
+def _jahresbilanz(n_h, n_haus, sz, regel, profil, bad, n_bad, name, leistung):
+    b, _, _ = lauf(n_h, n_haus, sz, regel, profil, bad, n_bad, name, leistung=leistung)
+    print(zeile(b), flush=True)
+    return b
+
+
+def _zusage(n_h, n_haus, regel, profil, bad, n_bad, name, leistung):
     from src.scheduler.zusage import prognose_profil, rechne_zusage
+
+    f, kosten = baue(n_h, n_haus, "spot", regel, profil, bad, n_bad, leistung=leistung)
+    r, f = rechne_zusage(f, prognose_profil(profil))
+    j = r["jahr"]
+    b = f.bilanz(anteil_fest_gebucht=j["anteil_fest_gebucht"], fehlmenge_server_h=j["fehlmenge_server_h"],
+                 kosten=kosten)
+    r["ergebnis_mit_zusage_chf"] = b["dh_ergebnis_pro_jahr_chf"]
+    print(f"Zusage {name}: Faktor {r['sicherheitsfaktor']}, zusagbar {j['zusagbarer_anteil']:.1%}, "
+          f"fest {j['anteil_fest_gebucht']:.1%}, Fehltage Auswertung {r['fehltage_auswertung']:.1%}, "
+          f"Ergebnis {b['dh_ergebnis_pro_jahr_chf']:,} CHF/J", flush=True)
+    return r
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--abschalten", action="store_true", help="Serverbetrieb für Haus und Sportbad simulieren")
+    parser.add_argument("--leerlauf-watt", type=float, default=230)
+    parser.add_argument("--standby-watt", type=float, default=10)
+    parser.add_argument("--start-minuten", type=float, default=5)
+    args = parser.parse_args()
+    try:
+        leistung = Leistungsprofil(args.leerlauf_watt, args.standby_watt, args.start_minuten) if args.abschalten else None
+    except ValueError as fehler:
+        parser.error(str(fehler))
     profil = profil_laden()
     n_haus = serverzahl_haus(profil)
     bad = bad_profil(profil)
@@ -105,39 +157,31 @@ def main():
 
     # Senkengrösse nach Nachfrage: bestes Ergebnis im Hauptszenario «Nur Jobs mit Frist»
     suche = []
-    for n_bad in range(10, 90, 10):
+    for n_bad in (() if leistung is not None else range(10, 90, 10)):
         b, _, _ = lauf(n_h, n_haus, "alibaba", regel, profil, bad, n_bad, f"Sportbad {n_bad}", monatlich=False)
         suche.append({"server_bad": n_bad, "ergebnis_chf": b["dh_ergebnis_pro_jahr_chf"],
                       "abgegeben_server_h": b["abgegeben_server_h"]})
         print(f"Suche Sportbad {n_bad:3d} Server: {b['dh_ergebnis_pro_jahr_chf']:>10,} CHF/J", flush=True)
-    n_best = max(suche, key=lambda r: r["ergebnis_chf"])["server_bad"]
+    # Für den Vergleich der Betriebsmodelle dieselbe Bad-Grösse aus der Case-Rechnung übernehmen.
+    n_best = (50 if leistung is not None else
+              max(suche, key=lambda r: r["ergebnis_chf"])["server_bad"])
 
-    varianten = [("0 Senken", 0), (f"Sportbad {n_best} (nach Nachfrage)", n_best),
-                 (f"Sportbad {n_regel} (Senkenregel)", n_regel)]
-    ergebnisse = []
-    for sz in ("alibaba", "spot"):
-        for name, n_bad in varianten:
-            b, f, kosten = lauf(n_h, n_haus, sz, regel, profil, bad, n_bad, name)
-            ergebnisse.append(b)
-            print(zeile(b), flush=True)
-
-    # Day-ahead-Zusage auf Flottenebene (Szenario spot = verfügbare Kapazität), Senke ohne Prognosefehler
-    zusage = {}
-    for name, n_bad in varianten[:2]:
-        f, kosten = baue(n_h, n_haus, "spot", regel, profil, bad, n_bad)
-        r, f = rechne_zusage(f, prognose_profil(profil))
-        j = r["jahr"]
-        b = f.bilanz(anteil_fest_gebucht=j["anteil_fest_gebucht"], fehlmenge_server_h=j["fehlmenge_server_h"],
-                     kosten=kosten)
-        zusage[name] = dict(r)
-        zusage[name]["ergebnis_mit_zusage_chf"] = b["dh_ergebnis_pro_jahr_chf"]
-        print(f"Zusage {name}: Faktor {r['sicherheitsfaktor']}, zusagbar {j['zusagbarer_anteil']:.1%}, "
-              f"fest {j['anteil_fest_gebucht']:.1%}, Fehltage Auswertung {r['fehltage_auswertung']:.1%}, "
-              f"Ergebnis {b['dh_ergebnis_pro_jahr_chf']:,} CHF/J", flush=True)
+    varianten = [("0 Senken", 0), (f"Sportbad {n_best} (nach Nachfrage)", n_best)]
+    if leistung is None:
+        varianten.append((f"Sportbad {n_regel} (Senkenregel)", n_regel))
+    with ProcessPoolExecutor(max_workers=4) as pool:
+        # Auch die Prognoseläufe rechnen mit dem gewählten Serverbetrieb.
+        zusagen = {name: pool.submit(_zusage, n_h, n_haus, regel, profil, bad, n_bad, name, leistung)
+                   for name, n_bad in varianten[:2]}
+        jahre = [pool.submit(_jahresbilanz, n_h, n_haus, sz, regel, profil, bad, n_bad, name, leistung)
+                 for sz in ("alibaba", "spot") for name, n_bad in varianten]
+        ergebnisse = [job.result() for job in jahre]
+        zusage = {name: job.result() for name, job in zusagen.items()}
 
     AUS.mkdir(parents=True, exist_ok=True)
-    (AUS / "flotte.json").write_text(json.dumps({
-        "erzeugt": "python3 src/scheduler/flotte.py", "regel_ueberschuss": regel,
+    (AUS / ("flotte_abschalten.json" if leistung else "flotte.json")).write_text(json.dumps({
+        "erzeugt": "python3 src/scheduler/flotte.py" + (" --abschalten" if leistung else ""),
+        "leistungsprofil": asdict(leistung) if leistung else None, "regel_ueberschuss": regel,
         "server_pro_haus": n_haus, "server_bad_regel": n_regel, "server_bad_nach_nachfrage": n_best,
         "suche_senkengroesse_alibaba": suche, "zusage_spot": zusage,
         "annahmen": {k: A.als_liste()[k] for k in ("flotte_haeuser", "bad_jahresbedarf_kwh", "bad_monatsanteile",

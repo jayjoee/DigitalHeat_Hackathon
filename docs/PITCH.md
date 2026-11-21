@@ -9,33 +9,34 @@ Alle Zahlen stammen aus dem Code (`ERGEBNISSE.md`, `KOSTEN_DH.md`) und sind in C
 ## Ablauf (5 Minuten)
 
 **1. Einstieg mit den Kennzahlen (30 s)**, so verlangt es der Case
-«8 Server pro Haus. 93 % der Wärme gedeckt. 5 kWh im ganzen Jahr weggekühlt. 52 % Auslastung. 0 % verpasste Fristen. Break-even 0,23 CHF pro Server-Stunde.»
+«Im Case-Modell decken 8 Server pro Haus 93 % der Wärme. Bei idealisierten 0 Watt Leerlauf fallen 5 kWh ungenutzte Wärme an. Die Server sind zu 52 % ausgelastet und verpassen keine Frist. Der Break-even nach Case-Formel liegt bei 0,23 CHF pro Server-Stunde.»
 Danach in einem Satz das Problem: Server machen aus Strom fast nur Wärme, und die wird heute weggekühlt, während Basler Ölheizungen Öl für dieselbe Wärme verbrennen.
 
 **2. Lösung im Haus (45 s)**
-- Pro Referenzhaus 8 Server mit Flüssigkühlung. Sie decken **93 %** der Wärme, der Haushalt bekommt sie **gratis**.
-- Im Jahr werden nur 5 kWh weggekühlt, und keine Frist wird verpasst.
+- Pro Referenzhaus 8 Server mit Flüssigkühlung. Im Case-Modell decken sie **93 %** der Wärme. Der Haushalt erhält die Wärme **gratis**.
+- Beim blossen Pausieren der Jobs verbrauchen die Server weiter Strom. Bei angenommenen 230 W Leerlauf spart das Abschalten ungenutzter Server in der Simulation rund 5'200 kWh Strom pro Jahr. Die Wärmedeckung sinkt dabei von 91,3 % auf 90,5 %, alle Fristen werden eingehalten.
 - Der Scheduler rechnet nur, wenn das Haus oder der Speicher die Wärme brauchen kann.
 
 **3. Was neu ist: der Wärme-Router (60 s)** (Kreativität und Scheduling)
 - Das Problem ist der Sommer: Ohne zweiten Abnehmer laufen die Server in den Häusern nur zu 8 %.
 - Ein gemeinsamer Auftragspool für 20 Häuser und das **Sportbad St. Jakob**. Das Bad hat ein beheiztes 50-m-Becken und ist genau dann offen, wenn die Häuser keine Wärme brauchen (Ende April bis Anfang Oktober).
 - **Die Häuser haben immer Vorrang.** Das Bad nimmt nur Arbeit, deren Wärme kein Haus brauchen kann.
-- Wird eine Frist knapp und braucht niemand die Wärme, geht die Arbeit an eine andere Schweizer Cloud: ohne Bad **180'000 Server-h** im Jahr, mit Bad nur **12'500 Server-h**.
+- Pro Standort simuliert der Router, wie viele Server starten oder im Standby bleiben. Im Bad bleiben sie ausserhalb der Saison im Standby.
+- Bei knapper Nachfrage sinkt mit dem Bad die externe Abgabe von **195’000 auf 30’000 Serverstunden pro Jahr**. Das verbessert das Jahresergebnis der Flotte um rund **66’600 CHF**.
 - Ein Auftrag wandert per Checkpoint zwischen Standorten. Getestet: Das Ergebnis ist exakt dasselbe wie ohne Unterbruch.
 
 **4. Live-Demo (60 s)**, der Case verlangt einen Januartag, einen Julitag und einen unterbrochenen Job (siehe unten)
 
 **5. Geld (45 s)** (Machbarkeit)
 - Kunden: Pharma, Banken, Spitäler, deren Daten in der Schweiz und unter Schweizer Recht bleiben müssen.
-- Preis **4,80 CHF pro Server-h** (= 0,60 CHF pro L4-h), rund 12 % unter Hikube (5,44 CHF).
-- **Zusage am Vortag um 12 Uhr** aus der ECMWF-Wetterprognose: 93 % der Stunden lassen sich zusagen, verkauft werden 60 %. An rund 2 % der Tage fehlt etwas, die Gutschrift kostet rund 270 CHF pro Jahr.
-- Ergebnis nach allen Kosten, Steuern und Zinsen: **+34'300 CHF pro Haus und Jahr**. Investition 290'000 CHF, nach **3 Jahren** zurück.
-- Ab **2,87 CHF pro Server-h** rechnet es sich (Break-even), Spielraum ist also da.
+- Angenommener Vertragspreis **4,80 CHF pro Server-h** (= 0,60 CHF pro L4-h), bei 60 % Festbuchung und Spot-Verkäufen für die übrigen Stunden.
+- **Zusage am Vortag um 12 Uhr** aus der ECMWF-Wetterprognose. Im Abschaltmodell mit Bad sind rund 91 % der Stunden zusagbar. Knapp 60 % gehen in der Rechnung als Festbuchung ein.
+- Das Einzelhaus mit Abschalten erreicht rund **+29'400 CHF pro Jahr** vor möglichen Gutschriften, bei rund 290'000 CHF Investition.
+- Der Vollkosten-Break-even des Einzelhauses mit Abschalten liegt bei **3,07 CHF pro Server-h**, sofern 60 % fest gebucht und die übrigen Stunden zum angenommenen Spot-Preis verkauft werden.
 
 **6. Ehrlich: wo es nicht trägt (30 s)** (Transparenz)
-- Gibt es nur Aufträge mit Frist (Nachfrage wie im Alibaba-Trace), macht auch die Flotte mit Bad Verlust: −101'000 CHF pro Jahr für 20 Häuser. Der Router verteilt Arbeit, er schafft keine neue. **Der Engpass ist die Nachfrage, nicht die Wärme.**
-- Darum der feste Vertrag. Unter 0,36 CHF pro L4-h oder unter rund 40 % fest gebuchten Stunden lohnt es sich nicht.
+- Bei der knappen Nachfrage aus dem Alibaba-Trace bleibt die Flotte mit Bad bei rund **−172’000 CHF pro Jahr**. Der feste Absatz von Rechenzeit entscheidet, ob sich die Investition trägt.
+- Die 60 % Festbuchung und der Spot-Absatz sind Annahmen, die wir mit Kunden prüfen müssen.
 - Der Wärmebedarf des Bads ist eine Schätzung (±30 %). Ein Messwert vom Sportamt würde sie ersetzen.
 
 **7. Schluss (15 s)**
@@ -53,13 +54,13 @@ Browser öffnen und zum Abschnitt «Echter Job, live gesteuert» scrollen.
 
 **Demo A: Der Job wird unterbrochen und wandert vom Haus ins Bad** (ca. 90 s, zweites Terminal):
 ```sh
-rm -rf messungen/live_job_flotte             # frischer Arbeitsordner, damit die Textzahlen wie unten stimmen
-.venv/bin/python src/scheduler/live.py --flotte --sekunden 3
+.venv/bin/python src/scheduler/live.py --flotte --sekunden 3 --arbeitsordner "messungen/live_job_flotte/$(date +%s)"
 ```
 - Der Trockenlauf wählt den 25.5.2025. Das dauert rund 20 s vor dem Start; währenddessen erklären.
 - **00–09 Uhr:** Der Job rechnet in Haus 01, der Speicher füllt sich von 16 auf 35 kWh (blaue Säulen).
 - **10 Uhr:** Der Speicher ist voll. Migration ins Sportbad: Checkpoint bei 2'560 Texten, neuer Prozess (orange Säulen).
 - Danach rechnet er im Bad: voll, wenn genug Wärmebedarf frei ist, gedrosselt, wenn Aufträge mit Frist Vorrang haben.
+- Für eine Demo mit simulierten Ein/Aus-Zuständen `--abschalten` ergänzen. Mit `--nur-tag` lässt sich vorab der Ablauf ohne Embedding-Prozess prüfen. Das Dashboard zeigt dann Haus und Bad mit Anzahl eingeschalteter Server und Server im Standby.
 
 **Demo B (Reserve): Pause und Weiterlauf im Haus**, 7. März:
 ```sh
@@ -68,22 +69,23 @@ rm -rf messungen/live_job_flotte             # frischer Arbeitsordner, damit die
 
 **Wenn etwas hängt:** Das Dashboard und `dashboard/artifact/index.html` zeigen die Aufzeichnung des Laufs vom 25.5. (`daten/ergebnisse/live_flotte_2025-05-25.json`).
 
-**Im Dashboard zeigen:** Abschnitt «Flotte», Umschalter «Nur Jobs mit Frist», Senke «Sportbad 50 Server». Die orangen Säulen füllen Mai bis September, grün ist die abgegebene Arbeit.
+**Im Dashboard zeigen:** Abschnitt «Flotte», «Bedarfsgerecht abschalten», «Nur Jobs mit Frist». Zwischen «Ohne Bad» und «Sportbad 50 Server» wechseln. Die Kacheln zeigen Gesamtstrom und den Standby-Anteil am Bad.
 
 ## Fragen der Jury, kurze Antworten
 
 | Frage | Antwort |
 |---|---|
-| Ist das wirklich verteilt? | Ja: ein Pool, 21 Standorte, Router pro Stunde, Migration per Checkpoint. Derselbe Kern rechnet die Jahresbilanz und steuert den echten Prozess. |
+| Ist das wirklich verteilt? | Der echte Job speichert seinen Checkpoint und läuft in einem neuen Prozess auf dem Laptop weiter. Die 21 Standorte, der Netztransfer und der Stromzustand der Server sind simuliert. |
 | Warum nicht einfach Rückkühler im Sommer? | Wärme zuerst: Ein Rückkühler macht aus DigitalHeat ein normales Rechenzentrum mit Strom zum Haushaltstarif. |
-| Woher wisst ihr, dass 60 % fest verkauft werden? | Wissen wir nicht. Zusagbar sind 93 %, belegt mit der Prognose. Ob Kunden 60 % kaufen, ist die Hauptannahme. Der Schieberegler im Dashboard zeigt die Folgen. |
-| Wieso 50 Server im Bad und nicht 170? | 170 Server würden die Wärme decken, aber so viele Aufträge gibt es nicht. 50 Server bringen das beste Ergebnis (Suche von 10 bis 80). |
-| Was kostet eine Migration? | Neustart bis rechenbereit 0,3 s, Checkpoint bis 6 s. Die 3'457 Migrationen im Jahr kosten zusammen rund 2 kWh. Nicht gerechnet: Übertragung über das Netz. |
+| Woher kommen die 60 % Festbuchung? | Das ist die Verkaufsannahme. Im Abschaltmodell mit Bad sind rund 91 % der simulierten Rechenkapazität am Vortag zusagbar. Die Abnahme müssen wir mit Kunden prüfen. |
+| Wieso 50 Server im Bad und nicht 170? | 170 ergeben sich aus dem geschätzten sommerlichen Wärmebedarf. Im Case-Idealmodell schnitten bei knapper Nachfrage 50 Server am besten ab. Für den Abschaltvergleich haben wir diese Grösse übernommen. |
+| Was kostet eine Migration? | Neustart bis rechenbereit rund 0,3 s, Checkpoint bis rund 6 s auf dem Laptop. Der Transfer übers Netz muss im Pilot gemessen werden. |
+| Woher kommen die 230 W? | Sensitivität aus einem H100-Vergleich. Beim Pilot messen wir Leerlauf, Standby und Startzeit am geplanten L4-Server. |
 | Datensicherheit im Privatkeller? | Verplombtes Gehäuse, Verschlüsselung, ISO 27001 (Premise im Design-Doc). Der Prototyp trennt die Oberflächen für Serverhalter und Pharma (`prototyp/`). |
 | Warum kein Hallenbad? | Das Rialto macht im Sommer Pause, das Hallenbad Eglisee steht nur im Winter. Das Sportbad St. Jakob ist offen, wenn die Häuser keine Wärme brauchen. |
 | Ist 2025 repräsentativ? | 2025 war ein milder Winter. In den Jahren 2010–2025 schwankt die Deckung zwischen 84,5 % und 95,9 % (`ANNAHMEN_PRUEFUNG.md`). |
 
 ## Nachweise (für Rückfragen)
-- Tests: `python3 -m unittest discover -s tests` (22 Tests, darunter Regressionstests, Router-Regeln und die Prüfung, dass keine Prognose nach dem Entscheid verwendet wird)
+- Tests: `python3 -m unittest discover -s tests` (Regression, Router, Prognose und Serverbetrieb)
 - Vektorvergleich mit Migration: `messungen/vektorvergleich.json` (Abweichung 0,0)
 - Annahmen mit Quelle: `src/scheduler/annahmen.py`, im Dashboard unter «Alle Annahmen mit Quelle»

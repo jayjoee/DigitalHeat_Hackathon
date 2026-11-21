@@ -1,0 +1,430 @@
+{
+  "annahmen": {
+    "leerlauf": "Standard: 100/350 W als Szenariogrenzen. 230 W: H100-Leerlaufquote aus ANNAHMEN_PRUEFUNG.md auf 1 kW übertragen.",
+    "standby_und_startzeit": "Szenariowerte, keine Messungen an L4-Hardware.",
+    "leistung_beim_start_watt": 1000.0,
+    "waermerueckgewinnung": "Case-Wirkungsgrad für Rechnen, Leerlauf und Start. Im Standby keine nutzbare Wärme."
+  },
+  "ergebnisse": [
+    {
+      "strategie": "case",
+      "szenario": "spot",
+      "server_pro_haus": 8,
+      "leistungsprofil": null,
+      "strom_kwh": 36290.0,
+      "strom_nach_zustand_kwh": {
+        "rechenstrom": 36290.0,
+        "leerlaufstrom": 0,
+        "standbystrom": 0,
+        "startstrom": 0
+      },
+      "serverstarts": 0,
+      "server_h_aus": 0,
+      "waerme_abgefuehrt_kwh": 4.5,
+      "jobs_frist_verpasst": 0,
+      "deckungsgrad": 0.9295,
+      "auslastung": 0.5178,
+      "server_h": 36290,
+      "jobs_mit_frist": 14390,
+      "verpasste_fristen_anteil": 0.0,
+      "stromkosten_chf": 12066,
+      "break_even_chf_pro_server_h": 0.2261
+    },
+    {
+      "strategie": "pausieren",
+      "szenario": "spot",
+      "server_pro_haus": 8,
+      "leistungsprofil": {
+        "leerlauf_watt": 100,
+        "standby_watt": 10,
+        "start_minuten": 5,
+        "nachlauf_h": 1,
+        "speicher_ein": 0.35,
+        "speicher_aus": 0.85
+      },
+      "strom_kwh": 36891.3,
+      "strom_nach_zustand_kwh": {
+        "rechenstrom": 33203.6,
+        "leerlaufstrom": 3687.6,
+        "standbystrom": 0.0,
+        "startstrom": 0.0
+      },
+      "serverstarts": 0,
+      "server_h_aus": 0,
+      "waerme_abgefuehrt_kwh": 1082.8,
+      "jobs_frist_verpasst": 0,
+      "deckungsgrad": 0.9103,
+      "auslastung": 0.4738,
+      "server_h": 33204,
+      "jobs_mit_frist": 14390,
+      "verpasste_fristen_anteil": 0.0,
+      "stromkosten_chf": 12266,
+      "break_even_chf_pro_server_h": 0.2555
+    },
+    {
+      "strategie": "abschalten",
+      "szenario": "spot",
+      "server_pro_haus": 8,
+      "leistungsprofil": {
+        "leerlauf_watt": 100,
+        "standby_watt": 10,
+        "start_minuten": 5,
+        "nachlauf_h": 1,
+        "speicher_ein": 0.35,
+        "speicher_aus": 0.85
+      },
+      "strom_kwh": 35551.5,
+      "strom_nach_zustand_kwh": {
+        "rechenstrom": 34864.5,
+        "leerlaufstrom": 309.0,
+        "standbystrom": 320.7,
+        "startstrom": 57.3
+      },
+      "serverstarts": 687,
+      "server_h_aus": 32068,
+      "waerme_abgefuehrt_kwh": 0.0,
+      "jobs_frist_verpasst": 0,
+      "deckungsgrad": 0.9025,
+      "auslastung": 0.4975,
+      "server_h": 34865,
+      "jobs_mit_frist": 14390,
+      "verpasste_fristen_anteil": 0.0,
+      "stromkosten_chf": 11821,
+      "break_even_chf_pro_server_h": 0.2315
+    },
+    {
+      "strategie": "pausieren",
+      "szenario": "spot",
+      "server_pro_haus": 8,
+      "leistungsprofil": {
+        "leerlauf_watt": 230,
+        "standby_watt": 10,
+        "start_minuten": 5,
+        "nachlauf_h": 1,
+        "speicher_ein": 0.35,
+        "speicher_aus": 0.85
+      },
+      "strom_kwh": 40889.6,
+      "strom_nach_zustand_kwh": {
+        "rechenstrom": 32170.4,
+        "leerlaufstrom": 8719.2,
+        "standbystrom": 0.0,
+        "startstrom": 0.0
+      },
+      "serverstarts": 0,
+      "server_h_aus": 0,
+      "waerme_abgefuehrt_kwh": 4191.4,
+      "jobs_frist_verpasst": 0,
+      "deckungsgrad": 0.9132,
+      "auslastung": 0.4591,
+      "server_h": 32170,
+      "jobs_mit_frist": 14390,
+      "verpasste_fristen_anteil": 0.0,
+      "stromkosten_chf": 13596,
+      "break_even_chf_pro_server_h": 0.3047
+    },
+    {
+      "strategie": "abschalten",
+      "szenario": "spot",
+      "server_pro_haus": 8,
+      "leistungsprofil": {
+        "leerlauf_watt": 230,
+        "standby_watt": 10,
+        "start_minuten": 5,
+        "nachlauf_h": 1,
+        "speicher_ein": 0.35,
+        "speicher_aus": 0.85
+      },
+      "strom_kwh": 35662.1,
+      "strom_nach_zustand_kwh": {
+        "rechenstrom": 34511.6,
+        "leerlaufstrom": 769.0,
+        "standbystrom": 321.6,
+        "startstrom": 59.8
+      },
+      "serverstarts": 717,
+      "server_h_aus": 32165,
+      "waerme_abgefuehrt_kwh": 0.0,
+      "jobs_frist_verpasst": 0,
+      "deckungsgrad": 0.9053,
+      "auslastung": 0.4925,
+      "server_h": 34512,
+      "jobs_mit_frist": 14390,
+      "verpasste_fristen_anteil": 0.0,
+      "stromkosten_chf": 11858,
+      "break_even_chf_pro_server_h": 0.2346
+    },
+    {
+      "strategie": "pausieren",
+      "szenario": "spot",
+      "server_pro_haus": 8,
+      "leistungsprofil": {
+        "leerlauf_watt": 350,
+        "standby_watt": 10,
+        "start_minuten": 5,
+        "nachlauf_h": 1,
+        "speicher_ein": 0.35,
+        "speicher_aus": 0.85
+      },
+      "strom_kwh": 44623.4,
+      "strom_nach_zustand_kwh": {
+        "rechenstrom": 30916.1,
+        "leerlaufstrom": 13707.4,
+        "standbystrom": 0.0,
+        "startstrom": 0.0
+      },
+      "serverstarts": 0,
+      "server_h_aus": 0,
+      "waerme_abgefuehrt_kwh": 7097.7,
+      "jobs_frist_verpasst": 0,
+      "deckungsgrad": 0.9158,
+      "auslastung": 0.4412,
+      "server_h": 30916,
+      "jobs_mit_frist": 14390,
+      "verpasste_fristen_anteil": 0.0,
+      "stromkosten_chf": 14837,
+      "break_even_chf_pro_server_h": 0.3569
+    },
+    {
+      "strategie": "abschalten",
+      "szenario": "spot",
+      "server_pro_haus": 8,
+      "leistungsprofil": {
+        "leerlauf_watt": 350,
+        "standby_watt": 10,
+        "start_minuten": 5,
+        "nachlauf_h": 1,
+        "speicher_ein": 0.35,
+        "speicher_aus": 0.85
+      },
+      "strom_kwh": 35777.1,
+      "strom_nach_zustand_kwh": {
+        "rechenstrom": 34119.2,
+        "leerlaufstrom": 1275.3,
+        "standbystrom": 322.6,
+        "startstrom": 59.9
+      },
+      "serverstarts": 719,
+      "server_h_aus": 32257,
+      "waerme_abgefuehrt_kwh": 0.0,
+      "jobs_frist_verpasst": 0,
+      "deckungsgrad": 0.9082,
+      "auslastung": 0.4869,
+      "server_h": 34119,
+      "jobs_mit_frist": 14390,
+      "verpasste_fristen_anteil": 0.0,
+      "stromkosten_chf": 11896,
+      "break_even_chf_pro_server_h": 0.2381
+    },
+    {
+      "strategie": "case",
+      "szenario": "alibaba",
+      "server_pro_haus": 8,
+      "leistungsprofil": null,
+      "strom_kwh": 29574.8,
+      "strom_nach_zustand_kwh": {
+        "rechenstrom": 29574.8,
+        "leerlaufstrom": 0,
+        "standbystrom": 0,
+        "startstrom": 0
+      },
+      "serverstarts": 0,
+      "server_h_aus": 0,
+      "waerme_abgefuehrt_kwh": 7506.2,
+      "jobs_frist_verpasst": 0,
+      "deckungsgrad": 0.5172,
+      "auslastung": 0.422,
+      "server_h": 29575,
+      "jobs_mit_frist": 44141,
+      "verpasste_fristen_anteil": 0.0,
+      "stromkosten_chf": 9834,
+      "break_even_chf_pro_server_h": 0.2599
+    },
+    {
+      "strategie": "pausieren",
+      "szenario": "alibaba",
+      "server_pro_haus": 8,
+      "leistungsprofil": {
+        "leerlauf_watt": 100,
+        "standby_watt": 10,
+        "start_minuten": 5,
+        "nachlauf_h": 1,
+        "speicher_ein": 0.35,
+        "speicher_aus": 0.85
+      },
+      "strom_kwh": 33625.3,
+      "strom_nach_zustand_kwh": {
+        "rechenstrom": 29574.8,
+        "leerlaufstrom": 4050.5,
+        "standbystrom": 0.0,
+        "startstrom": 0.0
+      },
+      "serverstarts": 0,
+      "server_h_aus": 0,
+      "waerme_abgefuehrt_kwh": 8963.7,
+      "jobs_frist_verpasst": 0,
+      "deckungsgrad": 0.5743,
+      "auslastung": 0.422,
+      "server_h": 29575,
+      "jobs_mit_frist": 44141,
+      "verpasste_fristen_anteil": 0.0,
+      "stromkosten_chf": 11180,
+      "break_even_chf_pro_server_h": 0.2974
+    },
+    {
+      "strategie": "abschalten",
+      "szenario": "alibaba",
+      "server_pro_haus": 8,
+      "leistungsprofil": {
+        "leerlauf_watt": 100,
+        "standby_watt": 10,
+        "start_minuten": 5,
+        "nachlauf_h": 1,
+        "speicher_ein": 0.35,
+        "speicher_aus": 0.85
+      },
+      "strom_kwh": 32292.9,
+      "strom_nach_zustand_kwh": {
+        "rechenstrom": 29574.8,
+        "leerlaufstrom": 2337.3,
+        "standbystrom": 169.2,
+        "startstrom": 211.6
+      },
+      "serverstarts": 2539,
+      "server_h_aus": 16921,
+      "waerme_abgefuehrt_kwh": 8127.7,
+      "jobs_frist_verpasst": 0,
+      "deckungsgrad": 0.5626,
+      "auslastung": 0.422,
+      "server_h": 29575,
+      "jobs_mit_frist": 44141,
+      "verpasste_fristen_anteil": 0.0,
+      "stromkosten_chf": 10737,
+      "break_even_chf_pro_server_h": 0.284
+    },
+    {
+      "strategie": "pausieren",
+      "szenario": "alibaba",
+      "server_pro_haus": 8,
+      "leistungsprofil": {
+        "leerlauf_watt": 230,
+        "standby_watt": 10,
+        "start_minuten": 5,
+        "nachlauf_h": 1,
+        "speicher_ein": 0.35,
+        "speicher_aus": 0.85
+      },
+      "strom_kwh": 38891.0,
+      "strom_nach_zustand_kwh": {
+        "rechenstrom": 29574.8,
+        "leerlaufstrom": 9316.2,
+        "standbystrom": 0.0,
+        "startstrom": 0.0
+      },
+      "serverstarts": 0,
+      "server_h_aus": 0,
+      "waerme_abgefuehrt_kwh": 10969.0,
+      "jobs_frist_verpasst": 0,
+      "deckungsgrad": 0.645,
+      "auslastung": 0.422,
+      "server_h": 29575,
+      "jobs_mit_frist": 44141,
+      "verpasste_fristen_anteil": 0.0,
+      "stromkosten_chf": 12931,
+      "break_even_chf_pro_server_h": 0.3467
+    },
+    {
+      "strategie": "abschalten",
+      "szenario": "alibaba",
+      "server_pro_haus": 8,
+      "leistungsprofil": {
+        "leerlauf_watt": 230,
+        "standby_watt": 10,
+        "start_minuten": 5,
+        "nachlauf_h": 1,
+        "speicher_ein": 0.35,
+        "speicher_aus": 0.85
+      },
+      "strom_kwh": 35330.8,
+      "strom_nach_zustand_kwh": {
+        "rechenstrom": 29574.8,
+        "leerlaufstrom": 5374.4,
+        "standbystrom": 169.3,
+        "startstrom": 212.4
+      },
+      "serverstarts": 2549,
+      "server_h_aus": 16926,
+      "waerme_abgefuehrt_kwh": 8760.3,
+      "jobs_frist_verpasst": 0,
+      "deckungsgrad": 0.6202,
+      "auslastung": 0.422,
+      "server_h": 29575,
+      "jobs_mit_frist": 44141,
+      "verpasste_fristen_anteil": 0.0,
+      "stromkosten_chf": 11748,
+      "break_even_chf_pro_server_h": 0.3101
+    },
+    {
+      "strategie": "pausieren",
+      "szenario": "alibaba",
+      "server_pro_haus": 8,
+      "leistungsprofil": {
+        "leerlauf_watt": 350,
+        "standby_watt": 10,
+        "start_minuten": 5,
+        "nachlauf_h": 1,
+        "speicher_ein": 0.35,
+        "speicher_aus": 0.85
+      },
+      "strom_kwh": 43751.6,
+      "strom_nach_zustand_kwh": {
+        "rechenstrom": 29574.8,
+        "leerlaufstrom": 14176.8,
+        "standbystrom": 0.0,
+        "startstrom": 0.0
+      },
+      "serverstarts": 0,
+      "server_h_aus": 0,
+      "waerme_abgefuehrt_kwh": 12958.8,
+      "jobs_frist_verpasst": 0,
+      "deckungsgrad": 0.7058,
+      "auslastung": 0.422,
+      "server_h": 29575,
+      "jobs_mit_frist": 44141,
+      "verpasste_fristen_anteil": 0.0,
+      "stromkosten_chf": 14547,
+      "break_even_chf_pro_server_h": 0.3928
+    },
+    {
+      "strategie": "abschalten",
+      "szenario": "alibaba",
+      "server_pro_haus": 8,
+      "leistungsprofil": {
+        "leerlauf_watt": 350,
+        "standby_watt": 10,
+        "start_minuten": 5,
+        "nachlauf_h": 1,
+        "speicher_ein": 0.35,
+        "speicher_aus": 0.85
+      },
+      "strom_kwh": 38128.1,
+      "strom_nach_zustand_kwh": {
+        "rechenstrom": 29574.8,
+        "leerlaufstrom": 8170.3,
+        "standbystrom": 169.5,
+        "startstrom": 213.5
+      },
+      "serverstarts": 2562,
+      "server_h_aus": 16948,
+      "waerme_abgefuehrt_kwh": 9348.8,
+      "jobs_frist_verpasst": 0,
+      "deckungsgrad": 0.673,
+      "auslastung": 0.422,
+      "server_h": 29575,
+      "jobs_mit_frist": 44141,
+      "verpasste_fristen_anteil": 0.0,
+      "stromkosten_chf": 12678,
+      "break_even_chf_pro_server_h": 0.3341
+    }
+  ]
+}
