@@ -1,10 +1,10 @@
 # Kosten und Wirtschaftlichkeit aus Sicht DigitalHeat (Stand 21.11.2026, Preismodell mit Ankerkunde)
 
-Säule «Firma». Ergänzt Joëls Kundensicht (`CustomerView_Joel.md`), die Pharma-Sicht (`PHARMA_SICHT.md`) und die Rechnung für die ganze Firma (`FIRMA.md`). Das Angebot selbst ist in `L4_ANGEBOT.md` festgelegt. **Alle Beträge in CHF.** Dollar- und Euro-Quellen sind mit 0,84 CHF/$ und 0,92 CHF/€ umgerechnet (Mitte November 2026). Gerechnet wird mit `src/wirtschaft.py`, alle Zahlen dieses Dokuments erzeugt `src/kosten_dh.py` (Ergebnis in `daten/ergebnisse/kosten_dh.json`).
+Säule «Firma». Ergänzt die Sicht des Hausbesitzers ([HAUSBESITZER.md](../kunden/HAUSBESITZER.md)), die Pharma-Sicht (`PHARMA_SICHT.md`) und die Rechnung für die ganze Firma (`FIRMA.md`). Das Angebot selbst ist in `L4_ANGEBOT.md` festgelegt. **Alle Beträge in CHF.** Dollar- und Euro-Quellen sind mit 0,84 CHF/$ und 0,92 CHF/€ umgerechnet (Mitte November 2026). Gerechnet wird mit `src/wirtschaft.py`, alle Zahlen dieses Dokuments erzeugt `src/kosten_dh.py` (Ergebnis in `daten/ergebnisse/kosten_dh.json`).
 
 **Rechenbasis ist das Abschaltmodell**, wie in `PITCH.md`, `README.md` und `FIRMA.md`: Server ohne Arbeit werden abgeschaltet, im Leerlauf ziehen sie angenommene 230 W, im Standby 10 W, ein Start dauert 5 Minuten (`src/scheduler/serverbetrieb.py`, `ERGEBNISSE.md`, Abschnitt «Leerlauf und Abschalten im Referenzhaus»). Das Idealmodell des Case (0 W Leerlauf) steht jeweils zum Vergleich daneben.
 
-**Neues Preismodell (21.11.2026):** Ein Ankerkunde (Roche) kauft 60 % der Server-Stunden zu **0,50 CHF pro L4-Stunde** mit Mengenrabatt und festem Preis über 5 Jahre. Die übrigen 40 % gehen an Kunden ohne Mindestmenge zu **0,55 CHF**, dieser Preis sinkt 10 % pro Jahr. Die frühere Fassung rechnete mit 0,60 CHF fest gebucht und dem Rest zum Spot-Preis von 0,294 CHF (+29'400 CHF, Break-even 0,38 CHF). `FIRMA.md`, `PITCH.md`, `README.md`, `ERGEBNISSE.md`, `PHARMA_SICHT.md`, `RESULTATE_EINFACH.md` und das 3D-Dashboard sind auf das neue Preismodell nachgeführt.
+**Preismodell:** Ein Ankerkunde (Roche) kauft 60 % der Server-Stunden zu **0,50 CHF pro L4-Stunde** mit Mengenrabatt und festem Preis über 5 Jahre. Die übrigen 40 % gehen an Kunden ohne Mindestmenge zu **0,55 CHF**, dieser Preis sinkt 10 % pro Jahr.
 
 ## Kurzfassung
 
@@ -241,20 +241,18 @@ In allen drei Spalten sind alle Rechenstunden verkauft und Roche nimmt 60 %. Die
 - **Server nur pausieren:** Bei 230 W Leerlauf rund 5'200 kWh mehr Strom (1'740 CHF) und 2'340 Rechenstunden weniger, weil die Leerlaufwärme den Speicher füllt. Das Ergebnis fällt von +35'000 auf +26'100 CHF pro Jahr. Details im [Betriebsvergleich](../ergebnisse/ERGEBNISSE.md#leerlauf-und-abschalten-im-referenzhaus).
 - **Pilot mit wenigen Häusern:** Die Firmenkosten (Zertifikat, Software, Personal) verteilen sich auf wenige Häuser. Laut `FIRMA.md` trägt die Firma ihre Fixkosten ab 6 Häusern, wenn alle Stunden verkauft sind, und erst ab 45 Häusern, wenn nur Roche abnimmt (knappe Nachfrage).
 
-## 6. Abgleich mit Joëls Kundensicht
+## 6. Abgleich mit der Sicht des Hausbesitzers
 
-| Joëls Frage | Antwort Säule Firma |
+| Frage des Haushalts | Antwort aus Sicht DigitalHeat |
 |---|---|
 | Wer zahlt Hardware, Einbau, Strom? | DH zahlt alles, eigener Stromzähler |
 | Gratiswärme möglich? | **Ja.** Kostet DH rund 1'700 CHF pro Jahr gegenüber einem Abo zu 7 Rp. |
-| Einheitengrösse? | Referenzhaus 8 kW. Durchschnitts-EFH: 4 kW ist für DH besser (91,5 % Deckung), 5 kW für den Haushalt (98,7 %). Die Kundensicht, `FIRMA.md` und der Pitch rechnen mit 5 kW. **Offen, vom Team zu entscheiden** |
+| Einheitengrösse? | Referenzhaus 8 kW. Durchschnitts-EFH: 4 kW ist für DH besser (91,5 % Deckung), 5 kW für den Haushalt (98,7 %). Die Sicht des Hausbesitzers und `FIRMA.md` rechnen mit 5 kW |
 | Genug flexible Aufträge? | Nicht belegt. Das Modell nimmt es an (Abschnitt 8) |
 | Anteil am Rechenerlös? | Im Pilot nicht nötig |
-| Vertrag, Konkurs? | Die Rechnung braucht 5 Jahre Laufzeit (Abschreibung, Roche-Vertrag). Der Pilotvertrag der Kundensicht läuft 1 Jahr mit kostenlosem Rückbau: Für diesen Fall ist die Investition nicht gedeckt. Holzofen bleibt im Haus |
+| Vertrag, Konkurs? | Die Rechnung braucht 5 Jahre Laufzeit (Abschreibung, Roche-Vertrag). Der Pilotvertrag mit dem Haushalt läuft 1 Jahr mit kostenlosem Rückbau; die Server ziehen danach ins nächste Haus um ([PILOTPLAN.md](PILOTPLAN.md)). Holzofen bleibt im Haus |
 
-**Hardwarekosten:** Abgeglichen. `CustomerView_Joel.md` rechnet ebenfalls mit **258'000 CHF Hardware** und **290'000 CHF** gesamt für 8 kW (vorher 142'000 + 20'000 CHF ohne Quelle).
-
-**Noch nicht abgeglichen:** Die Wärmedeckungen der Kundensicht (92,9 % und 99,6 %) stammen aus dem Idealmodell. Im Abschaltmodell sind es 90,5 % und 98,7 %, der Holzofen muss also etwas mehr liefern (`FIRMA.md`: bis 2'936 kWh pro Jahr im Referenzhaus).
+**Abgeglichen:** Die Sicht des Hausbesitzers rechnet mit derselben Hardware (290'000 CHF für 8 kW) und mit den Deckungen des Abschaltmodells (90,5 % und 98,7 %). Ihre Ersparnisse rechnet `src/haushalt.py`.
 
 ## 7. Was die Rechnung genauer machen würde
 

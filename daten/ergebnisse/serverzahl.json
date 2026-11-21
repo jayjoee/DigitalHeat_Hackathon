@@ -90,7 +90,7 @@
   },
   "waermepreis_haushalt_chf_kwh": {
    "wert": 0.0,
-   "quelle": "Gratiswärme im Pilot (ehemalige Öl-Häuser, Holzofen als Reserve; CustomerView_Joel.md)"
+   "quelle": "Gratiswärme im Pilot (ehemalige Öl-Häuser, Holzofen als Reserve; docs/kunden/HAUSBESITZER.md)"
   },
   "gpu_preis_chf": {
    "wert": 2100,
@@ -198,7 +198,7 @@
   },
   "flotte_haeuser": {
    "wert": 20,
-   "quelle": "Arbeitsannahme Design-Doc; vorerst 20 × Referenzhaus (docs/TODO.md, D3)"
+   "quelle": "Arbeitsannahme Design-Doc; vorerst 20 × Referenzhaus (docs/TODO.md, «Verschiedene Häuser»)"
   },
   "bad_jahresbedarf_kwh": {
    "wert": 650000,

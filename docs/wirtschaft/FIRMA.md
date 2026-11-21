@@ -4,20 +4,20 @@
 
 Stand 21.11.2026. Reproduzieren: `python3 src/firma.py` → `daten/ergebnisse/firma.json`; prüfen: `python3 -m unittest tests.test_firma`. Alle Beträge in CHF.
 
-## Was neu ist
+## Grundannahmen der Firmenrechnung
 
-| Thema | Vorher | Jetzt |
-|---|---|---|
-| Ebene | ein Haus, Firmenkosten als 1'200 CHF pro Haus | ganze Firma, Ausbauplan, jedes Haus 5 Jahre |
-| Preise | 0,60 CHF pro L4-Stunde, Rest zum Spot-Preis | **Roche 60 % zu 0,50 CHF fest, übrige Stunden 0,55 CHF**, sinkt 10 % pro Kalenderjahr ([KOSTEN_DH.md](KOSTEN_DH.md)) |
-| Reserveheizung | bestehender Ölkessel | **kein Öl mehr**: Kessel und Tank werden zurückgebaut (4'000 CHF). Den Rest liefert der Holzofen oder das Cheminée, das viele ältere Häuser schon haben (Team-Annahme, keine Kosten) |
-| Förderung | keine | wie für eine Luft/Wasser-Wärmepumpe in Basel-Stadt, laut DigitalHeat wahrscheinlich |
-| Skaleneffekte | keine | Mengenrabatt Server, Lernkurve beim Einbau, Fixkosten verteilen sich, dichtere Servicetouren |
-| Steuern | pro Haus | auf Firmenebene mit Verlustvortrag (7 Jahre) |
-| Finanzierung | 50 % Kredit, Eigenkapital-IRR | **ohne Kredit**: Ein junges Unternehmen ohne Sicherheiten bekommt kaum 50 % Kredit zu 4,5 %. Die Firma braucht das ganze Kapital als Eigenkapital |
-| Endwert | Restbuchwert nach 10 Jahren | **kein Endwert**: Wir rechnen eine Hardware-Generation, jedes Haus läuft 5 Jahre (2027 bis Mitte 2036). Am Ende zählt nur der Wiederverkaufswert der Server |
-| Zeitpunkt | volles erstes Jahr | **halbes erstes Jahr**: Ein neues Haus geht im Schnitt zur Jahresmitte in Betrieb, die Investition ist am Jahresanfang bezahlt. Das letzte halbe Jahr fällt ins sechste Kalenderjahr |
-| Fixkosten der Firma | gleich hoch | **+4,5 % pro Jahr** wie die laufenden Kosten |
+| Thema | Annahme |
+|---|---|
+| Ebene | ganze Firma, Ausbauplan, jedes Haus 5 Jahre |
+| Preise | **Roche 60 % zu 0,50 CHF fest, übrige Stunden 0,55 CHF**, sinkt 10 % pro Kalenderjahr ([KOSTEN_DH.md](KOSTEN_DH.md)) |
+| Reserveheizung | **kein Öl mehr**: Kessel und Tank werden zurückgebaut (4'000 CHF). Den Rest liefert der Holzofen oder das Cheminée, das viele ältere Häuser schon haben (Team-Annahme, keine Kosten) |
+| Förderung | wie für eine Luft/Wasser-Wärmepumpe in Basel-Stadt, laut DigitalHeat wahrscheinlich |
+| Skaleneffekte | Mengenrabatt Server, Lernkurve beim Einbau, Fixkosten verteilen sich, dichtere Servicetouren |
+| Steuern | auf Firmenebene mit Verlustvortrag (7 Jahre) |
+| Finanzierung | **ohne Kredit**: Ein junges Unternehmen ohne Sicherheiten bekommt kaum 50 % Kredit zu 4,5 %. Die Firma braucht das ganze Kapital als Eigenkapital |
+| Endwert | **kein Endwert**: Wir rechnen eine Hardware-Generation, jedes Haus läuft 5 Jahre (2027 bis Mitte 2036). Am Ende zählt nur der Wiederverkaufswert der Server |
+| Zeitpunkt | **halbes erstes Jahr**: Ein neues Haus geht im Schnitt zur Jahresmitte in Betrieb, die Investition ist am Jahresanfang bezahlt. Das letzte halbe Jahr fällt ins sechste Kalenderjahr |
+| Fixkosten der Firma | **+4,5 % pro Jahr** wie die laufenden Kosten |
 
 Grundlage pro Haus: Referenzhaus mit 8 Servern im Abschaltmodell (230 W Leerlauf), 34'512 verkaufte Server-Stunden pro Jahr, Roche 0,50 CHF (= 4,00 CHF pro Server-Stunde), übrige Stunden 0,55 CHF (= 4,40 CHF). Der Roche-Vertrag gilt 5 Jahre; die Rechnung nimmt an, dass er für die späteren Häuser zum selben Preis verlängert wird.
 

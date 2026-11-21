@@ -44,7 +44,7 @@ Ein Server braucht Strom und macht daraus fast vollständig Wärme. Normalerweis
 ## Planbar: die Zusage am Vortag
 - Der Ankerkunde zahlt 0,50 CHF nur für Stunden, die DigitalHeat **am Vortag um 12 Uhr verbindlich zusagt**.
 - Die Zusage stützt sich auf die Wetterprognose vom Vortag (ECMWF). Im Test zählen nur Prognosen, die um 12 Uhr schon veröffentlicht waren.
-- Ergebnis Referenzhaus: **93 % der Stunden lassen sich zusagen**, verkauft werden 60 %. An rund 2 % der Tage fehlt etwas. Dafür gibt es eine Gutschrift, die rund 270 CHF pro Jahr kostet.
+- Ergebnis Referenzhaus: **93 % der Stunden lassen sich zusagen**, verkauft werden 60 %. An rund 2 % der Tage fehlt etwas. Dafür gibt es eine Gutschrift, die rund 130 CHF pro Jahr kostet.
 - Das Ergebnis sinkt dadurch kaum. Abgesichert ist damit die Liefermenge. Preis und Nachfrage bleiben Annahmen.
 
 ## Lohnt es sich?
@@ -53,11 +53,11 @@ Ein Server braucht Strom und macht daraus fast vollständig Wärme. Normalerweis
 - DigitalHeat rechnet öffentliche und vom Kunden freigegebene, nicht vertrauliche Aufgaben (`L4_ANGEBOT.md`). Angenommen ist ein Ankerkunde (Roche), der 60 % der Stunden fest für **0,50 CHF pro Grafikkarte und Stunde** kauft; die übrigen Stunden gehen für **0,55 CHF** an andere Kunden. Beides ist noch mit keinem Kunden bestätigt; Schweizer Clouds verlangen ab 0,68 CHF.
 - Findet jede Rechenstunde einen Käufer, bleiben DigitalHeat nach allen Kosten, Steuern und Zinsen rund **35'000 CHF pro Haus und Jahr**. Das Geld für die Computer ist nach **knapp 3 Jahren** zurück, der interne Zinsfuss liegt bei rund **22 %**. Bleibt ein Drittel der Stunden unverkauft, ist der Gewinn weg. Gerechnet ist mit Servern, die ohne Arbeit abschalten (230 W Leerlauf). Die Rechnung für die ganze Firma mit ihren Fixkosten steht in `FIRMA.md`.
 - Bringen die übrigen Stunden nur den Spot-Preis von 0,294 CHF, sind es noch rund 15'800 CHF pro Haus und Jahr.
+- **82 % der Rechenstunden fallen in den Winter** (Oktober bis März). Kauft neben Roche ein zweiter Kunde die übrigen Winterstunden, bleiben rund **27'500 CHF pro Haus und Jahr**, auch wenn im Sommer niemand die übrigen Stunden kauft.
 - Der Haushalt bekommt die **Wärme gratis**.
 - **Es lohnt sich NICHT, wenn:**
-  - der Preis unter **0,38 CHF pro Grafikkarte und Stunde** fällt, oder
-  - weniger als rund ein Viertel der Stunden fest verkauft wird, oder
-  - weniger als 72 % der Rechenstunden überhaupt einen Käufer finden, oder
+  - Roche weniger als **0,38 CHF pro Grafikkarte und Stunde** zahlt und die übrigen Stunden nur den Spot-Preis bringen, oder
+  - weniger als **66 %** der Rechenstunden überhaupt einen Käufer finden, oder
   - es nicht genug flexible Aufträge gibt. Dann deckt das System nur 52 % und muss im Sommer Wärme wegkühlen.
 
 ## Welche Aufträge passen?
@@ -80,7 +80,7 @@ Ein Server braucht Strom und macht daraus fast vollständig Wärme. Normalerweis
 - **Der Job wandert echt.** Am 25. Mai rechnet der echte Auftrag bis 10 Uhr im Haus. Dann ist der Wassertank voll, und der Router schickt ihn ins Sportbad. Der Auftrag speichert seinen Stand, ein neuer Prozess macht dort weiter. Ein Vergleich mit einem Lauf ohne Unterbruch ergibt exakt dieselben Ergebnisse.
 
 ## Wichtigste Annahmen
-- Es gibt genug Rechenaufträge: Eine Pharmafirma bucht 60 % der Stunden fest, der Rest wird günstiger verkauft. Ohne genug Aufträge sinkt die Deckung auf 52 %.
+- Es gibt genug Rechenaufträge: Eine Pharmafirma bucht 60 % der Stunden fest, der Rest geht zu 0,55 CHF an Kunden ohne Mindestmenge. Ohne genug Aufträge sinkt die Deckung auf 52 %.
 - Strompreis 33,25 Rp./kWh (IWB Basel 2026). Die Wärme ist 13,3 Rp./kWh wert, weil sie eine Wärmepumpe ersetzt (Case-Regel).
 - Ein Server mit 8 Grafikkarten kostet 32'245 CHF und hält 5 Jahre. Alle Beträge in CHF, Herleitung in `KOSTEN_DH.md`.
 - Der Wärmebedarf des Sportbads ist geschätzt: rund 650'000 kWh im Jahr, auf ±30 % genau (Kennwert des Verbands Hallen- und Freibäder, `daten/HALLENBAD.md`).

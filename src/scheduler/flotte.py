@@ -1,6 +1,6 @@
 """Standorte der Flotte und Vergleich 0/1 Senke (Design-Doc Baustein 1, 4, 7).
 
-- Häuser: vorerst 20 × Referenzhaus (docs/TODO.md, D3). Serverzahl nach Serverregel: kleinste Zahl mit
+- Häuser: vorerst 20 × Referenzhaus (docs/TODO.md, «Verschiedene Häuser»). Serverzahl nach Serverregel: kleinste Zahl mit
   Deckung ≥ 92,9 % im Szenario «spot» → 8.
 - Senke: Sportbad im Gartenbad St. Jakob (daten/HALLENBAD.md). Ein Hallenbad scheidet aus (Rialto
   Sommerpause, Eglisee nur im Winter). Profil aus Jahresbedarf und Monatsanteilen, gleichmässig auf die

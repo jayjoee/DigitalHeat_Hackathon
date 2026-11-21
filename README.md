@@ -160,7 +160,7 @@ Die gemeinsame Aufgabenliste steht in [docs/TODO.md](docs/TODO.md). Die wichtigs
 | | [ANNAHMEN_PRUEFUNG.md](docs/wirtschaft/ANNAHMEN_PRUEFUNG.md) | Jede Annahme kritisch geprüft: Hält sie, und was passiert, wenn nicht? |
 | `docs/kunden/` | [L4_ANGEBOT.md](docs/kunden/L4_ANGEBOT.md) | Gewählte Ausrichtung: L4 für öffentliche/synthetische oder kundenseitig anonymisierte und freigegebene Aufgaben |
 | | [PHARMA_SICHT.md](docs/kunden/PHARMA_SICHT.md) | Wer die Rechenzeit kauft, was Kunden heute zahlen und welche Verträge üblich sind |
-| | [CustomerView_Joel.md](docs/kunden/CustomerView_Joel.md) | Die Sicht des Hausbesitzers: Was hat der Haushalt davon? |
+| | [HAUSBESITZER.md](docs/kunden/HAUSBESITZER.md) | Die Sicht des Hausbesitzers: Angebot, Ersparnis, Einwände |
 | `docs/technik/` | [GESAMTDEMO.md](docs/technik/GESAMTDEMO.md) | Was die Gesamtdemo zeigt, Start, Prozesssteuerung und Grenzen |
 | | [waerme-router-basel.md](docs/technik/waerme-router-basel.md) | Bauplan für den Wärme-Router und unsere Entscheide |
 | | [RESSOURCEN_SCHEDULER.md](docs/technik/RESSOURCEN_SCHEDULER.md) | Vergabecode, Wettbewerbsrecherche, Quellen, Annahmen und Grenzen der Ressourcenwarteschlange |

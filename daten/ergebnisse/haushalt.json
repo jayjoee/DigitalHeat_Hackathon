@@ -1,0 +1,161 @@
+{
+ "erzeugt": "python3 src/haushalt.py",
+ "annahmen": {
+  "oel_chf_l": {
+   "wert": 1.665,
+   "quelle": "Heizöl 3'000 l, Anfang Nov. 2026 (weekend.at)"
+  },
+  "oel_kwh_l": {
+   "wert": 10.0,
+   "quelle": "Heizwert Heizöl EL, Standardwert"
+  },
+  "oel_kessel": {
+   "wert": 0.85,
+   "quelle": "Annahme: älterer Ölkessel"
+  },
+  "oel_co2_kg_l": {
+   "wert": 2.65,
+   "quelle": "gängiger Emissionsfaktor Heizöl EL"
+  },
+  "gas_rp_kwh": {
+   "wert": 14.013,
+   "quelle": "IWB Gastarife 2026, Stufe M, Arbeitspreis + CO2-Abgabe + Konzessionsabgabe, inkl. MwSt."
+  },
+  "gas_grundgebuehr_chf": {
+   "wert": 194.58,
+   "quelle": "IWB 2026, Leistungspreis, Minimum; entfällt, wenn der Gasanschluss aufgegeben wird"
+  },
+  "gas_kessel": {
+   "wert": 0.9,
+   "quelle": "Annahme: Gaskessel"
+  },
+  "gas_co2_kg_kwh": {
+   "wert": 0.198,
+   "quelle": "gängiger Emissionsfaktor Erdgas"
+  },
+  "wp_jaz": {
+   "wert": 2.5,
+   "quelle": "Case: Wärme ersetzt Wärmepumpe mit JAZ 2,5"
+  }
+ },
+ "waermepreis_heute_rp_kwh": {
+  "oel": 19.6,
+  "gas": 15.6,
+  "waermepumpe": 13.3
+ },
+ "realistisch": {
+  "referenzhaus": {
+   "bedarf_kwh": 31231,
+   "deckung": 0.9053,
+   "vom_server_kwh": 28273,
+   "holzofen_kwh": 2958,
+   "heute_chf": {
+    "oel": 6118,
+    "gas": 5057,
+    "waermepumpe": 4154
+   },
+   "spart_chf": {
+    "oel": 5538,
+    "gas": 4597,
+    "waermepumpe": 3760
+   },
+   "heizoel_l_heute": 3674,
+   "co2_t_heute": {
+    "oel": 9.7,
+    "gas": 6.9
+   }
+  },
+  "efh": {
+   "bedarf_kwh": 17000,
+   "deckung": 0.9873,
+   "vom_server_kwh": 16784,
+   "holzofen_kwh": 216,
+   "heute_chf": {
+    "oel": 3330,
+    "gas": 2841,
+    "waermepumpe": 2261
+   },
+   "spart_chf": {
+    "oel": 3288,
+    "gas": 2808,
+    "waermepumpe": 2232
+   },
+   "heizoel_l_heute": 2000,
+   "co2_t_heute": {
+    "oel": 5.3,
+    "gas": 3.7
+   }
+  }
+ },
+ "idealmodell": {
+  "referenzhaus": {
+   "bedarf_kwh": 31231,
+   "deckung": 0.9295,
+   "vom_server_kwh": 29029,
+   "holzofen_kwh": 2202,
+   "heute_chf": {
+    "oel": 6118,
+    "gas": 5057,
+    "waermepumpe": 4154
+   },
+   "spart_chf": {
+    "oel": 5686,
+    "gas": 4714,
+    "waermepumpe": 3861
+   },
+   "heizoel_l_heute": 3674,
+   "co2_t_heute": {
+    "oel": 9.7,
+    "gas": 6.9
+   }
+  },
+  "efh": {
+   "bedarf_kwh": 17000,
+   "deckung": 0.996,
+   "vom_server_kwh": 16932,
+   "holzofen_kwh": 68,
+   "heute_chf": {
+    "oel": 3330,
+    "gas": 2841,
+    "waermepumpe": 2261
+   },
+   "spart_chf": {
+    "oel": 3317,
+    "gas": 2831,
+    "waermepumpe": 2252
+   },
+   "heizoel_l_heute": 2000,
+   "co2_t_heute": {
+    "oel": 5.3,
+    "gas": 3.7
+   }
+  }
+ },
+ "waermeabo_efh": {
+  "0": {
+   "oel": 3288,
+   "gas": 2808,
+   "waermepumpe": 2232
+  },
+  "3": {
+   "oel": 2784,
+   "gas": 2304,
+   "waermepumpe": 1729
+  },
+  "5": {
+   "oel": 2449,
+   "gas": 1969,
+   "waermepumpe": 1393
+  },
+  "7": {
+   "oel": 2113,
+   "gas": 1633,
+   "waermepumpe": 1057
+  },
+  "10": {
+   "oel": 1609,
+   "gas": 1129,
+   "waermepumpe": 554
+  }
+ }
+}

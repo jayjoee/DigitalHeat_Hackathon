@@ -76,7 +76,7 @@ Historischer Preisvergleich mit Schweizer GPU-Clouds: Ein Schweizer Standort all
 | Everyware (Sovereign Cloud) | 2,13 CHF |
 | Infomaniak | L4 im Angebot, Preis nicht öffentlich gefunden |
 
-**Preise als Annahme (seit 21.11.2026): Ankerkunde Roche 0,50 CHF für 60 % der Stunden, übrige Stunden 0,55 CHF** (`KOSTEN_DH.md`). Vorher: 0,60 CHF fest, Rest zum Spot-Preis. Für öffentliche bzw. freigegebene anonymisierte Aufgaben müssen Zahlungsbereitschaft und Wettbewerbspreis neu bestätigt werden. Das Angebot verspricht keinen Schutz der laufenden L4-Verarbeitung vor dem Hostadministrator und keine pauschale rechtliche Sonderstellung.
+**Preise als Annahme (seit 21.11.2026): Ankerkunde Roche 0,50 CHF für 60 % der Stunden, übrige Stunden 0,55 CHF** (`KOSTEN_DH.md`). Für öffentliche bzw. freigegebene anonymisierte Aufgaben müssen Zahlungsbereitschaft und Wettbewerbspreis neu bestätigt werden. Das Angebot verspricht keinen Schutz der laufenden L4-Verarbeitung vor dem Hostadministrator und keine pauschale rechtliche Sonderstellung.
 
 ## 5. Welche Verträge im GPU-Markt üblich sind
 
@@ -107,7 +107,7 @@ Mittlerer Kostenfall, 8 Server, 5 Jahre, nach Steuern, Abschaltmodell mit 230 W 
 | 0,55 CHF | +22'600 | +36'500 |
 | 0,60 CHF | +29'400 | +45'600 |
 
-**Break-even mit Direktvertrag: 0,38 CHF pro L4-Stunde** bei 60 % fest gebucht, 0,35 CHF bei 80 %. Über einen Marktplatz (20 % Gebühr, Preisverfall auf dem ganzen Preis) bräuchte es rund 0,47 CHF. Im Idealmodell ohne Leerlauf lagen die Werte höher (+34'500 CHF bei 0,60 CHF und 60 %, Break-even 0,36 CHF).
+**Break-even mit Direktvertrag: 0,38 CHF pro L4-Stunde** bei 60 % fest gebucht, 0,35 CHF bei 80 %. Über einen Marktplatz (20 % Gebühr, Preisverfall auf dem ganzen Preis) bräuchte es rund 0,47 CHF.
 
 Diese Tabelle rechnet den Rest zum Spot-Preis, ist also die vorsichtige Variante. Im aktuellen Preismodell (Roche 0,50 CHF, Rest 0,55 CHF) bleiben **+35'000 CHF pro Jahr**, Break-even für Roche 0,24 CHF (`KOSTEN_DH.md`).
 
@@ -130,7 +130,7 @@ Gerechnet mit `src/wirtschaft.py` wie in `KOSTEN_DH.md`: Referenzhaus, 8 Server,
 | Jobtyp B | Bilderkennung, Frist 2 h | **Mikroskopbilder** auswerten, Frist 12 h |
 | Rechenpreis | 0,29–0,73 CHF (Marktplatz) | **0,50 CHF Ankerkunde, 0,55 CHF übrige Stunden** (Annahme) |
 | Marktplatzgebühr | 15–30 % | **5 %** (eigene Plattform) |
-| Preisverfall | −10 % pro Jahr | **0 %** im Vertrag, −10 % nur für Füllaufträge |
+| Preisverfall | −10 % pro Jahr | **0 %** im Vertrag, −10 % nur für die übrigen Stunden |
 | Verkaufsquote | 85 % | **60 %** fest gebucht (42–80 %, Herleitung in `KOSTEN_DH.md` Abschnitt 2b) |
 | Vertragsdauer | – | **3 Jahre** |
 | Sicherheitskosten | ISO 27001 im Firmenanteil | zusätzlich jährliche Penetrationstests (ohne Quelle) |

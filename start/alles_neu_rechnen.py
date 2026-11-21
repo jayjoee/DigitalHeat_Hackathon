@@ -31,6 +31,7 @@ SCHRITTE = [
     ("Flotte im Abschaltmodell", ["src/scheduler/flotte.py", "--abschalten"], None),
     ("Flotte im Idealmodell", ["src/scheduler/flotte.py"], None),
     ("Zahlen für KOSTEN_DH.md", ["src/kosten_dh.py"], None),
+    ("Ersparnis des Haushalts", ["src/haushalt.py"], None),
     ("Firmenrechnung", ["src/firma.py"], None),
     ("Ressourcen-Warteschlange", ["start/queue_start.py"], None),
     ("Dashboard-Daten", ["src/dashboard_daten.py"], None),
