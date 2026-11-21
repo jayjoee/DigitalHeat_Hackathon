@@ -3,7 +3,7 @@
 Kundenperspektive Nordwestschweiz und technische Ergebnisse des Hackathons  
 Stand der Ausgangsunterlagen 20 und 21 November 2026
 
-Die Unterlagen beschreiben eine Serverheizung, deren Abwärme für Heizung und Warmwasser genutzt wird. Im Pilot ersetzt DigitalHeat die Ölheizung: Ölkessel und Tank werden zurückgebaut, ein wasserführender Holzofen deckt an den kältesten Tagen die letzten Prozente (Team-Entscheid 21.11.2026). DigitalHeat übernimmt nach der Arbeitsannahme Anlage, Einbau, Rückbau, Holzofen, Serverstrom und Unterhalt. Der Haushalt erhält die Wärme gratis und heizt ohne Öl.
+Die Unterlagen beschreiben eine Serverheizung, deren Abwärme für Heizung und Warmwasser genutzt wird. Im Pilot ersetzt DigitalHeat die Ölheizung: Ölkessel und Tank werden zurückgebaut, an den kältesten Tagen heizt der Holzofen oder das Cheminée, das viele ältere Häuser schon haben (Team-Annahme 21.11.2026). DigitalHeat übernimmt nach der Arbeitsannahme Anlage, Einbau, Rückbau, Serverstrom und Unterhalt. Der Haushalt erhält die Wärme gratis und heizt ohne Öl.
 
 Das untersuchte Referenzhaus hat einen jährlichen Wärmebedarf von 31'231 kWh. Die Unterlagen weisen für acht Server im Szenario mit ausreichend flexiblen Rechenaufträgen rund 93 Prozent Wärmedeckung aus. Für ein angenommenes Durchschnitts-Einfamilienhaus mit 17'000 kWh und einer kleineren Einheit werden 99,6 Prozent genannt. Die hohe Deckung hängt entscheidend von der Verfügbarkeit flexibler Aufträge ab. Kostenübernahme, Wärmepreis, Vertrag und Sicherheitsanforderungen sind mit den Säulen Firma und Pharma abzustimmen; die kantonale Anerkennung und die Zulässigkeit des vorgesehenen Backups sind offene Punkte der Unterlagen.
 
@@ -41,7 +41,7 @@ Stand 21.11.2026 · Säule «Kunde» des DigitalHeat-Case (Hackathon) · Die Sä
 
 ### 0. Kurzfassung
 
-**Das Angebot:** DigitalHeat ersetzt die Öl- oder Gasheizung kostenlos durch eine Serverheizung mit einem wasserführenden Holzofen als Reserve. DigitalHeat zahlt Anlage, Einbau, Rückbau der alten Heizung, Holzofen, Server-Strom und Unterhalt. Der Haushalt bekommt 93–100 % seiner Wärme von den Servern, den Rest aus etwas Brennholz, und braucht kein Heizöl und kein Gas mehr.
+**Das Angebot:** DigitalHeat ersetzt die Öl- oder Gasheizung kostenlos durch eine Serverheizung; an den wenigen kältesten Tagen hilft der vorhandene Holzofen. DigitalHeat zahlt Anlage, Einbau, Rückbau der alten Heizung, Server-Strom und Unterhalt. Der Haushalt bekommt 93–100 % seiner Wärme von den Servern, den Rest aus etwas Brennholz, und braucht kein Heizöl und kein Gas mehr.
 
 **Was der Haushalt gewinnt (Gratiswärme, Durchschnitts-Einfamilienhaus mit 17'000 kWh Wärme pro Jahr):**
 
@@ -123,13 +123,13 @@ Warum der Haushalt die Anlage nicht selbst kauft: Eine 8-kW-Einheit kostet rund 
 **Wohin der Ertrag der Rechenleistung fliesst:** Der Pharmakunde zahlt DigitalHeat für die Rechenzeit. DigitalHeat zahlt davon Strom, Hardware, Einbau und Unterhalt. Der Haushalt bekommt keinen Anteil am Rechenerlös, sondern die Wärme gratis und trägt kein Risiko. Ob er zusätzlich einen Bonus oder eine Platzmiete erhält, entscheidet die Säule Firma (Abschnitt 11).
 
 #### 3.2 Reserve: Holzofen statt Öl- oder Gaskessel
-Die Serverheizung **ersetzt** die bestehende Heizung. Ölkessel und Tank werden zurückgebaut (≈ 4'000 CHF, Schätzung). Für die kältesten Stunden heizt ein wasserführender Holzofen (6–8 kW, ≈ 7'000 CHF, Schätzung) in den Speicher. Beides bezahlt DigitalHeat (docs/FIRMA.md).
+Die Serverheizung **ersetzt** die bestehende Heizung. Ölkessel und Tank werden zurückgebaut (≈ 4'000 CHF, Schätzung, bezahlt DigitalHeat). Für die kältesten Stunden nutzt der Haushalt seinen vorhandenen Holzofen oder sein Cheminée (Team-Annahme, keine Kosten). Beim Durchschnitts-EFH fehlt die Serverwärme nur an rund 30 Tagen und höchstens 1,4 kW; ohne Ofen bliebe es über 18 °C. Beim grossen Referenzhaus sind es 77 Tage mit bis zu 4,1 kW (docs/FIRMA.md).
 
 | Heute | Reserve neu | Bemerkung |
 |---|---|---|
-| Öl | wasserführender Holzofen | Ölkessel und Tank werden zurückgebaut; Referenzhaus ≈ 1,4 Ster Buche pro Jahr (≈ 350 CHF) |
-| Gas (ausserhalb BS) | wasserführender Holzofen | Gasanschluss kann aufgegeben werden, Grundgebühr entfällt |
-| Gas (Basel-Stadt) | wasserführender Holzofen | Gasnetz wird bis 2037 abgestellt; ein Heizstab im Speicher wäre die Alternative, Erlaubnis als Notheizung offen |
+| Öl | vorhandener Holzofen / Cheminée | Ölkessel und Tank werden zurückgebaut; Referenzhaus ≈ 1,4 Ster Buche pro Jahr (≈ 350 CHF), Durchschnitts-EFH ≈ 0,15 Ster |
+| Gas (ausserhalb BS) | vorhandener Holzofen / Cheminée | Gasanschluss kann aufgegeben werden, Grundgebühr entfällt |
+| Gas (Basel-Stadt) | vorhandener Holzofen / Cheminée | Gasnetz wird bis 2037 abgestellt; ein Heizstab im Speicher wäre die Alternative, Erlaubnis als Notheizung offen |
 
 #### 3.3 Pilot-Aufbau (Vorschlag)
 | | |
@@ -642,7 +642,7 @@ Grundlagen: Strom 33,25 Rp./kWh (ElCom 2026, IWB), Wärmepumpe JAZ 2,5 (Case) �
 **Wichtigster Vorbehalt:** Ob die Serverheizung in Basel als erneuerbarer Heizungsersatz gilt (Energiegesetz BS), ist offen. Nur dann entfällt die neue Wärmepumpe. Klärung beim Amt für Umwelt und Energie, Abteilung Energie.
 
 ### 3b. Pilot: Umstieg für Ölheizungs-Besitzer
-**Idee:** Die Serverheizung **ersetzt die Ölheizung**. Ölkessel und Tank kommen raus, ein wasserführender Holzofen übernimmt die kältesten Stunden. So steigt der Haushalt ohne eigene Investition ganz aus dem Öl aus.
+**Idee:** Die Serverheizung **ersetzt die Ölheizung**. Ölkessel und Tank kommen raus, der vorhandene Holzofen übernimmt die wenigen kältesten Stunden. So steigt der Haushalt ohne eigene Investition ganz aus dem Öl aus.
 
 **Was sich für den Haushalt ändert** (Gratiswärme, flexible Aufträge vorausgesetzt):
 
@@ -662,7 +662,7 @@ Grundlagen: Heizöl 1,665 CHF/l (Anfang Nov. 2026), 10 kWh/l, Ölkessel 85 % (AN
 
 **Warum das gerade für Ölheizungs-Häuser passt**
 - **Keine Sanierung nötig:** Alte Häuser mit Ölheizung haben oft Radiatoren, die 55–70 °C brauchen. Eine Wärmepumpe arbeitet dort schlecht oder braucht zuerst Dämmung und neue Heizkörper. Die Serverheizung liefert laut DigitalHeat 50–70 °C Vorlauf und passt an die bestehenden Radiatoren.
-- **Keine Investition:** DigitalHeat zahlt Rückbau und Holzofen (≈ 11'000 CHF). Der Förderbeitrag wie für eine Wärmepumpe geht an DigitalHeat.
+- **Keine Investition:** DigitalHeat zahlt den Rückbau (≈ 4'000 CHF), der Holzofen ist schon da. Der Förderbeitrag wie für eine Wärmepumpe geht an DigitalHeat.
 - **Sofort sichtbar:** Der Öltank ist weg, der Kellerraum wird frei.
 - **Rechtlich (ANNAHME, zu prüfen):** Der Ölkessel wird ersetzt, darum gilt die Ersatzpflicht. Server mit Holzofen müssen als erneuerbarer Ersatz anerkannt werden; laut DigitalHeat wahrscheinlich. Offen sind auch Bewilligung und Feinstaub-Vorgaben für Holzöfen.
 
@@ -682,7 +682,7 @@ Grundlagen: Heizöl 1,665 CHF/l (Anfang Nov. 2026), 10 kWh/l, Ölkessel 85 % (AN
 - **Gas-Haushalte müssen wechseln, ob sie wollen oder nicht**, mit festem Datum. Das ist ein grösserer und dringenderer Markt als Öl.
 - **Aber:** Der Gas-Backup läuft mit der Stilllegung aus. Ein Gas-Haushalt braucht beim Umstieg auf die Serverheizung ein anderes Backup (z. B. eine kleine Wärmepumpe oder einen Elektroeinsatz im Speicher).
 - **Konkurrenz Fernwärme:** Im Fernwärmegebiet ist der Anschluss an die Fernwärme die naheliegende Lösung, und kantonale Förderung für dezentrale Heizungen ist dort halbiert. Die Serverheizung zielt deshalb auf **Gas-Haushalte ausserhalb des Fernwärmegebiets** (z. B. in Riehen und Bettingen).
-- **Folge für die Reihenfolge:** Öl bleibt der beste Einstieg für den Pilot (höchste Ersparnis, Holzofen ersetzt den Kessel). Gas ist danach der grösste Markt in Basel-Stadt, mit klarem Termindruck bis 2037.
+- **Folge für die Reihenfolge:** Öl bleibt der beste Einstieg für den Pilot (höchste Ersparnis, vorhandener Holzofen als Reserve). Gas ist danach der grösste Markt in Basel-Stadt, mit klarem Termindruck bis 2037.
 
 **Backup für Gas-Haushalte: Heizstab statt Gas**
 Wird der Gasanschluss aufgegeben, übernimmt ein Heizstab im Wärmespeicher die letzten Prozente (einmalig ≈ 2'000 CHF, ANNAHME).
@@ -799,7 +799,7 @@ Hinweis für die Säule Firma (nicht Teil der Kundenperspektive): BFE-Pilot- und
 | **Bank** (grüne Hypothek, z. B. BKB) | günstigere Hypothek für ein Haus mit erneuerbarer Wärme |
 
 ### 7. Das Angebot an den Kunden in einem Satz
-**DigitalHeat ersetzt die Ölheizung kostenlos durch eine Serverheizung mit Holzofen als Reserve, zahlt Strom und Unterhalt, und der Haushalt braucht kein Heizöl mehr. Das spart 3'300–5'700 CHF pro Jahr, ohne eigene Investition und ohne Sanierung.**
+**DigitalHeat ersetzt die Ölheizung kostenlos durch eine Serverheizung, der vorhandene Holzofen hilft an den kältesten Tagen, zahlt Strom und Unterhalt, und der Haushalt braucht kein Heizöl mehr. Das spart 3'300–5'700 CHF pro Jahr, ohne eigene Investition und ohne Sanierung.**
 
 Einwände und Antworten:
 | Einwand | Antwort |

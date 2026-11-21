@@ -299,7 +299,7 @@ function srvWatt(hd, i, k) {
   return 1000 * (l + start) + M.leerlauf_watt * Math.max(0, 1 - l - start);
 }
 const kessel = (hd, i) => Math.max(0, hd.bed[i] - hd.gen[i]);
-// Keine Ölheizung mehr: Server decken den Grossteil, den Rest liefert ein wasserführender Holzofen.
+// Keine Ölheizung mehr: Server decken den Grossteil, den Rest liefert der vorhandene Holzofen.
 // Ersetztes Heizöl = gesamter Wärmebedarf, den früher der Ölkessel lieferte (kumuliert).
 const oelSpar = HD.map(hd => { const a = new Float32Array(N); for (let i = 0, s = 0; i < N; i++) { s += hd.bed[i] / (W.heizoel_kwh_l * W.kessel_wirkungsgrad); a[i] = s; } return a; });
 const HOLZ_KWH_STER = 2100, HOLZ_ETA = 0.75;   // Buche ≈ 500 kg/Ster × 4,2 kWh/kg, Ofen 75 % (src/firma.py)
@@ -317,7 +317,7 @@ el('kpis').innerHTML = '<span class="gruppe">Jahr 2025 · Case-Regel</span>' + [
 el('modell').textContent =
   `Szene: Flotte aus ${M.haeuser} Häusern und Sportbad (${NB} Server). Server werden bei Bedarf ein- und `
   + `ausgeschaltet (${M.leerlauf_watt} W Leerlauf, ${M.standby_watt} W Standby). Die Werte «diese Stunde» stammen aus diesem `
-  + `Betriebsmodell, die Kennzahlen oben aus der Case-Regel. Kein Öl mehr: Reserve ist ein wasserführender Holzofen (src/firma.py). Ersetztes Heizöl: ${W.oel_quelle}.`;
+  + `Betriebsmodell, die Kennzahlen oben aus der Case-Regel. Kein Öl mehr: Reserve ist der vorhandene Holzofen (docs/FIRMA.md). Ersetztes Heizöl: ${W.oel_quelle}.`;
 
 // ---------- Server pro Haus ----------
 function serverLast(lauf, an, k) { return k < an ? clamp(lauf - k) : 0; }
@@ -472,7 +472,7 @@ function baueHaus(h) {
   o.tankFuell = mesh(new THREE.CylinderGeometry(0.63, 0.63, 1, 40), o.tankMat, o.tank.x, KBODEN + 0.1, o.tank.z, scene, false);
   for (const y of [2.75, 0.12]) mesh(new THREE.CylinderGeometry(0.75, 0.75, 0.12, 40), mat('#6b7487', { metalness: 0.5 }), o.tank.x, KBODEN + y, o.tank.z);
   for (const m of [glas, o.tankFuell]) { m.userData = { art: 'speicher', haus: h.n }; klickbar.push(m); }
-  // Holzofen (wasserführend, heizt in den Speicher) mit Holzstapel; ersetzt den Ölkessel
+  // Vorhandener Holzofen mit Holzstapel; der Ölkessel ist zurückgebaut
   o.kessel = { x: h.x1 - 1.05, z: 7.1 };
   const kk = mesh(new THREE.BoxGeometry(0.85, 1.35, 0.75), mat('#2a2c33', { roughness: 0.45, metalness: 0.5 }), o.kessel.x, KBODEN + 0.76, o.kessel.z);
   mesh(new THREE.BoxGeometry(0.5, 0.45, 0.02), new THREE.MeshBasicMaterial({ color: '#120c0a' }), o.kessel.x, KBODEN + 0.7, o.kessel.z + 0.385, scene, false);
@@ -1056,7 +1056,7 @@ function zeigeDetail(info, fliegen = true) {
       kw > 0.05 ? 'brennt' : 'aus', kw > 0.05 ? 'var(--oil)' : '#8ea0c2', [
         ['Holzwärme 2025', fmt(jahr) + ' kWh'], ['Brennholz 2025', fmt(ster(jahr), 1) + ' Ster Buche'],
         ['Kosten Holz (≈ 250 CHF/Ster)', fmt(ster(jahr) * 250) + ' CHF'], ['Heizöl ersetzt', fmt(oelSpar[info.haus - 1][N - 1]) + ' l'],
-      ], 'Ölkessel und Tank werden zurückgebaut. Ein wasserführender Holzofen (6–8 kW) heizt in den Speicher, nur an den kältesten Tagen. Damit ist das Haus ganz ohne fossile Energie. Holzpreis und Heizwert sind Schätzungen (src/firma.py).');
+      ], 'Ölkessel und Tank werden zurückgebaut. An den kältesten Tagen heizt der Holzofen, den viele ältere Häuser schon haben (Team-Annahme, keine Kosten für DigitalHeat). Damit ist das Haus ganz ohne fossile Energie. Holzpreis und Heizwert sind Schätzungen (docs/FIRMA.md).');
     miniChart(fenster(n => kessel(hd, n)), 4, '#ff5d4a');
     if (fliegen) fliegeZu(V(o.kessel.x - 0.8, KBODEN + 1, o.kessel.z + 0.5), V(-3.2, 1.4, 7.5));
   } else {

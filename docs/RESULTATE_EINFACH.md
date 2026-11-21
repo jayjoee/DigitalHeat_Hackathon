@@ -15,7 +15,7 @@ Ein Server braucht Strom und macht daraus fast vollständig Wärme. Normalerweis
 | Kennzahl | Ergebnis | Was das heisst |
 |---|---|---|
 | Server pro Haus | **8** | |
-| Wärmebedarf gedeckt | **93 %** | Die restlichen 7 % liefert ein Holzofen, nur an den kältesten Tagen. Öl braucht es keines mehr. |
+| Wärmebedarf gedeckt | **93 %** | Die restlichen 7 % liefert der Holzofen, den viele ältere Häuser schon haben, nur an den kältesten Tagen. Öl braucht es keines mehr. |
 | Abgeführte Wärme | **5 kWh im Jahr im Case-Idealmodell** | Das Modell setzt 0 W bei pausierten Servern an |
 | Auslastung | **52 %** | Die Server rechnen gut die Hälfte der Zeit |
 | Verpasste Fristen | **0 %** | Jeder Auftrag mit Frist wird rechtzeitig fertig |

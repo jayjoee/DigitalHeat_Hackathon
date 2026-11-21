@@ -13,8 +13,8 @@ genug Aufträge) und dieselbe Kostenformel wie in src/wirtschaft.py. Neu auf Fir
    Fr. 8'000 + Fr. 250 pro kW thermisch ausserhalb, halb so viel innerhalb des Fernwärmegebiets, höchstens 40 %
    der Investition (bs.ch/en/node/39393, node/28384, Stand Oktober 2026). Ausbezahlt an den Eigentümer, der sie
    vertraglich an DigitalHeat abtritt.
-4. Keine Ölheizung mehr: Ölkessel und Tank werden zurückgebaut, die restlichen rund 7 % Wärme liefert ein
-   wasserführender Holzofen, der in den Speicher heizt.
+4. Keine Ölheizung mehr: Ölkessel und Tank werden zurückgebaut. Die restlichen Prozente liefert der Holzofen
+   oder das Cheminée, das viele ältere Häuser schon haben (Team-Annahme, keine Kosten für DigitalHeat).
 5. Steuer auf Firmenebene mit Verlustvortrag (7 Jahre), Gewinnsteuer Basel-Stadt.
 
 Kennzahlen: Jahresrechnung, freier Cashflow, Kapitalbedarf, Projekt-IRR (vor Finanzierung), Eigenkapital-IRR
@@ -59,7 +59,8 @@ F = {
     "anteil_fernwaermegebiet": (0.5, "Annahme: die Hälfte der Öl-Häuser liegt im Fernwärmegebiet (dort halbe Beiträge)"),
     "foerderung_max_anteil": (0.40, "bs.ch/en/node/28384: höchstens 40 % der Investition"),
     "foerderung_erhalten": (True, "DigitalHeat-Angabe: Anerkennung wie Wärmepumpe wahrscheinlich; nicht zugesichert"),
-    "holzofen_chf": (7_000, "Schätzung: wasserführender Kaminofen 6–8 kW inkl. Anschluss an den Speicher"),
+    "holzofen_chf": (0, "Team-Annahme: Zielhäuser (ältere Öl- und Gas-Häuser) haben oft schon einen Holzofen oder ein "
+                     "Cheminée, das für die wenigen kalten Tage genutzt wird; keine BFS-Zahl zu Zusatzheizungen gefunden"),
     "rueckbau_oel_chf": (4_000, "Schätzung: Ölkessel und Tank zurückbauen und entsorgen"),
     "ersatz_einbau_anteil": (0.25, "Annahme: Hardwareersatz nach 5 Jahren braucht 25 % des ersten Einbaus"),
     # Finanzierung
