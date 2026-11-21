@@ -79,8 +79,11 @@ async function refresh() {
   get("site").textContent = data.site;
   get("state").textContent = data.state;
   get("count").textContent = done + " / " + data.total;
-  get("progress").max = data.total;
-  get("progress").value = done;
+  const percent = Math.round(100 * done / data.total);
+  get("progress").setAttribute("aria-valuemax", data.total);
+  get("progress").setAttribute("aria-valuenow", done);
+  get("progress-fill").style.width = percent + "%";
+  get("percent").textContent = percent + " %";
   get("rejects").textContent = (data.job?.rejects ?? 0) + " Packungen beanstandet";
   get("recent").textContent = data.recent.length ? "Hier geprüft · " + data.recent.join(", ") : "";
   get("start").hidden = !data.control || data.state !== "bereit";

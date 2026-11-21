@@ -16,8 +16,11 @@
     <section class="metrics" aria-label="Batchfortschritt">
       <p id="state" role="status">Verbinde …</p>
       <p id="count">0 / 30</p>
-      <progress id="progress" value="0" max="30" aria-label="Geprüfte Bilder"></progress>
-      <p>Geprüfte Bilder</p>
+      <div id="progress" role="progressbar" aria-valuemin="0" aria-valuemax="30"
+           aria-valuenow="0" aria-label="Geprüfte Bilder">
+        <div id="progress-fill"></div>
+      </div>
+      <p class="progress-caption"><span>Geprüfte Bilder</span><span id="percent">0 %</span></p>
       <p id="rejects">0 Packungen beanstandet</p>
       <p id="recent"></p>
       <button id="start" hidden>Batch starten</button>

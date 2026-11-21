@@ -10,7 +10,10 @@ canvas { width: 100%; display: block; background: #111b1c; border-radius: 10px; 
 p { margin: .65em 0; }
 #state { color: #add9cd; font-weight: bold; }
 #count { font-size: clamp(2rem, 5vw, 4.5rem); margin: .12em 0; font-variant-numeric: tabular-nums; }
-progress { width: 100%; accent-color: #81debe; }
+#progress { height: 20px; overflow: hidden; border: 1px solid #83aaa2; border-radius: 10px; background: #111b1c; }
+#progress-fill { width: 0; height: 100%; background: #81debe; transition: width .25s ease; }
+.progress-caption { display: flex; justify-content: space-between; gap: .75rem; }
+@media (prefers-reduced-motion: reduce) { #progress-fill { transition: none; } }
 button { margin-top: 12px; padding: 11px 15px; border: 0; border-radius: 9px; background: #a5ebd0; color: #142421; font: inherit; font-weight: bold; cursor: pointer; }
 button:disabled { opacity: .55; cursor: default; }
 #error { color: #ffaba1; }
