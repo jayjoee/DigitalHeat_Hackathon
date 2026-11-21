@@ -56,25 +56,6 @@ https://github.com/jayjoee/DigitalHeat_Hackathon
 
 Geprüft: Das Repo ist öffentlich und öffnet ohne Login. Das README hat die Setup-Schritte und einen Hinweis zu den KI-Werkzeugen (Claude Code, gstack). **Bitte im Team prüfen:** Mit welchem Werkzeug oder welcher Vorlage ist der Prototyp in `prototyp/` entstanden? Falls mit einem KI-Werkzeug, im README unter «Mit KI gebaut» ergänzen.
 
-## Video pitch URL *
-
-Ein Video gibt es noch nicht. Vorschlag für eine Bildschirmaufnahme mit Stimme, rund 3 Minuten (macOS: `Cmd + Shift + 5`, danach als «Nicht gelistet» auf YouTube hochladen):
-
-| Zeit | Bild | Was man sagt |
-|---|---|---|
-| 0:00–0:20 | Dashboard oben: Kacheln | «8 Server pro Haus, 93 % der Wärme gedeckt, fast nichts weggekühlt, keine Frist verpasst.» |
-| 0:20–0:50 | Januartag und Julitag im Dashboard | «Im Januar laufen alle 8 Server. Im Juli braucht das Haus nur Warmwasser, die Server stehen fast still.» |
-| 0:50–1:30 | Abschnitt «Flotte», Senke «Sportbad 50 Server» | «Der Wärme-Router schickt die Sommerarbeit ins Sportbad. Häuser haben Vorrang.» |
-| 1:30–2:30 | Terminal + Dashboard: `live.py --flotte` | «Das ist ein echter Prozess. Um 10 Uhr ist der Tank voll, der Job speichert und läuft im Bad weiter.» |
-| 2:30–3:00 | Zusage-Diagramm, dann Kachel «Ergebnis» | «Wir sagen am Vortag zu, 93 % sind planbar. +35'000 CHF pro Haus und Jahr, wenn jede Stunde verkauft ist. Unter 66 % verkauften Stunden lohnt es sich nicht.» |
-
-## Project ZIP (optional, max. 500 MB)
-
-Nicht nötig, denn alles liegt im Repo. Falls die Jury es offline will, ZIP mit klaren Namen:
-- `DigitalHeat_Dashboard_offline.html` (= `dashboard/artifact/index.html`, läuft ohne Installation)
-- `DigitalHeat_Pitch.md` (= `docs/PITCH.md`)
-- `DigitalHeat_Resultate_einfach.md` (= `docs/RESULTATE_EINFACH.md`)
-
 ## Thumbnail image
 
 Fertig: **`submission/thumbnail_600x600.png`**, 600 × 600 px, echter Screenshot aus dem Dashboard. Oben die Monatsverteilung Häuser/Sportbad, unten die Live-Demo, in der der Job ins Bad wandert.
@@ -85,5 +66,4 @@ Fertig: **`submission/thumbnail_600x600.png`**, 600 × 600 px, echter Screenshot
 - [ ] Titel, Slogan und Beschreibung eingefügt
 - [ ] Repo-URL eingefügt (öffentlich, geprüft)
 - [ ] Herkunft von `prototyp/` im README ergänzt (falls KI oder Vorlage)
-- [ ] Video aufgenommen, als «Nicht gelistet» hochgeladen, Link ohne Login getestet
 - [ ] Thumbnail hochgeladen
