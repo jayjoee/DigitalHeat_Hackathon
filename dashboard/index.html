@@ -124,8 +124,8 @@ details summary { cursor: pointer; font-weight: 600; }
   <div class="controls card">
     <div class="ctl"><label for="pStrom">Strompreis</label>
       <div class="range"><input id="pStrom" type="range" min="10" max="60" step="0.25" value="33.25"><output id="pStromOut"></output></div></div>
-    <div class="ctl"><label for="pRechen">Vertragspreis pro L4-Stunde</label>
-      <div class="range"><input id="pRechen" type="range" min="0.15" max="1.00" step="0.01" value="0.60"><output id="pRechenOut"></output></div></div>
+    <div class="ctl"><label for="pRechen">Roche-Preis pro L4-Stunde (fester Anteil)</label>
+      <div class="range"><input id="pRechen" type="range" min="0.15" max="1.00" step="0.01" value="0.50"><output id="pRechenOut"></output></div></div>
     <div class="ctl"><label for="pFest">Fest gebucht</label>
       <div class="range"><input id="pFest" type="range" min="20" max="100" step="5" value="60"><output id="pFestOut"></output></div></div>
     <div class="ctl"><label for="pHw">Kaufpreis pro Server (8 L4)</label>
@@ -738,9 +738,9 @@ function annahmenKurz() {
     ["Geld (alles in CHF)", [
       `Strom ${fmt(a("strompreis_chf_kwh") * 100, 2)} Rp./kWh ${s("ElCom 2026, IWB Basel, H4")}`,
       `Wärmewert ${fmt(a("waermewert_chf_kwh") * 100, 1)} Rp./kWh = Strompreis ÷ 2,5 ${s("Case: ersetzt Wärmepumpe, nur für den Break-even des Case")}`,
-      `<b>Zielpreis ${chf(a("vertragspreis_chf_karte_h"), 2)} pro L4-Stunde</b>, ${pct(a("anteil_fest_gebucht"), 0)} fest gebucht ` +
-        `${s("unbestätigt; Schweizer Clouds ab ≈ 0,68 CHF; vorsichtiger Fall 0,50 CHF; L4_ANGEBOT.md")}`,
-      `Rest als Füllauftrag zu ${chf(a("spotpreis_chf_karte_h"), 2)}, sinkt ${pct(a("spot_preisverfall"), 0)} pro Jahr ${s("L4-Spot-Preis")}`,
+      `<b>Ankerkunde ${chf(a("vertragspreis_chf_karte_h"), 2)} pro L4-Stunde</b>, ${pct(a("anteil_fest_gebucht"), 0)} fest gebucht ` +
+        `${s("Roche, unbestätigt; Schweizer Clouds ab ≈ 0,68 CHF; KOSTEN_DH.md, L4_ANGEBOT.md")}`,
+      `übrige Stunden zu ${chf(a("spotpreis_chf_karte_h"), 2)}, sinkt ${pct(a("spot_preisverfall"), 0)} pro Jahr ${s("Kunden ohne Mindestmenge; Untergrenze L4-Spot 0,29 CHF")}`,
       `<b>Server ${chf(a("server_preis_chf"))}</b> pro 8 L4 inkl. Prozessor und Speicher ${s("Gigabyte G293-Z43, 16× L4: 76'774 $")}`,
       `Kühlung ${chf(a("kuehlung_chf_pro_kw"))}/kW, Einbau ${chf(a("einbau_chf"))}, Speicher ${chf(a("speicher_chf"))}, Netzwerk ${chf(a("netzwerk_chf"))}`,
       `${a("abschreibung_jahre")} Jahre, Zins ${pct(a("zins"), 1)}, Restwert ${pct(a("restwert_anteil"), 0)}, Gewinnsteuer ${pct(a("gewinnsteuer"), 1)}`,

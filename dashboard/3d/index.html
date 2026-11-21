@@ -271,7 +271,7 @@ const C = {
   compute: new THREE.Color('#3ee0c0'), idle: new THREE.Color('#ffc857'), standby: new THREE.Color('#2a3550'),
   heat: new THREE.Color('#ff8a3d'), cold: new THREE.Color('#5aa8ff'), metal: new THREE.Color('#1b2233'),
 };
-const VERTRAG = K.vertragspreis_chf_server_h;
+const VERTRAG = K.vertragspreis_chf_server_h, RESTPREIS = K.restpreis_chf_server_h, MISCHPREIS = K.mischpreis_chf_server_h;
 const CL = D.cloud || {}, SVC = CL.service ? CL.service.server : null;
 let modus = 'abschalten';   // was passiert mit Servern ohne Arbeit: 'abschalten' oder 'pausieren'
 const stromJetzt = (on, lauf, n) => lauf + (M.leerlauf_watt / 1000) * Math.max(0, on - lauf) + (M.standby_watt / 1000) * (n - on);
@@ -950,7 +950,7 @@ function wolkenKarten(i) {
   const pause = modus === 'pausieren';
   const flotteGesamt = NH * 19 + NS2 + NB;
   const flotteAn = pause ? flotteGesamt : S.h_on[i] + S.h2_on[i] + S.b_on[i] + Math.round(S.rest_on[i] * 18);
-  wk('w-pool').innerHTML = z('Aufträge jetzt', `${fmt(S.flotte_lauf[i])} Server-h`) + z('Preis', `${fmt(VERTRAG, 2)} CHF/Server-h`);
+  wk('w-pool').innerHTML = z('Aufträge jetzt', `${fmt(S.flotte_lauf[i])} Server-h`) + z('Preis im Mittel', `${fmt(MISCHPREIS, 2)} CHF/Server-h`);
   wk('w-router').innerHTML = z('Server an', `${fmt(flotteAn)} von ${flotteGesamt}`)
     + z('Sportbad', S.b_bed[i] > 0 ? `${fmt(S.b_lauf[i], 1)} Server` : 'Pause') + z('Wechsel/Stunde', fmt(S.mig[i]));
   if (CL.ml) {
@@ -1019,7 +1019,7 @@ function zeigeDetail(info, fliegen = true) {
       echt ? '#ffffff' : STATUS[z][1], [
         ['Hardware', '8 × NVIDIA L4'], ['Leistung jetzt', fmt(watt) + ' W'], ['Davon Rechnen', fmt(l * 100) + ' % der Stunde'],
         ['Wärme an den Speicher', fmt(watt * ETA / 1000, 2) + ' kW'], ['Eingeschaltet 2025', fmt(J.anH) + ' h'],
-        ['Gerechnet 2025', fmt(J.rechenH) + ' Server-h'], ['Erlös 2025 (Vertragspreis)', fmt(J.rechenH * VERTRAG) + ' CHF'],
+        ['Gerechnet 2025', fmt(J.rechenH) + ' Server-h'], ['Erlös 2025 (Mischpreis)', fmt(J.rechenH * MISCHPREIS) + ' CHF'],
       ], (info.haus === 1 && k === NH - 1 ? (echt ? `Live: ${liveJob.text}. ` : 'In der Live-Demo steht dieser Server für den echten Embedding-Job auf dem Laptop. ') : '')
         + 'Zustand und Last dieses Servers stammen direkt aus dem Scheduler (Last pro Server je Stunde). Server werden der Reihe nach zugeschaltet: Server 1 läuft am längsten, die letzten nur an kalten Tagen.',
       ablaufHtml(hd, i, k) + (info.haus === 1 ? serviceHtml(k) : ''));
@@ -1045,9 +1045,10 @@ function zeigeDetail(info, fliegen = true) {
     if (fliegen) fliegeZu(V(o.h.x1 + 1.05, 0.6, 10.6), V(2.5, 2.5, 6));
   } else if (info.art === 'kunde') {
     box.innerHTML = detailHtml('Kunde (Beispiel)', 'Pharma-Kunde in Basel', 'schickt Aufträge', '#ffe2b8', [
-        ['Aufträge', 'Embeddings, Docking, Bildprüfung'], ['Daten bleiben', 'in der Schweiz'], ['Vertragspreis', `${fmt(VERTRAG, 2)} CHF/Server-h`],
+        ['Aufträge', 'öffentliche oder anonymisierte L4-Aufgaben'], [`Ankerkunde, ${fmt(K.anteil_fest * 100)} % fest`, `${fmt(VERTRAG / 8, 2)} CHF pro L4-h`],
+        ['Übrige Stunden', `${fmt(RESTPREIS / 8, 2)} CHF pro L4-h`],
         ['Am Vortag zusagbar', `${fmt(Z.zusagbar * 100)} % der Kapazität`], ['Rechenarbeit jetzt', `${fmt(S.flotte_lauf[i])} Server-h`],
-      ], 'Der Turm steht für einen Basler Pharma-Kunden. Es gibt noch keinen Vertrag; Preis, Menge und Festbuchung sind Annahmen (docs/PHARMA_SICHT.md). Die Aufträge gehen in den Auftragspool der DigitalHeat-Cloud, der Wärme-Router verteilt sie auf Häuser mit Wärmebedarf.');
+      ], 'Der Turm steht für einen Basler Pharma-Kunden als Ankerkunden. Er schickt nur Aufgaben, die öffentlich sind oder die er selbst anonymisiert und freigegeben hat (docs/L4_ANGEBOT.md). Es gibt noch keinen Vertrag; Preis, Menge und Festbuchung sind Annahmen (docs/KOSTEN_DH.md). Die Aufträge gehen in den Auftragspool der DigitalHeat-Cloud, der Wärme-Router verteilt sie auf Häuser mit Wärmebedarf.');
     miniChart(fenster(n => S.flotte_lauf[n]), Math.max(...S.flotte_lauf), '#ffe2b8');
     if (fliegen) fliegeZu(V(TURM.x, 9, TURM.z), V(12, 2, 18));
   } else if (info.art === 'kessel') {

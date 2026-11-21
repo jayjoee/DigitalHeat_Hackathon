@@ -34,11 +34,11 @@ Szenario **Genug Aufträge**: Ein Pharma-Vertrag bucht 60 % der Stunden fest (Wi
 | Wert der genutzten Wärme | 3'861 CHF (29'027 kWh × 0,133) |
 | **Break-even-Rechenpreis (Case-Definition)** | **0,226 CHF pro Server-h** = (12'066 − 3'861) ÷ 36'290, ohne Hardware |
 | Investition DigitalHeat | 290'100 CHF (8 Server mit 64 L4, Kühlung, Einbau, Speicher, Netzwerk) |
-| Rechenerlös im 1. Jahr | 130'800 CHF (Vertragspreis 0,60 CHF pro L4-Stunde, 60 % fest gebucht; Schweizer Clouds ab ≈ 0,68 CHF) |
+| Rechenerlös im 1. Jahr | 135'400 CHF (Roche 60 % zu 0,50 CHF pro L4-Stunde, Rest 0,55 CHF; Schweizer Clouds ab ≈ 0,68 CHF) |
 | Wärme an den Haushalt | gratis (Pilot in ehemaligen Öl-Häusern, vorhandener Holzofen als Reserve) |
-| **Ergebnis DigitalHeat** | **+29'400 CHF pro Jahr** im Abschaltmodell (230 W Leerlauf, 90,5 % Deckung, 34'512 verkaufte Server-h) nach allen Kosten, Steuern und Zins; interner Zinsfuss 18,8 %, Investition nach 3,2 Jahren zurück. Im Idealmodell dieser Tabelle (0 W Leerlauf): +34'500 CHF. Voraussetzung in beiden Fällen: jede Rechenstunde ist verkauft (`KOSTEN_DH.md`) |
+| **Ergebnis DigitalHeat** | **+35'000 CHF pro Jahr** im Abschaltmodell (230 W Leerlauf, 90,5 % Deckung, 34'512 verkaufte Server-h) nach allen Kosten, Steuern und Zins; interner Zinsfuss 21,6 %, Investition nach 2,9 Jahren zurück. Im Idealmodell dieser Tabelle (0 W Leerlauf): +40'400 CHF. Preise: Roche 60 % zu 0,50 CHF pro L4-h, Rest 0,55 CHF. Voraussetzung in beiden Fällen: jede Rechenstunde ist verkauft (`KOSTEN_DH.md`) |
 | Vorsichtiger Fall (0,50 CHF) | +15'800 CHF pro Jahr, Investition nach 3,9 Jahren zurück (Idealmodell: +20'300 CHF, 3,6 Jahre) |
-| **Nötiger Vertragspreis mit allen Kosten** | **0,38 CHF pro L4-Stunde** = 3,07 CHF pro Server-h (Idealmodell: 0,36 CHF = 2,87 CHF) |
+| **Nötiger Roche-Preis mit allen Kosten** | **0,24 CHF pro L4-Stunde**, wenn der Rest 0,55 CHF bringt; **0,38 CHF** (= 3,07 CHF pro Server-h), wenn der Rest nur den Spot-Preis bringt (`KOSTEN_DH.md`) |
 
 ## Leerlauf und Abschalten im Referenzhaus
 
@@ -76,13 +76,13 @@ Der Einzelhausvergleich bildet die lokale Ausführung ab. Der Wärme-Router nutz
 - Die Kosten tragen die Winterstunden: Ab Server 9 laufen die zusätzlichen Server nur in wenigen kalten Stunden, die Auslastung fällt unter 50 %.
 - 12,5 Server für die kälteste Stunde wären 100 % Deckung bei 37 % Auslastung.
 
-Was jeder weitere Server zum Ergebnis von DigitalHeat beiträgt (alle Kosten, Steuern, Zins; 0,60 CHF, 60 % fest gebucht):
+Was jeder weitere Server zum Ergebnis von DigitalHeat beiträgt (alle Kosten, Steuern, Zins; Roche 60 % zu 0,50 CHF, Rest 0,55 CHF):
 
 | Server Nr. | 1 | 2 | 3 | 4 | 5 | 6 | 7 | **8** | 9 | 10 | 11 |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| Beitrag CHF/Jahr | 7'573 | 6'734 | 6'284 | 5'991 | 5'262 | 3'045 | 708 | **−1'054** | −3'018 | −4'765 | −6'418 |
+| Beitrag CHF/Jahr | 8'807 | 7'568 | 7'091 | 6'781 | 6'008 | 3'659 | 1'182 | **−685** | −2'765 | −4'616 | −6'369 |
 
-Server 1 trägt zusätzlich die Fixkosten des Hauses (Einbau, Internet, Firmenanteil). Regel: **Ein Server mehr lohnt sich, solange sein Beitrag positiv ist.** Am meisten verdient DigitalHeat mit 7 Servern (+35'600 CHF, 87,1 % Deckung). Die 8 Server für das Team-Ziel von 93 % Deckung kosten nur rund 1'000 CHF Gewinn pro Jahr und sind damit praktisch optimal. Beide Tabellen stammen aus dem Idealmodell. Im Abschaltmodell bleibt die Reihenfolge gleich: 7 Server +30'500 CHF (84,5 % Deckung), 8 Server +29'400 CHF (90,5 %), 9 Server +27'100 CHF (95,2 %); siehe `KOSTEN_DH.md`, Abschnitt 3. Das Dashboard zeigt diese Rechnung im Abschnitt «Lohnt sich ein Server mehr?» für jeden Preis.
+Server 1 trägt zusätzlich die Fixkosten des Hauses (Einbau, Internet, Firmenanteil). Regel: **Ein Server mehr lohnt sich, solange sein Beitrag positiv ist.** Am meisten verdient DigitalHeat mit 7 Servern (+41'100 CHF, 87,1 % Deckung). Die 8 Server für das Team-Ziel von 93 % Deckung kosten nur rund 700 CHF Gewinn pro Jahr und sind damit praktisch optimal. Beide Tabellen stammen aus dem Idealmodell. Im Abschaltmodell bleibt die Reihenfolge gleich: 7 Server +35'700 CHF (84,5 % Deckung), 8 Server +35'000 CHF (90,5 %), 9 Server +32'900 CHF (95,2 %); siehe `KOSTEN_DH.md`, Abschnitt 3. Das Dashboard zeigt diese Rechnung im Abschnitt «Lohnt sich ein Server mehr?» für jeden Preis.
 
 ## Jahresverlauf (8 Server, Spot)
 | Monat | Jan | Feb | Mär | Apr | Mai | Jun | Jul | Aug | Sep | Okt | Nov | Dez |
@@ -94,7 +94,7 @@ Von Juni bis August laufen die Server nur noch für das Warmwasser (0,6 Server).
 
 ## Wann es sich nicht lohnt
 1. **Rechenpreis unter 0,226 CHF pro Server-h:** Dann deckt der Erlös nicht einmal den Strom abzüglich Wärmewert. Das gilt unabhängig von der Serverzahl, solange keine Wärme abgeführt wird.
-2. **Mit allen Kosten** (Hardware, Kühlung, Einbau, Wartung, Versicherung, Steuern, Zins): Vertragspreis unter **0,38 CHF pro L4-Stunde** (= 3,07 CHF pro Server-h im Abschaltmodell; Spanne 0,28–0,59 CHF), weniger als rund **ein Viertel der Stunden fest gebucht** oder weniger als **72 % der Rechenstunden verkauft**. Über einen Marktplatz statt Direktvertrag bräuchte es rund 0,47 CHF. Mit neuen H100 statt L4 verliert DigitalHeat selbst im günstigen Fall Geld.
+2. **Mit allen Kosten** (Hardware, Kühlung, Einbau, Wartung, Versicherung, Steuern, Zins): Roche-Preis unter **0,24 CHF pro L4-Stunde** bei 0,55 CHF für den Rest, unter **0,38 CHF**, wenn der Rest nur den Spot-Preis bringt, oder weniger als **68 % der Rechenstunden verkauft** (`KOSTEN_DH.md`). Über einen Marktplatz statt Direktvertrag bräuchte es rund 0,47 CHF. Mit neuen H100 statt L4 verliert DigitalHeat selbst im günstigen Fall Geld.
 3. **Ohne flexible Nachfrage (Szenario Alibaba):** Kommen alle Jobs mit Frist nach Alibaba-Trace, sinkt die Deckung bei 8 Servern auf 51,7 %. Im Sommer müssen 7'506 kWh Wärme abgeführt werden, weil die Jobs vor ihrer Frist laufen müssen. Der Break-even steigt auf 0,260 CHF.
    Mit der Regel «abgeben» gehen 9'608 Jobs (8'990 Server-h) an andere Standorte. Abgeführt werden nur noch 316 kWh. **Genau diese 9'000 Server-h im Sommer bräuchten einen Abnehmer mit Sommerwärmebedarf** (Hotel mit Spa, Maistrockner).
 
@@ -111,7 +111,7 @@ Von Juni bis August laufen die Server nur noch für das Warmwasser (0,6 Server).
 ## Annahmen und Grenzen
 Alle Annahmen mit Quelle stehen in `src/scheduler/annahmen.py` und in jeder Ergebnisdatei (`daten/ergebnisse/serverzahl.json`, Feld `annahmen`). Die wichtigsten:
 - **Genug Aufträge** (Szenario Standard): Ein Pharma-Vertrag bucht 60 % der Stunden fest, der Rest findet als Füllauftrag zum Spot-Preis Abnehmer. Das ist die stärkste Annahme. Das Szenario Alibaba zeigt, was ohne sie passiert.
-- Vertragspreis 0,60 CHF pro L4-Stunde als unbestätigter Zielpreis für öffentliche und freigegebene, nicht vertrauliche Aufgaben (`L4_ANGEBOT.md`; Schweizer GPU-Clouds ab ≈ 0,68 CHF, vorsichtig 0,50 CHF), Server mit 8 L4 für 32'245 CHF (belegter Komplettpreis), 5 Jahre, Zins 4,5 %, Restwert 20 %. Alle Werte mit Quelle in `src/scheduler/annahmen.py` und `KOSTEN_DH.md`.
+- Ankerkunde Roche 60 % zu 0,50 CHF pro L4-Stunde fest, übrige Stunden 0,55 CHF mit −10 % pro Jahr, als unbestätigte Zielpreise für öffentliche und freigegebene, nicht vertrauliche Aufgaben (`L4_ANGEBOT.md`; Schweizer GPU-Clouds ab ≈ 0,68 CHF, vorsichtig: Rest zum Spot-Preis 0,294 CHF), Server mit 8 L4 für 32'245 CHF (belegter Komplettpreis), 5 Jahre, Zins 4,5 %, Restwert 20 %. Alle Werte mit Quelle in `src/scheduler/annahmen.py` und `KOSTEN_DH.md`.
 - Die Case-Kennzahl «Break-even» bleibt ohne Hardware (0,226 CHF pro Server-h); daneben steht der nötige Preis mit allen Kosten (3,07 CHF pro Server-h im Abschaltmodell, 2,87 CHF im Idealmodell).
 - Keine Wetterprognose: Bei verlustfreiem Speicher und unbegrenzten Aufträgen A ist «Speicher immer füllen» schon die beste Deckung. Eine Prognose bringt erst etwas, wenn Aufträge knapp sind oder der Speicher Verluste hat.
 - Wärmeabgabe = Strom × 0,8, unabhängig von der Auslastung der GPU im Server. Läuft ein Server, läuft er voll (Alibaba zeigt im Median 4 % GPU-Nutzung: Jobs müssen dicht gepackt werden).
@@ -120,10 +120,10 @@ Alle Annahmen mit Quelle stehen in `src/scheduler/annahmen.py` und in jeder Erge
 - Ankünfte nach Alibaba-Tagesform in UTC+8, nicht auf Basel umgerechnet.
 
 ## Day-ahead-Zusage (Stand 21.11.2026, `src/scheduler/zusage.py`)
-Frage: Wie viele Server-Stunden kann DigitalHeat einen Tag im Voraus verbindlich zu 0,60 CHF pro L4-h (= 4,80 CHF pro Server-h) verkaufen?
+Frage: Wie viele Server-Stunden kann DigitalHeat einen Tag im Voraus verbindlich zum Roche-Preis von 0,50 CHF pro L4-h (= 4,00 CHF pro Server-h) verkaufen?
 - Entscheid um 12 Uhr Ortszeit am Vortag. Prognose: Open-Meteo «Previous Runs», ECMWF IFS 0,25°. Genutzt werden nur Läufe, die zum Entscheid schon veröffentlicht waren (konservativ 8 h Verzug, Test für jede Stunde). Der Vortagslauf ist genauer als der Lauf zwei Tage vorher: mittlerer Fehler 0,84 °C gegenüber 0,95 °C.
 - Für 2024 gibt es keine Previous Runs. Darum: kalibriert auf Januar–Juni 2025, ausgewertet auf Juli–Dezember 2025.
-- **Referenzhaus, 8 Server:** Sicherheitsfaktor 0,95. **93 % der Server-h sind zusagbar** (im Auswertungshalbjahr Juli–Dezember 92 %), die angenommenen 60 % fest gebucht sind also gedeckt. Fehlmenge an 2,2 % der Tage ausserhalb der Kalibrierung, 57 Server-h im Jahr. Gutschrift: 50 % des Vertragspreises (Schätzung). **Ergebnis im Idealmodell 34'276 CHF pro Jahr statt 34'543 CHF.** Die Fehlmenge ist so klein, weil im Modell nur 64 % der zugesagten Menge abgenommen werden.
+- **Referenzhaus, 8 Server:** Sicherheitsfaktor 0,95. **93 % der Server-h sind zusagbar** (im Auswertungshalbjahr Juli–Dezember 92 %), die angenommenen 60 % fest gebucht sind also gedeckt. Fehlmenge an 2,2 % der Tage ausserhalb der Kalibrierung, 57 Server-h im Jahr. Gutschrift: 50 % des Vertragspreises (Schätzung). **Ergebnis im Idealmodell 40'286 CHF pro Jahr statt 40'412 CHF.** Die Fehlmenge ist so klein, weil im Modell nur 64 % der zugesagten Menge abgenommen werden.
 - Damit ist gezeigt, dass die Liefermenge für eine Zusage am Vortag reicht. Preis und Nachfrage bleiben Annahmen: Zusagbar heisst noch nicht verkauft.
 - Daten: `daten/ergebnisse/zusage_8_spot.json`.
 
@@ -140,15 +140,15 @@ Senke: **Sportbad St. Jakob**, offen 26.4.–5.10.2025, ca. 650 MWh pro Jahr (Sc
 | An andere Cloud abgegebene Arbeit | 179'870 Server-h | **12'507 Server-h** | 5'249 Server-h |
 | Migrationen | 0 | 3'457 | 2 |
 | Verpasste Fristen | 0 % | 0 % | 0 % |
-| Ergebnis DigitalHeat | −176'618 CHF/J | **−101'372 CHF/J** | −1'066'667 CHF/J |
+| Ergebnis DigitalHeat | −108'690 CHF/J | **−6'207 CHF/J** | −965'465 CHF/J |
 
 | Szenario «Genug Aufträge» (Spot) | 0 Senken | Sportbad 50 | Sportbad 170 |
 |---|---|---|---|
-| Ergebnis DigitalHeat | 690'540 CHF/J | 851'590 CHF/J | 1'203'657 CHF/J |
-| mit Day-ahead-Zusage (60 % fest, Fehlmenge) | 685'220 CHF/J | 846'393 CHF/J | – |
+| Ergebnis DigitalHeat | 807'900 CHF/J | 1'001'068 CHF/J | 1'427'634 CHF/J |
+| mit Day-ahead-Zusage (60 % fest, Fehlmenge) | 805'380 CHF/J | 998'572 CHF/J | – |
 
 **Befunde**
-1. **Der Router schliesst das Sommerloch nur, wenn es genug Aufträge gibt.** Ohne Senke gibt die Flotte 179'870 Server-h an andere Clouds ab, weil die Häuser im Sommer keine Wärme brauchen. Ein Sportbad mit 50 Servern nimmt 93 % davon auf. Das verbessert das Ergebnis um rund **75'000 CHF pro Jahr**. Bei Nachfrage nach Alibaba bleibt die Flotte trotzdem im Minus: Der Engpass ist die Nachfrage, nicht die Wärme.
+1. **Der Router schliesst das Sommerloch nur, wenn es genug Aufträge gibt.** Ohne Senke gibt die Flotte 179'870 Server-h an andere Clouds ab, weil die Häuser im Sommer keine Wärme brauchen. Ein Sportbad mit 50 Servern nimmt 93 % davon auf. Das verbessert das Ergebnis um rund **102'000 CHF pro Jahr**. Bei Nachfrage nach Alibaba bleibt die Flotte trotzdem im Minus: Der Engpass ist die Nachfrage, nicht die Wärme.
 2. **Die Senkenregel aus dem Design-Doc ist falsch dimensioniert.** Sie richtet die Serverzahl nach dem Wärmebedarf (170 Server) statt nach den Aufträgen. Die richtige Grösse ergibt sich aus der Nachfrage: bestes Ergebnis bei 50 Servern (gesucht von 10 bis 80, `suche_senkengroesse_alibaba`). Nur wenn es unbegrenzt Aufträge gibt (Spot), lohnt jeder zusätzliche Server.
 3. **Die Häuser behalten ihre Wärme.** Weil sie Vorrang haben, sinkt ihre Deckung mit Bad nur von 51,5 % auf 50,9 %. Die Häuser haben in jeder Stunde Vorrang. Was das Bad zu einer Zeit rechnet, in der kein Haus Wärme braucht, fehlt einem Haus manchmal ein paar Stunden später. Ohne die Vorrang-Regel lag die Deckung bei 47,5 %, und das Bad holte sich im Mai und September die Arbeit der Häuser.
 4. **Gleiche Häuser gleichen sich nicht aus.** 20 gleiche Häuser mit gleichem Wetter rechnen so viel wie 20 einzelne Häuser (Test, Abweichung < 0,1 %). Der Nutzen der Verteilung entsteht erst mit einem Standort, der zu anderen Zeiten Wärme braucht.
@@ -164,13 +164,13 @@ Der Wärme-Router teilt zuerst den Häusern Aufträge zu. Zusammen mit Wärmebed
 
 | Nachfrage | Sportbad | Strom Flotte | Wärmedeckung Häuser / Bad | Extern abgegeben | Fristen verpasst (intern) | Jahresergebnis |
 |---|---|---:|---:|---:|---:|---:|
-| Nur Jobs mit Frist | Ohne | 451’579 kWh | 56,8 % / – | 194’940 h | 0 | −238’567 CHF |
-| Nur Jobs mit Frist | 50 Server | 620’914 kWh | 56,2 % / 21,0 % | 30’227 h | 0 | −172’014 CHF |
-| Genug Aufträge | Ohne | 714’113 kWh | 90,6 % / – | 183 h | 0 | +614’580 CHF |
-| Genug Aufträge | 50 Server | 903’903 kWh | 90,6 % / 23,1 % | 187 h | 0 | +737’049 CHF |
+| Nur Jobs mit Frist | Ohne | 451’579 kWh | 56,8 % / – | 194’940 h | 0 | −172’139 CHF |
+| Nur Jobs mit Frist | 50 Server | 620’914 kWh | 56,2 % / 21,0 % | 30’227 h | 0 | −78’626 CHF |
+| Genug Aufträge | Ohne | 714’113 kWh | 90,6 % / – | 183 h | 0 | +727’666 CHF |
+| Genug Aufträge | 50 Server | 903’903 kWh | 90,6 % / 23,1 % | 187 h | 0 | +880’032 CHF |
 
-Mit und ohne Bad kommen dieselben Aufträge mit Frist an. Bei knapper Nachfrage hält das Sportbad rund **165’000 zusätzliche Serverstunden** im eigenen System und verbessert das Jahresergebnis um **66’553 CHF**. Dabei steigt der Gesamtstrom, weil mehr Aufträge lokal laufen. Die 50 Bad-Server sind übers Jahr zu rund **60 % im Standby**. Mit genügend Aufträgen erhöht das Bad das Jahresergebnis um **122’469 CHF**. In diesem Szenario füllt der Spot-Nachschub auch die zusätzliche Kapazität am Bad. **50 Server** sind die Vergleichsgrösse aus dem Case-Idealmodell. Das Optimum im Abschaltmodell wurde noch nicht gesucht.
+Mit und ohne Bad kommen dieselben Aufträge mit Frist an. Bei knapper Nachfrage hält das Sportbad rund **165’000 zusätzliche Serverstunden** im eigenen System und verbessert das Jahresergebnis um **93’513 CHF**. Dabei steigt der Gesamtstrom, weil mehr Aufträge lokal laufen. Die 50 Bad-Server sind übers Jahr zu rund **60 % im Standby**. Mit genügend Aufträgen erhöht das Bad das Jahresergebnis um **152’366 CHF**. In diesem Szenario füllt der Spot-Nachschub auch die zusätzliche Kapazität am Bad. **50 Server** sind die Vergleichsgrösse aus dem Case-Idealmodell. Das Optimum im Abschaltmodell wurde noch nicht gesucht.
 
-Mit Vortagszusage und Gutschrift liegt das Jahresergebnis bei genügend Aufträgen bei **610’040 CHF ohne Bad** und **732’188 CHF mit Bad**. Rund **91 %** der simulierten Kapazität sind am Vortag zusagbar. Für das Sportbad verwendet die Prognose dasselbe geschätzte Monatsprofil wie die tatsächliche Simulation. Die Ausführung abgegebener Jobs in der externen Cloud wird nicht simuliert.
+Mit Vortagszusage und Gutschrift liegt das Jahresergebnis bei genügend Aufträgen bei **725’503 CHF ohne Bad** und **877’740 CHF mit Bad**. Rund **91 %** der simulierten Kapazität sind am Vortag zusagbar. Für das Sportbad verwendet die Prognose dasselbe geschätzte Monatsprofil wie die tatsächliche Simulation. Die Ausführung abgegebener Jobs in der externen Cloud wird nicht simuliert.
 
 **Reproduzieren:** `python3 src/scheduler/flotte.py --abschalten` schreibt `daten/ergebnisse/flotte_abschalten.json`. Die Optionen `--leerlauf-watt`, `--standby-watt` und `--start-minuten` ändern das Leistungsprofil. Die Live-Option `--flotte --abschalten` zeigt simulierte Serverzustände neben dem echten lokalen Job.

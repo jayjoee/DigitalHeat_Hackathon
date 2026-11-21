@@ -17,8 +17,14 @@ genug Aufträge) und dieselbe Kostenformel wie in src/wirtschaft.py. Neu auf Fir
    oder das Cheminée, das viele ältere Häuser schon haben (Team-Annahme, keine Kosten für DigitalHeat).
 5. Steuer auf Firmenebene mit Verlustvortrag (7 Jahre), Gewinnsteuer Basel-Stadt.
 
-Kennzahlen: Jahresrechnung, freier Cashflow, Kapitalbedarf, Projekt-IRR (vor Finanzierung), Eigenkapital-IRR
-bei teilweiser Fremdfinanzierung der Hardware, Payback.
+6. Preise nach Kalenderjahr: Der Preis der übrigen Stunden sinkt jedes Kalenderjahr (nicht pro Kohorte neu ab
+   Listenpreis), die laufenden Kosten steigen ebenso nach Kalenderjahr. Roche-Preis fest.
+7. Absatz: Anteil der Server-Stunden, die verkauft werden. Roche nimmt seinen Anteil fest ab, es fehlen Stunden
+   aus dem Rest. Der Strom bleibt gleich, weil das Haus die Wärme trotzdem braucht (vorsichtig).
+
+Kennzahlen: Jahresrechnung, freier Cashflow, Kapitalbedarf und Payback ohne Kredit, Projekt-IRR über 10 Jahre
+ohne Endwert (Hauptzahl) und mit Restbuchwert als Endwert. Die Eigenkapitalsicht mit 50 % Kredit steht nur
+noch zur Information in der JSON-Datei.
 
     python3 src/firma.py                 # → daten/ergebnisse/firma.json
 """
@@ -36,7 +42,9 @@ from src.scheduler import annahmen as A  # noqa: E402
 F = {
     "ausbau_neue_haeuser": ([5, 15, 30, 50, 70], "Annahme Team: Pilot 5 Häuser, dann Ausbau in Basel-Stadt; "
                             "170 Häuser = 10'880 L4, rund dreimal so viele GPUs, wie Roche heute betreibt (PHARMA_SICHT.md)"),
-    "horizont_jahre": (10, "Zwei Hardware-Generationen à 5 Jahre"),
+    "horizont_jahre": (10, "Zwei Hardware-Generationen à 5 Jahre (nur wenn nur_erste_generation=False)"),
+    "nur_erste_generation": (True, "Hauptrechnung: jedes Haus läuft 5 Jahre mit seiner ersten Hardware, kein Ersatz, "
+                             "Horizont bis die letzte Kohorte ausläuft (2027–2035); kein Endwert nötig"),
     "start_jahr": (2027, "Pilot nach dem Hackathon"),
     # Skaleneffekte
     "mengenrabatt": ([(0, 0.0), (80, 0.05), (300, 0.10)],
@@ -62,9 +70,11 @@ F = {
     "holzofen_chf": (0, "Team-Annahme: Zielhäuser (ältere Öl- und Gas-Häuser) haben oft schon einen Holzofen oder ein "
                      "Cheminée, das für die wenigen kalten Tage genutzt wird; keine BFS-Zahl zu Zusatzheizungen gefunden"),
     "rueckbau_oel_chf": (4_000, "Schätzung: Ölkessel und Tank zurückbauen und entsorgen"),
+    "absatz_anteil": (1.0, "Annahme Basisfall: alle Server-Stunden verkauft (KOSTEN_DH.md); Szenarien 90/80/72/60 %"),
     "ersatz_einbau_anteil": (0.25, "Annahme: Hardwareersatz nach 5 Jahren braucht 25 % des ersten Einbaus"),
     # Finanzierung
-    "fremdkapital_anteil_hardware": (0.5, "Annahme: Hälfte der Hardware über Bankkredit/Leasing"),
+    "fremdkapital_anteil_hardware": (0.0, "Hauptrechnung ohne Kredit (Eigenkapital trägt alles). Nur zur Information: "
+                                     "Rechnung mit 50 % Kredit/Leasing in nur_information_mit_kredit"),
     "eigenkapitalkosten": (0.12, "Annahme: erwartete Rendite der Investoren für ein junges Unternehmen"),
     "verlustvortrag_jahre": (7, "Schweiz: Verluste 7 Jahre vortragbar (DBG Art. 67)"),
 }
@@ -118,13 +128,14 @@ def rechne_firma(**ueber):
 def _rechne():
     p = parameter()
     J = p["abschreibung_jahre"]
-    T = W("horizont_jahre")
+    erste = W("nur_erste_generation")
+    T = len(W("ausbau_neue_haeuser")) + J - 1 if erste else W("horizont_jahre")
     plan = W("ausbau_neue_haeuser") + [0] * (T - len(W("ausbau_neue_haeuser")))
     kohorten = []  # (startjahr, häuser, investition pro Haus, Abschreibung, Restwert, Jahreszeilen)
     kumuliert = 0
     for j in range(T):
         # Ersatz der Hardware nach J Jahren
-        neu, ersatz = plan[j], (plan[j - J] if j >= J else 0)
+        neu, ersatz = plan[j], (plan[j - J] if j >= J and not erste else 0)
         n = neu + ersatz
         if n == 0:
             continue
@@ -147,7 +158,17 @@ def _rechne():
                          firmenanteil_chf=0.0, einsaetze_chf_pro_8_server=p["einsaetze_chf_pro_8_server"] * (1 - dichte))
             if art == "ersatz":
                 ueber.update(speicher_chf=0.0, netzwerk_chf=0.0)
-            r = rechne(HAUS["server"], HAUS["server_h"], 0, strom_kwh=HAUS["strom_kwh"], **ueber)
+            # Kalenderjahr statt Kohortenjahr: übriger Preis ist schon j Jahre gesunken (Ersatz-Kohorten auch)
+            ueber["spotpreis_chf_karte_h"] = A.wert("spotpreis_chf_karte_h") * (1 - A.wert("spot_preisverfall")) ** j
+            absatz = W("absatz_anteil")
+            fest = A.wert("anteil_fest_gebucht")
+            if absatz < fest:
+                raise ValueError("Absatz kleiner als der fest gebuchte Roche-Anteil")
+            ueber["anteil_fest_gebucht"] = fest / absatz
+            r = rechne(HAUS["server"], HAUS["server_h"] * absatz, 0, strom_kwh=HAUS["strom_kwh"], **ueber)
+            teuerung = (1 + A.wert("kostensteigerung")) ** j
+            for z in r["jahre"]:
+                z["laufend"] = z["laufend"] * teuerung
             inv = r["investition_chf"]
             zusatz = (W("holzofen_chf") + W("rueckbau_oel_chf")) if art == "neu" else 0.0
             foerd, kwth = foerderung_pro_haus(inv + zusatz) if art == "neu" else (0.0, 0.0)
@@ -157,7 +178,7 @@ def _rechne():
                              "foerderung": foerd, "inv_netto": inv_netto, "abschreibung": abschreibung,
                              "restwert": r["restwert_chf"], "zeilen": r["jahre"], "rabatt": rabatt, "einbau": einbau})
 
-    jahre, verlust, cf_projekt, cf_eigen, schuld = [], [], [], [], 0.0
+    jahre, verlust, cf_projekt, cf_eigen, schuld, endwert = [], [], [], [], 0.0, 0.0
     for j in range(T):
         akt = [k for k in kohorten if k["jahr"] <= j < k["jahr"] + J]
         haeuser = sum(k["haeuser"] for k in akt)
@@ -194,12 +215,14 @@ def _rechne():
                 rest -= abbau
         steuer = max(0.0, steuerbar) * p["gewinnsteuer"]
         gewinn = ebt - steuer
-        steuer_projekt = max(0.0, ebitda - abschreibung) * p["gewinnsteuer"]  # vereinfachte Steuer ohne Zins
         # Endwert: Restbuchwert der Hardware, die nach dem Horizont noch läuft (vorsichtig, ohne künftige Gewinne)
         if j == T - 1:
-            restwert += sum(k["haeuser"] * (k["inv_netto"] - k["abschreibung"] * (j - k["jahr"] + 1)) for k in akt)
+            # nur Kohorten, die nach dem Horizont weiterlaufen (auslaufende sind schon mit ihrem Restwert drin)
+            endwert = sum(k["haeuser"] * (k["inv_netto"] - k["abschreibung"] * (j - k["jahr"] + 1))
+                          for k in akt if k["jahr"] + J - 1 > j)
+            restwert += endwert
         fcf = ebitda - steuer - capex + foerderung + restwert
-        cf_projekt.append(ebitda - steuer_projekt - capex + foerderung + restwert)
+        cf_projekt.append(fcf)  # ohne Kredit: Steuer mit Verlustvortrag, kein Zins
         cf_eigen.append(fcf - zins + neu_kredit - tilgung)
         schuld = max(0.0, schuld - tilgung)
         jahre.append({"jahr": W("start_jahr") + j, "haeuser": haeuser, "neue_haeuser": plan[j],
@@ -208,17 +231,20 @@ def _rechne():
                       "ebitda": round(ebitda), "abschreibung": round(abschreibung), "zins": round(zins),
                       "steuer": round(steuer), "gewinn": round(gewinn), "capex": round(capex),
                       "foerderung": round(foerderung), "restwert": round(restwert), "freier_cashflow": round(fcf),
+                      "cashflow_projekt": round(cf_projekt[-1]),
                       "cashflow_eigenkapital": round(cf_eigen[-1]), "schuld_ende": round(schuld)})
+    cf_projekt_ohne_endwert = cf_projekt[:-1] + [cf_projekt[-1] - endwert]
     kum, minimum, payback = 0.0, 0.0, None
     for n, c in enumerate(cf_eigen):
         kum += c
         minimum = min(minimum, kum)
         if payback is None and kum >= 0 and n > 0 and minimum < 0:
             payback = W("start_jahr") + n
-    kum_p, payback_p = 0.0, None
-    for n, c in enumerate(cf_projekt):
+    kum_p, min_p, payback_p = 0.0, 0.0, None
+    for n, c in enumerate(cf_projekt_ohne_endwert):
         kum_p += c
-        if payback_p is None and kum_p >= 0 and n > 0:
+        min_p = min(min_p, kum_p)
+        if payback_p is None and kum_p >= 0 and n > 0 and min_p < 0:
             payback_p = W("start_jahr") + n
     # Break-even Firma: ab wie vielen Häusern deckt der Beitrag der Häuser die Fixkosten?
     z1 = kohorten[0]["zeilen"][0]
@@ -242,30 +268,43 @@ def _rechne():
                          "kosten_haushalt_chf": round(ster * HOLZ["ster_chf"])},
         "jahre": jahre,
         "kennzahlen": {
-            "projekt_irr": irr(cf_projekt), "eigenkapital_irr": irr(cf_eigen),
-            "kapitalbedarf_eigenkapital": round(-minimum), "payback_eigenkapital": payback, "payback_projekt": payback_p,
-            "npv_eigenkapital": round(sum(c / (1 + W("eigenkapitalkosten")) ** t for t, c in enumerate(cf_eigen))),
+            "projekt_irr": irr(cf_projekt_ohne_endwert), "projekt_irr_mit_endwert": irr(cf_projekt),
+            "endwert_restbuchwert": round(endwert),
+            "kapitalbedarf": round(-min_p), "payback_projekt": payback_p,
+            "npv_projekt_12": round(sum(c / (1 + W("eigenkapitalkosten")) ** t
+                                        for t, c in enumerate(cf_projekt_ohne_endwert))),
+            "umsatz_ende_ausbau": jahre[len(W("ausbau_neue_haeuser")) - 1]["umsatz"],
             "break_even_haeuser": round(break_even_haeuser, 1),
             "haeuser_ende_ausbau": sum(W("ausbau_neue_haeuser")),
         },
+        "eigenkapital": {"irr": irr(cf_eigen), "kapitalbedarf": round(-minimum), "payback": payback},
     }
 
 
 def main():
     basis = rechne_firma()
+    kredit = rechne_firma(fremdkapital_anteil_hardware=0.5)
+    basis["nur_information_mit_kredit"] = {
+        "hinweis": "50 % der Hardware über Kredit/Leasing zu 4,5 %; für ein junges Unternehmen ohne Sicherheiten "
+                   "kaum erhältlich, deshalb nicht in den Unterlagen", **kredit["eigenkapital"]}
+    zehn = rechne_firma(nur_erste_generation=False)
+    basis["zehn_jahre_mit_ersatz"] = {"kennzahlen": zehn["kennzahlen"], "jahre": zehn["jahre"]}
     szen = {
         "ohne_foerderung": rechne_firma(foerderung_erhalten=False),
-        "vertrag_0_50": None,
+        "absatz_90": rechne_firma(absatz_anteil=0.9),
+        "absatz_80": rechne_firma(absatz_anteil=0.8),
+        "absatz_72": rechne_firma(absatz_anteil=0.72),
+        "nur_roche_60": rechne_firma(absatz_anteil=0.6),
+        "rest_spot": None,
         "halbes_wachstum": rechne_firma(ausbau_neue_haeuser=[5, 8, 15, 25, 35]),
     }
-    # Vorsichtiger Preis 0,50 CHF pro L4-h: über die Kostenformel
-    from src.scheduler import annahmen as AA
-    alt = AA.ANNAHMEN["vertragspreis_chf_karte_h"]
-    AA.ANNAHMEN["vertragspreis_chf_karte_h"] = (0.50, alt[1])
+    # Vorsichtig: übrige Stunden nur zum L4-Spot-Preis (0,294 CHF), Roche bleibt bei 0,50 CHF
+    alt = A.ANNAHMEN["spotpreis_chf_karte_h"]
+    A.ANNAHMEN["spotpreis_chf_karte_h"] = (0.294, alt[1])
     try:
-        szen["vertrag_0_50"] = rechne_firma()
+        szen["rest_spot"] = rechne_firma()
     finally:
-        AA.ANNAHMEN["vertragspreis_chf_karte_h"] = alt
+        A.ANNAHMEN["spotpreis_chf_karte_h"] = alt
     # Knappe Nachfrage: nur Aufträge mit Frist (Alibaba-Trace), Wärme zuerst (Überschuss geht an andere Clouds).
     # Pro Haus aus der Flottenrechnung mit Abschalten, 20 Häuser ohne Bad (daten/ergebnisse/flotte_abschalten.json).
     fl = json.loads((ROOT / "daten" / "ergebnisse" / "flotte_abschalten.json").read_text())["ergebnisse"]
@@ -277,17 +316,17 @@ def main():
     finally:
         HAUS.clear(); HAUS.update(alt_haus)
     basis["szenarien"] = {k: v["kennzahlen"] for k, v in szen.items()}
-    basis["szenarien_jahre"] = {k: [{kk: j[kk] for kk in ("jahr", "umsatz", "ebitda", "gewinn", "cashflow_eigenkapital")}
+    basis["szenarien_jahre"] = {k: [{kk: j[kk] for kk in ("jahr", "umsatz", "ebitda", "gewinn", "cashflow_projekt")}
                                     for j in v["jahre"]] for k, v in szen.items()}
     ziel = ROOT / "daten" / "ergebnisse" / "firma.json"
     ziel.write_text(json.dumps(basis, indent=1, ensure_ascii=False))
     k = basis["kennzahlen"]
-    print(f"Häuser bis {basis['jahre'][4]['jahr']}: {k['haeuser_ende_ausbau']}, Projekt-IRR {k['projekt_irr']}, "
-          f"EK-IRR {k['eigenkapital_irr']}, Kapitalbedarf {k['kapitalbedarf_eigenkapital']:,} CHF, "
-          f"Payback EK {k['payback_eigenkapital']}, Break-even ab {k['break_even_haeuser']} Häusern")
+    print(f"Häuser bis {basis['jahre'][4]['jahr']}: {k['haeuser_ende_ausbau']}, Projekt-IRR {k['projekt_irr']} "
+          f"(mit Endwert {k['projekt_irr_mit_endwert']}), Kapitalbedarf {k['kapitalbedarf']:,} CHF, "
+          f"Payback {k['payback_projekt']}, Break-even ab {k['break_even_haeuser']} Häusern")
     for j in basis["jahre"]:
         print(j["jahr"], j["haeuser"], "Umsatz", f"{j['umsatz']:>10,}", "EBITDA", f"{j['ebitda']:>10,}",
-              "Gewinn", f"{j['gewinn']:>10,}", "FCF", f"{j['freier_cashflow']:>11,}", "EK-CF", f"{j['cashflow_eigenkapital']:>11,}")
+              "Gewinn", f"{j['gewinn']:>10,}", "Capex", f"{j['capex']:>11,}", "CF", f"{j['cashflow_projekt']:>11,}")
     for n, s in basis["szenarien"].items():
         print(n, s)
 

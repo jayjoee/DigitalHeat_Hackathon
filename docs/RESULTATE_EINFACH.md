@@ -37,12 +37,12 @@ Ein Server braucht Strom und macht daraus fast vollständig Wärme. Normalerweis
 - Alle Aufträge kommen in einen gemeinsamen Topf. Jede Stunde verteilt der **Wärme-Router** sie dorthin, wo die Wärme gebraucht wird.
 - **Die Häuser haben immer Vorrang.** Das Bad bekommt nur Arbeit, deren Wärme gerade kein Haus brauchen kann.
 - An beiden Standorttypen simuliert der Router das Ein- und Ausschalten. Ausserhalb der Saison bleiben die Bad-Server im Standby.
-- Bei knapper Nachfrage gehen ohne Bad rund **195’000 Serverstunden** an andere Clouds. Mit 50 Servern im Bad sind es rund **30’000**. Das verbessert das Jahresergebnis um rund **66’600 CHF**.
+- Bei knapper Nachfrage gehen ohne Bad rund **195’000 Serverstunden** an andere Clouds. Mit 50 Servern im Bad sind es rund **30’000**. Das verbessert das Jahresergebnis um rund **93’500 CHF**.
 - Die 50 Bad-Server stammen aus dem Vergleich im Case-Idealmodell. Bei ausreichenden Aufträgen könnte das Bad mehr Rechenlast aufnehmen. [Ergebnisse des Abschaltmodells](ERGEBNISSE.md#flotte-mit-bedarfsgerechtem-abschalten)
 - **Ehrlich:** Wenn es nur Aufträge mit Frist gibt, macht die Flotte trotzdem Verlust, weil Aufträge fehlen und nicht Wärme. Der Router verteilt die Arbeit besser, er schafft aber keine neue. Entscheidend bleibt der feste Vertrag mit zahlenden Kunden.
 
 ## Planbar: die Zusage am Vortag
-- Der Kunde zahlt 0,60 CHF nur für Stunden, die DigitalHeat **am Vortag um 12 Uhr verbindlich zusagt**.
+- Der Ankerkunde zahlt 0,50 CHF nur für Stunden, die DigitalHeat **am Vortag um 12 Uhr verbindlich zusagt**.
 - Die Zusage stützt sich auf die Wetterprognose vom Vortag (ECMWF). Im Test zählen nur Prognosen, die um 12 Uhr schon veröffentlicht waren.
 - Ergebnis Referenzhaus: **93 % der Stunden lassen sich zusagen**, verkauft werden 60 %. An rund 2 % der Tage fehlt etwas. Dafür gibt es eine Gutschrift, die rund 270 CHF pro Jahr kostet.
 - Das Ergebnis sinkt dadurch kaum. Abgesichert ist damit die Liefermenge. Preis und Nachfrage bleiben Annahmen.
@@ -50,8 +50,8 @@ Ein Server braucht Strom und macht daraus fast vollständig Wärme. Normalerweis
 ## Lohnt es sich?
 - **Der Strom ist nicht das Problem.** Nur für Strom (abzüglich Wärmewert) reichen schon 0,23 CHF pro Server-Stunde.
 - **Entscheidend sind die Computer.** DigitalHeat kauft pro Haus 8 Server mit je 8 Grafikkarten (NVIDIA L4) und investiert dafür mit Einbau rund **290'000 CHF**.
-- DigitalHeat rechnet öffentliche und vom Kunden freigegebene, nicht vertrauliche Aufgaben (`L4_ANGEBOT.md`). Der Zielpreis ist **0,60 CHF pro Grafikkarte und Stunde**. Er ist noch mit keinem Kunden bestätigt; Schweizer Clouds verlangen ab 0,68 CHF.
-- Findet jede Rechenstunde einen Käufer, bleiben DigitalHeat nach allen Kosten, Steuern und Zinsen rund **29'400 CHF pro Haus und Jahr**. Das Geld für die Computer ist nach **gut 3 Jahren** zurück, der interne Zinsfuss liegt bei rund **19 %**. Gerechnet ist mit Servern, die ohne Arbeit abschalten (230 W Leerlauf). Die Rechnung für die ganze Firma mit ihren Fixkosten steht in `FIRMA.md`.
+- DigitalHeat rechnet öffentliche und vom Kunden freigegebene, nicht vertrauliche Aufgaben (`L4_ANGEBOT.md`). Angenommen ist ein Ankerkunde (Roche), der 60 % der Stunden fest für **0,50 CHF pro Grafikkarte und Stunde** kauft; die übrigen Stunden gehen für **0,55 CHF** an andere Kunden. Beides ist noch mit keinem Kunden bestätigt; Schweizer Clouds verlangen ab 0,68 CHF.
+- Findet jede Rechenstunde einen Käufer, bleiben DigitalHeat nach allen Kosten, Steuern und Zinsen rund **35'000 CHF pro Haus und Jahr**. Das Geld für die Computer ist nach **knapp 3 Jahren** zurück, der interne Zinsfuss liegt bei rund **22 %**. Bleibt ein Drittel der Stunden unverkauft, ist der Gewinn weg. Gerechnet ist mit Servern, die ohne Arbeit abschalten (230 W Leerlauf). Die Rechnung für die ganze Firma mit ihren Fixkosten steht in `FIRMA.md`.
 - Vorsichtig gerechnet mit 0,50 CHF sind es noch rund 15'800 CHF pro Haus und Jahr.
 - Der Haushalt bekommt die **Wärme gratis**.
 - **Es lohnt sich NICHT, wenn:**
@@ -86,4 +86,4 @@ Ein Server braucht Strom und macht daraus fast vollständig Wärme. Normalerweis
 - Der Wärmebedarf des Sportbads ist geschätzt: rund 650'000 kWh im Jahr, auf ±30 % genau (Kennwert des Verbands Hallen- und Freibäder, `daten/HALLENBAD.md`).
 
 ## In einem Satz
-**8 Server pro Haus decken rund 90 % der Wärme (93 % im Case-Modell ohne Leerlauf), und der Haushalt bekommt sie gratis. Im Sommer schickt der Wärme-Router die Arbeit ins Sportbad, statt sie zu verschenken. Findet jede Rechenstunde einen Käufer zum Zielpreis, verdient DigitalHeat rund 29'400 CHF pro Haus und Jahr und hat die Investition nach gut 3 Jahren zurück.**
+**8 Server pro Haus decken rund 90 % der Wärme (93 % im Case-Modell ohne Leerlauf), und der Haushalt bekommt sie gratis. Im Sommer schickt der Wärme-Router die Arbeit ins Sportbad, statt sie zu verschenken. Findet jede Rechenstunde einen Käufer zum Zielpreis, verdient DigitalHeat rund 35'000 CHF pro Haus und Jahr und hat die Investition nach knapp 3 Jahren zurück.**

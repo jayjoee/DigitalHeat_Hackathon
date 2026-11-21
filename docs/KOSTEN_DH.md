@@ -4,7 +4,7 @@ Säule «Firma». Ergänzt Joëls Kundensicht (`CustomerView_Joel.md`), die Phar
 
 **Rechenbasis ist das Abschaltmodell**, wie in `PITCH.md`, `README.md` und `FIRMA.md`: Server ohne Arbeit werden abgeschaltet, im Leerlauf ziehen sie angenommene 230 W, im Standby 10 W, ein Start dauert 5 Minuten (`src/scheduler/serverbetrieb.py`, `ERGEBNISSE.md`, Abschnitt «Leerlauf und Abschalten im Referenzhaus»). Das Idealmodell des Case (0 W Leerlauf) steht jeweils zum Vergleich daneben.
 
-**Neues Preismodell (21.11.2026):** Ein Ankerkunde (Roche) kauft 60 % der Server-Stunden zu **0,50 CHF pro L4-Stunde** mit Mengenrabatt und festem Preis über 5 Jahre. Die übrigen 40 % gehen an Kunden ohne Mindestmenge zu **0,55 CHF**, dieser Preis sinkt 10 % pro Jahr. Die frühere Fassung rechnete mit 0,60 CHF fest gebucht und dem Rest zum Spot-Preis von 0,294 CHF (+29'400 CHF, Break-even 0,38 CHF). **`FIRMA.md`, `PITCH.md`, `README.md`, `ERGEBNISSE.md`, `PHARMA_SICHT.md`, `RESULTATE_EINFACH.md` und die Dashboards nennen noch die alten Preise und Zahlen.**
+**Neues Preismodell (21.11.2026):** Ein Ankerkunde (Roche) kauft 60 % der Server-Stunden zu **0,50 CHF pro L4-Stunde** mit Mengenrabatt und festem Preis über 5 Jahre. Die übrigen 40 % gehen an Kunden ohne Mindestmenge zu **0,55 CHF**, dieser Preis sinkt 10 % pro Jahr. Die frühere Fassung rechnete mit 0,60 CHF fest gebucht und dem Rest zum Spot-Preis von 0,294 CHF (+29'400 CHF, Break-even 0,38 CHF). `FIRMA.md`, `PITCH.md`, `README.md`, `ERGEBNISSE.md`, `PHARMA_SICHT.md`, `RESULTATE_EINFACH.md` und das 3D-Dashboard sind auf das neue Preismodell nachgeführt.
 
 ## Kurzfassung
 

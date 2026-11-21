@@ -13,7 +13,11 @@
   },
   "horizont_jahre": {
    "wert": 10,
-   "quelle": "Zwei Hardware-Generationen à 5 Jahre"
+   "quelle": "Zwei Hardware-Generationen à 5 Jahre (nur wenn nur_erste_generation=False)"
+  },
+  "nur_erste_generation": {
+   "wert": true,
+   "quelle": "Hauptrechnung: jedes Haus läuft 5 Jahre mit seiner ersten Hardware, kein Ersatz, Horizont bis die letzte Kohorte ausläuft (2027–2035); kein Endwert nötig"
   },
   "start_jahr": {
    "wert": 2027,
@@ -109,13 +113,17 @@
    "wert": 4000,
    "quelle": "Schätzung: Ölkessel und Tank zurückbauen und entsorgen"
   },
+  "absatz_anteil": {
+   "wert": 1.0,
+   "quelle": "Annahme Basisfall: alle Server-Stunden verkauft (KOSTEN_DH.md); Szenarien 90/80/72/60 %"
+  },
   "ersatz_einbau_anteil": {
    "wert": 0.25,
    "quelle": "Annahme: Hardwareersatz nach 5 Jahren braucht 25 % des ersten Einbaus"
   },
   "fremdkapital_anteil_hardware": {
-   "wert": 0.5,
-   "quelle": "Annahme: Hälfte der Hardware über Bankkredit/Leasing"
+   "wert": 0.0,
+   "quelle": "Hauptrechnung ohne Kredit (Eigenkapital trägt alles). Nur zur Information: Rechnung mit 50 % Kredit/Leasing in nur_information_mit_kredit"
   },
   "eigenkapitalkosten": {
    "wert": 0.12,
@@ -145,7 +153,7 @@
   "holzofen_und_rueckbau": 4000,
   "foerderung": 7200,
   "investition_netto": 285176,
-  "beitrag_vor_fixkosten_jahr1": 57809
+  "beitrag_vor_fixkosten_jahr1": 68853
  },
  "skaleneffekte": [
   {
@@ -187,46 +195,6 @@
    "rabatt_server": 0.1,
    "einbau_chf": 4500,
    "investition_pro_haus": 256624
-  },
-  {
-   "jahr": 2032,
-   "art": "ersatz",
-   "haeuser": 5,
-   "rabatt_server": 0.0,
-   "einbau_chf": 2250,
-   "investition_pro_haus": 280370
-  },
-  {
-   "jahr": 2033,
-   "art": "ersatz",
-   "haeuser": 15,
-   "rabatt_server": 0.05,
-   "einbau_chf": 2250,
-   "investition_pro_haus": 267472
-  },
-  {
-   "jahr": 2034,
-   "art": "ersatz",
-   "haeuser": 30,
-   "rabatt_server": 0.05,
-   "einbau_chf": 2250,
-   "investition_pro_haus": 267472
-  },
-  {
-   "jahr": 2035,
-   "art": "ersatz",
-   "haeuser": 50,
-   "rabatt_server": 0.1,
-   "einbau_chf": 2250,
-   "investition_pro_haus": 254574
-  },
-  {
-   "jahr": 2036,
-   "art": "ersatz",
-   "haeuser": 70,
-   "rabatt_server": 0.1,
-   "einbau_chf": 2250,
-   "investition_pro_haus": 254574
   }
  ],
  "holz_reserve": {
@@ -240,271 +208,563 @@
    "haeuser": 5,
    "neue_haeuser": 5,
    "server": 40,
-   "umsatz": 621965,
+   "umsatz": 677185,
    "strom": 59290,
    "betrieb_haeuser": 40045,
    "fixkosten_firma": 386250,
    "fte": 2.1,
-   "ebitda": 136380,
+   "ebitda": 191600,
    "abschreibung": 233584,
-   "zins": 32082,
+   "zins": 0,
    "steuer": 0,
-   "gewinn": -129286,
+   "gewinn": -41984,
    "capex": 1461880,
    "foerderung": 36000,
    "restwert": 0,
-   "freier_cashflow": -1289500,
-   "cashflow_eigenkapital": -751230,
-   "schuld_ende": 570352
+   "freier_cashflow": -1234280,
+   "cashflow_projekt": -1234280,
+   "cashflow_eigenkapital": -1234280,
+   "schuld_ende": 0
   },
   {
    "jahr": 2028,
    "haeuser": 20,
    "neue_haeuser": 15,
    "server": 160,
-   "umsatz": 2472545,
+   "umsatz": 2594140,
    "strom": 237160,
-   "betrieb_haeuser": 177280,
+   "betrieb_haeuser": 182631,
    "fixkosten_firma": 435000,
    "fte": 2.5,
-   "ebitda": 1623105,
+   "ebitda": 1739349,
    "abschreibung": 896689,
-   "zins": 116807,
-   "steuer": 62634,
-   "gewinn": 546975,
+   "zins": 0,
+   "steuer": 104408,
+   "gewinn": 738252,
    "capex": 4158705,
    "foerderung": 108000,
    "restwert": 0,
-   "freier_cashflow": -2490234,
-   "cashflow_eigenkapital": -1129347,
-   "schuld_ende": 2048046
+   "freier_cashflow": -2415764,
+   "cashflow_projekt": -2415764,
+   "cashflow_eigenkapital": -2415764,
+   "schuld_ende": 0
   },
   {
    "jahr": 2029,
    "haeuser": 50,
    "neue_haeuser": 30,
    "server": 400,
-   "umsatz": 6144610,
+   "umsatz": 6227500,
    "strom": 592900,
-   "betrieb_haeuser": 462355,
+   "betrieb_haeuser": 491234,
    "fixkosten_firma": 532500,
    "fte": 3.2,
-   "ebitda": 4556855,
+   "ebitda": 4610866,
    "abschreibung": 2219749,
-   "zins": 274089,
-   "steuer": 269017,
-   "gewinn": 1793999,
+   "zins": 0,
+   "steuer": 311802,
+   "gewinn": 2079315,
    "capex": 8301660,
    "foerderung": 216000,
    "restwert": 0,
-   "freier_cashflow": -3797822,
-   "cashflow_eigenkapital": -1385306,
-   "schuld_ende": 4734652
+   "freier_cashflow": -3786596,
+   "cashflow_projekt": -3786596,
+   "cashflow_eigenkapital": -3786596,
+   "schuld_ende": 0
   },
   {
    "jahr": 2030,
    "haeuser": 100,
    "neue_haeuser": 50,
    "server": 800,
-   "umsatz": 12218625,
+   "umsatz": 11990800,
    "strom": 1185800,
-   "betrieb_haeuser": 991130,
+   "betrieb_haeuser": 1083521,
    "fixkosten_firma": 695000,
    "fte": 4.5,
-   "ebitda": 9346695,
+   "ebitda": 9026479,
    "abschreibung": 4321659,
-   "zins": 501761,
-   "steuer": 589835,
-   "gewinn": 3933440,
+   "zins": 0,
+   "steuer": 613509,
+   "gewinn": 4091312,
    "capex": 13191200,
    "foerderung": 360000,
    "restwert": 0,
-   "freier_cashflow": -4074340,
-   "cashflow_eigenkapital": -799846,
-   "schuld_ende": 8510907
+   "freier_cashflow": -4418229,
+   "cashflow_projekt": -4418229,
+   "cashflow_eigenkapital": -4418229,
+   "schuld_ende": 0
   },
   {
    "jahr": 2031,
    "haeuser": 170,
    "neue_haeuser": 70,
    "server": 1360,
-   "umsatz": 20641925,
+   "umsatz": 19674270,
    "strom": 2015860,
-   "betrieb_haeuser": 1800735,
+   "betrieb_haeuser": 2021658,
    "fixkosten_firma": 922500,
    "fte": 6.2,
-   "ebitda": 15902830,
+   "ebitda": 14714252,
    "abschreibung": 7264333,
-   "zins": 787174,
-   "steuer": 1023813,
-   "gewinn": 6827511,
+   "zins": 0,
+   "steuer": 971469,
+   "gewinn": 6478450,
    "capex": 18467680,
    "foerderung": 504000,
    "restwert": 257960,
-   "freier_cashflow": -2826703,
-   "cashflow_eigenkapital": 932251,
-   "schuld_ende": 13057034
+   "freier_cashflow": -3962937,
+   "cashflow_projekt": -3962937,
+   "cashflow_eigenkapital": -3962937,
+   "schuld_ende": 0
   },
   {
    "jahr": 2032,
-   "haeuser": 170,
+   "haeuser": 165,
    "neue_haeuser": 0,
-   "server": 1360,
-   "umsatz": 20234455,
-   "strom": 2015860,
-   "betrieb_haeuser": 2226985,
-   "fixkosten_firma": 922500,
-   "fte": 6.2,
-   "ebitda": 15069110,
-   "abschreibung": 7259527,
-   "zins": 619108,
-   "steuer": 937638,
-   "gewinn": 6252837,
-   "capex": 1401850,
+   "server": 1320,
+   "umsatz": 18475380,
+   "strom": 1956570,
+   "betrieb_haeuser": 2479503,
+   "fixkosten_firma": 906250,
+   "fte": 6.1,
+   "ebitda": 13133057,
+   "abschreibung": 7030749,
+   "zins": 0,
+   "steuer": 795741,
+   "gewinn": 5306567,
+   "capex": 0,
    "foerderung": 0,
    "restwert": 735180,
-   "freier_cashflow": 13464802,
-   "cashflow_eigenkapital": 9113309,
-   "schuld_ende": 9324650
+   "freier_cashflow": 13072496,
+   "cashflow_projekt": 13072496,
+   "cashflow_eigenkapital": 13072496,
+   "schuld_ende": 0
   },
   {
    "jahr": 2033,
-   "haeuser": 170,
+   "haeuser": 150,
    "neue_haeuser": 0,
-   "server": 1360,
-   "umsatz": 19993175,
-   "strom": 2015860,
-   "betrieb_haeuser": 2482580,
-   "fixkosten_firma": 922500,
-   "fte": 6.2,
-   "ebitda": 14572235,
-   "abschreibung": 7251802,
-   "zins": 509881,
-   "steuer": 888096,
-   "gewinn": 5922456,
-   "capex": 4012080,
+   "server": 1200,
+   "umsatz": 16288200,
+   "strom": 1778700,
+   "betrieb_haeuser": 2653271,
+   "fixkosten_firma": 857500,
+   "fte": 5.8,
+   "ebitda": 10998729,
+   "abschreibung": 6367644,
+   "zins": 0,
+   "steuer": 603893,
+   "gewinn": 4027191,
+   "capex": 0,
    "foerderung": 0,
    "restwert": 1470360,
-   "freier_cashflow": 11142419,
-   "cashflow_eigenkapital": 8209131,
-   "schuld_ende": 6901243
+   "freier_cashflow": 11865195,
+   "cashflow_projekt": 11865195,
+   "cashflow_eigenkapital": 11865195,
+   "schuld_ende": 0
   },
   {
    "jahr": 2034,
-   "haeuser": 170,
+   "haeuser": 120,
    "neue_haeuser": 0,
-   "server": 1360,
-   "umsatz": 19964120,
-   "strom": 2015860,
-   "betrieb_haeuser": 2729465,
-   "fixkosten_firma": 922500,
-   "fte": 6.2,
-   "ebitda": 14296295,
-   "abschreibung": 7239502,
-   "zins": 491100,
-   "steuer": 856166,
-   "gewinn": 5709527,
-   "capex": 8024160,
+   "server": 960,
+   "umsatz": 12665160,
+   "strom": 1422960,
+   "betrieb_haeuser": 2666232,
+   "fixkosten_firma": 760000,
+   "fte": 5.0,
+   "ebitda": 7815968,
+   "abschreibung": 5044584,
+   "zins": 0,
+   "steuer": 361388,
+   "gewinn": 2409995,
+   "capex": 0,
    "foerderung": 0,
    "restwert": 2321650,
-   "freier_cashflow": 7737619,
-   "cashflow_eigenkapital": 6835302,
-   "schuld_ende": 6490026
+   "freier_cashflow": 9776229,
+   "cashflow_projekt": 9776229,
+   "cashflow_eigenkapital": 9776229,
+   "schuld_ende": 0
   },
   {
    "jahr": 2035,
-   "haeuser": 170,
+   "haeuser": 70,
    "neue_haeuser": 0,
-   "server": 1360,
-   "umsatz": 20188825,
-   "strom": 2015860,
-   "betrieb_haeuser": 2333510,
-   "fixkosten_firma": 922500,
-   "fte": 6.2,
-   "ebitda": 14916955,
-   "abschreibung": 7219002,
-   "zins": 578447,
-   "steuer": 928384,
-   "gewinn": 6191122,
-   "capex": 12728700,
+   "server": 560,
+   "umsatz": 7196140,
+   "strom": 830060,
+   "betrieb_haeuser": 1614515,
+   "fixkosten_firma": 597500,
+   "fte": 3.8,
+   "ebitda": 4154065,
+   "abschreibung": 2942674,
+   "zins": 0,
+   "steuer": 157965,
+   "gewinn": 1053425,
+   "capex": 0,
    "foerderung": 0,
    "restwert": 3250310,
-   "freier_cashflow": 4510181,
-   "cashflow_eigenkapital": 5883037,
-   "schuld_ende": 8441329
-  },
-  {
-   "jahr": 2036,
-   "haeuser": 170,
-   "neue_haeuser": 0,
-   "server": 1360,
-   "umsatz": 20641925,
-   "strom": 2015860,
-   "betrieb_haeuser": 1825125,
-   "fixkosten_firma": 922500,
-   "fte": 6.2,
-   "ebitda": 15878440,
-   "abschreibung": 7190302,
-   "zins": 780814,
-   "steuer": 1031115,
-   "gewinn": 6876209,
-   "capex": 17820180,
-   "foerderung": 0,
-   "restwert": 29470446,
-   "freier_cashflow": 26497591,
-   "cashflow_eigenkapital": 30228170,
-   "schuld_ende": 12952722
+   "freier_cashflow": 7246409,
+   "cashflow_projekt": 7246409,
+   "cashflow_eigenkapital": 7246409,
+   "schuld_ende": 0
   }
  ],
  "kennzahlen": {
-  "projekt_irr": 0.3538,
-  "eigenkapital_irr": 0.619,
-  "kapitalbedarf_eigenkapital": 4065729,
-  "payback_eigenkapital": 2032,
+  "projekt_irr": 0.2882,
+  "projekt_irr_mit_endwert": 0.2882,
+  "endwert_restbuchwert": 0,
+  "kapitalbedarf": 15817807,
   "payback_projekt": 2033,
-  "npv_eigenkapital": 22857937,
-  "break_even_haeuser": 6.8,
+  "npv_projekt_12": 8704745,
+  "umsatz_ende_ausbau": 19674270,
+  "break_even_haeuser": 5.6,
   "haeuser_ende_ausbau": 170
+ },
+ "eigenkapital": {
+  "irr": 0.2882,
+  "kapitalbedarf": 15817807,
+  "payback": 2033
+ },
+ "nur_information_mit_kredit": {
+  "hinweis": "50 % der Hardware über Kredit/Leasing zu 4,5 %; für ein junges Unternehmen ohne Sicherheiten kaum erhältlich, deshalb nicht in den Unterlagen",
+  "irr": 0.5041,
+  "kapitalbedarf": 4249452,
+  "payback": 2032
+ },
+ "zehn_jahre_mit_ersatz": {
+  "kennzahlen": {
+   "projekt_irr": -0.3666,
+   "projekt_irr_mit_endwert": 0.2878,
+   "endwert_restbuchwert": 28954526,
+   "kapitalbedarf": 15817807,
+   "payback_projekt": 2033,
+   "npv_projekt_12": 266072,
+   "umsatz_ende_ausbau": 19674270,
+   "break_even_haeuser": 5.6,
+   "haeuser_ende_ausbau": 170
+  },
+  "jahre": [
+   {
+    "jahr": 2027,
+    "haeuser": 5,
+    "neue_haeuser": 5,
+    "server": 40,
+    "umsatz": 677185,
+    "strom": 59290,
+    "betrieb_haeuser": 40045,
+    "fixkosten_firma": 386250,
+    "fte": 2.1,
+    "ebitda": 191600,
+    "abschreibung": 233584,
+    "zins": 0,
+    "steuer": 0,
+    "gewinn": -41984,
+    "capex": 1461880,
+    "foerderung": 36000,
+    "restwert": 0,
+    "freier_cashflow": -1234280,
+    "cashflow_projekt": -1234280,
+    "cashflow_eigenkapital": -1234280,
+    "schuld_ende": 0
+   },
+   {
+    "jahr": 2028,
+    "haeuser": 20,
+    "neue_haeuser": 15,
+    "server": 160,
+    "umsatz": 2594140,
+    "strom": 237160,
+    "betrieb_haeuser": 182631,
+    "fixkosten_firma": 435000,
+    "fte": 2.5,
+    "ebitda": 1739349,
+    "abschreibung": 896689,
+    "zins": 0,
+    "steuer": 104408,
+    "gewinn": 738252,
+    "capex": 4158705,
+    "foerderung": 108000,
+    "restwert": 0,
+    "freier_cashflow": -2415764,
+    "cashflow_projekt": -2415764,
+    "cashflow_eigenkapital": -2415764,
+    "schuld_ende": 0
+   },
+   {
+    "jahr": 2029,
+    "haeuser": 50,
+    "neue_haeuser": 30,
+    "server": 400,
+    "umsatz": 6227500,
+    "strom": 592900,
+    "betrieb_haeuser": 491234,
+    "fixkosten_firma": 532500,
+    "fte": 3.2,
+    "ebitda": 4610866,
+    "abschreibung": 2219749,
+    "zins": 0,
+    "steuer": 311802,
+    "gewinn": 2079315,
+    "capex": 8301660,
+    "foerderung": 216000,
+    "restwert": 0,
+    "freier_cashflow": -3786596,
+    "cashflow_projekt": -3786596,
+    "cashflow_eigenkapital": -3786596,
+    "schuld_ende": 0
+   },
+   {
+    "jahr": 2030,
+    "haeuser": 100,
+    "neue_haeuser": 50,
+    "server": 800,
+    "umsatz": 11990800,
+    "strom": 1185800,
+    "betrieb_haeuser": 1083521,
+    "fixkosten_firma": 695000,
+    "fte": 4.5,
+    "ebitda": 9026479,
+    "abschreibung": 4321659,
+    "zins": 0,
+    "steuer": 613509,
+    "gewinn": 4091312,
+    "capex": 13191200,
+    "foerderung": 360000,
+    "restwert": 0,
+    "freier_cashflow": -4418229,
+    "cashflow_projekt": -4418229,
+    "cashflow_eigenkapital": -4418229,
+    "schuld_ende": 0
+   },
+   {
+    "jahr": 2031,
+    "haeuser": 170,
+    "neue_haeuser": 70,
+    "server": 1360,
+    "umsatz": 19674270,
+    "strom": 2015860,
+    "betrieb_haeuser": 2021658,
+    "fixkosten_firma": 922500,
+    "fte": 6.2,
+    "ebitda": 14714252,
+    "abschreibung": 7264333,
+    "zins": 0,
+    "steuer": 971469,
+    "gewinn": 6478450,
+    "capex": 18467680,
+    "foerderung": 504000,
+    "restwert": 257960,
+    "freier_cashflow": -3962937,
+    "cashflow_projekt": -3962937,
+    "cashflow_eigenkapital": -3962937,
+    "schuld_ende": 0
+   },
+   {
+    "jahr": 2032,
+    "haeuser": 170,
+    "neue_haeuser": 0,
+    "server": 1360,
+    "umsatz": 19035240,
+    "strom": 2015860,
+    "betrieb_haeuser": 2526166,
+    "fixkosten_firma": 922500,
+    "fte": 6.2,
+    "ebitda": 13570714,
+    "abschreibung": 7259527,
+    "zins": 0,
+    "steuer": 822979,
+    "gewinn": 5488208,
+    "capex": 1401850,
+    "foerderung": 0,
+    "restwert": 735180,
+    "freier_cashflow": 12081065,
+    "cashflow_projekt": 12081065,
+    "cashflow_eigenkapital": 12081065,
+    "schuld_ende": 0
+   },
+   {
+    "jahr": 2033,
+    "haeuser": 170,
+    "neue_haeuser": 0,
+    "server": 1360,
+    "umsatz": 18459960,
+    "strom": 2015860,
+    "betrieb_haeuser": 2867316,
+    "fixkosten_firma": 922500,
+    "fte": 6.2,
+    "ebitda": 12654284,
+    "abschreibung": 7251802,
+    "zins": 0,
+    "steuer": 704484,
+    "gewinn": 4697999,
+    "capex": 4012080,
+    "foerderung": 0,
+    "restwert": 1470360,
+    "freier_cashflow": 9408081,
+    "cashflow_projekt": 9408081,
+    "cashflow_eigenkapital": 9408081,
+    "schuld_ende": 0
+   },
+   {
+    "jahr": 2034,
+    "haeuser": 170,
+    "neue_haeuser": 0,
+    "server": 1360,
+    "umsatz": 17942310,
+    "strom": 2015860,
+    "betrieb_haeuser": 3264234,
+    "fixkosten_firma": 922500,
+    "fte": 6.2,
+    "ebitda": 11739716,
+    "abschreibung": 7239502,
+    "zins": 0,
+    "steuer": 586828,
+    "gewinn": 3913386,
+    "capex": 8024160,
+    "foerderung": 0,
+    "restwert": 2321650,
+    "freier_cashflow": 5450378,
+    "cashflow_projekt": 5450378,
+    "cashflow_eigenkapital": 5450378,
+    "schuld_ende": 0
+   },
+   {
+    "jahr": 2035,
+    "haeuser": 170,
+    "neue_haeuser": 0,
+    "server": 1360,
+    "umsatz": 17476340,
+    "strom": 2015860,
+    "betrieb_haeuser": 2949982,
+    "fixkosten_firma": 922500,
+    "fte": 6.2,
+    "ebitda": 11587998,
+    "abschreibung": 7219002,
+    "zins": 0,
+    "steuer": 569717,
+    "gewinn": 3799279,
+    "capex": 12728700,
+    "foerderung": 0,
+    "restwert": 3250310,
+    "freier_cashflow": 1539891,
+    "cashflow_projekt": 1539891,
+    "cashflow_eigenkapital": 1539891,
+    "schuld_ende": 0
+   },
+   {
+    "jahr": 2036,
+    "haeuser": 170,
+    "neue_haeuser": 0,
+    "server": 1360,
+    "umsatz": 17057120,
+    "strom": 2015860,
+    "betrieb_haeuser": 2557981,
+    "fixkosten_firma": 922500,
+    "fte": 6.2,
+    "ebitda": 11560779,
+    "abschreibung": 7190302,
+    "zins": 0,
+    "steuer": 569910,
+    "gewinn": 3800567,
+    "capex": 17820180,
+    "foerderung": 0,
+    "restwert": 29212486,
+    "freier_cashflow": 22383175,
+    "cashflow_projekt": 22383175,
+    "cashflow_eigenkapital": 22383175,
+    "schuld_ende": 0
+   }
+  ]
  },
  "szenarien": {
   "ohne_foerderung": {
-   "projekt_irr": 0.336,
-   "eigenkapital_irr": 0.585,
-   "kapitalbedarf_eigenkapital": 4540563,
-   "payback_eigenkapital": 2032,
+   "projekt_irr": 0.2685,
+   "projekt_irr_mit_endwert": 0.2685,
+   "endwert_restbuchwert": 0,
+   "kapitalbedarf": 16977024,
    "payback_projekt": 2033,
-   "npv_eigenkapital": 22109365,
-   "break_even_haeuser": 7.0,
+   "npv_projekt_12": 7916262,
+   "umsatz_ende_ausbau": 19674270,
+   "break_even_haeuser": 5.8,
    "haeuser_ende_ausbau": 170
   },
-  "vertrag_0_50": {
-   "projekt_irr": 0.23,
-   "eigenkapital_irr": 0.4033,
-   "kapitalbedarf_eigenkapital": 7821826,
-   "payback_eigenkapital": 2033,
+  "absatz_90": {
+   "projekt_irr": 0.2101,
+   "projekt_irr_mit_endwert": 0.2101,
+   "endwert_restbuchwert": 0,
+   "kapitalbedarf": 18906317,
    "payback_projekt": 2033,
-   "npv_eigenkapital": 14276606,
+   "npv_projekt_12": 4842867,
+   "umsatz_ende_ausbau": 18076610,
+   "break_even_haeuser": 7.2,
+   "haeuser_ende_ausbau": 170
+  },
+  "absatz_80": {
+   "projekt_irr": 0.1376,
+   "projekt_irr_mit_endwert": 0.1376,
+   "endwert_restbuchwert": 0,
+   "kapitalbedarf": 21994915,
+   "payback_projekt": 2034,
+   "npv_projekt_12": 980968,
+   "umsatz_ende_ausbau": 16478780,
+   "break_even_haeuser": 10.0,
+   "haeuser_ende_ausbau": 170
+  },
+  "absatz_72": {
+   "projekt_irr": 0.083,
+   "projekt_irr_mit_endwert": 0.083,
+   "endwert_restbuchwert": 0,
+   "kapitalbedarf": 24465761,
+   "payback_projekt": 2034,
+   "npv_projekt_12": -2110054,
+   "umsatz_ende_ausbau": 15200550,
+   "break_even_haeuser": 14.5,
+   "haeuser_ende_ausbau": 170
+  },
+  "nur_roche_60": {
+   "projekt_irr": 0.0045,
+   "projekt_irr_mit_endwert": 0.0045,
+   "endwert_restbuchwert": 0,
+   "kapitalbedarf": 28171892,
+   "payback_projekt": 2035,
+   "npv_projekt_12": -6811617,
+   "umsatz_ende_ausbau": 13283290,
+   "break_even_haeuser": 44.6,
+   "haeuser_ende_ausbau": 170
+  },
+  "rest_spot": {
+   "projekt_irr": 0.1473,
+   "projekt_irr_mit_endwert": 0.1473,
+   "endwert_restbuchwert": 0,
+   "kapitalbedarf": 21568119,
+   "payback_projekt": 2034,
+   "npv_projekt_12": 1514658,
+   "umsatz_ende_ausbau": 16699610,
    "break_even_haeuser": 9.5,
    "haeuser_ende_ausbau": 170
   },
   "halbes_wachstum": {
-   "projekt_irr": 0.2925,
-   "eigenkapital_irr": 0.4913,
-   "kapitalbedarf_eigenkapital": 2765362,
-   "payback_eigenkapital": 2032,
+   "projekt_irr": 0.2283,
+   "projekt_irr_mit_endwert": 0.2283,
+   "endwert_restbuchwert": 0,
+   "kapitalbedarf": 9029692,
    "payback_projekt": 2033,
-   "npv_eigenkapital": 10411895,
-   "break_even_haeuser": 6.8,
+   "npv_projekt_12": 3161866,
+   "umsatz_ende_ausbau": 10184328,
+   "break_even_haeuser": 5.6,
    "haeuser_ende_ausbau": 88
   },
   "knappe_nachfrage": {
-   "projekt_irr": -0.007,
-   "eigenkapital_irr": 0.0618,
-   "kapitalbedarf_eigenkapital": 17775084,
-   "payback_eigenkapital": 2036,
+   "projekt_irr": -0.0766,
+   "projekt_irr_mit_endwert": -0.0766,
+   "endwert_restbuchwert": 0,
+   "kapitalbedarf": 30001589,
    "payback_projekt": null,
-   "npv_eigenkapital": -3497783,
-   "break_even_haeuser": 67.7,
+   "npv_projekt_12": -10982968,
+   "umsatz_ende_ausbau": 11221360,
+   "break_even_haeuser": 31.5,
    "haeuser_ende_ausbau": 170
   }
  },
@@ -512,289 +772,521 @@
   "ohne_foerderung": [
    {
     "jahr": 2027,
-    "umsatz": 621965,
-    "ebitda": 136380,
-    "gewinn": -137296,
-    "cashflow_eigenkapital": -773640
+    "umsatz": 677185,
+    "ebitda": 191600,
+    "gewinn": -49184,
+    "cashflow_projekt": -1270280
    },
    {
     "jahr": 2028,
-    "umsatz": 2472545,
-    "ebitda": 1623105,
-    "gewinn": 520299,
-    "cashflow_eigenkapital": -1195623
+    "umsatz": 2594140,
+    "ebitda": 1739349,
+    "gewinn": 714146,
+    "cashflow_projekt": -2519070
    },
    {
     "jahr": 2029,
-    "umsatz": 6144610,
-    "ebitda": 4556855,
-    "gewinn": 1725049,
-    "cashflow_eigenkapital": -1526257
+    "umsatz": 6227500,
+    "ebitda": 4610866,
+    "gewinn": 2016704,
+    "cashflow_projekt": -3993207
    },
    {
     "jahr": 2030,
-    "umsatz": 12218625,
-    "ebitda": 9346695,
-    "gewinn": 3796243,
-    "cashflow_eigenkapital": -1045043
+    "umsatz": 11990800,
+    "ebitda": 9026479,
+    "gewinn": 3966089,
+    "cashflow_projekt": -4759452
    },
    {
     "jahr": 2031,
-    "umsatz": 20641925,
-    "ebitda": 15902830,
-    "gewinn": 6595615,
-    "cashflow_eigenkapital": 570755
+    "umsatz": 19674270,
+    "ebitda": 14714252,
+    "gewinn": 6265572,
+    "cashflow_projekt": -4435015
    },
    {
     "jahr": 2032,
-    "umsatz": 20234455,
-    "ebitda": 15069110,
-    "gewinn": 6031992,
-    "cashflow_eigenkapital": 9011264
+    "umsatz": 18475380,
+    "ebitda": 13133057,
+    "gewinn": 5099950,
+    "cashflow_projekt": 13103479
    },
    {
     "jahr": 2033,
-    "umsatz": 19993175,
-    "ebitda": 14572235,
-    "gewinn": 5725043,
-    "cashflow_eigenkapital": 8119718
+    "umsatz": 16288200,
+    "ebitda": 10998729,
+    "gewinn": 3839358,
+    "cashflow_projekt": 11893362
    },
    {
     "jahr": 2034,
-    "umsatz": 19964120,
-    "ebitda": 14296295,
-    "gewinn": 5553907,
-    "cashflow_eigenkapital": 6766082
+    "umsatz": 12665160,
+    "ebitda": 7815968,
+    "gewinn": 2259728,
+    "cashflow_projekt": 9798762
    },
    {
     "jahr": 2035,
-    "umsatz": 20188825,
-    "ebitda": 14916955,
-    "gewinn": 6101495,
-    "cashflow_eigenkapital": 5843810
-   },
-   {
-    "jahr": 2036,
-    "umsatz": 20641925,
-    "ebitda": 15878440,
-    "gewinn": 6876209,
-    "cashflow_eigenkapital": 30228170
+    "umsatz": 7196140,
+    "ebitda": 4154065,
+    "gewinn": 965770,
+    "cashflow_projekt": 7259554
    }
   ],
-  "vertrag_0_50": [
+  "absatz_90": [
+   {
+    "jahr": 2027,
+    "umsatz": 605560,
+    "ebitda": 119975,
+    "gewinn": -113609,
+    "cashflow_projekt": -1305905
+   },
+   {
+    "jahr": 2028,
+    "umsatz": 2336280,
+    "ebitda": 1481489,
+    "gewinn": 523356,
+    "cashflow_projekt": -2630660
+   },
+   {
+    "jahr": 2029,
+    "umsatz": 5647300,
+    "ebitda": 4030666,
+    "gewinn": 1574773,
+    "cashflow_projekt": -4291138
+   },
+   {
+    "jahr": 2030,
+    "umsatz": 10946500,
+    "ebitda": 7982179,
+    "gewinn": 3183189,
+    "cashflow_projekt": -5326352
+   },
+   {
+    "jahr": 2031,
+    "umsatz": 18076610,
+    "ebitda": 13116592,
+    "gewinn": 5089125,
+    "cashflow_projekt": -5352262
+   },
+   {
+    "jahr": 2032,
+    "umsatz": 17079645,
+    "ebitda": 11737322,
+    "gewinn": 4092836,
+    "cashflow_projekt": 11858765
+   },
+   {
+    "jahr": 2033,
+    "umsatz": 15146250,
+    "ebitda": 9856779,
+    "gewinn": 3034152,
+    "cashflow_projekt": 10872156
+   },
+   {
+    "jahr": 2034,
+    "umsatz": 11842920,
+    "ebitda": 6993728,
+    "gewinn": 1694975,
+    "cashflow_projekt": 9061209
+   },
+   {
+    "jahr": 2035,
+    "umsatz": 6764520,
+    "ebitda": 3722445,
+    "gewinn": 678089,
+    "cashflow_projekt": 6871073
+   }
+  ],
+  "absatz_80": [
+   {
+    "jahr": 2027,
+    "umsatz": 533935,
+    "ebitda": 48350,
+    "gewinn": -185234,
+    "cashflow_projekt": -1377530
+   },
+   {
+    "jahr": 2028,
+    "umsatz": 2078440,
+    "ebitda": 1223649,
+    "gewinn": 308479,
+    "cashflow_projekt": -2845537
+   },
+   {
+    "jahr": 2029,
+    "umsatz": 5067150,
+    "ebitda": 3450516,
+    "gewinn": 1070275,
+    "cashflow_projekt": -4795636
+   },
+   {
+    "jahr": 2030,
+    "umsatz": 9902200,
+    "ebitda": 6937879,
+    "gewinn": 2275065,
+    "cashflow_projekt": -6234476
+   },
+   {
+    "jahr": 2031,
+    "umsatz": 16478780,
+    "ebitda": 11518762,
+    "gewinn": 3699652,
+    "cashflow_projekt": -6741735
+   },
+   {
+    "jahr": 2032,
+    "umsatz": 15683910,
+    "ebitda": 10341587,
+    "gewinn": 2879105,
+    "cashflow_projekt": 10645034
+   },
+   {
+    "jahr": 2033,
+    "umsatz": 14004300,
+    "ebitda": 8714829,
+    "gewinn": 2041112,
+    "cashflow_projekt": 9879116
+   },
+   {
+    "jahr": 2034,
+    "umsatz": 11020800,
+    "ebitda": 6171608,
+    "gewinn": 980060,
+    "cashflow_projekt": 8346294
+   },
+   {
+    "jahr": 2035,
+    "umsatz": 6332830,
+    "ebitda": 3290755,
+    "gewinn": 302691,
+    "cashflow_projekt": 6495675
+   }
+  ],
+  "absatz_72": [
+   {
+    "jahr": 2027,
+    "umsatz": 476635,
+    "ebitda": -8950,
+    "gewinn": -242534,
+    "cashflow_projekt": -1434830
+   },
+   {
+    "jahr": 2028,
+    "umsatz": 1872160,
+    "ebitda": 1017369,
+    "gewinn": 120680,
+    "cashflow_projekt": -3033336
+   },
+   {
+    "jahr": 2029,
+    "umsatz": 4603000,
+    "ebitda": 2986366,
+    "gewinn": 682540,
+    "cashflow_projekt": -5183371
+   },
+   {
+    "jahr": 2030,
+    "umsatz": 9066800,
+    "ebitda": 6102479,
+    "gewinn": 1548601,
+    "cashflow_projekt": -6960940
+   },
+   {
+    "jahr": 2031,
+    "umsatz": 15200550,
+    "ebitda": 10240532,
+    "gewinn": 2588103,
+    "cashflow_projekt": -7853284
+   },
+   {
+    "jahr": 2032,
+    "umsatz": 14567355,
+    "ebitda": 9225032,
+    "gewinn": 1908149,
+    "cashflow_projekt": 9674078
+   },
+   {
+    "jahr": 2033,
+    "umsatz": 13090800,
+    "ebitda": 7801329,
+    "gewinn": 1246732,
+    "cashflow_projekt": 9084736
+   },
+   {
+    "jahr": 2034,
+    "umsatz": 10362960,
+    "ebitda": 5513768,
+    "gewinn": 408002,
+    "cashflow_projekt": 7774236
+   },
+   {
+    "jahr": 2035,
+    "umsatz": 5987520,
+    "ebitda": 2945445,
+    "gewinn": 2410,
+    "cashflow_projekt": 6195394
+   }
+  ],
+  "nur_roche_60": [
+   {
+    "jahr": 2027,
+    "umsatz": 390685,
+    "ebitda": -94900,
+    "gewinn": -328484,
+    "cashflow_projekt": -1520780
+   },
+   {
+    "jahr": 2028,
+    "umsatz": 1562740,
+    "ebitda": 707949,
+    "gewinn": -188740,
+    "cashflow_projekt": -3342756
+   },
+   {
+    "jahr": 2029,
+    "umsatz": 3906850,
+    "ebitda": 2290216,
+    "gewinn": 70467,
+    "cashflow_projekt": -5795444
+   },
+   {
+    "jahr": 2030,
+    "umsatz": 7813700,
+    "ebitda": 4849379,
+    "gewinn": 517163,
+    "cashflow_projekt": -7992378
+   },
+   {
+    "jahr": 2031,
+    "umsatz": 13283290,
+    "ebitda": 8323272,
+    "gewinn": 920854,
+    "cashflow_projekt": -9520533
+   },
+   {
+    "jahr": 2032,
+    "umsatz": 12892605,
+    "ebitda": 7550282,
+    "gewinn": 451786,
+    "cashflow_projekt": 8217715
+   },
+   {
+    "jahr": 2033,
+    "umsatz": 11720550,
+    "ebitda": 6431079,
+    "gewinn": 55163,
+    "cashflow_projekt": 7893167
+   },
+   {
+    "jahr": 2034,
+    "umsatz": 9376440,
+    "ebitda": 4527248,
+    "gewinn": -517336,
+    "cashflow_projekt": 6848898
+   },
+   {
+    "jahr": 2035,
+    "umsatz": 5469590,
+    "ebitda": 2427515,
+    "gewinn": -515159,
+    "cashflow_projekt": 5677825
+   }
+  ],
+  "rest_spot": [
    {
     "jahr": 2027,
     "umsatz": 543830,
     "ebitda": 58245,
-    "gewinn": -207421,
-    "cashflow_eigenkapital": -829365
+    "gewinn": -175339,
+    "cashflow_projekt": -1367635
    },
    {
     "jahr": 2028,
-    "umsatz": 2160005,
-    "ebitda": 1310565,
-    "gewinn": 285379,
-    "cashflow_eigenkapital": -1390943
+    "umsatz": 2114060,
+    "ebitda": 1259269,
+    "gewinn": 338163,
+    "cashflow_projekt": -2815853
    },
    {
     "jahr": 2029,
-    "umsatz": 5363255,
-    "ebitda": 3775500,
-    "gewinn": 1114533,
-    "cashflow_eigenkapital": -2064773
+    "umsatz": 5147300,
+    "ebitda": 3530666,
+    "gewinn": 1139973,
+    "cashflow_projekt": -4725938
    },
    {
     "jahr": 2030,
-    "umsatz": 10655905,
-    "ebitda": 7783975,
-    "gewinn": 2574498,
-    "cashflow_eigenkapital": -2158787
+    "umsatz": 10046500,
+    "ebitda": 7082179,
+    "gewinn": 2400549,
+    "cashflow_projekt": -6108992
    },
    {
     "jahr": 2031,
-    "umsatz": 17985290,
-    "ebitda": 13246195,
-    "gewinn": 4517301,
-    "cashflow_eigenkapital": -1377958
+    "umsatz": 16699610,
+    "ebitda": 11739592,
+    "gewinn": 3891685,
+    "cashflow_projekt": -6549702
    },
    {
     "jahr": 2032,
-    "umsatz": 17577785,
-    "ebitda": 12412440,
-    "gewinn": 3942597,
-    "cashflow_eigenkapital": 6803069
+    "umsatz": 15876795,
+    "ebitda": 10534472,
+    "gewinn": 3046838,
+    "cashflow_projekt": 10812767
    },
    {
     "jahr": 2033,
-    "umsatz": 17336465,
-    "ebitda": 11915525,
-    "gewinn": 3612181,
-    "cashflow_eigenkapital": 5898856
+    "umsatz": 14162100,
+    "ebitda": 8872629,
+    "gewinn": 2178335,
+    "cashflow_projekt": 10016339
    },
    {
     "jahr": 2034,
-    "umsatz": 17307455,
-    "ebitda": 11639630,
-    "gewinn": 3399291,
-    "cashflow_eigenkapital": 4525066
+    "umsatz": 11134440,
+    "ebitda": 6285248,
+    "gewinn": 1078881,
+    "cashflow_projekt": 8445115
    },
    {
     "jahr": 2035,
-    "umsatz": 17532215,
-    "ebitda": 12260345,
-    "gewinn": 3880934,
-    "cashflow_eigenkapital": 3572849
-   },
-   {
-    "jahr": 2036,
-    "umsatz": 17985290,
-    "ebitda": 13221805,
-    "gewinn": 4565999,
-    "cashflow_eigenkapital": 27917960
+    "umsatz": 6392540,
+    "ebitda": 3350465,
+    "gewinn": 354615,
+    "cashflow_projekt": 6547599
    }
   ],
   "halbes_wachstum": [
    {
     "jahr": 2027,
-    "umsatz": 621965,
-    "ebitda": 136380,
-    "gewinn": -129286,
-    "cashflow_eigenkapital": -751230
+    "umsatz": 677185,
+    "ebitda": 191600,
+    "gewinn": -41984,
+    "cashflow_projekt": -1234280
    },
    {
     "jahr": 2028,
-    "umsatz": 1601794,
-    "ebitda": 912958,
-    "gewinn": 218626,
-    "cashflow_eigenkapital": -679412
+    "umsatz": 1686191,
+    "ebitda": 994472,
+    "gewinn": 344785,
+    "cashflow_projekt": -1317151
    },
    {
     "jahr": 2029,
-    "umsatz": 3429405,
-    "ebitda": 2363100,
-    "gewinn": 822689,
-    "cashflow_eigenkapital": -706822
+    "umsatz": 3487400,
+    "ebitda": 2405949,
+    "gewinn": 991285,
+    "cashflow_projekt": -1786563
    },
    {
     "jahr": 2030,
-    "umsatz": 6458832,
-    "ebitda": 4729262,
-    "gewinn": 1819962,
-    "cashflow_eigenkapital": -627897
+    "umsatz": 6355124,
+    "ebitda": 4578335,
+    "gewinn": 1921614,
+    "cashflow_projekt": -2447869
    },
    {
     "jahr": 2031,
-    "umsatz": 10663659,
-    "ebitda": 7978141,
-    "gewinn": 3174967,
-    "cashflow_eigenkapital": 237701
+    "umsatz": 10184328,
+    "ebitda": 7384242,
+    "gewinn": 3019343,
+    "cashflow_projekt": -2243830
    },
    {
     "jahr": 2032,
-    "umsatz": 10485140,
-    "ebitda": 7610460,
-    "gewinn": 2925536,
-    "cashflow_eigenkapital": 4156353
+    "umsatz": 9293676,
+    "ebitda": 6382893,
+    "gewinn": 2351694,
+    "cashflow_projekt": 6442983
    },
    {
     "jahr": 2033,
-    "umsatz": 10362109,
-    "ebitda": 7355153,
-    "gewinn": 2757140,
-    "cashflow_eigenkapital": 3887520
+    "umsatz": 8144100,
+    "ebitda": 5278751,
+    "gewinn": 1713889,
+    "cashflow_projekt": 5756926
    },
    {
     "jahr": 2034,
-    "umsatz": 10339160,
-    "ebitda": 7207741,
-    "gewinn": 2649347,
-    "cashflow_eigenkapital": 3382109
+    "umsatz": 6332580,
+    "ebitda": 3691062,
+    "gewinn": 908682,
+    "cashflow_projekt": 4780102
    },
    {
     "jahr": 2035,
-    "umsatz": 10443932,
-    "ebitda": 7489159,
-    "gewinn": 2865392,
-    "cashflow_eigenkapital": 2745789
-   },
-   {
-    "jahr": 2036,
-    "umsatz": 10663659,
-    "ebitda": 7970427,
-    "gewinn": 3206258,
-    "cashflow_eigenkapital": 15701841
+    "umsatz": 3598070,
+    "ebitda": 1867198,
+    "gewinn": 281427,
+    "cashflow_projekt": 3540417
    }
   ],
   "knappe_nachfrage": [
    {
     "jahr": 2027,
-    "umsatz": 354745,
-    "ebitda": -109090,
-    "gewinn": -374756,
-    "cashflow_eigenkapital": -996700
+    "umsatz": 386235,
+    "ebitda": -77600,
+    "gewinn": -311184,
+    "cashflow_projekt": -1503480
    },
    {
     "jahr": 2028,
-    "umsatz": 1410245,
-    "ebitda": 647805,
-    "gewinn": -365691,
-    "cashflow_eigenkapital": -2042013
+    "umsatz": 1479580,
+    "ebitda": 711789,
+    "gewinn": -184900,
+    "cashflow_projekt": -3338916
    },
    {
     "jahr": 2029,
-    "umsatz": 3504650,
-    "ebitda": 2134395,
-    "gewinn": -359443,
-    "cashflow_eigenkapital": -3538749
+    "umsatz": 3551900,
+    "ebitda": 2152766,
+    "gewinn": -66983,
+    "cashflow_projekt": -5932894
    },
    {
     "jahr": 2030,
-    "umsatz": 6969030,
-    "ebitda": 4532100,
-    "gewinn": -291320,
-    "cashflow_eigenkapital": -5024606
+    "umsatz": 6839100,
+    "ebitda": 4309779,
+    "gewinn": -11880,
+    "cashflow_projekt": -8521421
    },
    {
     "jahr": 2031,
-    "umsatz": 11773345,
-    "ebitda": 7773750,
-    "gewinn": -277757,
-    "cashflow_eigenkapital": -6173016
+    "umsatz": 11221360,
+    "ebitda": 7000842,
+    "gewinn": -263491,
+    "cashflow_projekt": -10704878
    },
    {
     "jahr": 2032,
-    "umsatz": 11540920,
-    "ebitda": 7115075,
-    "gewinn": -763560,
-    "cashflow_eigenkapital": 2096912
+    "umsatz": 10537560,
+    "ebitda": 5912987,
+    "gewinn": -1117762,
+    "cashflow_projekt": 6648167
    },
    {
     "jahr": 2033,
-    "umsatz": 11403275,
-    "ebitda": 6721835,
-    "gewinn": -1039848,
-    "cashflow_eigenkapital": 1246827
+    "umsatz": 9290100,
+    "ebitda": 4653129,
+    "gewinn": -1714515,
+    "cashflow_projekt": 6123489
    },
    {
     "jahr": 2034,
-    "umsatz": 11386680,
-    "ebitda": 6458355,
-    "gewinn": -1272247,
-    "cashflow_eigenkapital": -146472
+    "umsatz": 7223640,
+    "ebitda": 2896448,
+    "gewinn": -2148136,
+    "cashflow_projekt": 5218098
    },
    {
     "jahr": 2035,
-    "umsatz": 11514900,
-    "ebitda": 6982530,
-    "gewinn": -814919,
-    "cashflow_eigenkapital": -1123004
-   },
-   {
-    "jahr": 2036,
-    "umsatz": 11773345,
-    "ebitda": 7749360,
-    "gewinn": -221756,
-    "cashflow_eigenkapital": 23130205
+    "umsatz": 4104380,
+    "ebitda": 1366805,
+    "gewinn": -1575869,
+    "cashflow_projekt": 4617115
    }
   ]
  }

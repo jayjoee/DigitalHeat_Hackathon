@@ -60,6 +60,11 @@ def kennzahlen():
         },
         "flotte": flotte,
         "vertragspreis_chf_server_h": round(A.wert("vertragspreis_chf_karte_h") * A.wert("karten_pro_server"), 2),
+        "restpreis_chf_server_h": round(A.wert("spotpreis_chf_karte_h") * A.wert("karten_pro_server"), 2),
+        "anteil_fest": A.wert("anteil_fest_gebucht"),
+        "mischpreis_chf_server_h": round((A.wert("anteil_fest_gebucht") * A.wert("vertragspreis_chf_karte_h")
+                                          + (1 - A.wert("anteil_fest_gebucht")) * A.wert("spotpreis_chf_karte_h"))
+                                         * A.wert("karten_pro_server"), 2),
     }
 
 

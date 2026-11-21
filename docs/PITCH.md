@@ -23,26 +23,26 @@ Danach in einem Satz das Problem: Server machen aus Strom fast nur Wärme, und d
 - Ein gemeinsamer Auftragspool für 20 Häuser und das **Sportbad St. Jakob**. Das Bad hat ein beheiztes 50-m-Becken und ist genau dann offen, wenn die Häuser keine Wärme brauchen (Ende April bis Anfang Oktober).
 - **Die Häuser haben immer Vorrang.** Das Bad nimmt nur Arbeit, deren Wärme kein Haus brauchen kann.
 - Pro Standort simuliert der Router, wie viele Server starten oder im Standby bleiben. Im Bad bleiben sie ausserhalb der Saison im Standby.
-- Bei knapper Nachfrage sinkt mit dem Bad die externe Abgabe von **195’000 auf 30’000 Serverstunden pro Jahr**. Das verbessert das Jahresergebnis der Flotte um rund **66’600 CHF**.
+- Bei knapper Nachfrage sinkt mit dem Bad die externe Abgabe von **195’000 auf 30’000 Serverstunden pro Jahr**. Das verbessert das Jahresergebnis der Flotte um rund **93’500 CHF**.
 - Ein Auftrag wandert per Checkpoint zwischen Standorten. Getestet: Das Ergebnis ist exakt dasselbe wie ohne Unterbruch.
 
 **4. Live-Demo (60 s)**, der Case verlangt einen Januartag, einen Julitag und einen unterbrochenen Job (siehe unten)
 
 **5. Geld (45 s)** (Machbarkeit)
-- Kunden: Pharma, Banken, Spitäler, deren Daten in der Schweiz und unter Schweizer Recht bleiben müssen.
-- Angenommener Vertragspreis **4,80 CHF pro Server-h** (= 0,60 CHF pro L4-h), bei 60 % Festbuchung und Spot-Verkäufen für die übrigen Stunden.
+- Angebot: L4-Rechenzeit für öffentliche, synthetische oder vom Kunden anonymisierte und freigegebene Aufgaben (`docs/L4_ANGEBOT.md`). Vertrauliche Daten gehören nicht dazu.
+- Angenommene Preise: Ankerkunde Roche nimmt 60 % der Stunden fest zu **0,50 CHF pro L4-h** (= 4,00 CHF pro Server-h), die übrigen Stunden gehen zu **0,55 CHF** (= 4,40 CHF) an Kunden ohne Mindestmenge. Beides sind Zielpreise, kein Kunde hat sie bestätigt.
 - **Zusage am Vortag um 12 Uhr** aus der ECMWF-Wetterprognose. Im Abschaltmodell mit Bad sind rund 91 % der Stunden zusagbar. Knapp 60 % gehen in der Rechnung als Festbuchung ein.
-- Das Einzelhaus mit Abschalten erreicht rund **+29'400 CHF pro Jahr** vor möglichen Gutschriften, bei rund 290'000 CHF Investition.
-- Der Vollkosten-Break-even des Einzelhauses mit Abschalten liegt bei **3,07 CHF pro Server-h**, sofern 60 % fest gebucht und die übrigen Stunden zum angenommenen Spot-Preis verkauft werden.
-- **Firma** (`docs/FIRMA.md`): Ab **7 Häusern** trägt DigitalHeat ihre Fixkosten. Ausbau auf 170 Häuser bis 2031: Projekt-IRR **35,4 %**, Eigenkapitalbedarf **4,1 Mio. CHF**, Payback 2032. Der Förderbeitrag wie für eine Wärmepumpe (rund 7'200 CHF pro Haus) hilft wenig, Skaleneffekte vor allem bei den Fixkosten.
+- Das Einzelhaus mit Abschalten erreicht rund **+35'000 CHF pro Jahr**, bei rund 290'000 CHF Investition, wenn jede Stunde verkauft ist (`docs/KOSTEN_DH.md`). Bei 68 % verkauften Stunden ist es bei null.
+- Bringen die übrigen Stunden nur den Spot-Preis (0,294 CHF), braucht DH von Roche mindestens **0,38 CHF pro L4-h**.
+- **Firma** (`docs/FIRMA.md`): Ab **6 Häusern** trägt DigitalHeat ihre Fixkosten. Ausbau auf 170 Häuser bis 2031, jedes Haus 5 Jahre: Projekt-IRR **28,8 %** ohne Kredit und ohne Endwert, Kapitalbedarf **15,8 Mio. CHF**, Payback 2033. Der Förderbeitrag wie für eine Wärmepumpe (rund 7'200 CHF pro Haus) hilft wenig, Skaleneffekte vor allem bei den Fixkosten.
 
 **6. Ehrlich: wo es nicht trägt (30 s)** (Transparenz)
-- Bei der knappen Nachfrage aus dem Alibaba-Trace bleibt die Flotte mit Bad bei rund **−172’000 CHF pro Jahr**. Der feste Absatz von Rechenzeit entscheidet, ob sich die Investition trägt.
-- Die 60 % Festbuchung und der Spot-Absatz sind Annahmen, die wir mit Kunden prüfen müssen. Mit knapper Nachfrage fällt die Projekt-IRR der Firma auf −0,7 %.
+- Bei der knappen Nachfrage aus dem Alibaba-Trace bleibt die Flotte mit Bad bei rund **−79’000 CHF pro Jahr**. Der feste Absatz von Rechenzeit entscheidet, ob sich die Investition trägt.
+- Roche als Ankerkunde und der Absatz der übrigen Stunden sind Annahmen, die wir mit Kunden prüfen müssen. Bei 80 % verkauften Stunden fällt die Projekt-IRR auf 13,8 %, mit nur Roche auf 0,4 %, mit knapper Nachfrage auf −7,7 %. Nächster Schritt: ein bezahltes Winterkontingent.
 - Der Wärmebedarf des Bads ist eine Schätzung (±30 %). Ein Messwert vom Sportamt würde sie ersetzen.
 
 **7. Schluss (15 s)**
-«Wir verkaufen nicht billige Restkapazität, sondern planbare Schweizer Rechenzeit. Und im Keller wird es warm.»
+«Wir verkaufen planbare Rechenzeit in Basel, die das Haus heizt. Das Öl kommt raus, der Holzofen bleibt für die kältesten Abende.»
 
 ## Live-Demo
 
