@@ -35,7 +35,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from digitalheat import APIError, Handler, init_credentials, private_write, tls_context  # noqa: E402
 
-DEMO = Path(__file__).resolve().with_name("blister_demo.py")
+DEMOS = {"blister": Path(__file__).resolve().with_name("blister_demo.py"),
+         "docking": Path(__file__).resolve().with_name("docking_demo.py")}
 PORT_UEBERGABE, PORT_PAARUNG, PORT_SUCHE = 8445, 8446, 8447
 BILDSCHIRM_HAUS, BILDSCHIRM_BAD = 8082, 8092
 KENNUNG = b"DIGITALHEAT-SCHWIMMBAD"
@@ -61,9 +62,9 @@ def kasten(*zeilen):
     print("█" * breite + "\n", flush=True)
 
 
-def starte(rolle, *argumente):
-    """blister_demo.py als Kindprozess starten und warten, bis er bereit ist."""
-    p = subprocess.Popen([sys.executable, str(DEMO), rolle, *argumente], stdout=subprocess.PIPE, text=True)
+def starte(demo, rolle, *argumente):
+    """Die gewählte Demo (blister_demo.py oder docking_demo.py) als Kindprozess starten und auf «bereit» warten."""
+    p = subprocess.Popen([sys.executable, str(demo), rolle, *argumente], stdout=subprocess.PIPE, text=True)
     if not p.stdout.readline():
         raise SystemExit(f"Der {rolle} konnte nicht starten. Läuft schon eine Demo? Ports 8082/8092/8445 prüfen.")
     return p
@@ -131,7 +132,8 @@ def schwimmbad(args):
         stopp = threading.Event()
         threading.Thread(target=ankuendigen, args=(adresse, stopp), daemon=True).start()
 
-        prozess = starte("worker", "--credentials", str(zugang / "worker"))
+        prozess = starte(DEMOS[args.job], "worker", "--credentials", str(zugang / "worker"),
+                         "--port", str(PORT_UEBERGABE), "--screen-port", str(BILDSCHIRM_BAD))
         kasten("SCHWIMMBAD bereit (Laptop B)",
                f"Code für das Haus:   {code[:3]} {code[3:]}",
                f"Adresse:             {adresse}",
@@ -220,8 +222,8 @@ def haus(args):
         zugang.mkdir(mode=0o700)
         private_write(zugang / "worker-cert.pem", daten["cert"].encode())
         private_write(zugang / "token.txt", daten["token"].encode())
-        prozess = starte("sender", "--credentials", str(zugang),
-                         "--target", f"https://{adresse}:{PORT_UEBERGABE}")
+        prozess = starte(DEMOS[args.job], "sender", "--credentials", str(zugang),
+                         "--target", f"https://{adresse}:{PORT_UEBERGABE}", "--screen-port", str(BILDSCHIRM_HAUS))
         kasten("HAUS bereit (Laptop A)",
                f"Verbunden mit Schwimmbad {adresse}",
                f"Leinwand: http://127.0.0.1:{BILDSCHIRM_HAUS}",
@@ -237,6 +239,8 @@ def main(rolle=None):
     if rolle is None:
         p.add_argument("rolle", choices=("haus", "schwimmbad"))
     p.add_argument("--kein-browser", action="store_true", help="Leinwand nicht automatisch öffnen")
+    p.add_argument("--job", choices=("blister", "docking"), default="docking",
+                   help="Was gerechnet wird: docking (virtuelles Screening, Standard) oder blister")
     if rolle in (None, "haus"):
         p.add_argument("--bad", help="Adresse des Schwimmbads, falls die Suche nichts findet")
         p.add_argument("--code", help="Code vom Schwimmbad-Laptop (sonst wird gefragt)")

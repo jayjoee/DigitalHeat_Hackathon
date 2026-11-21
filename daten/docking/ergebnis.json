@@ -1,0 +1,147 @@
+{
+ "schloss": "Abl-Kinase (PDB 1IEP)",
+ "programm": "AutoDock Vina 1.2.7, exhaustiveness 8, seed 1",
+ "erzeugt_mit": "python3 src/jobs/docking_job.py (Linux, 4 Kerne)",
+ "moleküle": {
+  "Imatinib": {
+   "gruppe": "Kinasehemmer (Leukämie)",
+   "energie_kcal_mol": -12.839,
+   "wand_s": 26.032
+  },
+  "Nilotinib": {
+   "gruppe": "Kinasehemmer (Leukämie)",
+   "energie_kcal_mol": -13.426,
+   "wand_s": 33.003
+  },
+  "Dasatinib": {
+   "gruppe": "Kinasehemmer (Leukämie)",
+   "energie_kcal_mol": -9.305,
+   "wand_s": 21.044
+  },
+  "Bosutinib": {
+   "gruppe": "Kinasehemmer (Leukämie)",
+   "energie_kcal_mol": -7.351,
+   "wand_s": 38.981
+  },
+  "Ponatinib": {
+   "gruppe": "Kinasehemmer (Leukämie)",
+   "energie_kcal_mol": -12.407,
+   "wand_s": 16.42
+  },
+  "Gefitinib": {
+   "gruppe": "Kinasehemmer (Lunge)",
+   "energie_kcal_mol": -8.502,
+   "wand_s": 20.281
+  },
+  "Erlotinib": {
+   "gruppe": "Kinasehemmer (Lunge)",
+   "energie_kcal_mol": -7.005,
+   "wand_s": 18.614
+  },
+  "Sorafenib": {
+   "gruppe": "Kinasehemmer (Niere/Leber)",
+   "energie_kcal_mol": -11.611,
+   "wand_s": 16.137
+  },
+  "Sunitinib": {
+   "gruppe": "Kinasehemmer (Niere)",
+   "energie_kcal_mol": -8.69,
+   "wand_s": 15.575
+  },
+  "Lapatinib": {
+   "gruppe": "Kinasehemmer (Brust)",
+   "energie_kcal_mol": -11.406,
+   "wand_s": 50.681
+  },
+  "Paracetamol": {
+   "gruppe": "Medikament",
+   "energie_kcal_mol": -6.685,
+   "wand_s": 1.275
+  },
+  "Ibuprofen": {
+   "gruppe": "Medikament",
+   "energie_kcal_mol": -8.626,
+   "wand_s": 3.15
+  },
+  "Aspirin": {
+   "gruppe": "Medikament",
+   "energie_kcal_mol": -7.192,
+   "wand_s": 2.176
+  },
+  "Diclofenac": {
+   "gruppe": "Medikament",
+   "energie_kcal_mol": -8.871,
+   "wand_s": 4.404
+  },
+  "Naproxen": {
+   "gruppe": "Medikament",
+   "energie_kcal_mol": -9.312,
+   "wand_s": 3.026
+  },
+  "Metformin": {
+   "gruppe": "Medikament",
+   "energie_kcal_mol": -4.994,
+   "wand_s": 0.714
+  },
+  "Atorvastatin": {
+   "gruppe": "Medikament",
+   "energie_kcal_mol": -7.225,
+   "wand_s": 74.335
+  },
+  "Omeprazol": {
+   "gruppe": "Medikament",
+   "energie_kcal_mol": -7.718,
+   "wand_s": 7.856
+  },
+  "Warfarin": {
+   "gruppe": "Medikament",
+   "energie_kcal_mol": -9.453,
+   "wand_s": 6.663
+  },
+  "Lidocain": {
+   "gruppe": "Medikament",
+   "energie_kcal_mol": -7.389,
+   "wand_s": 3.437
+  },
+  "Koffein": {
+   "gruppe": "Alltag",
+   "energie_kcal_mol": -5.876,
+   "wand_s": 0.78
+  },
+  "Nikotin": {
+   "gruppe": "Alltag",
+   "energie_kcal_mol": -6.615,
+   "wand_s": 1.056
+  },
+  "Glucose": {
+   "gruppe": "Alltag",
+   "energie_kcal_mol": -5.127,
+   "wand_s": 2.385
+  },
+  "Vanillin": {
+   "gruppe": "Alltag",
+   "energie_kcal_mol": -6.298,
+   "wand_s": 1.341
+  },
+  "Menthol": {
+   "gruppe": "Alltag",
+   "energie_kcal_mol": -7.148,
+   "wand_s": 1.129
+  },
+  "Capsaicin": {
+   "gruppe": "Alltag",
+   "energie_kcal_mol": -8.356,
+   "wand_s": 11.963
+  },
+  "Zimtaldehyd": {
+   "gruppe": "Alltag",
+   "energie_kcal_mol": -6.786,
+   "wand_s": 0.911
+  },
+  "Ethanol": {
+   "gruppe": "Alltag",
+   "energie_kcal_mol": -2.488,
+   "wand_s": 0.422
+  }
+ }
+}

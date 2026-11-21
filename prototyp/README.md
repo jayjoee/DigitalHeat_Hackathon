@@ -9,6 +9,17 @@ Der Prototyp trennt die Serverhalter von den Nutzern der Rechenleistung. Die Ges
 
 Es gibt keinen Rollenumschalter und keine vermischte Navigation. Die Serverhalter-Schnittstelle liefert keine Projekttitel, Eingabetexte, Target-Namen, Auftrags-IDs oder Ergebnisse. Der Pharma-Arbeitsbereich bietet keine globale Heizungssteuerung. Das ist eine Trennung der Anwendungsoberflächen und ihrer Schnittstellen, keine Absicherung des Arbeitsspeichers gegen den Besitzer des Empfängergeräts.
 
+## Virtuelles Screening auf zwei Leinwänden (Standard)
+
+Zwei Laptops docken Moleküle gegen die Abl-Kinase; der Auftrag wandert mit vollem Wärmespeicher vom Haus ins Sportbad und zurück. Details und Quellen: [daten/docking/README.md](../daten/docking/README.md).
+
+```sh
+python3 prototyp/schwimmbad.py     # Laptop B: zeigt einen Code
+python3 prototyp/haus.py           # Laptop A: Code eingeben, «Screening starten»
+```
+
+Auf einem Laptop zum Ausprobieren: `python3 prototyp/docking_demo.py demo --open`. Für die Bildprüfung statt Docking überall `--job blister` anhängen.
+
 ## Animierte Tablettenprüfung
 
 Im Ordner `prototyp` starten:

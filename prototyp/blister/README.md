@@ -1,5 +1,8 @@
 # Blisterprüfung auf zwei Leinwänden
 
+> **Standard ist jetzt das Docking** (virtuelles Screening, `python3 prototyp/haus.py` / `schwimmbad.py`). Diese Seite beschreibt die Blister-Variante; sie läuft mit `--job blister` oder `python3 prototyp/blister_demo.py demo --open`.
+
+
 Zwei Rechner prüfen einen Batch mit 30 synthetischen Kamerabildern von Blisterpackungen. Die Software vergleicht pro Fach die Helligkeit des Zentrums mit der umgebenden Folie. Sie markiert fehlende Tabletten rot und zeigt, welche Fächer betroffen sind. Der Datensatz ist deterministisch auf beiden Geräten verfügbar.
 
 Der Demo-Ablauf beginnt mit der aufgezeichneten Simulation des Wärme-Routers vom 25. Mai 2025, ab 06:00 Uhr. Um 10:00 Uhr ist der simulierte Hausspeicher mit 35 kWh voll und der Router weist den Auftrag dem Sportbad zu. Das Haus stoppt zwischen zwei Packungen und sendet den Bildindex, die bisherigen Beanstandungen und den Stand der Modellzeit per TLS.

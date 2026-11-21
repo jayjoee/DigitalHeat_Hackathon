@@ -45,5 +45,28 @@ class EchtesDocking(unittest.TestCase):
             self.assertLess(e["energie_kcal_mol"], -3)
 
 
+sys.path.insert(0, str(ROOT / 'prototyp'))
+
+
+class ZweiLaptopDemo(unittest.TestCase):
+    def test_docking_demo_spielt_echte_energien(self):
+        import docking_demo as d
+        self.assertEqual(d.TOTAL, 28)
+        self.assertEqual(len(d.ENERGIEN), 28)
+        # dock() ohne Vina spielt die echten Werte aus ergebnis.json ab
+        item = d.dock(0)
+        self.assertEqual(item["name"], d.MOLEKUELE[0][0])
+        self.assertEqual(item["energie"], d.ENERGIEN[0])
+        self.assertEqual(item["stark"], d.ENERGIEN[0] <= d.STARK_KCAL)
+        # die Rangliste findet die bekannten Kinasehemmer zuoberst
+        besten = sorted(zip((n for n, _ in d.MOLEKUELE), d.ENERGIEN), key=lambda x: x[1])[:3]
+        self.assertEqual([n for n, _ in besten], ["Nilotinib", "Imatinib", "Ponatinib"])
+
+    def test_checkpoint_schema(self):
+        import docking_demo as d
+        self.assertTrue(d.valid_checkpoint({"id": "x" * 32, "next": 5, "rejects": 2, "heat_step": 3}))
+        self.assertFalse(d.valid_checkpoint({"id": "kurz", "next": 5, "rejects": 2, "heat_step": 3}))
+
+
 if __name__ == "__main__":
     unittest.main()

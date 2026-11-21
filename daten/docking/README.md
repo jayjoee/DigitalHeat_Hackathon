@@ -53,3 +53,12 @@ python3 src/scheduler/live.py --tag 2025-03-07 --server 8 --sekunden 3 --job doc
 ```
 
 Ergebnisse: `stand.json` im Arbeitsordner (Bindungsenergie und Zeit pro Molekül, Rangliste), beste Lage jedes Moleküls in `posen/`.
+
+## Auf zwei Laptops hin und her (wie die Blister-Demo)
+
+Das virtuelle Screening wandert zwischen zwei Geräten: Das Haus dockt, bis sein Wärmespeicher voll ist, übergibt den Stand per TLS ans Sportbad, und holt ihn zurück, wenn es wieder Wärme braucht. Beide Laptops im selben WLAN, auf beiden derselbe Code-Stand.
+
+1. **Laptop B (Schwimmbad):** `python3 prototyp/schwimmbad.py` (zeigt einen 6-stelligen Code).
+2. **Laptop A (Haus):** `python3 prototyp/haus.py`, Code eingeben, dann **Screening starten**. Die Übergabe läuft automatisch.
+
+Docking ist der Standard. Für die Blisterprüfung stattdessen `--job blister` anhängen. Die Bindungsenergien stammen aus `daten/docking/ergebnis.json` (echter Vina-Lauf) und werden flüssig abgespielt. Auf einem einzelnen Laptop zum Ausprobieren: `python3 prototyp/docking_demo.py demo --open`.

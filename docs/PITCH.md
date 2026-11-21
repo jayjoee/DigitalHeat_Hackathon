@@ -64,7 +64,7 @@ python3 src/scheduler/live.py --tag 2025-03-07 --server 8 --sekunden 3 --job doc
 - Zum Schluss die Rangliste: Nilotinib, Imatinib und Ponatinib binden am besten – echte Leukämie-Medikamente für genau dieses Protein.
 - Reserve, falls etwas hängt: die Gesamtdemo (`.venv/bin/python start/demo_start.py --open`) oder die Aufzeichnung im Dashboard (unten).
 
-**Zugabe, falls Zeit bleibt: Migration ins Sportbad.**
+**Zugabe, falls Zeit bleibt: Docking wandert auf zwei Laptops ins Sportbad.** Einer öffnet `python3 prototyp/schwimmbad.py`, der andere `python3 prototyp/haus.py`, Code eingeben, **Screening starten**. Das Haus dockt Moleküle, bis der Speicher voll ist, übergibt den Stand per TLS ans Sportbad und holt ihn später zurück. Zeigt die Verteilung zwischen Standorten bildhaft auf zwei Leinwänden (daten/docking/README.md).
 
 **Vorbereitung (vor dem Pitch, Terminal im Repo):**
 ```sh
