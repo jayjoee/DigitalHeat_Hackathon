@@ -18,6 +18,12 @@ ANNAHMEN = {
     "waermewert_chf_kwh": (0.3325 / 2.5, "Case: Strompreis ÷ 2,5 (ersetzt Wärmepumpe mit JAZ 2,5)"),
     "usd_chf": (0.84, "Angabe Joël, 20.11.2026: 1 USD = 0,84 CHF"),
     "rechenpreis_usd_server_h": (1.26, "Spot H100 0,79 $/GPU-h × 1,6 GPU pro kW (daten/PREISE.md), untere Spanne"),
+    # --- Hardware (daten/PREISE.md, Abschnitt Hardware) ---
+    "gpu_pro_server": (1.6, "MLPerf v5.0, ID 5.0-0023: 8× H100 NVL ziehen 4,85 kW → 1 kW ≈ 1,6 GPU samt Host"),
+    "hardware_usd_pro_gpu": (25000, "H100 NVL 2026: 24'500 $ (fluence.network) bis 32'383 $ (CDW, 21.09.2026, "
+                                    "auslaufend); untere Spanne, Host/Gehäuse/Kühlung nicht eingerechnet"),
+    "abschreibung_jahre": (5, "Amazon 5 Jahre, Microsoft/Alphabet 6 Jahre für Server (Geschäftsberichte, "
+                              "zitiert in daten/PREISE.md); 5 Jahre, weil GPUs schneller veralten"),
     # --- Jobs ---
     "job_a_kwh": (_typ["A"]["energie_kwh"], _typ["A"]["quelle_energie"]),
     "job_a_frist_h": (_typ["A"]["frist_h"], _typ["A"]["quelle_frist"]),
@@ -36,6 +42,11 @@ ANNAHMEN = {
 
 def wert(name):
     return ANNAHMEN[name][0]
+
+
+def hardware_chf_pro_server_jahr():
+    """Abschreibung eines 1-kW-Servers pro Jahr: GPU-Preis × GPUs pro Server × Kurs ÷ Jahre."""
+    return wert("hardware_usd_pro_gpu") * wert("gpu_pro_server") * wert("usd_chf") / wert("abschreibung_jahre")
 
 
 def als_liste():

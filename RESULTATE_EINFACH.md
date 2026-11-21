@@ -34,6 +34,7 @@ Ein Server braucht Strom und macht daraus fast vollständig Wärme. Normalerweis
 ## Lohnt es sich?
 - **Der Strom ist nicht das Problem.** Schon ab 0,23 CHF pro Server-Stunde rechnet es sich. Rechenzeit wird heute für etwa 1–4 CHF pro Stunde verkauft.
 - **Entscheidend sind die Kosten der Hardware.** Bei einem Rechenpreis von 1,06 CHF pro Stunde darf ein Server höchstens rund **3'800 CHF pro Jahr** kosten.
+- Ein Server mit H100-Grafikkarten kostet aber rund **6'700 CHF pro Jahr** (Kaufpreis über 5 Jahre verteilt). Darum braucht es mindestens **1,71 CHF pro Server-Stunde**. Das zahlt der Markt heute, aber nicht zum tiefsten Preis.
 - **Es lohnt sich NICHT, wenn:**
   - der Rechenpreis unter 0,23 CHF pro Stunde fällt, oder
   - die Hardware teurer ist, als die Erlöse hergeben, oder
@@ -53,13 +54,14 @@ Ein Server braucht Strom und macht daraus fast vollständig Wärme. Normalerweis
 - Der Scheduler pausiert und startet ihn je nach Wärmebedarf:
   - **Januar:** Das Haus braucht viel Wärme, der Auftrag läuft durchgehend.
   - **Juli:** Der Speicher ist voll, der Auftrag läuft nur 62 % jeder Stunde und ist sonst pausiert.
+  - **7. März:** Am Nachmittag ist der Speicher voll. Der Auftrag pausiert 7 Stunden lang und rechnet am Abend weiter, sobald das Haus wieder Wärme braucht.
 - Nach einem Stopp macht der Auftrag genau dort weiter, wo er aufgehört hat. Das Ergebnis ist identisch.
 
 ## Wichtigste Annahmen
 - Es gibt immer genug Rechenaufträge zu kaufen (Spot-Markt). Ohne diese Annahme sinkt die Deckung auf 52 %.
 - Strompreis 33,25 Rp./kWh (IWB Basel 2026). Die Wärme ist 13,3 Rp./kWh wert, weil sie eine Wärmepumpe ersetzt.
 - Rechenpreis rund 1,06 CHF pro Server-Stunde (günstigster Marktpreis, 1 $ = 0,84 CHF).
-- Hardwarekosten sind nicht eingerechnet, sondern als Grenze angegeben.
+- Hardware: eine H100-Grafikkarte für 25'000 $, 1,6 Karten pro Server, 5 Jahre Lebensdauer.
 
 ## In einem Satz
-**8 Server pro Haus decken 93 % der Wärme und verschwenden fast nichts. Es lohnt sich, wenn ein Server weniger als rund 3'800 CHF pro Jahr kostet und es im Sommer einen zweiten Wärmeabnehmer gibt.**
+**8 Server pro Haus decken 93 % der Wärme und verschwenden fast nichts. Mit heutiger Hardware lohnt es sich ab 1,71 CHF pro Server-Stunde und wenn es im Sommer einen zweiten Wärmeabnehmer gibt.**
