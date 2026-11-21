@@ -4,6 +4,7 @@
 
 | Datei | In einem Satz |
 |---|---|
+| [CONFIDENTIAL_COMPUTING.md](CONFIDENTIAL_COMPUTING.md) | Verschlüsselte Aufträge, externer Schlüsseldienst, Hardwarevoraussetzungen, Mehrkosten und noch offene Hardware-Abnahme |
 | [RESSOURCEN_SCHEDULER.md](RESSOURCEN_SCHEDULER.md) | Vergabecode, Wettbewerbsrecherche, Quellen, Annahmen und Grenzen der Ressourcenwarteschlange |
 | [PROJEKTUEBERSICHT.md](PROJEKTUEBERSICHT.md) | Alle Bausteine, Nachweise und offenen Punkte im gemeinsamen Stand |
 | [START_HIER.md](START_HIER.md) | Der Zweck und die drei Stationen der Gesamtdemo |

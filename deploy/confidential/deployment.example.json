@@ -1,0 +1,7 @@
+{
+  "namespace": "digitalheat-confidential",
+  "image": "registry.example.invalid/digitalheat/cc-worker@sha256:0000000000000000000000000000000000000000000000000000000000000000",
+  "initdata_file": "reviewed-initdata.toml",
+  "approved_initdata_sha384": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+  "kbs_url": "https://trustee.example.invalid"
+}

@@ -16,6 +16,10 @@ prototyp/credentials/
 
 # Local environments and generated experiment data
 .venv-ml/
+.venv-cc/
+**/*.cckey
+**/cc-client-secrets/
+**/reviewed-initdata.toml
 .env
 .env.*
 **/token.txt

@@ -4,6 +4,7 @@ Documented ideas from Kueue, KAI/Run:ai and Slurm; our own small implementation.
 Reservations are scheduler accounting, NOT operating-system or GPU memory isolation.
 """
 from dataclasses import dataclass, asdict, replace
+from src.confidential.costs import Overhead
 import math
 import threading
 import time
@@ -99,18 +100,24 @@ class Node:
     site_id: str = 'local'
     server_service_due_at: float | None = None
     cooling_service_due_at: float | None = None
+    tee_type: str = ''
 
     def __post_init__(self):
         if not isinstance(self.id,str) or not 1<=len(self.id)<=80 or not isinstance(self.max_classification,str) or self.max_classification not in CLASSES or self.maintenance not in ('ready','drain','isolated'):
             raise ValueError('Ungültiger Serverzustand.')
         number(self.ram_gb,'node RAM',.1,8192);number(self.cpu_cores,'node CPU',1,1024,True)
         number(self.slots,'slots',1,128,True)
-        if self.executor not in ('local_cpu_demo','gpu','plan_only') or self.power_state not in ('on','sleep','starting'):
+        if self.executor not in ('local_cpu_demo','gpu','plan_only','confidential_coco') or self.power_state not in ('on','sleep','starting'):
             raise ValueError('Ungültiger Executor oder Betriebszustand.')
         for v in self.gpu_memory_gb:number(v,'VRAM je Karte',.1,1024)
         for v in (self.active_kw,self.idle_kw,self.standby_kw,self.heat_need_kw,self.electricity_chf_kwh):number(v,'Leistungs-/Preisannahme',0,100)
         if not self.standby_kw<=self.idle_kw<=self.active_kw:raise ValueError('Ungültiges Leistungsprofil.')
         if self.executor=='local_cpu_demo' and self.gpu_memory_gb:raise ValueError('CPU-Demo darf keine echten GPUs behaupten.')
+        if self.executor=='confidential_coco':
+            if self.tee_type!='tdx' or self.slots!=1 or len(self.gpu_memory_gb)>1:
+                raise ValueError('CoCo benötigt hier einen dedizierten TDX-Host mit höchstens einer GPU und einem Auftrag.')
+            if self.gpu_memory_gb and self.gpu_model not in ('H100','H200','B200'):
+                raise ValueError('Keine freigegebene Confidential-GPU; L4 ist nicht unterstützt.')
         if self.max_gpu_temp_c is not None:number(self.max_gpu_temp_c,'Freigegebene Temperaturgrenze',1,115)
         if not isinstance(self.approved_customers,(tuple,list)) or any(not isinstance(c,str) or not c for c in self.approved_customers):raise ValueError('Ungültige Serverfreigaben.')
         if not isinstance(self.region,str) or not self.region or not isinstance(self.site_id,str) or not self.site_id:raise ValueError('Ungültiger Standort.')
@@ -135,10 +142,11 @@ class Ticket:
     reserved_at: float | None = None
     finish_by: float | None = None
     paused: bool = False
+    baseline_runtime_seconds: float | None = None
 
 
 class ResourceQueue:
-    def __init__(self,nodes,customers,*,clock=time.time,aging_seconds=900.,health_ttl=120.,idle_sleep_seconds=300.,placement='pack',queue_order='priority',backfill=True,risk_threshold=.2):
+    def __init__(self,nodes,customers,*,clock=time.time,aging_seconds=900.,health_ttl=120.,idle_sleep_seconds=300.,placement='pack',queue_order='priority',backfill=True,risk_threshold=.2,confidential_overhead=None):
         self.nodes={n.id:n for n in nodes};self.customers={c.id:c for c in customers}
         if len(self.nodes)!=len(nodes) or len(self.customers)!=len(customers):raise ValueError('Doppelte Server-/Kunden-ID.')
         self.clock=clock;self.aging_seconds=number(aging_seconds,'aging_seconds',1,86400)
@@ -147,6 +155,7 @@ class ResourceQueue:
         if placement not in ('pack','spread') or queue_order not in ('priority','fifo') or type(backfill) is not bool:raise ValueError('Ungültige Schedulerstrategie.')
         self.placement=placement;self.queue_order=queue_order;self.backfill=backfill
         self.risk_threshold=number(risk_threshold,'risk_threshold',0,1)
+        self.confidential_overhead=Overhead(**(confidential_overhead or {}))
         self.lock=threading.RLock();self.jobs={};self.usage={c.id:0. for c in customers}
         self.last_usage=clock();self.idle_since={n.id:clock() for n in nodes}
 
@@ -160,7 +169,9 @@ class ResourceQueue:
             if CLASSES[r.classification]>CLASSES[c.max_classification]:raise PermissionError('Kunde ist für diese Datenklasse nicht freigegeben.')
             if c.allowed_regions and r.region and r.region not in c.allowed_regions:raise PermissionError('Standort ist für diesen Kunden nicht freigegeben.')
             if r.gpu_count>c.gpu_quota:raise PermissionError('GPU-Anforderung überschreitet das Kundenkontingent.')
-            self.jobs[jid]=Ticket(jid,customer,r,task_type,self.clock(),runtime_seconds,deadline_at)
+            baseline=runtime_seconds
+            if r.classification!='public':runtime_seconds=self.confidential_overhead.runtime(baseline)
+            self.jobs[jid]=Ticket(jid,customer,r,task_type,self.clock(),runtime_seconds,deadline_at,baseline_runtime_seconds=baseline)
             return self.jobs[jid]
 
     def _held(self,node,at=None):
@@ -182,6 +193,10 @@ class ResourceQueue:
         r=ticket.requirements;c=self.customers[ticket.customer]
         due=next_maintenance(node)
         if node.executor not in executors:return 'Kein angeschlossener passender Executor'
+        if r.classification!='public' and node.executor!='confidential_coco':return 'Vertrauliche Daten benötigen einen CoCo-Executor; keine CPU-/L4-Ausweichroute'
+        if node.executor=='confidential_coco':
+            if r.classification!='confidential':return 'Dedizierter vertraulicher Executor'
+            if r.gpu_count!=len(node.gpu_memory_gb):return 'Vertraulicher Auftrag muss alle GPUs des dedizierten Hosts reservieren'
         if ticket.customer not in node.approved_customers:return 'Server nicht für diesen Kunden freigegeben'
         if CLASSES[r.classification]>CLASSES[node.max_classification]:return 'Sicherheitsfreigabe des Servers reicht nicht'
         if node.approved_until is not None and now>=node.approved_until:return 'Sicherheitsfreigabe abgelaufen'
@@ -207,6 +222,7 @@ class ResourceQueue:
         r=ticket.requirements
         load=max(r.cpu_cores/node.cpu_cores,r.gpu_count/max(1,len(node.gpu_memory_gb)))
         incremental=(node.active_kw-node.idle_kw)*load+(node.idle_kw if not held else 0.)
+        if r.classification!='public':incremental*=1+self.confidential_overhead.power_increase
         energy=incremental*ticket.runtime_seconds/3600
         if self.placement=='spread':return (len(held),node.id)
         # Prefer lower modelled incremental cost; useful heat breaks a tie, never a cash credit.
@@ -261,6 +277,8 @@ class ResourceQueue:
             j=self.jobs[jid];now=self.clock()
             if j.state!='running':return False,'Auftrag hat keine aktive Reservierung'
             n=self.nodes[j.node]
+            if j.requirements.classification!='public' and (n.executor!='confidential_coco' or n.tee_type!='tdx'):
+                return False,'Geschützter Executor nicht mehr verfügbar'
             if j.finish_by is not None and now>=j.finish_by:return False,'Laufzeitlimit erreicht'
             if j.deadline_at is not None and now>=j.deadline_at:return False,'Frist erreicht'
             if n.maintenance=='isolated':return False,'Kritische Wartungssperre'
@@ -317,5 +335,8 @@ class ResourceQueue:
             if j.state=='running':
                 allowed,current=self.can_run(jid)
                 if not allowed:reason=current
+            node=self.nodes.get(j.node)
+            estimate=self.confidential_overhead.estimate(j.baseline_runtime_seconds,node.active_kw,node.electricity_chf_kwh) if node and j.requirements.classification!='public' else None
             return dict(state=j.state,waiting_reason=reason,assigned_server=j.node,gpu_devices=list(j.devices),resource_lease_active=j.state=='running',
-                        requirements=asdict(j.requirements),customer_priority=c.priority,finish_by=j.finish_by)
+                        requirements=asdict(j.requirements),customer_priority=c.priority,finish_by=j.finish_by,
+                        baseline_runtime_seconds=j.baseline_runtime_seconds,estimated_runtime_seconds=j.runtime_seconds,confidential_cost_estimate=estimate)

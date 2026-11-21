@@ -1,0 +1,7 @@
+{
+  "nodes": [{"id":"replace-with-real-tdx-node","ram_gb":16,"cpu_cores":4,"slots":1,
+    "executor":"confidential_coco","tee_type":"tdx","region":"CH",
+    "max_classification":"confidential","approved_customers":["pharma-demo"]}],
+  "customers":[{"id":"demo","priority":2},{"id":"pharma-demo","priority":1,"max_classification":"confidential","max_running":1,"gpu_quota":0,"token_env":"DIGITALHEAT_CONFIDENTIAL_TOKEN"}],
+  "scheduler":{"confidential_overhead":{"throughput_loss":0.10,"power_increase":0.05,"setup_seconds":30,"setup_kw":1,"broker_kwh_per_job":0.001,"fixed_chf_per_job":0}}
+}

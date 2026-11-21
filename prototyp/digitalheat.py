@@ -86,12 +86,13 @@ def init_credentials(host, directory):
 
 
 class Store:
-    def __init__(self, workers=1, scheduler=None):
+    def __init__(self, workers=1, scheduler=None, confidential_executor=None):
         self.lock = threading.RLock()
         self.jobs = {}
         self.stopping = threading.Event()
         self.pool = concurrent.futures.ThreadPoolExecutor(max_workers=workers)
         self.workers = workers
+        self.confidential_executor = confidential_executor
         self.heat_enabled = True
         self.health_monitor=None
         self._last_health_poll=0.
@@ -119,12 +120,13 @@ class Store:
                 self.health_monitor.poll();self._last_health_poll=time.monotonic()
             with self.lock:
                 occupied=sum(j.state=='running' for j in self.scheduler.jobs.values())
-                assigned=self.scheduler.dispatch(executors=('local_cpu_demo',),max_assignments=max(0,self.workers-occupied))
+                executors=('local_cpu_demo','confidential_coco') if self.confidential_executor else ('local_cpu_demo',)
+                assigned=self.scheduler.dispatch(executors=executors,max_assignments=max(0,self.workers-occupied))
                 for ticket in assigned:
                     job=self.jobs.get(ticket.id)
                     if job and not job['_cancel']:
                         job.update(state='running',updated_at=time.time())
-                        self.pool.submit(self._run,ticket.id)
+                        self.pool.submit(self._run_coco if ticket.requirements.classification=='confidential' else self._run,ticket.id)
                 for jid,ticket in self.scheduler.jobs.items():
                     if ticket.state=='expired' and jid in self.jobs and self.jobs[jid]['state'] not in TERMINAL:
                         self.jobs[jid].update(state='failed',_text=None,updated_at=time.time())
@@ -205,10 +207,58 @@ class Store:
             self.wakeup.set()
             return self.snapshot(job)
 
+    def submit_confidential(self, data, customer):
+        from src.confidential.envelope import validate
+        if self.confidential_executor is None:
+            raise APIError(503,'Kein geschützter Executor eingerichtet. Keine vertraulichen Daten an die CPU-Demo senden.')
+        if not isinstance(data,dict) or set(data)!={'envelope','requirements','runtime_seconds','deadline_seconds'}:
+            raise APIError(400,'Nur verschlüsseltes Paket, Ressourcen und Laufzeit-/Fristmetadaten sind erlaubt.')
+        try:
+            sealed=validate(data['envelope'],direction='input',customer=customer)
+            requirements=Requirements.parse(data['requirements'])
+            if requirements.classification!='confidential':raise ValueError('Datenklasse muss confidential sein.')
+            runtime=data['runtime_seconds'];deadline=data['deadline_seconds']
+            if type(runtime) is not int or not 1<=runtime<=86400 or type(deadline) is not int or not 1<=deadline<=604800:
+                raise ValueError('Ungültige Laufzeit oder Frist.')
+        except PermissionError as exc:raise APIError(403,str(exc))
+        except (ValueError,TypeError,KeyError):raise APIError(400,'Ungültige verschlüsselte Auftragsmetadaten.')
+        with self.lock:
+            self._prune()
+            if len(self.jobs)>=MAX_JOBS:raise APIError(429,'Auftragsspeicher ist belegt.')
+            jid=sealed['job_id'];now=time.time()
+            try:self.scheduler.submit(jid,customer,requirements,'literature',runtime,now+deadline)
+            except PermissionError as exc:raise APIError(403,str(exc))
+            except ValueError as exc:raise APIError(400,str(exc))
+            job=dict(id=jid,title='Verschlüsselter Auftrag',state='queued',progress=0,
+                     created_at=now,updated_at=now,duration=runtime,active_seconds=0,task_type='literature',
+                     sample_count=None,target=None,characters=None,receiver='Vertrauliche VM',result=None,
+                     _text=None,_sealed=sealed,_pause=False,_cancel=False,_customer=customer)
+            self.jobs[jid]=job;self.wakeup.set()
+            return self.snapshot(job)
+
+    def _run_coco(self, jid):
+        try:
+            with self.lock:
+                job=self.jobs[jid];job['_started']=True;sealed=job['_sealed']
+            result=self.confidential_executor.run(self.scheduler,jid,sealed,self.stopping)
+            with self.lock:
+                if not self.jobs[jid]['_cancel']:
+                    self.jobs[jid].update(state='completed',progress=100,result=result,updated_at=time.time())
+        except Exception:
+            with self.lock:
+                if not self.jobs[jid]['_cancel']:self.jobs[jid].update(state='failed',updated_at=time.time())
+        finally:
+            # Only the CoCo executor may acknowledge a stopped external workload.
+            # On missing acknowledgement its lease remains held and the node locks.
+            self.wakeup.set()
+
     def control(self, jid, action, customer=None):
         with self.lock:
             self.get(jid,customer)
             job = self.jobs[jid]
+            protected=self.scheduler.jobs[jid].requirements.classification=='confidential'
+            if protected and action in ('pause','resume'):
+                raise APIError(409,'Geschützte Aufträge unterstützen noch keine sicheren Zwischenstände; Abbrechen ist möglich.')
             if action == "delete":
                 if job["state"] not in TERMINAL:
                     raise APIError(409, "Laufenden Auftrag zuerst abbrechen.")
@@ -230,6 +280,7 @@ class Store:
                 job["_cancel"] = True
                 job["_text"] = None
                 job["state"] = "cancelled"
+                if protected:self.scheduler.jobs[jid].paused=True
                 if self.scheduler.jobs[jid].state!='running':self.scheduler.finish(jid,'cancelled')
             else:
                 raise APIError(404, "Unbekannte Aktion.")
@@ -441,6 +492,8 @@ class WorkerHandler(Handler):
                                       processing="CPU-Simulation", retention_seconds=RETENTION))
         if path == "/v1/jobs" and method == "POST":
             return self.reply(202, store.submit(self.body(),customer))
+        if path == '/v1/confidential-jobs' and method == 'POST':
+            return self.reply(202,store.submit_confidential(self.body(),customer))
         match = re.fullmatch(r"/v1/jobs/([0-9a-f-]{36})(?:/(pause|resume|cancel|delete))?", path)
         if match:
             jid, action = match.groups()
@@ -466,7 +519,7 @@ def tls_context(cert=None, key=None):
     return context
 
 
-def make_worker(host, port, credentials, workers=1, scheduler=None, customer_tokens=None, health_file=None):
+def make_worker(host, port, credentials, workers=1, scheduler=None, customer_tokens=None, health_file=None, confidential_executor=None):
     credentials = Path(credentials)
     server = ThreadingHTTPServer((host, port), WorkerHandler)
     server.token = (credentials / "token.txt").read_text().strip()
@@ -479,7 +532,7 @@ def make_worker(host, port, credentials, workers=1, scheduler=None, customer_tok
     except Exception:
         server.server_close()
         raise
-    server.store = Store(workers,scheduler)
+    server.store = Store(workers,scheduler,confidential_executor)
     if 'demo' not in server.store.scheduler.customers:
         server.server_close();server.store.close();raise ValueError('Die Betreiberkonfiguration muss den öffentlichen Standardkunden demo enthalten.')
     server.identities={hashlib.sha256(server.token.encode()).hexdigest():'demo'}
@@ -615,6 +668,7 @@ def main():
     worker.add_argument('--health-file',help='Vertrauenswürdige lokale Gesundheitsdatei; fehlende/veraltete Meldungen sperren neue Zuteilungen')
     worker.add_argument('--service-plan',help='Ergebnis-JSON unserer Serviceplanung; standardmässig nur Hinweise')
     worker.add_argument('--approve-service-dates',action='store_true',help='Betreiber übernimmt individuelle und gemeinsame Wartungstermine aus dem Serviceplan')
+    worker.add_argument('--cc-deployment-config',help='Vertrauenswürdige CoCo-/Trustee-Konfiguration; Steuerung muss ausserhalb der Haushaltsserver laufen')
     sender = commands.add_parser("sender", help="Lokale Kundenseite auf dem Sender starten")
     sender.add_argument("--worker", required=True, help="https://EMPFÄNGER-IP:8443")
     sender.add_argument("--port", type=int, default=8080)
@@ -643,7 +697,12 @@ def main():
             if args.service_plan:
                 from src.scheduler.runtime_config import apply_service_plan
                 apply_service_plan(scheduler,json.loads(Path(args.service_plan).read_text()),args.approve_service_dates)
-            server = make_worker(args.bind, args.port, args.credentials, args.workers,scheduler,tokens,args.health_file)
+            cc_executor=None
+            if args.cc_deployment_config:
+                if scheduler is None:raise ValueError('CoCo benötigt eine Betreiberkonfiguration.')
+                from src.confidential.executor import CoCoExecutor
+                cc_executor=CoCoExecutor(args.cc_deployment_config)
+            server = make_worker(args.bind, args.port, args.credentials, args.workers,scheduler,tokens,args.health_file,cc_executor)
             print(f"Empfänger bereit auf Port {server.server_port}. TLS 1.3, {args.workers} Rechenplatz/Rechenplätze.", flush=True)
             host = make_host(args.host_port, server.store)
             host_thread = threading.Thread(target=host.serve_forever, daemon=True)

@@ -84,6 +84,15 @@ Die vollständige stündliche ML-Auswertung und neue Live-Vektoren werden lokal 
 
 ## Dokumente und Abgabe
 
+### Confidential-Computing-Integration
+
+`confidential_start.py` verschlüsselt Testaufträge auf dem Kundengerät, plant Kata/CoCo-Jobs
+und berechnet angenommene Mehrkosten. Ein separater Worker-Endpunkt nimmt nur verschlüsselte
+Pakete an; Schlüssel kommen ausschliesslich vom externen Trustee nach dessen Attestierung.
+Die Softwareintegration ist getestet, eine echte TDX-/Confidential-GPU-Umgebung ist noch
+nicht eingerichtet. **L4 ist für diesen GPU-Schutzpfad nicht unterstützt.**
+[Architektur, Quellen, Annahmen und reale Bereitstellung](docs/CONFIDENTIAL_COMPUTING.md).
+
 ### Ressourcenbasierte Auftragsvergabe
 
 Die getrennte Pharma-/Host-Demo (`python3 prototyp/digitalheat.py demo --pharma --open`)

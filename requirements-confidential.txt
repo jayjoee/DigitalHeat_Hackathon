@@ -1,0 +1,2 @@
+# Optional, isolated from the existing ML environment.
+cryptography==50.0.2
