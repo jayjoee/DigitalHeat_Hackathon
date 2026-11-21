@@ -24,6 +24,7 @@ from src.confidential.executor import CoCoExecutor
 from src.scheduler.resource_queue import ResourceQueue, Requirements, Node, Customer
 
 ROOT=Path(__file__).resolve().parents[1]
+import sys; sys.path.insert(0,str(ROOT))
 spec=importlib.util.spec_from_file_location('digitalheat_cc_test',ROOT/'prototyp/digitalheat.py')
 app=importlib.util.module_from_spec(spec);spec.loader.exec_module(app)
 

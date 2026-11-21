@@ -40,10 +40,10 @@ Der nächste reale Pilot braucht einen zahlenden Kunden, einen geeigneten Wärme
 ## Auf diesem Rechner
 
 ```sh
-python3 demo_start.py --open
+python3 start/demo_start.py --open
 ```
 
-Oder `Gesamtdemo_starten.command` doppelklicken. Oberfläche: `http://127.0.0.1:18200`. Dort startet die Schaltfläche „Live-Demo starten“ den echten CPU-Auftrag. Es läuft höchstens eine Live-Demo gleichzeitig. Wiederholungen bekommen jeweils einen neuen Arbeitsordner; vorhandene Messungen werden nicht gelöscht.
+Oder `start/Gesamtdemo_starten.command` doppelklicken. Oberfläche: `http://127.0.0.1:18200`. Dort startet die Schaltfläche „Live-Demo starten“ den echten CPU-Auftrag. Es läuft höchstens eine Live-Demo gleichzeitig. Wiederholungen bekommen jeweils einen neuen Arbeitsordner; vorhandene Messungen werden nicht gelöscht.
 
 Die vorhandene FastEmbed-Umgebung des Desktop-Projekts wird automatisch verwendet. Der Hauptdienst selbst benötigt nur Python. Der Worker braucht FastEmbed und den bereits vorhandenen Modellcache.
 
@@ -51,9 +51,9 @@ Die vorhandene FastEmbed-Umgebung des Desktop-Projekts wird automatisch verwende
 
 ```sh
 python3 -m venv .venv
-.venv/bin/python -m pip install -r requirements-live.txt
+.venv/bin/python -m pip install -r requirements/live.txt
 .venv/bin/python -c 'from fastembed import TextEmbedding; TextEmbedding("BAAI/bge-small-en-v1.5")'
-python3 demo_start.py --open
+python3 start/demo_start.py --open
 ```
 
 Die einmalige Einrichtung lädt das öffentliche Modell. Die Live-Demo selbst verwendet `--offline` und den CPU-Provider. Alternativ lässt sich eine vorhandene passende Python-Umgebung mit `DIGITALHEAT_PYTHON` auswählen.

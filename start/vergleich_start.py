@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 """Four controlled strategies, identical finite jobs and hardware assumptions.
 
-Run: python3 vergleich_start.py --days 184 --output daten/ergebnisse/strategievergleich
-Dependencies: requirements-ml.txt. Does not change the existing ML dashboard.
+Run: python3 start/vergleich_start.py --days 184 --output daten/ergebnisse/strategievergleich
+Dependencies: requirements/ml.txt. Does not change the existing ML dashboard.
 """
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[1]))  # Repo-Wurzel, damit «src» gefunden wird
 import argparse
 import csv
 import hashlib
@@ -75,7 +78,7 @@ def write_report(result, output):
               '- Prognosemodell: Training Januar–Mai, Kalibrierung Juni, Auswertung Juli–Dezember 2025. Die Prognose verwendet keine künftigen Ist-Beobachtungen.',
               '- ML-Energie = gemessene Softwarelaufzeit × angenommene Hostleistung; diese kleine Position kann zwischen Läufen schwanken.', '',
               f"Auftrags-Fingerabdruck: `{result['comparison']['jobs_sha256']}`", '',
-              'Reproduktion: `python3 vergleich_start.py --days 184 --output daten/ergebnisse/strategievergleich`', '',
+              'Reproduktion: `python3 start/vergleich_start.py --days 184 --output daten/ergebnisse/strategievergleich`', '',
               'Die vollständigen Stundenwerte und Annahmen stehen in vergleich.json, die Kennzahlen in vergleich.csv.']
     (output/'Bericht.md').write_text('\n'.join(lines)+'\n', encoding='utf-8')
     manifest = {'files': {p.name: hashlib.sha256(p.read_bytes()).hexdigest()

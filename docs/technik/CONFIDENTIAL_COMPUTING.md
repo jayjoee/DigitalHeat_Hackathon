@@ -14,7 +14,7 @@ Auf einer L4 bleiben öffentliche oder synthetische Aufträge möglich. Vertraul
 
 ## Datenweg und Vertrauensgrenzen
 
-1. Auf dem vertrauenswürdigen Kundengerät erzeugt `confidential_start.py seal` einen zufälligen 256-Bit-Schlüssel und verschlüsselt den Auftrag mit AES-GCM. Kunde, Auftrags-ID und Richtung sind gegen Veränderungen gebunden. Jeder Verschlüsselungsvorgang verwendet einen neuen zufälligen Nonce. Implementierung: etablierte [Cryptography-AEAD-Bibliothek](https://cryptography.io/en/latest/hazmat/primitives/aead/), keine selbst erfundene Chiffre.
+1. Auf dem vertrauenswürdigen Kundengerät erzeugt `start/confidential_start.py seal` einen zufälligen 256-Bit-Schlüssel und verschlüsselt den Auftrag mit AES-GCM. Kunde, Auftrags-ID und Richtung sind gegen Veränderungen gebunden. Jeder Verschlüsselungsvorgang verwendet einen neuen zufälligen Nonce. Implementierung: etablierte [Cryptography-AEAD-Bibliothek](https://cryptography.io/en/latest/hazmat/primitives/aead/), keine selbst erfundene Chiffre.
 2. Der Kunde behält seine private Schlüsseldatei. Die zentrale DigitalHeat-Steuerung nimmt über `/v1/confidential-jobs` ausschliesslich das verschlüsselte Paket und technische Ressourcen-/Fristmetadaten an. Freitexttitel und Klartextfelder sind dort nicht erlaubt. Technische IDs und Paketgrössen bleiben sichtbar; das ist keine Metadaten-Anonymisierung.
 3. Der Datenschlüssel wird separat durch den Kunden bzw. einen berechtigten DigitalHeat-Betreiber an einen **externen, vertrauenswürdigen Trustee-Key-Broker** provisioniert. Er wird niemals auf dem Haushaltsserver, im Kubernetes-Secret, im Container-Environment, in Init-Data oder im Repository abgelegt. Trustee und seine Administration dürfen nicht unter Kontrolle des Haushalts liegen. Die erste Integration enthält keinen öffentlichen Provisionierungsdienst für Kunden.
 4. Der Scheduler lässt den Auftrag nur auf einen passenden `confidential_coco`-Knoten. Ein exklusiver Ausführungsplatz verhindert das Vermischen verschiedener Aufträge im selben Gast. Eine Typangabe im Inventar ist dabei nur Planung; sie ersetzt keine Attestierung.
@@ -28,7 +28,7 @@ Der Worker ist noch kein Docking-, Bildanalyse- oder LLM-Modell und führt selbs
 
 Eine verschlüsselte VM allein genügt nicht, wenn der Host anschliessend per `exec` Befehle im Gast starten darf. Deshalb muss die **Kata Agent Policy innerhalb des Gastes** die erlaubten Images, Startbefehle, Umgebungsvariablen, Mounts und APIs einschränken. Shell-/Debugzugriff, beliebiges Kopieren, zusätzliche Container und Policy-Austausch müssen ausgeschlossen sein. Das beschreibt [NVIDIAs Workload-Konfiguration](https://docs.nvidia.com/confidential-computing/containers/configure-workloads).
 
-`genpolicy` liefert einen Ausgangspunkt, keine automatische Sicherheitsfreigabe. Die Policy muss für das genaue Worker-Image und Manifest geprüft werden. `confidential_start.py initdata` verpackt diese Policy zusammen mit der Trustee-Adresse und dessen Zertifikat. Das vollständige Dokument wird gemessen. `load_deployment` akzeptiert nur exakt die zuvor vom vertrauenswürdigen Betreiber freigegebene SHA384-Prüfsumme. Die Erzeugung eines Hashes ist **keine** Prüfung, ob eine Policy sicher ist. Insbesondere darf eine permissive Tutorial-Policy nicht einfach freigegeben werden.
+`genpolicy` liefert einen Ausgangspunkt, keine automatische Sicherheitsfreigabe. Die Policy muss für das genaue Worker-Image und Manifest geprüft werden. `start/confidential_start.py initdata` verpackt diese Policy zusammen mit der Trustee-Adresse und dessen Zertifikat. Das vollständige Dokument wird gemessen. `load_deployment` akzeptiert nur exakt die zuvor vom vertrauenswürdigen Betreiber freigegebene SHA384-Prüfsumme. Die Erzeugung eines Hashes ist **keine** Prüfung, ob eine Policy sicher ist. Insbesondere darf eine permissive Tutorial-Policy nicht einfach freigegeben werden.
 
 Der externe Broker muss dieselbe Prüfsumme verlangen. Sonst könnte der Host die Agent-Policy austauschen. Referenz: [Init-Data](https://confidentialcontainers.org/docs/features/initdata/) und [drei getrennte Policy-Ebenen](https://confidentialcontainers.org/docs/attestation/policies/). Die Attestation-Service-Policy muss reale Referenzmesswerte und die zulässige TCB bewerten; eine Ressourcenpolicy allein ersetzt diese Bewertung nicht. Ein beliebiger TEE-Nachweis oder ein Sample-Attester genügt nicht.
 
@@ -68,9 +68,9 @@ Beispiel für einen Auftrag mit einer Stunde Basislaufzeit und 1 kW: 1,000 kWh o
 
 ```sh
 python3 -m venv .venv-cc
-.venv-cc/bin/python -m pip install -r requirements-confidential.txt
-.venv-cc/bin/python -m unittest discover -s confidential_tests -v
-python3 confidential_start.py estimate --seconds 3600
+.venv-cc/bin/python -m pip install -r requirements/confidential.txt
+.venv-cc/bin/python -m unittest discover -s tests -p test_confidential.py -v
+python3 start/confidential_start.py estimate --seconds 3600
 ```
 
 Für die Rego-Prüfung zusätzlich das offizielle [OPA-Prüfwerkzeug](https://www.openpolicyagent.org/docs) installieren und `OPA_BIN=/absoluter/pfad/opa` beim Testlauf setzen. Ohne OPA wird nur diese konkrete Prüfung übersprungen. Auch mit OPA sind Test-Claims künstliche Daten und keine Attestierung.
@@ -79,7 +79,7 @@ Auf dem Kundengerät einen **öffentlichen** ersten Testtext verschlüsseln:
 
 ```sh
 mkdir -m 700 cc-client-secrets
-.venv-cc/bin/python confidential_start.py seal --input public-test.txt --customer pharma-demo --key-file cc-client-secrets/job.cckey --out cc-package
+.venv-cc/bin/python start/confidential_start.py seal --input public-test.txt --customer pharma-demo --key-file cc-client-secrets/job.cckey --out cc-package
 ```
 
 Das Verzeichnis `cc-package` enthält nur den verschlüsselten Auftrag. Die `.cckey`-Datei bleibt beim Kunden bzw. beim berechtigten externen Broker. Der neue Endpunkt nimmt den Schlüssel nicht entgegen. `.cckey` und `cc-client-secrets` sind von Git ausgeschlossen.
@@ -93,13 +93,13 @@ Das Verzeichnis `cc-package` enthält nur den verschlüsselten Auftrag. Die `.cc
 5. Die geprüfte Policy und das Broker-Zertifikat verpacken:
 
    ```sh
-   python3 confidential_start.py initdata --agent-policy reviewed-agent.rego --kbs-url https://TRUSTED-BROKER --kbs-cert broker-cert.pem --out reviewed-initdata.toml
+   python3 start/confidential_start.py initdata --agent-policy reviewed-agent.rego --kbs-url https://TRUSTED-BROKER --kbs-cert broker-cert.pem --out reviewed-initdata.toml
    ```
 
    Den ausgegebenen Hash und den Image-Digest in einer Kopie von `deploy/confidential/deployment.example.json` eintragen. Diese Beispieldatei ist absichtlich nicht ausführungsbereit. Ein Inventarbeispiel liegt daneben; es bestätigt keine vorhandene Hardware. Der feste Gast muss auch die passende CDH-/Attestation-Agent-Konfiguration und Gast-REST-Schnittstelle enthalten.
-6. Mit `confidential_start.py plan --request cc-package/request.json --inventory inventory.json --deployment-config deployment.json --out cc-plan` die konkrete Ressourcenpolicy und das CoCo-Manifest erzeugen. Der Plan verändert keinen Cluster. Den Init-Data-Hash auch auf dem Broker festlegen. Mehrere pro Auftrag erzeugte Policies müssen kontrolliert kombiniert bzw. getrennten Brokern zugeordnet werden; nicht die Policy eines produktiven, gemeinsam genutzten Brokers blind überschreiben.
+6. Mit `start/confidential_start.py plan --request cc-package/request.json --inventory inventory.json --deployment-config deployment.json --out cc-plan` die konkrete Ressourcenpolicy und das CoCo-Manifest erzeugen. Der Plan verändert keinen Cluster. Den Init-Data-Hash auch auf dem Broker festlegen. Mehrere pro Auftrag erzeugte Policies müssen kontrolliert kombiniert bzw. getrennten Brokern zugeordnet werden; nicht die Policy eines produktiven, gemeinsam genutzten Brokers blind überschreiben.
 7. Den 32-Byte-Auftragsschlüssel als die vom CLI genannte Ressource provisionieren, ausschliesslich über die authentisierte Admin-Schnittstelle des externen Brokers. Der [offizielle KBS-Client](https://confidentialcontainers.org/docs/attestation/client-tool/) unterstützt `config --admin-token-file ... set-resource --path ... --resource-file ...`; für die Policy `set-resource-policy --policy-file ...`. HTTPS mit verifiziertem Broker-Zertifikat verwenden. Kein `--insecure`, kein Schlüsselwert als Kommandozeilenargument oder Logausgabe.
 8. Zentrale Steuerung mit Betreiberinventar, verschiedenen Kundentokens und `--cc-deployment-config deployment.json` starten. Der hierfür verwendete Worker-Prozess und sein Kubernetes-Zugang laufen auf der vertrauenswürdigen DigitalHeat-Steuerung, **nicht** beim Haushalt. Die bisherige CPU-Demo im Haus darf keine Trustee-Administration oder Kunden-Schlüsseldateien erhalten.
-9. Der Kunde sendet nur `cc-package/request.json` mit `confidential_start.py submit --request ... --worker https://CENTRAL-CONTROL:8443 --credentials CUSTOMER-CREDENTIALS`. Das Ergebnis aus der bestehenden authentisierten Job-API wird als verschlüsseltes Paket gespeichert und auf dem Kundengerät mit `decrypt-result --result ... --request ... --key-file ... --out ...` geöffnet.
+9. Der Kunde sendet nur `cc-package/request.json` mit `start/confidential_start.py submit --request ... --worker https://CENTRAL-CONTROL:8443 --credentials CUSTOMER-CREDENTIALS`. Das Ergebnis aus der bestehenden authentisierten Job-API wird als verschlüsseltes Paket gespeichert und auf dem Kundengerät mit `decrypt-result --result ... --request ... --key-file ... --out ...` geöffnet.
 
 Die reale Abnahme muss mindestens einen erfolgreichen verschlüsselten Auftrag, verweigerte Schlüssel bei falscher CPU/GPU/Init-Data, blockierten Host-Exec und unlesbare Host-Dateien/-Logs belegen. Ein Neustart, Netzverlust und Wartungsabbruch müssen ohne ungeschützte Wiederaufnahme getestet werden. Ergebniswiederholungen und Zählung genau einmal sind noch nicht gewährleistet; die bestehende Queue bleibt flüchtig. Bis dahin ist dies eine getestete Softwarebasis für die Bereitstellung, keine bereits abgesicherte Pharma-Produktionsplattform.

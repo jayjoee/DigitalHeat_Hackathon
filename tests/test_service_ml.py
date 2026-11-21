@@ -9,7 +9,7 @@ from unittest.mock import patch
 import numpy as np
 from src.service_ml import (ServiceConfig, ServiceModel, FEATURES, TARGET, calculate,
                             demo_data, validate_rows, trajectory, renewal, plan_server)
-from service_start import save_report
+from start.service_start import save_report
 
 
 class RenewalTests(unittest.TestCase):

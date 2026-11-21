@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
 """Train and run DigitalHeat's maintenance planning model.
 
-python3 service_start.py --demo --output daten/ergebnisse/service_ml
-python3 service_start.py --history history.csv --fleet fleet.csv --output report
-Dependencies: requirements-ml.txt. All inputs are CSV, no external model execution.
+python3 start/service_start.py --demo --output daten/ergebnisse/service_ml
+python3 start/service_start.py --history history.csv --fleet fleet.csv --output report
+Dependencies: requirements/ml.txt. All inputs are CSV, no external model execution.
 """
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[1]))  # Repo-Wurzel, damit «src» gefunden wird
 import argparse
 import csv
 import html
@@ -30,7 +33,7 @@ def save_report(result,output):
     write_csv(output/'annahmen.csv',result['assumptions'])
     if result.get('case_operation'):
         sources=output/'quellen';sources.mkdir(exist_ok=True)
-        shutil.copy2(Path(__file__).resolve().parent/'docs/CASE.md',sources/'CASE.md')
+        shutil.copy2(Path(__file__).resolve().parents[1]/'docs/CASE.md',sources/'CASE.md')
     (output/'service_plan.json').write_text(json.dumps(result,ensure_ascii=False,indent=2,allow_nan=False)+'\n',encoding='utf-8')
     rows=[];candidates=[]
     for s in result['servers']:

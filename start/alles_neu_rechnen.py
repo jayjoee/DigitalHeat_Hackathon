@@ -4,12 +4,12 @@
 Nach jeder Änderung an src/scheduler/annahmen.py ausführen. Braucht nur Python, keine Zusatzpakete.
 Die Flotte dauert am längsten (einige Minuten); mit --ohne-flotte wird sie übersprungen.
 
-Nicht enthalten (eigene Umgebungen bzw. echte Läufe): ML-Untersuchung (ml_start.py),
-Strategievergleich (vergleich_start.py), Serviceplanung (service_start.py), Live-Läufe.
+Nicht enthalten (eigene Umgebungen bzw. echte Läufe): ML-Untersuchung (start/ml_start.py),
+Strategievergleich (start/vergleich_start.py), Serviceplanung (start/service_start.py), Live-Läufe.
 
 Aufruf:
-  python3 alles_neu_rechnen.py
-  python3 alles_neu_rechnen.py --ohne-flotte
+  python3 start/alles_neu_rechnen.py
+  python3 start/alles_neu_rechnen.py --ohne-flotte
 """
 import argparse
 import subprocess
@@ -17,7 +17,7 @@ import sys
 import time
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[1]
 ERG = "daten/ergebnisse"
 
 # (Beschreibung, Befehl, Datei für die Standardausgabe oder None). Reihenfolge zählt:
@@ -32,7 +32,7 @@ SCHRITTE = [
     ("Flotte im Idealmodell", ["src/scheduler/flotte.py"], None),
     ("Zahlen für KOSTEN_DH.md", ["src/kosten_dh.py"], None),
     ("Firmenrechnung", ["src/firma.py"], None),
-    ("Ressourcen-Warteschlange", ["queue_start.py"], None),
+    ("Ressourcen-Warteschlange", ["start/queue_start.py"], None),
     ("Dashboard-Daten", ["src/dashboard_daten.py"], None),
     ("Dashboard als Einzeldatei", ["src/artifact_bauen.py"], None),
     ("3D-Dashboard-Daten", ["src/dashboard3d_daten.py"], None),

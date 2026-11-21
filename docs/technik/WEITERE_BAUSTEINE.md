@@ -11,7 +11,7 @@ auf öffentliche Verarbeitung begrenzt. Die geprüfte Hybridvariante wurde verwo
 
 ## Confidential-Computing-Rechercheoption – nicht das gewählte Angebot
 
-`confidential_start.py` verschlüsselt Testaufträge auf dem Kundengerät, plant Kata/CoCo-Jobs
+`start/confidential_start.py` verschlüsselt Testaufträge auf dem Kundengerät, plant Kata/CoCo-Jobs
 und berechnet angenommene Mehrkosten. Ein separater Worker-Endpunkt nimmt nur verschlüsselte
 Pakete an; Schlüssel kommen ausschliesslich vom externen Trustee nach dessen Attestierung.
 Die Softwareintegration ist getestet, eine echte TDX-/Confidential-GPU-Umgebung ist noch
@@ -24,14 +24,14 @@ Die getrennte Pharma-/Host-Demo (`python3 prototyp/digitalheat.py demo --pharma 
 verwendet jetzt eine Warteschlange mit GPU-/VRAM-, RAM-, CPU-, Standort- und Freigabeprüfung,
 Kundenpriorität, Kontingenten, Backfill und Wartungssperren. CPU-Demoaufträge laufen;
 GPU-Aufträge warten auf einen echten GPU-Worker. Nur öffentliche/synthetische Inhalte sind zugelassen.
-`python3 queue_start.py` vergleicht die Vergabestrategien und simuliertes Schlafenlegen.
+`python3 start/queue_start.py` vergleicht die Vergabestrategien und simuliertes Schlafenlegen.
 [Recherche, Annahmen, Grenzen und Betreiberkonfiguration](RESSOURCEN_SCHEDULER.md).
 
 ## ML-Serviceplanung
 
-`python3 service_start.py --demo --case --open` trainiert ein ML-Risikomodell und berechnet
+`python3 start/service_start.py --demo --case --open` trainiert ein ML-Risikomodell und berechnet
 Serviceintervalle, erwartete geplante/ungeplante Eingriffe und Kosten pro physischem
-Server. Voraussetzung: `requirements-ml.txt`. HTML, CSV und JSON entstehen unter
+Server. Voraussetzung: `requirements/ml.txt`. HTML, CSV und JSON entstehen unter
 `daten/ergebnisse/service_ml/`. Eigene CSV-Dateien sind über `--history` und `--fleet`
 anschliessbar. Der Case-Modus übernimmt getrennte Betriebsstunden, Rechenstunden und
 Starts je Server aus dem bestehenden Jahres-Scheduler. Die gemeinsame Kühlung hat
@@ -40,9 +40,9 @@ sie ist kein realer L4-Wartungsnachweis.** [Methode und Datenschema](SERVICE_ML.
 
 ## Kontrollierter Vergleich der Betriebsstrategien
 
-`python3 vergleich_start.py --days 184` berechnet vier Varianten mit identischen
+`python3 start/vergleich_start.py --days 184` berechnet vier Varianten mit identischen
 endlichen Aufträgen, Fristen und aktiven Leistungs-/Geschwindigkeitsprofilen.
-Voraussetzung: `requirements-ml.txt`. Bericht, Kennzahlen-CSV und vollständiges JSON
+Voraussetzung: `requirements/ml.txt`. Bericht, Kennzahlen-CSV und vollständiges JSON
 entstehen unter `daten/ergebnisse/strategievergleich/`; das bisherige ML-Dashboard bleibt erhalten.
 
 Referenzlauf Juli–Dezember 2025 (4’416 Stunden, acht Server):

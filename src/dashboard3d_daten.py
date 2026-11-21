@@ -92,7 +92,7 @@ def cloud_daten():
                  and (r.get("leistungsprofil") or {}).get("leerlauf_watt") == 230)
         out[name] = {"strom_kwh": round(r["strom_kwh"]), "abgefuehrt_kwh": round(r["waerme_abgefuehrt_kwh"]),
                      "deckung": r["deckungsgrad"], "starts": r["serverstarts"]}
-    svc = ERG / "service_ml" / "service_plan.json"  # erzeugt mit: python3 service_start.py --demo --case
+    svc = ERG / "service_ml" / "service_plan.json"  # erzeugt mit: python3 start/service_start.py --demo --case
     if svc.exists():
         d = json.loads(svc.read_text())
         out["service"] = {

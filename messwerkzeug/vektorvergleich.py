@@ -5,7 +5,7 @@ Migration = SIGTERM (Block fertig, Checkpoint), dann Neustart als neuer Prozess 
 maximale Abweichung der Vektoren < 1e-6. Läuft mit 1 Thread, damit ONNX Runtime deterministisch rechnet.
 
 Aufruf (dauert einige Minuten, braucht .venv mit fastembed):
-  .venv/bin/python tests/vektorvergleich.py [--anzahl 5000]
+  .venv/bin/python messwerkzeug/vektorvergleich.py [--anzahl 5000]
 Ergebnis: messungen/vektorvergleich.json
 """
 import argparse

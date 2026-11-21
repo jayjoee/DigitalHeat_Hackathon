@@ -2,7 +2,7 @@
 
 ## Aufbau
 - Gerät: MacBook Pro (MacBookPro18,3), Apple M1 Pro, 8 Kerne (6 Leistung, 2 Effizienz), 16 GB, am Netz
-- Software: Python 3.13, fastembed 0.9.1, ONNX Runtime 1.32.0, CPU, 6 Threads, Batch 16 (`requirements.txt`)
+- Software: Python 3.13, fastembed 0.9.1, ONNX Runtime 1.32.0, CPU, 6 Threads, Batch 16 (`requirements/embedding_gepinnt.txt`)
 - Modell: BAAI/bge-small-en-v1.5 (384 Dimensionen)
 - Daten: AG News Testset, 7'600 Nachrichtentexte, Median 231 Zeichen (Hugging Face `fancyzhx/ag_news`)
 - Job: `src/jobs/embedding_job.py`, Checkpoint alle 128 Texte (Vektoren + `stand.json`, atomar geschrieben)
@@ -30,7 +30,7 @@ Erste Messung (21:20, Lauf `embedding_2026-11-20_2120`): 102,0 s, 74,5 Texte/s, 
 
 Wiederholen:
 ```
-bash src/leistung_messen.sh        # im macOS-Terminal, fragt nach dem Mac-Passwort
+bash messwerkzeug/leistung_messen.sh        # im macOS-Terminal, fragt nach dem Mac-Passwort
 ```
 
 ## Unterbrechbarkeit (gemessen, Test 21:23)

@@ -133,7 +133,7 @@ class EnergyTests(unittest.TestCase):
 class APITests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        import ml_start
+        from start import ml_start
         cls.server=ml_start.make_server(0)
         cls.thread=threading.Thread(target=cls.server.serve_forever,daemon=True);cls.thread.start()
     @classmethod
@@ -148,7 +148,7 @@ class APITests(unittest.TestCase):
         self.assertEqual(self.request('GET','/api/status',headers={'Origin':'https://foreign.example'}),403)
         self.assertEqual(self.request('POST','/api/run',{}, {'X-DigitalHeat-CSRF':'wrong'}),403)
         self.assertEqual(self.request('GET','/../../ml_start.py'),404)
-        self.assertEqual(self.request('GET','/src/github_token.sh'),404)
+        self.assertEqual(self.request('GET','/src/wirtschaft.py'),404)
     def test_input_rejected_before_starting_training(self):
         for d in ({'days':True},{'days':10000},{'start':'2025-01-01'},{'config':{'servers':0}}, {'config':{'electricity_chf_kwh':-1}}, {'config':{'servers':'8'}}):
             self.assertEqual(self.request('POST','/api/run',d),400)

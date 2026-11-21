@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 """Guided main-case demonstration: annual reference + actual heat-controlled embedding job."""
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[1]))  # Repo-Wurzel, damit «src» gefunden wird
 import argparse
 from datetime import datetime,timezone
 import importlib.util
@@ -17,7 +20,7 @@ from http.server import BaseHTTPRequestHandler,ThreadingHTTPServer
 from src.scheduler.jahr import Haus
 from src.scheduler.live import anteil,waehle_server
 
-ROOT=Path(__file__).resolve().parent
+ROOT=Path(__file__).resolve().parents[1]
 DAYS=[('2025-01-15','Winter: Wärme wird gebraucht'),('2025-07-15','Sommer: nur Warmwasser'),('2025-03-07','Speicher voll: Auftrag pausiert')]
 
 def build_case():

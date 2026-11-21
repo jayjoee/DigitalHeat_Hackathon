@@ -10,6 +10,21 @@ Damit das funktioniert, müssen drei Dinge zusammenpassen:
 
 Diese README ist der einzige Einstieg. Alle weiteren Dokumente stehen unten unter [Dokumente](#dokumente).
 
+## Was liegt wo?
+
+| Ordner | Inhalt |
+|---|---|
+| `start/` | Alle Startskripte, die Doppelklick-Dateien für macOS (`*.command`) und `alles_neu_rechnen.py` |
+| `src/` | Programmcode: Scheduler, Wärme-Router, Wirtschaftlichkeit, Jobs, ML |
+| `docs/` | Case, Pitch, Aufgaben; Unterordner `ergebnisse/`, `wirtschaft/`, `kunden/`, `technik/` |
+| `daten/` | Eingangsdaten mit Quellen, `ergebnisse/` mit allen erzeugten Ergebnisdateien |
+| `dashboard/` | Analyse-, 3D-, Gesamtdemo- und ML-Oberflächen |
+| `prototyp/` | Pharma-/Serverhalter-Oberflächen und Blister-Demo mit zwei Laptops |
+| `messungen/`, `messwerkzeug/` | Gemessene Laufzeiten und Energie, Werkzeug zum Messen |
+| `tests/` | Tests für Scheduler, Wirtschaft, Demos, ML und Confidential Computing |
+| `requirements/` | Python-Pakete je Umgebung (`live`, `ml`, `confidential`, gepinnte Embedding-Umgebung) |
+| `deploy/` | Vorlagen für die Confidential-Computing-Bereitstellung |
+
 ## Die geführte Gesamtdemo starten
 
 Die Gesamtdemo beantwortet drei Fragen: Wie viel Wärme decken die Server? Steuert der Wärmebedarf einen echten Auftrag? Unter welchen Annahmen lohnt sich das Geschäft?
@@ -18,12 +33,12 @@ Python 3.10 oder neuer, macOS oder Linux. Einmalig eine Umgebung mit FastEmbed u
 
 ```sh
 python3 -m venv .venv
-.venv/bin/python -m pip install -r requirements-live.txt
+.venv/bin/python -m pip install -r requirements/live.txt
 .venv/bin/python -c 'from fastembed import TextEmbedding; TextEmbedding("BAAI/bge-small-en-v1.5")'
-.venv/bin/python demo_start.py --open
+.venv/bin/python start/demo_start.py --open
 ```
 
-Danach reicht auf macOS `Gesamtdemo_starten.command`. Die Oberfläche läuft unter **http://127.0.0.1:18200**. Dort **Live-Demo starten** drücken. Winter, Sommer und voller Speicher werden in etwa 90 Sekunden gezeigt. Der Embedding-Prozess und seine Pausen sind echt; Haus und Wärme sind simuliert.
+Danach reicht auf macOS `start/Gesamtdemo_starten.command`. Die Oberfläche läuft unter **http://127.0.0.1:18200**. Dort **Live-Demo starten** drücken. Winter, Sommer und voller Speicher werden in etwa 90 Sekunden gezeigt. Der Embedding-Prozess und seine Pausen sind echt; Haus und Wärme sind simuliert.
 
 [Was die Demo zeigt, Ablauf und Methode](docs/technik/GESAMTDEMO.md)
 
@@ -101,7 +116,7 @@ Die allgemeine Pharma-Oberfläche enthält Screening-, Cell-Painting- und Litera
 Alle Ergebnisdateien und alle Zahlen der Wirtschaftlichkeit mit einem Befehl neu erzeugen, zum Beispiel nach einer Änderung in `src/scheduler/annahmen.py`. Es braucht keine zusätzlichen Python-Pakete:
 
 ```sh
-python3 alles_neu_rechnen.py
+python3 start/alles_neu_rechnen.py
 ```
 
 Einzelne Schritte und Tests:
@@ -113,7 +128,7 @@ python3 -m unittest discover -s tests -v
 
 # ML-Umgebung separat einrichten
 python3 -m venv .venv-ml
-.venv-ml/bin/python -m pip install -r requirements-ml.txt
+.venv-ml/bin/python -m pip install -r requirements/ml.txt
 .venv-ml/bin/python -m unittest discover -s tests -v
 
 # Produktprototyp und Messauswertung separat prüfen
@@ -150,8 +165,7 @@ Die gemeinsame Aufgabenliste steht in [docs/TODO.md](docs/TODO.md). Die wichtigs
 | | [SERVICE_ML.md](docs/technik/SERVICE_ML.md) | ML-Serviceplanung: Methode und Datenschema |
 | | [CONFIDENTIAL_COMPUTING.md](docs/technik/CONFIDENTIAL_COMPUTING.md) | Verschlüsselte Aufträge, externer Schlüsseldienst, Hardwarevoraussetzungen, Mehrkosten und offene Hardware-Abnahme |
 | | [WEITERE_BAUSTEINE.md](docs/technik/WEITERE_BAUSTEINE.md) | L4-Angebot, Confidential Computing, Auftragsvergabe, Serviceplanung und Strategievergleich in Kürze |
-| `docs/archiv/` | [archiv](docs/archiv/) | Erste Notizen, Testprotokolle und frühere Entwürfe, nur zur Nachvollziehbarkeit |
 
-Weitere Hintergründe liegen bei den Daten: [HALLENBAD.md](daten/HALLENBAD.md) (Wärmebedarf Sportbad), [PREISE.md](daten/PREISE.md), [QUELLEN.md](daten/QUELLEN.md), [ALIBABA_AUSWERTUNG.md](daten/ALIBABA_AUSWERTUNG.md), [MESSUNG.md](messungen/MESSUNG.md). Abgabetexte: [submission/SUBMISSION.md](submission/SUBMISSION.md).
+Weitere Hintergründe liegen bei den Daten: [HALLENBAD.md](daten/HALLENBAD.md) (Wärmebedarf Sportbad), [PREISE.md](daten/PREISE.md), [QUELLEN.md](daten/QUELLEN.md), [ALIBABA_AUSWERTUNG.md](daten/ALIBABA_AUSWERTUNG.md), [MESSUNG.md](messungen/MESSUNG.md).
 
 Code, Analysen und Texte wurden mit Claude Code und Codex erarbeitet. Der ursprüngliche Wärme-Router, die neue Serverbetriebssimulation und die Blister-Demo sind erhalten; Gesamtdemo, ML-Untersuchung und Messwerkzeug ergänzen diesen gemeinsamen Stand.

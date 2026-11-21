@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 """Customer encryption, CoCo deployment planning and overhead sensitivity; no dashboard."""
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[1]))  # Repo-Wurzel, damit «src» gefunden wird
 import argparse
 import http.client
 import json

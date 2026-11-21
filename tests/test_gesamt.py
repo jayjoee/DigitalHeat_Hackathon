@@ -7,7 +7,7 @@ import threading
 import unittest
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT))
-from demo_start import make_server
+from start.demo_start import make_server
 
 class GuidedDemoTests(unittest.TestCase):
     @classmethod
@@ -41,7 +41,7 @@ class GuidedDemoTests(unittest.TestCase):
     def test_only_public_demo_assets_served_and_invalid_commands_rejected(self):
         for path in ('/','/app.js','/style.css','/wallpaper.svg','/api/case','/api/live'):
             self.assertEqual(self.request('GET',path)[0],200)
-        self.assertEqual(self.request('GET','/../../src/github_token.sh')[0],404)
+        self.assertEqual(self.request('GET','/../../src/wirtschaft.py')[0],404)
         self.assertEqual(self.request('POST','/api/start',[])[0],400)
         self.assertEqual(self.request('POST','/api/unknown',{})[0],404)
 

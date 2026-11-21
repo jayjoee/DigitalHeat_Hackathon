@@ -67,7 +67,7 @@ Die genannten Fremdsysteme begründen die Verfahren, nicht unsere Zahlenwerte. F
 Ohne Zusatzpakete den kontrollierten Vergleich rechnen:
 
 ```sh
-python3 queue_start.py
+python3 start/queue_start.py
 ```
 
 Der Kern `src/scheduler/resource_queue.py` benötigt keine Oberfläche. Die Einbindung erfolgt direkt im Worker `prototyp/digitalheat.py`: Jeder eingehende Auftrag durchläuft die neue Vergabe vor der Ausführung. Die vorhandene Oberfläche ist lediglich ein optionaler Zugang und wurde für diesen Stand nicht erweitert.
@@ -104,7 +104,7 @@ Der Zeitstempel ist nur ein Formatbeispiel und absichtlich nicht frisch. Reales 
 
 ## Was die Energieauswertung aussagt
 
-`queue_start.py` schreibt identische Eingangsaufträge samt Hash sowie JSON, CSV und Bericht. Verglichen werden FIFO/Verteilung, Priorität/Bündelung und zusätzlich simuliertes Schlafenlegen. Alle Varianten verwenden dieselben Ressourcen-/Freigabeprüfungen. Der Referenzlauf erledigt überall dieselben 48 Aufträge ohne Fristverletzung. Das reine Bündeln senkt bei ständig eingeschalteten Hosts die modellierte IT-Energie nicht; der Vorteil entsteht durch weniger Leerlauf im Schlafmodus.
+`start/queue_start.py` schreibt identische Eingangsaufträge samt Hash sowie JSON, CSV und Bericht. Verglichen werden FIFO/Verteilung, Priorität/Bündelung und zusätzlich simuliertes Schlafenlegen. Alle Varianten verwenden dieselben Ressourcen-/Freigabeprüfungen. Der Referenzlauf erledigt überall dieselben 48 Aufträge ohne Fristverletzung. Das reine Bündeln senkt bei ständig eingeschalteten Hosts die modellierte IT-Energie nicht; der Vorteil entsteht durch weniger Leerlauf im Schlafmodus.
 
 Die Rechnung ist ein Funktionsvergleich bei geringer Auslastung. Pumpen, Datenübertragung, Steuerungsenergie, Speicherung, reale Wärmeabnahme, Ersatzheizung und Wartungskosten fehlen. Sie belegt weder Gesamtsystem-Einsparung noch Unternehmensrentabilität und darf nicht mit den 18’121,5 kWh des früheren Halbjahresmodells gleichgesetzt werden. Für eine belastbare Entscheidung müssen reale Leistungsprofile, Laufzeiten, Fristen, Startkosten und eine vollständige Wärmebilanz hinein.
 

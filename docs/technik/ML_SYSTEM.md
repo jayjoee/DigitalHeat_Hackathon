@@ -10,23 +10,23 @@ Die Oberfläche ist ein eigener Planungsbereich. Sie vermischt weder die Pharma-
 
 ## Start
 
-Python 3.10 oder neuer. Die neue ML-Erweiterung braucht nicht die vollständige Embedding-Umgebung aus der bisherigen `requirements.txt`.
+Python 3.10 oder neuer. Die neue ML-Erweiterung braucht nicht die vollständige Embedding-Umgebung aus `requirements/embedding_gepinnt.txt`.
 
 ```sh
 python3 -m venv .venv-ml
-.venv-ml/bin/python -m pip install -r requirements-ml.txt
-.venv-ml/bin/python ml_start.py --open
+.venv-ml/bin/python -m pip install -r requirements/ml.txt
+.venv-ml/bin/python start/ml_start.py --open
 ```
 
-Auf Windows die entsprechenden Programme unter `.venv-ml/Scripts/` verwenden. Auf macOS kann nach Einrichtung `ML_starten.command` gestartet werden. Der Dienst bindet nur an `127.0.0.1`. Kein externer Modellanbieter, kein API-Schlüssel und keine Übertragung der Berechnungsdaten an eine Cloud. Die erstmalige Paketinstallation braucht einen Internetzugang; die Berechnung nutzt die mitgelieferten Daten.
+Auf Windows die entsprechenden Programme unter `.venv-ml/Scripts/` verwenden. Auf macOS kann nach Einrichtung `start/ML_starten.command` gestartet werden. Der Dienst bindet nur an `127.0.0.1`. Kein externer Modellanbieter, kein API-Schlüssel und keine Übertragung der Berechnungsdaten an eine Cloud. Die erstmalige Paketinstallation braucht einen Internetzugang; die Berechnung nutzt die mitgelieferten Daten.
 
 Standard: Juli bis Dezember 2025, acht Referenzserver. In der Oberfläche können Startdatum, Zeitraum, Serverzahl und mehrere Energieannahmen geändert werden. Für die Option „Juli bis Dezember“ den Start auf 1. Juli belassen. Ungültige Zeiträume werden abgewiesen. Es läuft höchstens ein Vergleich gleichzeitig.
 
 Ohne Weboberfläche:
 
 ```sh
-.venv-ml/bin/python ml_start.py --compute-only --days 184
-.venv-ml/bin/python ml_start.py --compute-only --start 2025-10-01 --days 30
+.venv-ml/bin/python start/ml_start.py --compute-only --days 184
+.venv-ml/bin/python start/ml_start.py --compute-only --start 2025-10-01 --days 30
 ```
 
 ## Wo ML in der Rechnung sitzt
@@ -116,7 +116,7 @@ Die System-Stromkosten enthalten auch die Ersatzheizung. Der Unternehmensbeitrag
 - `src/ml_system/simulation.py`: Energiezustände, Arbeit, Speicher, Wärme- und Arbeitsbilanz.
 - `src/ml_system/experiment.py`: identische Vergleichsläufe und Exporte.
 - `src/ml_system/config.py`: validierte Szenarioannahmen.
-- `ml_start.py`: lokale Bedienoberfläche und Kommandozeile.
+- `start/ml_start.py`: lokale Bedienoberfläche und Kommandozeile.
 - `dashboard/ml/`: eigenständiger Planungsbereich, auch als gespeicherte Ansicht lesbar.
 - `daten/ergebnisse/ml/`: JSON sowie tägliche und stündliche CSV-Dateien.
 - `tests/test_ml_system.py`: zwölf zusätzliche Tests.

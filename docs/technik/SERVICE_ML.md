@@ -9,16 +9,16 @@ synthetisch. Die Simulation des Case-Betriebs macht daraus keinen realen L4-Wart
 
 ## Start
 
-Mit Python 3.10 oder neuer und den Paketen aus `requirements-ml.txt`:
+Mit Python 3.10 oder neuer und den Paketen aus `requirements/ml.txt`:
 
 ```sh
 python3 -m venv .venv-ml
-.venv-ml/bin/python -m pip install -r requirements-ml.txt
-.venv-ml/bin/python service_start.py --demo --case --open
+.venv-ml/bin/python -m pip install -r requirements/ml.txt
+.venv-ml/bin/python start/service_start.py --demo --case --open
 ```
 
-Bei bereits installierten Paketen: `python3 service_start.py --demo --case --open`.
-Auf macOS startet `Service_Demo_starten.command` dieselbe gekoppelte Demo.
+Bei bereits installierten Paketen: `python3 start/service_start.py --demo --case --open`.
+Auf macOS startet `start/Service_Demo_starten.command` dieselbe gekoppelte Demo.
 HTML, CSV und JSON entstehen unter `daten/ergebnisse/service_ml/`.
 Es gibt keinen neuen Netzwerkdienst oder Zugriff auf die Hardware.
 Ohne `--case` bleibt die bisherige reine Szenario-Demo verfügbar.
@@ -103,7 +103,7 @@ Kosten wird das längere erlaubte Intervall gewählt. Optimiert wird nur der
 angegebene Zeitraum; ein Eingriff genau am exklusiven Enddatum zählt erst später.
 
 ```sh
-python3 service_start.py --demo --case --intervals 60,90,180,365   --max-interval 365 --planned-cost 400 --unplanned-cost 900   --planned-hours 2 --unplanned-hours 12 --lost-margin 0
+python3 start/service_start.py --demo --case --intervals 60,90,180,365   --max-interval 365 --planned-cost 400 --unplanned-cost 900   --planned-hours 2 --unplanned-hours 12 --lost-margin 0
 ```
 
 400/900 CHF, zwei/zwölf Stunden und die maximale Intervallgrenze sind Testannahmen.
@@ -123,7 +123,7 @@ Vergleichsnäherung, kein ausgewählter Herstellerplan; Preis und Dauer bleiben
 unbelegt. [CoolIT Servicebeschreibung](https://www.coolitsystems.com/products-services/global-professional-services/)
 
 ```sh
-python3 service_start.py --demo --case --cooling-interval 180   --cooling-age 0 --cooling-cost 600 --cooling-hours 2
+python3 start/service_start.py --demo --case --cooling-interval 180   --cooling-age 0 --cooling-cost 600 --cooling-hours 2
 ```
 
 `kuehlungskalender.json` enthält Termine und Kosten. Server-Reparaturen können diese
@@ -152,7 +152,7 @@ Alle Ergebnisse bleiben manuell zu prüfen; es gibt keine automatische Sicherhei
 ## Daten importieren
 
 ```sh
-python3 service_start.py --history historie.csv --fleet server.csv --open
+python3 start/service_start.py --history historie.csv --fleet server.csv --open
 ```
 
 Die Demo exportiert Beispiel-CSV-Dateien. Die Historie enthält eine Zeile pro Gerät
