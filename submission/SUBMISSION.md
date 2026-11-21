@@ -33,7 +33,7 @@ THE PROBLEM (in DigitalHeat's words)
 OUR SOLUTION
 We model 8 liquid-cooled servers (8× NVIDIA L4 each, 8 kW total) in the Basel reference house. The scheduler uses heat demand, a 35 kWh tank and job deadlines to decide when to run AI jobs. The idealised case with zero idle draw covers 93 % of heating and hot water, dumps 5 kWh of heat, meets all deadlines and reaches 52 % utilisation. Break-even (case definition): 0.23 CHF per server-hour. At an assumed 230 W idle draw per server, switching off unused servers saves about 5,200 kWh per year compared with leaving them powered on.
 Our heat router shares a job pool across 20 houses and Sportbad St. Jakob, a heated 50 m outdoor pool. Homes get priority. The model starts servers where there is work and demand for heat. The pool's servers stay in standby outside its season. With 50 servers at the pool, annual work passed to other clouds falls from about 195,000 to 30,000 server-hours under the limited-demand scenario.
-Pharma, banks and hospitals are potential customers. The model assumes a contract price of 4.80 CHF per server-hour and 60 % of capacity sold at this rate. At noon the day before, the ECMWF forecast helps estimate available capacity. About 91 % of modelled capacity can be committed in the fleet with the pool. The reference house with power management yields an annualised result of about CHF 29,400 before day-ahead credits, assuming enough jobs.
+We sell L4 compute for public, synthetic or customer-anonymised tasks (no confidential data). Assumed prices: an anchor customer (Roche) books 60 % of the hours at 0.50 CHF per L4-hour (4.00 CHF per server-hour); the remaining hours go to customers without minimum volume at 0.55 CHF per L4-hour, falling 10 % per year. These are target prices, not confirmed by a customer. At noon the day before, the ECMWF forecast helps estimate available capacity. About 91 % of modelled capacity can be committed in the fleet with the pool. The reference house with power management yields an annualised result of about CHF 35,000 after all costs, taxes and interest, but only if every hour is sold; at 66 % sold hours it is zero. As a company rolling out 170 houses by 2031 (one hardware generation, no loan), the project IRR is 19.9 % with a capital need of CHF 23.4 million; below about 85 % sold hours it falls under the 12 % investors expect.
 Where it does not pay off, we say so: with demand limited to deadline jobs (Alibaba trace), even the fleet with the pool loses money. The bottleneck is demand, not heat.
 
 HOW IT WORKS – REAL VS. MOCKED
@@ -43,7 +43,7 @@ Reproducible: simulation and costs can be rerun from code. Automated tests cover
 
 NEXT FOUR WEEKS
 1. Replace the pool estimate with measured district-heating data from the Sportamt Basel-Stadt.
-2. Talk to 2–3 Basel pharma/biotech companies: would they buy day-ahead committed Swiss compute at 4.80 CHF per server-hour, and for how many hours?
+2. Talk to Roche and 2–3 other Basel companies: would they book a paid winter quota of day-ahead committed Swiss compute at 0.50 CHF per L4-hour (4.00 CHF per server-hour), and for how many hours?
 3. Pilot one real server with liquid cooling in a former oil-heated house (oil boiler removed, the existing wood stove as backup): measure supply temperature, heat recovery, idle and standby power, and time from power-on to job readiness.
 4. Different houses (heat load, tank size) and a second summer sink (hotel with spa), plus the network cost of migrating jobs.
 ```
@@ -66,7 +66,7 @@ Ein Video gibt es noch nicht. Vorschlag für eine Bildschirmaufnahme mit Stimme,
 | 0:20–0:50 | Januartag und Julitag im Dashboard | «Im Januar laufen alle 8 Server. Im Juli braucht das Haus nur Warmwasser, die Server stehen fast still.» |
 | 0:50–1:30 | Abschnitt «Flotte», Senke «Sportbad 50 Server» | «Der Wärme-Router schickt die Sommerarbeit ins Sportbad. Häuser haben Vorrang.» |
 | 1:30–2:30 | Terminal + Dashboard: `live.py --flotte` | «Das ist ein echter Prozess. Um 10 Uhr ist der Tank voll, der Job speichert und läuft im Bad weiter.» |
-| 2:30–3:00 | Zusage-Diagramm, dann Kachel «Ergebnis» | «Wir sagen am Vortag zu, 93 % sind planbar. +34'300 CHF pro Haus und Jahr. Zu wenig Aufträge: dann lohnt es sich nicht.» |
+| 2:30–3:00 | Zusage-Diagramm, dann Kachel «Ergebnis» | «Wir sagen am Vortag zu, 93 % sind planbar. +35'000 CHF pro Haus und Jahr, wenn jede Stunde verkauft ist. Unter 66 % verkauften Stunden lohnt es sich nicht.» |
 
 ## Project ZIP (optional, max. 500 MB)
 

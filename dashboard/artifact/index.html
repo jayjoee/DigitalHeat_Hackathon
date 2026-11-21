@@ -753,7 +753,7 @@ function annahmenKurz() {
       `Umrechnung auf 1 kW: gleiche Arbeit pro kWh wie gemessen`,
       `Fristen und Auftragsgrössen selbst festgelegt`]],
     ["Nachfrage nach Rechenzeit", [
-      `<b>Genug Aufträge</b> (Standard): Vertrag mit Winterkontingent, der Rest als Füllaufträge. Jede Rechenstunde gilt als verkauft ${s("Annahme, kein Nachfragebeleg")}`,
+      `<b>Genug Aufträge</b> (Standard): Roche bucht 60 % als Winterkontingent fest, die übrigen Stunden gehen an Kunden ohne Mindestmenge. Jede Rechenstunde gilt als verkauft ${s("Annahme, kein Nachfragebeleg")}`,
       `Alternative: nur Aufträge mit Frist, ${fmt(a("nachfrage_server_h_pro_server_tag"), 1)} Server-h pro Server und Tag ${s("Alibaba-GPU-Trace 2020")}`,
       `Kurze Aufträge (B) = ${pct(a("anteil_kurze_jobs_gpu_h"), 0)} der Rechenzeit ${s("Alibaba")}`,
       `Ankünfte über den Tag nach Alibaba-Tagesform, feste Zufallssaat`]],

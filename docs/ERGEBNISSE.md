@@ -21,7 +21,7 @@ Firmenrechnung mit Ausbau, Skaleneffekten, Förderbeitrag und Holzofen: `docs/FI
 
 ## Kennzahlen für 8 Server pro Haus
 
-Szenario **Genug Aufträge**: Ein Pharma-Vertrag bucht 60 % der Stunden fest (Winterkontingent), der Rest läuft als Füllauftrag zum Spot-Preis. Typ B kommt begrenzt nach Alibaba-Trace (40 Jobs pro Tag, Frist 2 h).
+Szenario **Genug Aufträge**: Roche bucht 60 % der Stunden fest (Winterkontingent) zu 0,50 CHF pro L4-Stunde, die übrigen Stunden gehen zu 0,55 CHF an Kunden ohne Mindestmenge. Typ B kommt begrenzt nach Alibaba-Trace (40 Jobs pro Tag, Frist 2 h).
 
 | Kennzahl | Wert |
 |---|---|

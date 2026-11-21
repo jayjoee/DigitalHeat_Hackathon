@@ -165,8 +165,8 @@ def _rechne():
             ueber["spotpreis_chf_karte_h"] = A.wert("spotpreis_chf_karte_h") * (1 - A.wert("spot_preisverfall")) ** j
             absatz = W("absatz_anteil")
             fest = A.wert("anteil_fest_gebucht")
-            if absatz < fest:
-                raise ValueError("Absatz kleiner als der fest gebuchte Roche-Anteil")
+            if not fest <= absatz <= 1:
+                raise ValueError("Absatz muss zwischen dem fest gebuchten Roche-Anteil und 100 % liegen")
             ueber["anteil_fest_gebucht"] = fest / absatz
             r = rechne(HAUS["server"], HAUS["server_h"] * absatz, 0, strom_kwh=HAUS["strom_kwh"], **ueber)
             teuerung = (1 + A.wert("kostensteigerung")) ** j
