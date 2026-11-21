@@ -26,6 +26,7 @@ Danach reicht auf macOS `Gesamtdemo_starten.command`. Die Oberfläche läuft unt
 | Zweck | Einstieg |
 |---|---|
 | Projekt als Ganzes verstehen | Gesamtdemo, Port 18200 |
+| 3D-Ansicht: Häuser im Schnitt, Ölkessel, Sportbad, Cloud mit ML-Prognose, Pausieren vs. Abschalten, Thermostat, Tour für den Pitch | `bash dashboard/starten.sh`, dann http://localhost:8765/3d/ (läuft ohne Internet; Daten neu: `python3 src/dashboard3d_daten.py`) |
 | Jahreszahlen, Flotte und Serverbetrieb untersuchen | `bash dashboard/starten.sh`, Port 8765; alternativ `dashboard/artifact/index.html` mit Aufzeichnung |
 | Echten Auftrag im Wärme-Router zeigen | `.venv/bin/python src/scheduler/live.py --flotte --sekunden 3`; mit `--abschalten` auch Serverzustände simulieren |
 | Pharma-Kunde und Serverhalter getrennt bedienen | [prototyp/README.md](prototyp/README.md) |

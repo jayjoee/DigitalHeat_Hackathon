@@ -7,8 +7,7 @@
 <style>
   :root {
     --bg: #070b16;
-    --panel: rgba(13, 19, 36, 0.78);
-    --panel-solid: #0d1324;
+    --panel: rgba(12, 18, 34, 0.80);
     --line: rgba(140, 170, 220, 0.16);
     --text: #e8eefb;
     --muted: #93a2c0;
@@ -17,7 +16,7 @@
     --cold: #5aa8ff;
     --idle: #ffc857;
     --standby: #5b6b8c;
-    --danger: #ff5d6c;
+    --oil: #ff5d4a;
     --radius: 14px;
   }
   * { box-sizing: border-box; }
@@ -27,67 +26,129 @@
   #szene { position: fixed; inset: 0; }
   .panel { position: fixed; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
     backdrop-filter: blur(14px) saturate(140%); -webkit-backdrop-filter: blur(14px) saturate(140%); }
-  /* Kopf mit Case-Kennzahlen */
-  #kopf { top: 14px; left: 14px; right: 14px; padding: 12px 16px; display: flex; gap: 18px; align-items: center; }
-  #kopf h1 { margin: 0; font-size: 17px; font-weight: 650; letter-spacing: .2px; white-space: nowrap; }
-  #kopf h1 small { display: block; font-size: 11px; font-weight: 450; color: var(--muted); letter-spacing: 0; }
-  #kpis { display: flex; gap: 8px; flex: 1; justify-content: flex-end; flex-wrap: wrap; }
-  .kpi { min-width: 104px; padding: 6px 10px; border-radius: 10px; background: rgba(255,255,255,.035);
-    border: 1px solid var(--line); }
-  .kpi b { display: block; font-size: 19px; font-weight: 650; font-variant-numeric: tabular-nums; }
-  .kpi span { font-size: 11px; color: var(--muted); }
+  h2.k { margin: 0 0 6px; font-size: 11px; font-weight: 650; color: var(--muted); text-transform: uppercase; letter-spacing: .9px; }
+
+  /* Kopf */
+  #kopf { top: 12px; left: 12px; right: 12px; padding: 8px 14px; display: flex; gap: 14px; align-items: center; }
+  #kopf h1 { margin: 0; font-size: 16px; font-weight: 650; white-space: nowrap; }
+  #kopf h1 small { display: block; font-size: 11px; font-weight: 450; color: var(--muted); }
+  #live { display: none; align-items: center; gap: 7px; padding: 4px 10px; border-radius: 99px; font-size: 12px; font-weight: 600;
+    background: rgba(255, 93, 74, .14); border: 1px solid rgba(255, 93, 74, .5); white-space: nowrap; }
+  #live.an { display: inline-flex; }
+  #live i { width: 8px; height: 8px; border-radius: 50%; background: var(--oil); animation: puls 1s infinite; }
+  @keyframes puls { 50% { opacity: .25; } }
+  #kpis { display: flex; gap: 6px; flex: 1; justify-content: flex-end; align-items: center; flex-wrap: wrap; }
+  #kpis .gruppe { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .8px; margin-right: 2px; }
+  .kpi { min-width: 86px; padding: 4px 9px; border-radius: 9px; background: rgba(255,255,255,.035); border: 1px solid var(--line); }
+  .kpi b { display: block; font-size: 16px; font-weight: 650; font-variant-numeric: tabular-nums; }
+  .kpi span { font-size: 10.5px; color: var(--muted); }
   .kpi.heat b { color: var(--heat); } .kpi.compute b { color: var(--compute); }
-  /* Stundenwerte rechts */
-  #jetzt { top: 104px; right: 14px; width: 270px; padding: 14px 16px; }
-  #jetzt h2, #detail h2 { margin: 0 0 8px; font-size: 13px; font-weight: 600; color: var(--muted);
-    text-transform: uppercase; letter-spacing: .8px; }
-  .zeile { display: flex; justify-content: space-between; padding: 3px 0; font-variant-numeric: tabular-nums; }
+
+  /* Satzzeile */
+  #satz { top: 74px; left: 50%; transform: translateX(-50%); max-width: min(900px, calc(100% - 24px)); padding: 9px 18px;
+    font-size: 15.5px; line-height: 1.35; text-align: center; border-radius: 99px; }
+  #satz b { color: var(--compute); font-weight: 650; } #satz em { color: var(--heat); font-style: normal; font-weight: 650; }
+  #satz .oel { color: var(--oil); font-weight: 650; }
+
+  /* Rechtes Panel */
+  #jetzt { top: 128px; right: 12px; width: 258px; padding: 12px 14px; max-height: calc(100% - 250px); overflow-y: auto;
+    transition: transform .35s ease; }
+  #jetzt.zu { transform: translateX(calc(100% + 20px)); }
+  #klapp { position: fixed; top: 128px; right: 12px; z-index: 3; width: 28px; height: 28px; border-radius: 8px; border: 1px solid var(--line);
+    background: var(--panel); color: var(--text); cursor: pointer; font-size: 14px; transition: right .35s ease; }
+  #klapp.offen { right: 278px; }
+  .zeile { display: flex; justify-content: space-between; gap: 8px; padding: 2px 0; font-variant-numeric: tabular-nums; font-size: 13px; }
   .zeile span:first-child { color: var(--muted); }
   .trenn { height: 1px; background: var(--line); margin: 8px 0; }
-  .balken { height: 6px; border-radius: 3px; background: rgba(255,255,255,.07); overflow: hidden; margin: 4px 0 6px; }
+  .balken { height: 5px; border-radius: 3px; background: rgba(255,255,255,.07); overflow: hidden; margin: 3px 0 5px; }
   .balken i { display: block; height: 100%; width: 0; border-radius: 3px; transition: width .2s; }
-  .punkte { display: flex; gap: 4px; margin: 6px 0 2px; flex-wrap: wrap; }
-  .punkte i { width: 14px; height: 14px; border-radius: 4px; background: var(--standby); opacity: .5; }
+  .punkte { display: flex; gap: 3px; margin: 4px 0 2px; flex-wrap: wrap; }
+  .punkte i { width: 12px; height: 12px; border-radius: 3px; background: var(--standby); opacity: .45; }
   .punkte i.an { background: var(--idle); opacity: 1; } .punkte i.rechnet { background: var(--compute); opacity: 1; }
-  .legende { display: flex; gap: 10px; font-size: 11px; color: var(--muted); margin-top: 6px; flex-wrap: wrap; }
+  .punkte i.echt { outline: 2px solid #fff; outline-offset: 1px; }
+  .legende { display: flex; gap: 10px; font-size: 11px; color: var(--muted); margin-top: 4px; flex-wrap: wrap; }
   .legende em { font-style: normal; display: inline-flex; align-items: center; gap: 4px; }
   .legende em::before { content: ""; width: 9px; height: 9px; border-radius: 3px; background: var(--c); }
-  /* Detail beim Anklicken */
-  #detail { top: 104px; left: 14px; width: 300px; padding: 14px 16px; display: none; }
-  #detail.offen { display: block; }
-  #detail h3 { margin: 0 0 2px; font-size: 18px; }
-  #detail .status { display: inline-block; margin: 4px 0 10px; padding: 2px 9px; border-radius: 99px; font-size: 12px;
-    font-weight: 600; color: #08101f; }
-  #detail canvas { width: 100%; height: 70px; display: block; margin-top: 6px; }
-  #detail p { color: var(--muted); font-size: 12px; margin: 8px 0 0; }
-  #zu { position: absolute; top: 10px; right: 10px; background: none; border: 0; color: var(--muted); font-size: 18px;
-    cursor: pointer; }
+  .gross { font-size: 20px; font-weight: 650; font-variant-numeric: tabular-nums; }
+  .ok { color: var(--compute); } .nein { color: var(--oil); }
+  #modell { color: var(--muted); font-size: 10.5px; margin: 8px 0 0; }
+
+  /* Linkes Panel: Detail oder Thermostat */
+  #links { top: 128px; left: 12px; width: 300px; padding: 14px 16px; display: none; max-height: calc(100% - 250px); overflow-y: auto; }
+  #links.offen { display: block; }
+  #links h3 { margin: 0 0 2px; font-size: 18px; }
+  .status { display: inline-block; margin: 4px 0 10px; padding: 2px 9px; border-radius: 99px; font-size: 12px; font-weight: 600; color: #08101f; }
+  #links canvas { width: 100%; display: block; margin-top: 6px; }
+  #links p { color: var(--muted); font-size: 12px; margin: 8px 0 0; }
+  #zu { position: absolute; top: 8px; right: 10px; background: none; border: 0; color: var(--muted); font-size: 18px; cursor: pointer; }
+  /* Thermostat im Stil einer App */
+  .app { margin: 6px 0 4px; padding: 14px; border-radius: 22px; background: linear-gradient(160deg, #1b2440, #0f1528);
+    border: 1px solid rgba(255,255,255,.08); text-align: center; }
+  .app .ist { font-size: 12px; color: var(--muted); }
+  .app .soll { font-size: 44px; font-weight: 300; letter-spacing: -1px; line-height: 1.1; font-variant-numeric: tabular-nums; }
+  .app .soll small { font-size: 20px; }
+  .app .knoepfe { display: flex; justify-content: center; gap: 18px; margin: 6px 0 4px; }
+  .app .knoepfe button { width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line); background: rgba(255,255,255,.06);
+    color: var(--text); font-size: 22px; cursor: pointer; }
+  .app .knoepfe button:hover { background: rgba(255,255,255,.14); }
+  .app .rechnen { font-size: 12px; color: var(--muted); }
+  .app .rechnen b { color: var(--compute); }
+  .optionen { display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--muted); margin: 8px 0 4px; }
+  .optionen label { display: inline-flex; gap: 5px; align-items: center; cursor: pointer; }
+
   /* Zeitleiste */
-  #zeit { left: 14px; right: 14px; bottom: 14px; padding: 10px 16px 12px; }
-  #zeitkopf { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-  #datum { font-size: 16px; font-weight: 650; min-width: 172px; font-variant-numeric: tabular-nums; }
-  #wetter { color: var(--muted); min-width: 90px; font-variant-numeric: tabular-nums; }
+  #zeit { left: 12px; right: 12px; bottom: 12px; padding: 8px 14px 10px; }
+  #zeitkopf { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  #datum { font-size: 15px; font-weight: 650; min-width: 168px; font-variant-numeric: tabular-nums; }
+  #wetter { color: var(--muted); min-width: 84px; font-variant-numeric: tabular-nums; }
   button.knopf, select.knopf { background: rgba(255,255,255,.06); color: var(--text); border: 1px solid var(--line);
-    border-radius: 9px; padding: 6px 11px; font: inherit; font-size: 13px; cursor: pointer; }
+    border-radius: 9px; padding: 5px 10px; font: inherit; font-size: 13px; cursor: pointer; }
   button.knopf:hover, select.knopf:hover { background: rgba(255,255,255,.12); }
   button.knopf.aktiv { border-color: var(--compute); color: var(--compute); }
-  #play { width: 40px; font-size: 15px; }
+  button.knopf.haupt { background: var(--compute); color: #06221c; border-color: var(--compute); font-weight: 650; }
+  #play { width: 38px; font-size: 14px; }
   .spacer { flex: 1; }
-  #jahr { position: relative; margin-top: 8px; height: 46px; cursor: pointer; }
+  #jahr { position: relative; margin-top: 6px; height: 42px; cursor: pointer; }
   #jahr canvas { width: 100%; height: 100%; display: block; }
-  #marker { position: absolute; top: -2px; bottom: -2px; width: 2px; background: #fff; border-radius: 2px;
-    box-shadow: 0 0 10px #fff; pointer-events: none; }
-  #hinweis { position: fixed; left: 50%; transform: translateX(-50%); bottom: 112px; font-size: 12px; color: var(--muted);
-    background: var(--panel); border: 1px solid var(--line); padding: 5px 12px; border-radius: 99px; pointer-events: none;
-    transition: opacity .6s; }
+  #marker { position: absolute; top: -2px; bottom: -2px; width: 2px; background: #fff; border-radius: 2px; box-shadow: 0 0 10px #fff; pointer-events: none; }
+  #hinweis { position: fixed; left: 50%; transform: translateX(-50%); bottom: 104px; font-size: 12px; color: var(--muted);
+    background: var(--panel); border: 1px solid var(--line); padding: 5px 12px; border-radius: 99px; pointer-events: none; transition: opacity .6s; }
   .label { color: var(--text); font-size: 12px; font-weight: 600; padding: 3px 8px; border-radius: 99px;
     background: rgba(7, 11, 22, .72); border: 1px solid var(--line); white-space: nowrap; pointer-events: none; }
   .label small { color: var(--muted); font-weight: 450; }
-  @media (max-width: 900px) {
+  .label.temp { font-size: 13px; font-variant-numeric: tabular-nums; }
+  .label.warn { border-color: rgba(255, 93, 74, .7); color: #ffb3a8; }
+  /* Karten in der Cloud */
+  .wolke { width: 184px; padding: 6px 9px; border-radius: 12px; background: rgba(10, 22, 44, .78); border: 1px solid rgba(120, 220, 255, .35);
+    box-shadow: 0 0 18px rgba(80, 200, 255, .18); font-size: 11.5px; line-height: 1.35; color: var(--text); pointer-events: none; }
+  .wolke b.t { display: block; font-size: 10px; letter-spacing: .8px; text-transform: uppercase; color: #8fe3ff; margin-bottom: 2px; }
+  .wolke .z { display: flex; justify-content: space-between; gap: 6px; font-variant-numeric: tabular-nums; }
+  .wolke .z span:first-child { color: var(--muted); }
+  .wolke .z span { white-space: nowrap; }
+  .wolke canvas { width: 100%; height: 38px; display: block; margin: 3px 0 1px; }
+  .wolke small { color: var(--muted); font-size: 10px; }
+  .segment { display: inline-flex; border: 1px solid var(--line); border-radius: 9px; overflow: hidden; }
+  .segment button { background: rgba(255,255,255,.04); color: var(--muted); border: 0; padding: 5px 9px; font: inherit; font-size: 12.5px; cursor: pointer; }
+  .segment button.an { background: rgba(62,224,192,.18); color: var(--compute); font-weight: 600; }
+  .segment button.an.pause { background: rgba(255,200,87,.18); color: var(--idle); }
+  .ablauf { display: flex; gap: 4px; align-items: center; flex-wrap: wrap; margin: 4px 0 8px; font-size: 11px; }
+  .ablauf span { padding: 2px 7px; border-radius: 99px; border: 1px solid var(--line); color: var(--muted); }
+  .ablauf span.jetzt { border-color: #fff; color: #08101f; font-weight: 650; }
+  .ablauf i { color: var(--muted); font-style: normal; }
+  @media (max-width: 1400px) {
+    #wetter { display: none; }
+    #datum { min-width: 150px; font-size: 14px; }
+    button.knopf, select.knopf, .segment button { padding: 5px 7px; font-size: 12.5px; }
+    #zeitkopf { gap: 6px; flex-wrap: nowrap; }
+  }
+  @media (max-width: 1100px) {
+    #kpis .kpi:nth-child(n+6) { display: none; }
+    #satz { font-size: 13.5px; top: 70px; }
+  }
+  @media (max-width: 820px) {
     #kopf { flex-direction: column; align-items: flex-start; }
-    #kpis { justify-content: flex-start; }
-    #jetzt { display: none; }
-    #detail { top: auto; bottom: 150px; left: 14px; right: 14px; width: auto; }
+    #jetzt, #klapp { display: none; }
+    #links { top: auto; bottom: 120px; left: 12px; right: 12px; width: auto; max-height: 50%; }
   }
 </style>
 </head>
@@ -95,43 +156,61 @@
 <div id="szene"></div>
 
 <header id="kopf" class="panel">
-  <h1>Rechnen, das heizt<small>Case-Kennzahlen Referenzhaus Basel 2025 (Case-Regel)</small></h1>
+  <h1>Rechnen, das heizt<small>Server im Keller heizen Basler Häuser, im Sommer das Sportbad</small></h1>
+  <span id="live"><i></i><span id="live-text">LIVE</span></span>
   <div id="kpis"></div>
 </header>
 
+<div id="satz" class="panel">–</div>
+
+<button id="klapp" class="offen" title="Panel ein-/ausklappen (P)">⟩</button>
 <aside id="jetzt" class="panel">
-  <h2>Diese Stunde</h2>
-  <div class="zeile"><span>Wärmebedarf Haus</span><span id="j-bed">–</span></div>
+  <h2 class="k">Haus 01 · diese Stunde</h2>
+  <div class="zeile"><span>Wärmebedarf</span><span id="j-bed">–</span></div>
   <div class="zeile"><span>Von Servern gedeckt</span><span id="j-deck">–</span></div>
   <div class="balken"><i id="j-deck-b" style="background:var(--heat)"></i></div>
+  <div class="zeile"><span>Ölkessel</span><span id="j-oel">–</span></div>
   <div class="zeile"><span>Speicher</span><span id="j-sp">–</span></div>
   <div class="balken"><i id="j-sp-b" style="background:linear-gradient(90deg,var(--cold),var(--heat))"></i></div>
-  <div class="zeile"><span>Server im Haus</span><span id="j-on">–</span></div>
+  <div class="zeile"><span>Server</span><span id="j-on">–</span></div>
   <div class="punkte" id="j-punkte"></div>
   <div class="trenn"></div>
-  <div class="zeile"><span>Sportbad St. Jakob</span><span id="j-bad">–</span></div>
-  <div class="zeile"><span>Server im Bad</span><span id="j-bad-on">–</span></div>
-  <div class="balken"><i id="j-bad-b" style="background:var(--compute)"></i></div>
+  <h2 class="k">Haus 02</h2>
+  <div class="zeile"><span>Server</span><span id="j2-on">–</span></div>
+  <div class="punkte" id="j2-punkte"></div>
   <div class="trenn"></div>
+  <h2 class="k">Sportbad St. Jakob</h2>
+  <div class="zeile"><span id="j-bad-z">–</span><span id="j-bad-on">–</span></div>
+  <div class="balken"><i id="j-bad-b" style="background:var(--compute)"></i></div>
   <div class="zeile"><span>Flotte rechnet</span><span id="j-flotte">–</span></div>
   <div class="zeile"><span>Migrationen</span><span id="j-mig">–</span></div>
+  <div class="trenn"></div>
+  <h2 class="k" id="b-titel">Betrieb: Abschalten</h2>
+  <div class="zeile"><span>Strom Haus 01 jetzt</span><span id="b-jetzt">–</span></div>
+  <div class="zeile"><span id="b-andere-t">Bei «Pausieren» wären es</span><span id="b-pause">–</span></div>
+  <div class="zeile"><span>Strom pro Jahr</span><span id="b-jahr">–</span></div>
+  <div class="zeile"><span>Weggekühlt pro Jahr</span><span id="b-weg">–</span></div>
+  <div class="trenn"></div>
+  <h2 class="k">Heizöl gespart seit 1. Januar · Haus 01</h2>
+  <div class="gross" id="j-oelspar">–</div>
+  <div class="zeile"><span>CO₂ vermieden</span><span id="j-co2">–</span></div>
+  <div class="trenn"></div>
+  <h2 class="k" id="z-titel">Zusage für morgen</h2>
+  <div class="zeile"><span>Prognose aussen</span><span id="z-temp">–</span></div>
+  <div class="zeile"><span>Zugesagt (Flotte)</span><span id="z-zu">–</span></div>
+  <div class="zeile"><span>Geliefert</span><span id="z-ge">–</span></div>
   <div class="legende">
     <em style="--c:var(--compute)">rechnet</em><em style="--c:var(--idle)">bereit</em><em style="--c:var(--standby)">Standby</em>
   </div>
-  <p style="color:var(--muted);font-size:11px;margin:10px 0 0" id="modell"></p>
+  <p id="modell"></p>
 </aside>
 
-<aside id="detail" class="panel">
+<aside id="links" class="panel">
   <button id="zu" title="Schliessen (Esc)">×</button>
-  <h2 id="d-art">Server</h2>
-  <h3 id="d-titel">–</h3>
-  <span class="status" id="d-status">–</span>
-  <div id="d-zeilen"></div>
-  <canvas id="d-chart"></canvas>
-  <p id="d-text"></p>
+  <div id="links-inhalt"></div>
 </aside>
 
-<div id="hinweis">Server oder Bad anklicken · ziehen zum Drehen · scrollen zum Zoomen</div>
+<div id="hinweis">Server, Ölkessel oder Bad anklicken · ziehen zum Drehen · scrollen zum Zoomen</div>
 
 <footer id="zeit" class="panel">
   <div id="zeitkopf">
@@ -144,11 +223,16 @@
       <option value="24">1 Tag/s</option>
       <option value="168">1 Woche/s</option>
     </select>
+    <span class="segment" title="Was passiert mit Servern ohne Arbeit?">
+      <button id="m-pause">Pausieren</button><button id="m-ab" class="an">Abschalten</button>
+    </span>
+    <button class="knopf aktiv" id="cloud-knopf" title="Cloud-Ebene ein-/ausblenden (C)">☁ Cloud</button>
     <div class="spacer"></div>
     <button class="knopf tag" data-tag="01-15">Januartag</button>
     <button class="knopf tag" data-tag="03-07">7. März</button>
-    <button class="knopf tag" data-tag="05-25">25. Mai</button>
     <button class="knopf tag" data-tag="07-15">Julitag</button>
+    <button class="knopf" id="thermo-knopf">🌡 Thermostat</button>
+    <button class="knopf haupt" id="tour-knopf">▶ Tour</button>
     <button class="knopf" id="uebersicht">Übersicht</button>
   </div>
   <div id="jahr"><canvas id="jahr-c"></canvas><div id="marker"></div></div>
@@ -157,8 +241,8 @@
 <script src="daten3d.js"></script>
 <script type="importmap">
 { "imports": {
-  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  "three": "./vendor/three/build/three.module.min.js",
+  "three/addons/": "./vendor/three/examples/jsm/"
 } }
 </script>
 <script type="module">
@@ -170,19 +254,39 @@ import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
 
-const D = window.D3, S = D.stunden, K = D.kennzahlen, M = D.modell;
-const N = S.zeit.length, NH = M.server_haus, NB = M.server_bad;
-const fmt = (x, d = 0) => x.toLocaleString('de-CH', { minimumFractionDigits: d, maximumFractionDigits: d });
+const D = window.D3, S = D.stunden, K = D.kennzahlen, M = D.modell, W = D.waerme, Z = D.zusage;
+const N = S.zeit.length, NH = M.server_haus, NB = M.server_bad, ETA = W.waermerueckgewinnung;
+// Schweizer Schreibweise wie in den Team-Dokumenten: 34’500 und 0,60
+const fmt = (x, d = 0) => x.toLocaleString('de-CH', { minimumFractionDigits: d, maximumFractionDigits: d }).replace('.', ',');
 const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
 const lerp = (a, b, t) => a + (b - a) * t;
+const el = id => document.getElementById(id);
+const MONATE = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
+const datumText = (i, kurz = false) => {
+  const z = S.zeit[i], m = MONATE[parseInt(z.slice(0, 2)) - 1];
+  return `${parseInt(z.slice(3, 5))}. ${kurz ? m.slice(0, 3) : m}`;
+};
 const C = {
   compute: new THREE.Color('#3ee0c0'), idle: new THREE.Color('#ffc857'), standby: new THREE.Color('#2a3550'),
   heat: new THREE.Color('#ff8a3d'), cold: new THREE.Color('#5aa8ff'), metal: new THREE.Color('#1b2233'),
 };
+const VERTRAG = K.vertragspreis_chf_server_h;
+const CL = D.cloud || {}, SVC = CL.service ? CL.service.server : null;
+let modus = 'abschalten';   // was passiert mit Servern ohne Arbeit: 'abschalten' oder 'pausieren'
+const stromJetzt = (on, lauf, n) => lauf + (M.leerlauf_watt / 1000) * Math.max(0, on - lauf) + (M.standby_watt / 1000) * (n - on);
+
+// Haus-Daten: Haus 01 = "h", Haus 02 = "h2"
+const HD = [1, 2].map(n => {
+  const p = n === 1 ? 'h' : 'h2';
+  return { bed: S[p + '_bed'], gen: S[p + '_gen'], sp: S[p + '_sp'], on: S[p + '_on'], lauf: S[p + '_lauf'] };
+});
+const kessel = (hd, i) => Math.max(0, hd.bed[i] - hd.gen[i]);
+// Heizöl gespart (kumuliert): genutzte Serverwärme ersetzt Ölwärme
+const oelSpar = HD.map(hd => { const a = new Float32Array(N); for (let i = 0, s = 0; i < N; i++) { s += hd.gen[i] / (W.heizoel_kwh_l * W.kessel_wirkungsgrad); a[i] = s; } return a; });
 
 // ---------- Kennzahlen oben (Case-Regel) ----------
 const kc = K.case;
-document.getElementById('kpis').innerHTML = [
+el('kpis').innerHTML = '<span class="gruppe">Jahr 2025 · Case-Regel</span>' + [
   ['Server pro Haus', fmt(kc.server_pro_haus), ''],
   ['Wärme gedeckt', fmt(kc.deckung * 100, 1) + ' %', 'heat'],
   ['Weggekühlt', fmt(kc.abgefuehrt_kwh) + ' kWh', ''],
@@ -190,11 +294,12 @@ document.getElementById('kpis').innerHTML = [
   ['Fristen verpasst', fmt(kc.verpasst * 100, 1) + ' %', ''],
   ['Break-even', fmt(kc.break_even_chf_server_h, 2) + ' CHF/Server-h', ''],
 ].map(([t, v, c]) => `<div class="kpi ${c}"><b>${v}</b><span>${t}</span></div>`).join('');
-document.getElementById('modell').textContent =
-  `Szene: Flotte aus ${M.haeuser} Häusern und Sportbad (${NB} Server), Server werden bei Bedarf ein- und `
-  + `ausgeschaltet (${M.leerlauf_watt} W Leerlauf, ${M.standby_watt} W Standby). Gezeigt: Haus 01.`;
+el('modell').textContent =
+  `Szene: Flotte aus ${M.haeuser} Häusern und Sportbad (${NB} Server). Server werden bei Bedarf ein- und `
+  + `ausgeschaltet (${M.leerlauf_watt} W Leerlauf, ${M.standby_watt} W Standby). Die Werte «diese Stunde» stammen aus diesem `
+  + `Betriebsmodell, die Kennzahlen oben aus der Case-Regel. Heizöl: ${W.oel_quelle}.`;
 
-// ---------- Pro Server: Zustand und Jahreswerte ----------
+// ---------- Server pro Haus ----------
 function serverLast(lauf, an, k) { return k < an ? clamp(lauf - k) : 0; }
 function serverZustand(lauf, an, k) {
   if (k >= an) return 'standby';
@@ -205,25 +310,24 @@ function serverWatt(lauf, an, k) {
   const l = serverLast(lauf, an, k);
   return 1000 * l + M.leerlauf_watt * (1 - l);
 }
-const jahrServer = Array.from({ length: NH }, (_, k) => {
-  let anH = 0, rechenH = 0, kwh = 0;
-  for (let i = 0; i < N; i++) {
-    if (S.h_on[i] > k) anH++;
-    rechenH += serverLast(S.h_lauf[i], S.h_on[i], k);
-    kwh += serverWatt(S.h_lauf[i], S.h_on[i], k) / 1000;
-  }
-  return { anH, rechenH, kwh };
-});
+const jahrCache = {};
+function jahrServer(haus, k) {
+  const key = haus + '-' + k;
+  if (jahrCache[key]) return jahrCache[key];
+  const hd = HD[haus - 1];
+  let anH = 0, rechenH = 0;
+  for (let i = 0; i < N; i++) { if (hd.on[i] > k) anH++; rechenH += serverLast(hd.lauf[i], hd.on[i], k); }
+  return (jahrCache[key] = { anH, rechenH });
+}
 
 // ---------- Renderer, Szene, Kamera ----------
-const box = document.getElementById('szene');
+const box = el('szene');
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
 renderer.setSize(innerWidth, innerHeight);
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.05;
 box.appendChild(renderer.domElement);
 const labels = new CSS2DRenderer();
 labels.setSize(innerWidth, innerHeight);
@@ -231,31 +335,30 @@ Object.assign(labels.domElement.style, { position: 'absolute', top: 0, left: 0, 
 box.appendChild(labels.domElement);
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color('#070b16');
-scene.fog = new THREE.Fog('#070b16', 55, 120);
-const camera = new THREE.PerspectiveCamera(42, innerWidth / innerHeight, 0.1, 400);
-const HOME = { pos: new THREE.Vector3(5, 8, 37), target: new THREE.Vector3(8, -0.8, 2) };
+scene.background = new THREE.Color('#0c1428');
+scene.fog = new THREE.Fog('#0c1428', 60, 130);
+const camera = new THREE.PerspectiveCamera(40, innerWidth / innerHeight, 0.1, 400);
+const HOME = { pos: new THREE.Vector3(7, 12.5, 54), target: new THREE.Vector3(8.5, 5.2, 0) };
 camera.position.copy(HOME.pos);
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.target.copy(HOME.target);
 controls.enableDamping = true;
 controls.maxPolarAngle = Math.PI * 0.49;
-controls.minDistance = 3; controls.maxDistance = 90;
+controls.minDistance = 2.5; controls.maxDistance = 95;
 
 const composer = new EffectComposer(renderer);
 composer.addPass(new RenderPass(scene, camera));
-const bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 0.6, 0.45, 0.85);
-composer.addPass(bloom);
+composer.addPass(new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 0.6, 0.45, 0.85));
 composer.addPass(new OutputPass());
 
-const hemi = new THREE.HemisphereLight('#9fb8ff', '#1a1410', 0.5);
+const hemi = new THREE.HemisphereLight('#9fb8ff', '#1a1410', 0.6);
 scene.add(hemi);
 const sonne = new THREE.DirectionalLight('#fff1dc', 1.4);
 sonne.castShadow = true;
 sonne.shadow.mapSize.set(2048, 2048);
-Object.assign(sonne.shadow.camera, { left: -40, right: 40, top: 30, bottom: -30, near: 1, far: 120 });
+Object.assign(sonne.shadow.camera, { left: -45, right: 45, top: 30, bottom: -30, near: 1, far: 140 });
 scene.add(sonne, sonne.target);
-sonne.target.position.set(6, 0, 0);
+sonne.target.position.set(11, 0, 0);
 
 const mat = (color, o = {}) => new THREE.MeshStandardMaterial({ color, roughness: 0.8, metalness: 0.05, ...o });
 function mesh(geo, material, x, y, z, parent = scene, schatten = true) {
@@ -265,371 +368,705 @@ function mesh(geo, material, x, y, z, parent = scene, schatten = true) {
   parent.add(m);
   return m;
 }
-function label(html, x, y, z, parent = scene) {
+function label(html, x, y, z, klasse = '') {
   const div = document.createElement('div');
-  div.className = 'label'; div.innerHTML = html;
-  const o = new CSS2DObject(div); o.position.set(x, y, z); parent.add(o);
+  div.className = 'label ' + klasse; div.innerHTML = html;
+  const o = new CSS2DObject(div); o.position.set(x, y, z); scene.add(o);
+  div._obj = o;   // Sichtbarkeit über o.visible steuern; CSS2DRenderer überschreibt style.display
   return div;
 }
 const klickbar = [];
+const V = (x, y, z) => new THREE.Vector3(x, y, z);
 
-// ---------- Diorama-Sockel: Erde mit Schnitt durch den Keller ----------
+// ---------- Diorama-Sockel mit zwei Kellern im Schnitt ----------
 const erdeMat = mat('#2a2119', { roughness: 1 });
 const rasenMat = mat('#2f4a2a', { roughness: 1 });
-const SOCKEL = { x0: -16, x1: 30, z0: -14, z1: 12, tiefe: 3.6 };
-// Häuser-Grundriss mit Keller: x -4.6..4.6, z 5..12 (Keller offen nach vorne)
-const KEL = { x0: -4.6, x1: 4.6, z0: 5, z1: 12, boden: -3.2 };
+const SOCKEL = { x0: -18, x1: 38, z0: -14, tiefe: 3.6 };
+const KZ0 = 5, KZ1 = 12, KBODEN = -3.2;
+const HAEUSER = [
+  { n: 1, x0: -4.6, x1: 4.6, name: 'Haus 01', unter: 'Öl-Pilot Basel', dach: '#6b3b2f' },
+  { n: 2, x0: 7.4, x1: 15.0, name: 'Haus 02', unter: 'Nachbarhaus der Flotte', dach: '#4c5466' },
+];
 function sockelBlock(x0, x1, z0, z1) {
-  const g = new THREE.BoxGeometry(x1 - x0, SOCKEL.tiefe, z1 - z0);
-  mesh(g, erdeMat, (x0 + x1) / 2, -SOCKEL.tiefe / 2, (z0 + z1) / 2, scene, false);
-  const r = mesh(new THREE.BoxGeometry(x1 - x0, 0.12, z1 - z0), rasenMat, (x0 + x1) / 2, 0.06, (z0 + z1) / 2, scene, false);
-  r.userData.rasen = true;
+  mesh(new THREE.BoxGeometry(x1 - x0, SOCKEL.tiefe, z1 - z0), erdeMat, (x0 + x1) / 2, -SOCKEL.tiefe / 2, (z0 + z1) / 2, scene, false);
+  mesh(new THREE.BoxGeometry(x1 - x0, 0.12, z1 - z0), rasenMat, (x0 + x1) / 2, 0.06, (z0 + z1) / 2, scene, false);
 }
-sockelBlock(SOCKEL.x0, KEL.x0, SOCKEL.z0, SOCKEL.z1);
-sockelBlock(KEL.x1, SOCKEL.x1, SOCKEL.z0, SOCKEL.z1);
-sockelBlock(KEL.x0, KEL.x1, SOCKEL.z0, KEL.z0);
-mesh(new THREE.BoxGeometry(KEL.x1 - KEL.x0, SOCKEL.tiefe + KEL.boden, KEL.z1 - KEL.z0),
-  erdeMat, 0, (-SOCKEL.tiefe + KEL.boden) / 2, (KEL.z0 + KEL.z1) / 2, scene, false);
-const kellerBoden = mesh(new THREE.BoxGeometry(KEL.x1 - KEL.x0, 0.08, KEL.z1 - KEL.z0), mat('#3a4152'),
-  0, KEL.boden + 0.04, (KEL.z0 + KEL.z1) / 2, scene, false);
-// Kellerdecke als Betonplatte (= Boden EG)
-mesh(new THREE.BoxGeometry(KEL.x1 - KEL.x0, 0.25, KEL.z1 - KEL.z0), mat('#5b6170'), 0, -0.05, (KEL.z0 + KEL.z1) / 2);
-const kellerLicht = new THREE.PointLight('#7fd8ff', 6, 12, 1.6);
-kellerLicht.position.set(0, -0.8, 9.5); scene.add(kellerLicht);
+sockelBlock(SOCKEL.x0, SOCKEL.x1, SOCKEL.z0, KZ0);
+let xLauf = SOCKEL.x0;
+for (const h of HAEUSER) { sockelBlock(xLauf, h.x0, KZ0, KZ1); xLauf = h.x1; }
+sockelBlock(xLauf, SOCKEL.x1, KZ0, KZ1);
+// Erdschichten an der Schnittkante, damit die Front nicht nur schwarz ist
+for (const [y, farbe] of [[-0.45, '#4a3826'], [-1.5, '#3b2c1f'], [-2.7, '#2f231a']]) {
+  for (const [x0, x1] of [[SOCKEL.x0, HAEUSER[0].x0], [HAEUSER[0].x1, HAEUSER[1].x0], [HAEUSER[1].x1, SOCKEL.x1]])
+    mesh(new THREE.BoxGeometry(x1 - x0, 0.95, 0.03), mat(farbe, { roughness: 1 }), (x0 + x1) / 2, y, KZ1 + 0.02, scene, false);
+}
 
-// ---------- Haus im Schnitt ----------
-const haus = new THREE.Group(); scene.add(haus);
+// ---------- Ein Haus bauen: Keller mit Servern, Speicher, Ölkessel, zwei Etagen ----------
 const wandMat = mat('#d9d4c9', { roughness: 0.9 });
 const glasMat = new THREE.MeshPhysicalMaterial({ color: '#a8c8ff', transparent: true, opacity: 0.16, roughness: 0.1,
   metalness: 0, depthWrite: false });
-const H = { x0: -4.6, x1: 4.6, z0: 5, z1: 12, geschoss: 2.9 };
-const breite = H.x1 - H.x0, tief = H.z1 - H.z0;
-// Rückwand und Seitenwände, Vorderseite offen (Schnitt)
-mesh(new THREE.BoxGeometry(breite, H.geschoss * 2, 0.25), wandMat, 0, H.geschoss, H.z0, haus);
-mesh(new THREE.BoxGeometry(0.25, H.geschoss * 2, tief), glasMat, H.x0, H.geschoss, (H.z0 + H.z1) / 2, haus, false);
-mesh(new THREE.BoxGeometry(0.25, H.geschoss * 2, tief), wandMat, H.x1, H.geschoss, (H.z0 + H.z1) / 2, haus);
-mesh(new THREE.BoxGeometry(breite, 0.2, tief), mat('#8b7f70'), 0, H.geschoss, (H.z0 + H.z1) / 2, haus);
-// Dach (zwei Flächen), vorne etwas zurückgesetzt damit man hineinsieht
-const dachMat = mat('#6b3b2f', { roughness: 0.85 });
-for (const s of [-1, 1]) {
-  const d = mesh(new THREE.BoxGeometry(breite / 2 + 0.9, 0.22, tief - 1.6), dachMat,
-    s * breite / 4.2, H.geschoss * 2 + 1.25, (H.z0 + H.z1) / 2 - 0.8, haus);
-  d.rotation.z = -s * 0.55;
-}
-// Räume: vier Zimmer, Farbe nach Wärme
-const raumMats = [], heizkoerper = [];
-const raeume = [[-1, 0], [1, 0], [-1, 1], [1, 1]];
-for (const [sx, etage] of raeume) {
-  const m = mat('#3a4560', { emissive: new THREE.Color('#ff8a3d'), emissiveIntensity: 0, transparent: true, opacity: 0.92 });
-  raumMats.push(m);
-  mesh(new THREE.BoxGeometry(breite / 2 - 0.5, 0.06, tief - 0.6), m, sx * breite / 4, etage * H.geschoss + 0.14,
-    (H.z0 + H.z1) / 2, haus, false);
-  // Heizkörper an der Rückwand
-  const hk = mesh(new THREE.BoxGeometry(1.6, 0.7, 0.12),
-    mat('#ddd', { emissive: new THREE.Color('#ff6a1a'), emissiveIntensity: 0 }),
-    sx * breite / 4, etage * H.geschoss + 0.8, H.z0 + 0.25, haus);
-  heizkoerper.push(hk);
-  // Möbel-Andeutung
-  mesh(new THREE.BoxGeometry(1.4, 0.5, 0.8), mat('#4b5675'), sx * breite / 4 + sx * 0.6, etage * H.geschoss + 0.4, 9.5, haus);
-}
-const hausLicht = new THREE.PointLight('#ffb070', 0, 14, 1.5);
-hausLicht.position.set(0, 3.2, 9); scene.add(hausLicht);
-label('Haus 01 <small>· Öl-Pilot Basel</small>', 0, H.geschoss * 2 + 3.2, 8.5);
+const GESCHOSS = 2.9;
 
-// ---------- Server-Racks im Keller ----------
-function baueRack(x, y, z, einheiten, parent, info) {
-  const g = new THREE.Group(); g.position.set(x, y, z); parent.add(g);
-  const koerper = mesh(new THREE.BoxGeometry(0.62, 1.95, 0.9),
-    mat(C.metal, { metalness: 0.6, roughness: 0.35, emissive: new THREE.Color('#3ee0c0'), emissiveIntensity: 0 }),
-    0, 0.975, 0, g);
+function baueRack(x, y, z, einheiten, info) {
+  const g = new THREE.Group(); g.position.set(x, y, z); scene.add(g);
+  const koerper = mesh(new THREE.BoxGeometry(0.6, 1.95, 0.9),
+    mat(C.metal, { metalness: 0.6, roughness: 0.35, emissive: new THREE.Color('#3ee0c0'), emissiveIntensity: 0 }), 0, 0.975, 0, g);
   const leds = [];
   for (let u = 0; u < einheiten; u++) {
-    const led = mesh(new THREE.BoxGeometry(0.46, Math.min(0.12, 1.5 / einheiten - 0.04), 0.02),
+    leds.push(mesh(new THREE.BoxGeometry(0.44, Math.min(0.12, 1.5 / einheiten - 0.04), 0.02),
       new THREE.MeshStandardMaterial({ color: '#000', emissive: C.standby.clone(), emissiveIntensity: 1 }),
-      0, 0.3 + u * (1.5 / einheiten), 0.46, g, false);
-    leds.push(led);
+      0, 0.3 + u * (1.5 / einheiten), 0.46, g, false));
   }
-  // Lüfter-Punkte
-  const luefter = mesh(new THREE.CircleGeometry(0.09, 16),
-    new THREE.MeshBasicMaterial({ color: '#0e1424' }), 0.18, 1.78, 0.455, g, false);
+  const luefter = mesh(new THREE.CircleGeometry(0.08, 16), new THREE.MeshBasicMaterial({ color: '#0e1424' }), 0.17, 1.78, 0.455, g, false);
   for (const m of [koerper, ...leds]) { m.userData = info; klickbar.push(m); }
   return { g, koerper, leds, luefter };
 }
-const hausRacks = [];
-for (let k = 0; k < NH; k++) {
-  const r = baueRack(-4 + k * 0.82, KEL.boden + 0.08, 5.7, 6, scene, { art: 'server', k });
-  hausRacks.push(r);
-}
-label('Keller · 8 Server à 8 × NVIDIA L4', -1.1, -0.6, 7.1);
-
-
-// ---------- Leitungen mit fliessender Wärme ----------
 function leitung(punkte, farbe) {
-  const kurve = new THREE.CatmullRomCurve3(punkte.map(p => new THREE.Vector3(...p)));
-  mesh(new THREE.TubeGeometry(kurve, 80, 0.055, 8, false), mat('#7a8295', { metalness: 0.6, roughness: 0.3 }), 0, 0, 0, scene, false);
-  const n = 26, geo = new THREE.BufferGeometry();
+  const kurve = new THREE.CatmullRomCurve3(punkte.map(p => V(...p)));
+  mesh(new THREE.TubeGeometry(kurve, 80, 0.05, 8, false), mat('#7a8295', { metalness: 0.6, roughness: 0.3 }), 0, 0, 0, scene, false);
+  const n = 24, geo = new THREE.BufferGeometry();
   geo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(n * 3), 3));
   const pts = new THREE.Points(geo, new THREE.PointsMaterial({ color: farbe, size: 0.22, transparent: true,
     opacity: 0.95, depthWrite: false, blending: THREE.AdditiveBlending }));
   scene.add(pts);
-  return { kurve, pts, n, phase: Math.random() };
+  return { kurve, pts, n, phase: Math.random(), fluss: 0 };
 }
-const Y0 = KEL.boden;
-const leitungen = {
-  serverZumTank: leitung([[-4, Y0 + 2.15, 6.1], [-1, Y0 + 2.4, 6.4], [2.5, Y0 + 2.4, 6.6], [3.8, Y0 + 2.6, 7]], '#ff9a52'),
-  tankZuOben1: leitung([[3.8, Y0 + 2.6, 7], [3.8, 0.2, 7], [2.3, 0.6, 5.6], [2.3, 0.9, 5.35]], '#ff7a2a'),
-  tankZuOben2: leitung([[3.8, Y0 + 2.6, 7], [4.2, 1.5, 6.6], [4.2, H.geschoss + 0.5, 5.6], [2.3, H.geschoss + 0.85, 5.35]], '#ff7a2a'),
-};
+function baueHaus(h) {
+  const breite = h.x1 - h.x0, mx = (h.x0 + h.x1) / 2, mz = (KZ0 + KZ1) / 2, tief = KZ1 - KZ0;
+  const o = { h, mx, racks: [], raumMats: [], heizkoerper: [], leitungen: [], tempLabels: [] };
+  // Keller
+  mesh(new THREE.BoxGeometry(breite, SOCKEL.tiefe + KBODEN, tief), erdeMat, mx, (-SOCKEL.tiefe + KBODEN) / 2, mz, scene, false);
+  mesh(new THREE.BoxGeometry(breite, 0.08, tief), mat('#3a4152'), mx, KBODEN + 0.04, mz, scene, false);
+  mesh(new THREE.BoxGeometry(breite, 0.25, tief), mat('#5b6170'), mx, -0.05, mz);
+  o.kellerLicht = new THREE.PointLight('#7fd8ff', 4, 12, 1.6);
+  o.kellerLicht.position.set(mx, -0.8, 9.5); scene.add(o.kellerLicht);
+  // Server
+  const abstand = Math.min(0.8, (breite - 3) / 7.6);
+  for (let k = 0; k < NH; k++) o.racks.push(baueRack(h.x0 + 0.55 + k * abstand, KBODEN + 0.08, 5.7, 6, { art: 'server', haus: h.n, k }));
+  // Verteilpunkt der Leitungen (kein Speichertank im Modell)
+  o.tank = { x: h.x1 - 0.4, z: 7.0 };
+  // Ölkessel mit Flamme
+  o.kessel = { x: h.x1 - 1.05, z: 7.1 };
+  const kk = mesh(new THREE.BoxGeometry(0.95, 1.5, 0.85), mat('#b9402f', { roughness: 0.5, metalness: 0.3 }), o.kessel.x, KBODEN + 0.83, o.kessel.z);
+  mesh(new THREE.BoxGeometry(0.35, 0.25, 0.02), new THREE.MeshBasicMaterial({ color: '#0b0d14' }), o.kessel.x, KBODEN + 0.7, o.kessel.z + 0.43, scene, false);
+  mesh(new THREE.CylinderGeometry(0.09, 0.09, 1.5, 10), mat('#6b7487', { metalness: 0.6 }), o.kessel.x, KBODEN + 2.3, o.kessel.z - 0.1);
+  o.flamme = mesh(new THREE.ConeGeometry(0.12, 0.32, 12), new THREE.MeshBasicMaterial({ color: '#ff7a1a', transparent: true, opacity: 0.95 }),
+    o.kessel.x, KBODEN + 0.72, o.kessel.z + 0.45, scene, false);
+  o.kesselLicht = new THREE.PointLight('#ff6a1a', 0, 6, 1.6);
+  o.kesselLicht.position.set(o.kessel.x, KBODEN + 1, o.kessel.z + 0.9); scene.add(o.kesselLicht);
+  kk.userData = { art: 'kessel', haus: h.n }; klickbar.push(kk);
+  // Haus
+  mesh(new THREE.BoxGeometry(breite, GESCHOSS * 2, 0.25), wandMat, mx, GESCHOSS, KZ0);
+  mesh(new THREE.BoxGeometry(0.25, GESCHOSS * 2, tief), glasMat, h.x0, GESCHOSS, mz, scene, false);
+  mesh(new THREE.BoxGeometry(0.25, GESCHOSS * 2, tief), wandMat, h.x1, GESCHOSS, mz);
+  mesh(new THREE.BoxGeometry(breite, 0.2, tief), mat('#8b7f70'), mx, GESCHOSS, mz);
+  const dachMat = mat(h.dach, { roughness: 0.85 });
+  for (const s of [-1, 1]) {
+    const d = mesh(new THREE.BoxGeometry(breite / 2 + 0.9, 0.22, tief - 1.6), dachMat, mx + s * breite / 4.2, GESCHOSS * 2 + 1.2, mz - 0.8);
+    d.rotation.z = -s * 0.55;
+  }
+  for (const etage of [0, 1]) for (const sx of [-1, 1]) {
+    mesh(new THREE.BoxGeometry(1.1, 0.9, 0.05), new THREE.MeshStandardMaterial({ color: '#0d1830', emissive: new THREE.Color('#6d8fc9'), emissiveIntensity: 0.25 }),
+      mx + sx * breite / 4, etage * GESCHOSS + 1.7, KZ0 + 0.14, scene, false);
+    const m = mat('#4a5470', { emissive: new THREE.Color('#ff8a3d'), emissiveIntensity: 0 });
+    o.raumMats.push(m);
+    mesh(new THREE.BoxGeometry(breite / 2 - 0.5, 0.06, tief - 0.6), m, mx + sx * breite / 4, etage * GESCHOSS + 0.14, mz, scene, false);
+    o.heizkoerper.push(mesh(new THREE.BoxGeometry(1.3, 0.55, 0.12), mat('#ddd', { emissive: new THREE.Color('#ff6a1a'), emissiveIntensity: 0 }),
+      mx + sx * breite / 4, etage * GESCHOSS + 0.65, KZ0 + 0.25));
+    mesh(new THREE.BoxGeometry(1.2, 0.45, 0.7), mat('#56607e'), mx + sx * breite / 4 + sx * 0.5, etage * GESCHOSS + 0.36, 9.6);
+  }
+  for (const etage of [0, 1]) o.tempLabels.push(label('20,0 °C', mx, etage * GESCHOSS + 1.9, 10.5, 'temp'));
+  o.hausLicht = new THREE.PointLight('#ffb070', 0, 14, 1.5);
+  o.hausLicht.position.set(mx, 3.2, 9); scene.add(o.hausLicht);
+  label(`${h.name} <small>· ${h.unter}</small>`, mx, GESCHOSS * 2 + 3.1, 8.5);
+  // Leitungen: Server → Heizkörper
+  const Y0 = KBODEN, rx0 = h.x0 + 0.55;
+  o.leitungen.push(leitung([[rx0, Y0 + 2.15, 6.1], [mx - 1, Y0 + 2.4, 6.4], [o.tank.x - 1.2, Y0 + 2.4, 7.8], [o.tank.x, Y0 + 2.8, o.tank.z]], '#ff9a52'));
+  o.leitungen.push(leitung([[o.tank.x, Y0 + 2.8, o.tank.z], [o.tank.x + 0.3, 0.2, 7], [mx + breite / 4, 0.4, 5.6], [mx + breite / 4, 0.65, 5.35]], '#ff7a2a'));
+  o.leitungen.push(leitung([[o.tank.x, Y0 + 2.8, o.tank.z], [h.x1 - 0.4, 1.5, 6.6], [h.x1 - 0.4, GESCHOSS + 0.5, 5.6], [mx + breite / 4, GESCHOSS + 0.65, 5.35]], '#ff7a2a'));
+  // Service-ML: Risikopunkt oben auf jedem Rack (nur Haus 01, synthetische Daten)
+  if (h.n === 1 && SVC) o.racks.forEach((r, k) => {
+    const s = SVC[k]; if (!s) return;
+    const farbe = s.risiko_30d < 0.072 ? '#3ee0c0' : s.risiko_30d < 0.08 ? '#ffc857' : '#ff5d4a';
+    mesh(new THREE.SphereGeometry(0.07, 10, 10), new THREE.MeshBasicMaterial({ color: farbe }), 0.16, 2.02, 0.3, r.g, false);
+  });
+  // Rückkühler im Garten: läuft nur, wenn Leerlaufwärme weg muss (Modus «Pausieren»)
+  o.kuehler = mesh(new THREE.BoxGeometry(1.1, 0.8, 1.1), mat('#5b6375', { metalness: 0.4, emissive: new THREE.Color('#ff3b2a'), emissiveIntensity: 0 }), h.x1 + 1.05, 0.52, 10.6);
+  o.fan = new THREE.Group(); o.fan.position.set(h.x1 + 1.05, 0.94, 10.6); scene.add(o.fan);
+  for (const r of [0, Math.PI / 2]) { const b = mesh(new THREE.BoxGeometry(0.8, 0.03, 0.12), mat('#20252f'), 0, 0, 0, o.fan, false); b.rotation.y = r; }
+  o.kuehlerLabel = label('Rückkühler: Leerlaufwärme wird weggekühlt', h.x1 + 1.05, 1.7, 10.6, 'warn');
+  o.kuehlerLabel._obj.visible = false;
+  o.kuehler.userData = { art: 'kuehler', haus: h.n }; klickbar.push(o.kuehler);
+  return o;
+}
+const HAUS = HAEUSER.map(baueHaus);
 
-// ---------- Umgebung: Bäume, Nachbarhäuser in der Ferne ----------
+// ---------- Umgebung: Bäume und die übrigen 18 Häuser der Flotte ----------
 const baumKronen = [];
 function baum(x, z, s = 1) {
   mesh(new THREE.CylinderGeometry(0.12 * s, 0.16 * s, 1.2 * s, 8), mat('#3b2a1e'), x, 0.6 * s, z);
-  const k = mesh(new THREE.ConeGeometry(0.9 * s, 2.4 * s, 10), mat('#2f5a36', { roughness: 1 }), x, 2.2 * s, z);
-  baumKronen.push(k);
+  baumKronen.push(mesh(new THREE.ConeGeometry(0.9 * s, 2.4 * s, 10), mat('#2f5a36', { roughness: 1 }), x, 2.2 * s, z));
 }
-[[-9, 9], [-11, 3], [-7, -6], [-13, -10], [8, 10.5], [27, 9], [28, -8], [-2, -11], [12, -12]].forEach(([x, z], i) => baum(x, z, 0.9 + (i % 3) * 0.2));
-const nachbarMat = mat('#232a3b', { roughness: 0.9 });
-const fensterMat = new THREE.MeshStandardMaterial({ color: '#000', emissive: new THREE.Color('#ff9a52'), emissiveIntensity: 0.6 });
-const nachbarDach = mat('#4a2b24');
+[[-9, 9], [-9.5, 1.5], [-8, -6], [-15, -10], [5.9, 10.8], [17.5, 10.5], [35, 9], [36, -8], [19, -12], [-3, -12.5]].forEach(([x, z], i) => baum(x, z, 0.9 + (i % 3) * 0.2));
+const nachbarMat = mat('#232a3b', { roughness: 0.9 }), nachbarDach = mat('#4a2b24');
+const nachbarKeller = [];
 for (let i = 0; i < 6; i++) {
-  const x = -13 + i * 3.1, z = -11.5 - (i % 2) * 1.2, hoehe = 1.5 + (i % 3) * 0.3;
-  mesh(new THREE.BoxGeometry(2, hoehe, 1.8), nachbarMat, x, hoehe / 2, z);
-  const d = mesh(new THREE.ConeGeometry(1.55, 0.9, 4), nachbarDach, x, hoehe + 0.45, z); d.rotation.y = Math.PI / 4;
-  mesh(new THREE.BoxGeometry(0.5, 0.4, 0.02), fensterMat, x - 0.45, hoehe * 0.55, z + 0.91, scene, false);
-  mesh(new THREE.BoxGeometry(0.5, 0.4, 0.02), fensterMat, x + 0.45, hoehe * 0.55, z + 0.91, scene, false);
+  const x = -15 + i * 3.4, z = -11 - (i % 2) * 1.3, hoehe = 1.5 + (i % 3) * 0.3;
+  mesh(new THREE.BoxGeometry(2.1, hoehe, 1.9), nachbarMat, x, hoehe / 2, z);
+  const d = mesh(new THREE.ConeGeometry(1.6, 0.9, 4), nachbarDach, x, hoehe + 0.45, z); d.rotation.y = Math.PI / 4;
+  const kf = mesh(new THREE.BoxGeometry(1.5, 0.22, 0.03), new THREE.MeshStandardMaterial({ color: '#000', emissive: C.compute.clone(), emissiveIntensity: 0 }),
+    x, 0.25, z + 0.96, scene, false);
+  nachbarKeller.push({ m: kf, x, z, phase: i * 0.37 });
 }
-label('19 weitere Häuser der Flotte', -5.2, 3.4, -11.5);
+label('18 weitere Häuser der Flotte <small>· Kellerfenster leuchten, wenn ihre Server rechnen</small>', -6.5, 3.6, -12);
 
 // ---------- Sportbad St. Jakob ----------
-const BAD = { x: 18.5, z: 4.5 };
-mesh(new THREE.BoxGeometry(13, 0.5, 7.2), mat('#cfd6df'), BAD.x, 0.25, BAD.z);
-const wasserMat = new THREE.MeshPhysicalMaterial({ color: '#1fa7c4', emissive: new THREE.Color('#2ad3e6'), emissiveIntensity: 0.1,
-  roughness: 0.08, metalness: 0, transparent: true, opacity: 0.92 });
-const wasser = mesh(new THREE.BoxGeometry(12, 0.3, 6.2), wasserMat, BAD.x, 0.42, BAD.z, scene, false);
+const BAD = { x: 27, z: 4.6 }, TR = { x: 27, z: -4.3 };
+const becken = mesh(new THREE.BoxGeometry(12, 0.06, 6.2), mat('#aeb9c3', { roughness: 0.7 }), BAD.x, 0.15, BAD.z, scene, false);
 for (let b = 1; b < 8; b++)
-  mesh(new THREE.BoxGeometry(12, 0.03, 0.04), new THREE.MeshBasicMaterial({ color: '#7f97ab' }), BAD.x, 0.59, BAD.z - 3.1 + b * 0.775, scene, false);
-wasser.userData = { art: 'bad' }; klickbar.push(wasser);
-const badLicht = new THREE.PointLight('#41e3ff', 0, 16, 1.4);
+  mesh(new THREE.BoxGeometry(11.6, 0.02, 0.06), new THREE.MeshBasicMaterial({ color: '#2d5f7a' }), BAD.x, 0.19, BAD.z - 3.1 + b * 0.775, scene, false);
+const randMat = mat('#e3e8ee');
+mesh(new THREE.BoxGeometry(13, 0.7, 0.5), randMat, BAD.x, 0.35, BAD.z - 3.35);
+mesh(new THREE.BoxGeometry(13, 0.7, 0.5), randMat, BAD.x, 0.35, BAD.z + 3.35);
+mesh(new THREE.BoxGeometry(0.5, 0.7, 7.2), randMat, BAD.x - 6.25, 0.35, BAD.z);
+mesh(new THREE.BoxGeometry(0.5, 0.7, 7.2), randMat, BAD.x + 6.25, 0.35, BAD.z);
+const wasserMat = new THREE.MeshPhysicalMaterial({ color: '#1fa7c4', emissive: new THREE.Color('#2ad3e6'), emissiveIntensity: 0.15,
+  roughness: 0.05, metalness: 0.1, transparent: true, opacity: 0.88, clearcoat: 1 });
+const wasser = mesh(new THREE.BoxGeometry(12, 0.42, 6.2), wasserMat, BAD.x, 0.4, BAD.z, scene, false);
+for (const m of [wasser, becken]) { m.userData = { art: 'bad' }; klickbar.push(m); }
+const badLicht = new THREE.PointLight('#41e3ff', 0, 18, 1.4);
 badLicht.position.set(BAD.x, 2.5, BAD.z); scene.add(badLicht);
-const badLabel = label('Sportbad St. Jakob <small>· 50-m-Becken</small>', BAD.x, 2.2, BAD.z + 3.4);
-// Technikraum mit 50 Servern (5 Racks à 10)
-const TR = { x: 18.5, z: -4.2 };
+const dampfN = 160, dampfGeo = new THREE.BufferGeometry(), dampfPos = new Float32Array(dampfN * 3), dampfSeed = [];
+for (let i = 0; i < dampfN; i++) dampfSeed.push([Math.random() * 11.4 - 5.7, Math.random() * 5.8 - 2.9, Math.random()]);
+dampfGeo.setAttribute('position', new THREE.BufferAttribute(dampfPos, 3));
+const dampf = new THREE.Points(dampfGeo, new THREE.PointsMaterial({ color: '#cfefff', size: 0.35, transparent: true, opacity: 0.25, depthWrite: false }));
+scene.add(dampf);
+const badLabel = label('Sportbad St. Jakob', BAD.x, 2.4, BAD.z + 3.6);
 mesh(new THREE.BoxGeometry(8.6, 0.15, 4.2), mat('#3a4152'), TR.x, 0.08, TR.z);
 mesh(new THREE.BoxGeometry(8.6, 3.2, 0.2), wandMat, TR.x, 1.6, TR.z - 2.05);
 mesh(new THREE.BoxGeometry(0.2, 3.2, 4.2), wandMat, TR.x - 4.3, 1.6, TR.z);
 mesh(new THREE.BoxGeometry(0.2, 3.2, 4.2), glasMat, TR.x + 4.3, 1.6, TR.z, scene, false);
 mesh(new THREE.BoxGeometry(8.8, 0.2, 4.4), mat('#4a5163'), TR.x, 3.25, TR.z - 0.6);
 const badRacks = [];
-for (let r = 0; r < 5; r++) badRacks.push(baueRack(TR.x - 3.2 + r * 1.6, 0.15, TR.z - 1.2, 10, scene, { art: 'badrack', r }));
-label('Technikraum Bad · 50 Server', TR.x, 3.9, TR.z);
+for (let r = 0; r < 5; r++) badRacks.push(baueRack(TR.x - 3.2 + r * 1.6, 0.15, TR.z - 1.2, 10, { art: 'badrack', r }));
+label('Technikraum Bad <small>· 50 Server</small>', TR.x, 3.9, TR.z);
 
-// ---------- Migrationen: Aufträge fliegen zwischen Haus und Bad ----------
+// ---------- Pharma-Kunde: Turm, der Rechenaufträge schickt ----------
+const TURM = { x: -13.5, z: 1.6 };
+{
+  const weiss = mat('#e9edf2', { roughness: 0.55 });
+  const band = new THREE.MeshStandardMaterial({ color: '#16202f', emissive: new THREE.Color('#9fc4ff'), emissiveIntensity: 0.35 });
+  const hinten = TURM.z - 1.8, breite = 3.0;
+  for (const [y0, y1, t] of [[0, 6, 3.6], [6, 9.6, 3.0], [9.6, 12.6, 2.4], [12.6, 15, 1.8], [15, 16.8, 1.2]]) {
+    const m = mesh(new THREE.BoxGeometry(breite, y1 - y0, t), weiss, TURM.x, (y0 + y1) / 2, hinten + t / 2);
+    m.userData = { art: 'kunde' }; klickbar.push(m);
+    for (let y = y0 + 0.55; y < y1 - 0.2; y += 0.62)
+      mesh(new THREE.BoxGeometry(breite + 0.02, 0.2, t + 0.02), band, TURM.x, y, hinten + t / 2, scene, false);
+  }
+  const spitze = new THREE.PointLight('#ffe2b8', 3, 8, 1.5); spitze.position.set(TURM.x, 17.6, TURM.z - 1.2); scene.add(spitze);
+  label('Pharma-Kunde <small>· schickt Rechenaufträge</small>', TURM.x, 18.2, TURM.z - 1.2);
+}
+const TURM_SPITZE = new THREE.Vector3(TURM.x, 17, TURM.z - 1.2);
+
+// ---------- Cloud-Ebene: Auftragspool, Wärme-Router, ML-Prognose, Zusage ----------
+const CLOUD = { x: 9, y: 12.6, z: -1.5 };
+const cloudGruppe = new THREE.Group(); scene.add(cloudGruppe);
+{
+  const wolkeMat = new THREE.MeshStandardMaterial({ color: '#d7ecff', emissive: new THREE.Color('#3aa6ff'), emissiveIntensity: 0.22,
+    transparent: true, opacity: 0.2, roughness: 1, depthWrite: false });
+  let s = 7; const zufall = () => (s = (s * 16807) % 2147483647) / 2147483647;
+  for (let n = 0; n < 30; n++) {
+    const b = new THREE.Mesh(new THREE.SphereGeometry(1, 20, 14), wolkeMat);
+    b.position.set(CLOUD.x - 19 + zufall() * 38, CLOUD.y - 0.6 + zufall() * 1.4, CLOUD.z - 2 + zufall() * 4);
+    b.scale.set(2.2 + zufall() * 2.4, 1.1 + zufall() * 0.9, 1.8 + zufall() * 1.4);
+    cloudGruppe.add(b);
+  }
+}
+const KNOTEN = {};
+function knoten(name, dx, farbe, html) {
+  const pos = new THREE.Vector3(CLOUD.x + dx, CLOUD.y, CLOUD.z + 1.5);
+  const kern = new THREE.Mesh(new THREE.IcosahedronGeometry(0.42, 1), new THREE.MeshBasicMaterial({ color: farbe }));
+  kern.position.copy(pos); cloudGruppe.add(kern);
+  const div = document.createElement('div'); div.className = 'wolke'; div.innerHTML = html;
+  const o = new CSS2DObject(div); o.position.set(pos.x, pos.y + 0.2, pos.z + 0.6); cloudGruppe.add(o);
+  KNOTEN[name] = { pos, kern, div, o };
+}
+knoten('pool', -16, '#ffe2b8', '<b class="t">Auftragspool</b><div id="w-pool"></div>');
+knoten('router', -5.5, '#7dfbe0', '<b class="t">Wärme-Router</b><div id="w-router"></div>');
+knoten('ml', 5, '#8fb8ff', '<b class="t">ML-Wärmeprognose</b><canvas id="w-ml-c"></canvas><div id="w-ml"></div>');
+knoten('zusage', 15.5, '#ffc857', '<b class="t">Zusage für morgen</b><div id="w-zusage"></div>');
+function strahl(von, nach, farbe, n = 18) {
+  const mitte = von.clone().add(nach).multiplyScalar(0.5); mitte.y += 1.5;
+  const kurve = new THREE.QuadraticBezierCurve3(von.clone(), mitte, nach.clone());
+  const tubeMat = new THREE.MeshBasicMaterial({ color: farbe, transparent: true, opacity: 0.2, depthWrite: false, blending: THREE.AdditiveBlending });
+  cloudGruppe.add(new THREE.Mesh(new THREE.TubeGeometry(kurve, 40, 0.06, 6, false), tubeMat));
+  const geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(n * 3), 3));
+  const pts = new THREE.Points(geo, new THREE.PointsMaterial({ color: farbe, size: 0.3, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending }));
+  cloudGruppe.add(pts);
+  return { kurve, tubeMat, pts, n, phase: Math.random(), fluss: 0 };
+}
+const R = KNOTEN.router.pos;
+const STRAHLEN = {
+  kunde: strahl(TURM_SPITZE, KNOTEN.pool.pos, '#ffe2b8'),
+  pool: strahl(KNOTEN.pool.pos, R, '#ffe2b8'),
+  ml: strahl(KNOTEN.ml.pos, R, '#8fb8ff', 10),
+  haus1: strahl(R, V(0, GESCHOSS * 2 + 1.6, 8.5), '#7dfbe0'),
+  haus2: strahl(R, V(11.2, GESCHOSS * 2 + 1.6, 8.5), '#7dfbe0'),
+  bad: strahl(R, V(TR.x, 3.5, TR.z), '#7dfbe0'),
+  flotte: strahl(R, V(-6.5, 2.6, -11.5), '#7dfbe0'),
+};
+// ML-Stichproben (Ist und Prognose) auf der Zeitachse
+const ML_PUNKTE = [];
+if (CL.ml) { const idx = new Map(S.zeit.map((z, n) => [z, n])); CL.ml.reihen.forEach(([z, a, m, p, h]) => { if (idx.has(z)) ML_PUNKTE.push({ i: idx.get(z), a, m, p, h }); }); }
+
+// ---------- Aufträge, die den Standort wechseln ----------
 const orbGeo = new THREE.SphereGeometry(0.16, 12, 12);
 const orbs = [];
-for (let i = 0; i < 24; i++) {
+for (let i = 0; i < 32; i++) {
   const o = new THREE.Mesh(orbGeo, new THREE.MeshBasicMaterial({ color: '#7dfbe0' }));
   o.visible = false; scene.add(o);
-  orbs.push({ o, t: 1, kurve: null });
+  orbs.push({ o, t: 1, kurve: null, speed: 0.7 });
 }
-const flugHin = new THREE.QuadraticBezierCurve3(new THREE.Vector3(0, -0.5, 7), new THREE.Vector3(10, 12, 2),
-  new THREE.Vector3(TR.x - 1, 2, TR.z));
-const flugAusFlotte = new THREE.QuadraticBezierCurve3(new THREE.Vector3(-1, 3, -10), new THREE.Vector3(9, 11, -9),
-  new THREE.Vector3(TR.x - 2, 2.5, TR.z));
-function starteOrb() {
+const ORTE = {
+  haus1: V(-1, -0.6, 7), haus2: V(11, -0.6, 7), bad: V(TR.x - 1, 2, TR.z),
+  nachbar: () => { const n = nachbarKeller[Math.random() * 6 | 0]; return V(n.x, 0.4, n.z); },
+};
+function flug(von, nach, farbe = '#7dfbe0') {
   const f = orbs.find(x => x.t >= 1); if (!f) return;
-  f.t = 0; f.o.visible = true; f.kurve = Math.random() < 0.35 ? flugHin : flugAusFlotte;
-  f.speed = 0.55 + Math.random() * 0.35;
+  const mitte = von.clone().add(nach).multiplyScalar(0.5); mitte.y += 5 + von.distanceTo(nach) * 0.2;
+  f.kurve = new THREE.QuadraticBezierCurve3(von.clone(), mitte, nach.clone());
+  f.t = 0; f.o.visible = true; f.speed = 0.55 + Math.random() * 0.35; f.o.material.color.set(farbe);
+}
+
+// ---------- Thermostat-Simulation (Haus 01) ----------
+// Raum: C · dT/dt = Q_raum − UA · (T_innen − T_aussen). Ein Server gibt 0,8 kW Wärme ins Wasser,
+// Warmwasser 0,5 kW läuft immer mit. Regler: Halteleistung + Aufheizen zur Wunschtemperatur in ~2 h.
+const UA = W.ua_kw_k, CAP = W.zeitkonstante_h * UA, WW = 0.5, KESSEL_KW = 12;
+const thermo = { soll: 22, kessel: true, sim: null, abspielen: null, offen: false };
+function simuliereThermostat(start, soll, mitKessel) {
+  const dt = 1 / 6, schritte = 24 * 6, out = [];
+  let tin = 20, erreicht = null;
+  for (let s = 0; s <= schritte; s++) {
+    const tout = S.temp[Math.min(N - 1, start + Math.floor(s * dt))];
+    const halten = Math.max(0, UA * (soll - tout));
+    const wunsch = Math.max(0, halten + CAP * (soll - tin) / 2);
+    const nServer = Math.min(NH, (wunsch + WW) / ETA);
+    const qServer = Math.max(0, nServer * ETA - WW);
+    const qKessel = mitKessel && wunsch > qServer + 0.05 ? Math.min(KESSEL_KW, wunsch - qServer) : 0;
+    out.push({ h: s * dt, tin, tout, nServer, qKessel });
+    if (erreicht === null && Math.abs(tin - soll) < 0.15) erreicht = s * dt;
+    tin += (qServer + qKessel - UA * (tin - tout)) / CAP * dt;
+  }
+  const basis = out.map(p => Math.min(NH, (Math.max(0, UA * (20 - p.tout)) + WW) / ETA));
+  return { out, erreicht, basis };
+}
+function zielFuerFreieServer(i) {
+  if (S.b_bed[i] > 0) return 'bad';
+  if (S.h2_on[i] < NH || S.h2_sp[i] < M.speicher_haus_kwh * 0.85) return 'haus2';
+  return 'andere';
+}
+const dauerText = h => h === null ? 'nicht innert 24 h' : h < 0.2 ? 'sofort' : `nach ${Math.floor(h)} h ${String(Math.round((h % 1) * 60)).padStart(2, '0')} min`;
+function zeigeThermostat() {
+  thermo.offen = true; auswahl = null;
+  const i = zeitH | 0;
+  const sim = simuliereThermostat(i, thermo.soll, thermo.kessel), sim0 = simuliereThermostat(i, thermo.soll, false);
+  thermo.sim = sim;
+  const endN = sim.out[sim.out.length - 1].nServer, basisN = sim.basis[sim.basis.length - 1];
+  const diff = endN - basisN, ziel = zielFuerFreieServer(i);
+  const zielText = { bad: 'ins Sportbad', haus2: 'zu Haus 02', andere: 'zu einem anderen Haus der Flotte' }[ziel];
+  const quelleText = { bad: 'aus dem Sportbad', haus2: 'von Haus 02', andere: 'aus dem Auftragspool der Flotte' }[ziel];
+  let wirkung;
+  if (Math.abs(diff) < 0.3) wirkung = 'Kaum Änderung bei der Rechenleistung.';
+  else if (diff > 0) wirkung = `Dauerhaft <b>${fmt(diff, 1)} Server mehr</b> im Haus. Die Aufträge dafür kommen ${quelleText}.`;
+  else wirkung = `Dauerhaft <b>${fmt(-diff, 1)} Server weniger</b> im Haus. Ihre Aufträge springen ${zielText}.`;
+  if (endN >= NH - 0.01 && diff >= 0) wirkung += ' Alle 8 Server laufen schon voll, mehr Wärme kommt nur vom Ölkessel.';
+  el('links-inhalt').innerHTML = `
+    <h2 class="k">Hausbesitzer-App (Vorschau) · Haus 01</h2>
+    <div class="app">
+      <div class="ist">Jetzt 20,0 °C · aussen ${fmt(S.temp[i], 1)} °C · ${datumText(i)}, ${S.zeit[i].slice(6, 8)}:00</div>
+      <div class="soll">${fmt(thermo.soll, 1)}<small> °C</small></div>
+      <div class="knoepfe"><button id="t-minus">−</button><button id="t-plus">+</button></div>
+      <div class="rechnen">Dafür rechnen im Haus <b>${fmt(endN, 1)} von ${NH} Servern</b></div>
+    </div>
+    <div class="optionen"><label><input type="checkbox" id="t-kessel" ${thermo.kessel ? 'checked' : ''}> Ölkessel darf helfen</label>
+      <button class="knopf" id="t-play">▶ 24 h abspielen</button></div>
+    <div class="zeile"><span>${fmt(thermo.soll, 1)} °C erreicht</span><span>${dauerText(sim.erreicht)}</span></div>
+    <div class="zeile"><span>Nur mit Servern</span><span>${dauerText(sim0.erreicht)}</span></div>
+    <canvas id="t-chart" height="120"></canvas>
+    <p>${wirkung}</p>
+    <p>Raummodell: Wärmeverlust ${fmt(UA, 2)} kW pro Kelvin (${W.ua_quelle}), Zeitkonstante ${W.zeitkonstante_h} h (${W.zeitkonstante_quelle}).
+      Ein Server gibt ${fmt(ETA * 1000)} W Wärme ins Wasser. Das ist die Logik der geplanten iOS-App: Wunschtemperatur rein, Rechenleistung raus.</p>`;
+  el('links').classList.add('offen');
+  el('t-minus').onclick = () => { thermo.soll = Math.max(16, thermo.soll - 0.5); zeigeThermostat(); };
+  el('t-plus').onclick = () => { thermo.soll = Math.min(25, thermo.soll + 0.5); zeigeThermostat(); };
+  el('t-kessel').onchange = e => { thermo.kessel = e.target.checked; zeigeThermostat(); };
+  el('t-play').onclick = () => { thermo.abspielen = { start: performance.now(), i0: i, ziel, idx: 0 }; spielt = false; el('play').textContent = '▶'; };
+  zeichneThermo(sim);
+}
+function zeichneThermo(sim, markerH = null) {
+  const cv = el('t-chart'); if (!cv) return;
+  const dpr = devicePixelRatio || 1, w = cv.clientWidth, h = 120;
+  cv.width = w * dpr; cv.height = h * dpr;
+  const g = cv.getContext('2d'); g.scale(dpr, dpr);
+  const tmin = Math.min(19, ...sim.out.map(p => p.tin), thermo.soll) - 0.5, tmax = Math.max(thermo.soll, 20, ...sim.out.map(p => p.tin)) + 0.8;
+  const X = hh => 4 + (hh / 24) * (w - 8), YT = t => 8 + (1 - (t - tmin) / (tmax - tmin)) * 64, YS = n => 110 - (n / NH) * 26, bw = (w - 8) / sim.out.length + 0.5;
+  g.clearRect(0, 0, w, h);
+  g.strokeStyle = 'rgba(140,170,220,.35)'; g.setLineDash([3, 3]); g.beginPath(); g.moveTo(4, YT(thermo.soll)); g.lineTo(w - 4, YT(thermo.soll)); g.stroke(); g.setLineDash([]);
+  g.fillStyle = 'rgba(62,224,192,.4)'; sim.out.forEach(p => g.fillRect(X(p.h), YS(p.nServer), bw, 110 - YS(p.nServer)));
+  g.fillStyle = 'rgba(255,93,74,.8)'; sim.out.forEach(p => { if (p.qKessel > 0.05) g.fillRect(X(p.h), 110, bw, 3); });
+  g.strokeStyle = '#ff8a3d'; g.lineWidth = 2; g.beginPath();
+  sim.out.forEach((p, n) => n ? g.lineTo(X(p.h), YT(p.tin)) : g.moveTo(X(p.h), YT(p.tin))); g.stroke();
+  g.fillStyle = '#93a2c0'; g.font = '10px sans-serif';
+  g.fillText(`${fmt(thermo.soll, 1)} °C`, w - 40, YT(thermo.soll) - 3); g.fillText('Raumtemperatur', 6, 16);
+  g.fillText('Server im Haus · rot: Ölkessel', 6, 80); g.fillText('jetzt', 4, 120); g.fillText('+24 h', w - 30, 120);
+  if (markerH !== null) { g.fillStyle = '#fff'; g.fillRect(X(markerH) - 1, 4, 2, 108); }
 }
 
 // ---------- Zustand anwenden ----------
 let zeitH = S.zeit.findIndex(z => z.startsWith('01-15T08'));
-let spielt = false, tempo = 3, auswahl = null;
-
+let spielt = false, tempo = 3, auswahl = null, liveJob = null;
 function farbeLed(zustand, last) {
   if (zustand === 'standby') return [C.standby, 0.6];
   if (zustand === 'bereit') return [C.idle, 1.3];
   return [C.compute, 0.8 + 1.3 * last];
 }
-function wende(i, frac) {
-  const j = Math.min(N - 1, i + 1);
-  const L = (a) => lerp(a[i], a[j], frac);
-  const temp = L(S.temp), bed = L(S.h_bed), gen = L(S.h_gen), sp = L(S.h_sp);
-  const on = S.h_on[i], lauf = S.h_lauf[i];
-  const stunde = parseInt(S.zeit[i].slice(6, 8)) + frac;
-  const monat = parseInt(S.zeit[i].slice(0, 2));
-
-  // Server im Haus
-  hausRacks.forEach((r, k) => {
-    const z = serverZustand(lauf, on, k), l = serverLast(lauf, on, k);
-    const [c, inten] = farbeLed(z, l);
+function wendeHaus(o, on, lauf, sp, bed, gen, kesselKw, tRaum, weg = false) {
+  const hn = o.h.n, now = performance.now();
+  o.racks.forEach((r, k) => {
+    const z = serverZustand(lauf, on, k), l = serverLast(lauf, on, k), [c, inten] = farbeLed(z, l);
     r.leds.forEach((led, u) => {
-      const flacker = z === 'rechnet' ? 0.75 + 0.25 * Math.sin(performance.now() / (90 + u * 17) + k) : 1;
+      const flacker = z === 'rechnet' ? 0.78 + 0.22 * Math.sin(now / (90 + u * 17) + k) : 1;
       led.material.emissive.copy(c); led.material.emissiveIntensity = inten * flacker;
     });
-    const sel = auswahl && auswahl.art === 'server' && auswahl.k === k;
-    r.koerper.material.emissiveIntensity = sel ? 0.1 : 0;
+    const sel = auswahl && auswahl.art === 'server' && auswahl.haus === hn && auswahl.k === k;
+    const echt = liveJob && hn === 1 && k === NH - 1 && liveJob.ort === 'haus';
+    r.koerper.material.emissiveIntensity = sel ? 0.1 : echt ? 0.2 + 0.1 * Math.sin(now / 250) : 0;
     r.luefter.rotation.z += z === 'standby' ? 0 : 0.05 + 0.3 * l;
   });
-  // Bad-Server (5 Racks à 10)
-  const bOn = S.b_on[i], bLauf = S.b_lauf[i];
+  const deck = bed > 0.01 ? clamp(gen / bed) : 1, heizung = clamp(bed / 9);
+  const warm = clamp(0.25 + 0.5 * heizung + (tRaum - 20) / 3, 0, 1) * (tRaum < 19.5 ? 0.4 : 1);
+  o.raumMats.forEach(m => { m.color.copy(new THREE.Color('#4a5470').lerp(C.heat, 0.35 * warm)); m.emissiveIntensity = 0.16 * warm; });
+  o.heizkoerper.forEach(h => h.material.emissiveIntensity = 1.8 * heizung * Math.max(deck, kesselKw > 0.05 ? 1 : 0));
+  o.hausLicht.intensity = 7 * heizung;
+  const strom = lauf + (M.leerlauf_watt / 1000) * Math.max(0, on - lauf);
+  o.leitungen[0].fluss = clamp(strom / NH);
+  o.leitungen[1].fluss = clamp((gen + kesselKw) / 8);
+  o.leitungen[2].fluss = clamp((gen + kesselKw) / 8) * (bed > 1.5 ? 1 : 0.2);
+  const k = clamp(kesselKw / 4);
+  o.flamme.visible = kesselKw > 0.05;
+  o.flamme.scale.set(1 + k, (1 + 1.5 * k) * (0.85 + 0.25 * Math.sin(now / 70 + hn)), 1 + k);
+  o.kesselLicht.intensity = kesselKw > 0.05 ? 2 + 5 * k : 0;
+  o.kellerLicht.intensity = 1.5 + 4 * clamp(on / NH);
+  o.kuehler.material.emissiveIntensity = weg ? 0.6 + 0.3 * Math.sin(now / 200) : 0;
+  if (weg) o.fan.rotation.y += 0.35;
+  o.kuehlerLabel._obj.visible = weg;
+  const tTxt = fmt(tRaum, 1) + ' °C';
+  o.tempLabels.forEach(t => { if (t.textContent !== tTxt) t.textContent = tTxt; t.style.color = tRaum >= 19.95 ? '#ffd2b0' : '#a9cbff'; });
+}
+function wende(i, frac) {
+  const j = Math.min(N - 1, i + 1), L = a => lerp(a[i], a[j], frac), now = performance.now();
+  const stunde = parseInt(S.zeit[i].slice(6, 8)) + frac, monat = parseInt(S.zeit[i].slice(0, 2)), temp = L(S.temp);
+  HAUS.forEach((o, n) => {
+    const hd = HD[n];
+    let on = hd.on[i], lauf = hd.lauf[i], tRaum = 20, kw = kessel(hd, i);
+    if (n === 0 && thermo.abspielen && thermo.sim) {
+      const p = thermo.sim.out[thermo.abspielen.idx];
+      lauf = p.nServer; on = Math.ceil(p.nServer - 0.01); tRaum = p.tin; kw = p.qKessel;
+    }
+    if (modus === 'pausieren') on = NH;
+    const weg = modus === 'pausieren' && hd.sp[i] >= 0.85 * M.speicher_haus_kwh && on - lauf > 0.2;
+    wendeHaus(o, on, lauf, L(hd.sp), L(hd.bed), L(hd.gen), kw, tRaum, weg);
+  });
+  const bOn = modus === 'pausieren' ? NB : S.b_on[i], bLauf = S.b_lauf[i];
   badRacks.forEach((r, ri) => r.leds.forEach((led, u) => {
-    const k = ri * 10 + u, z = serverZustand(bLauf, bOn, k), l = serverLast(bLauf, bOn, k);
-    const [c, inten] = farbeLed(z, l);
+    const k = ri * 10 + u, z = serverZustand(bLauf, bOn, k), l = serverLast(bLauf, bOn, k), [c, inten] = farbeLed(z, l);
     led.material.emissive.copy(c); led.material.emissiveIntensity = inten;
     const sel = auswahl && auswahl.art === 'badrack' && auswahl.r === ri;
-    r.koerper.material.emissiveIntensity = sel ? 0.1 : 0;
+    const echt = liveJob && liveJob.ort === 'bad' && ri === 0;
+    r.koerper.material.emissiveIntensity = sel ? 0.1 : echt ? 0.2 + 0.1 * Math.sin(now / 250) : 0;
   }));
-
-  // Räume: warm, wenn Server den Bedarf decken
-  const deck = bed > 0.01 ? clamp(gen / bed) : 1;
-  const heizung = clamp(bed / 9);
-  raumMats.forEach(m => { m.color.copy(new THREE.Color('#4a5470').lerp(C.heat, 0.35 * deck * heizung));
-    m.emissiveIntensity = 0.18 * deck * heizung; });
-  heizkoerper.forEach(h => h.material.emissiveIntensity = 1.8 * deck * heizung);
-  hausLicht.intensity = 8 * deck * heizung;
-
-  // Wärme in den Leitungen
-  const strom = lauf + 0.23 * Math.max(0, on - lauf);
-  leitungen.serverZumTank.fluss = clamp(strom / NH);
-  leitungen.tankZuOben1.fluss = clamp(gen / 8);
-  leitungen.tankZuOben2.fluss = clamp(gen / 8) * (bed > 1.5 ? 1 : 0.2);
-
-  // Bad: offen im Sommer, Wasser leuchtet mit genutzter Wärme
-  const bGen = L(S.b_gen), offen = S.b_bed[i] > 0;
-  wasserMat.emissiveIntensity = offen ? 0.12 + 0.5 * clamp(bGen / 120) : 0.02;
-  wasserMat.color.set(offen ? '#1fa7c4' : '#163f52');
-  badLicht.intensity = offen ? 4 + 10 * clamp(bGen / 120) : 0;
-  badLabel.innerHTML = 'Sportbad St. Jakob <small>· ' + (offen ? 'offen, nimmt Sommerarbeit' : 'Saisonpause') + '</small>';
-
+  const bGen = L(S.b_gen), offen = S.b_bed[i] > 0, warm = clamp(bGen / 120);
+  wasser.visible = offen;
+  wasserMat.emissiveIntensity = 0.1 + 0.45 * warm * (0.9 + 0.1 * Math.sin(now / 600));
+  badLicht.intensity = offen ? 3 + 9 * warm : 0;
+  dampf.visible = offen && warm > 0.05; dampf.material.opacity = 0.08 + 0.25 * warm;
+  if (dampf.visible) {
+    const t = now / 1000;
+    dampfSeed.forEach(([x, z, p], n) => {
+      dampfPos[n * 3] = BAD.x + x + Math.sin(t + p * 9) * 0.2; dampfPos[n * 3 + 1] = 0.8 + ((t * 0.25 + p) % 1) * 2.2; dampfPos[n * 3 + 2] = BAD.z + z;
+    });
+    dampfGeo.attributes.position.needsUpdate = true;
+  }
+  const badText = 'Sportbad St. Jakob <small>· ' + (offen ? 'offen, heizt das 50-m-Becken' : 'Saisonpause, Becken leer') + '</small>';
+  if (badLabel.innerHTML !== badText) badLabel.innerHTML = badText;
+  const rest = S.rest_on[i] / NH;
+  nachbarKeller.forEach(n => n.m.material.emissiveIntensity = rest > 0.02 ? 0.4 + 1.6 * rest * (0.85 + 0.15 * Math.sin(now / 400 + n.phase * 10)) : 0.05);
   // Himmel, Sonne, Jahreszeit
   const tag = clamp(Math.sin(((stunde - 6) / 12) * Math.PI));
-  const nacht = new THREE.Color('#0c1428'), mittag = new THREE.Color(monat >= 5 && monat <= 9 ? '#2d4f78' : '#24344f');
-  scene.background.copy(nacht.clone().lerp(mittag, tag)); scene.fog.color.copy(scene.background);
+  scene.background.copy(new THREE.Color('#0c1428').lerp(new THREE.Color(monat >= 5 && monat <= 9 ? '#2d4f78' : '#24344f'), tag));
+  scene.fog.color.copy(scene.background);
   const w = ((stunde - 6) / 12) * Math.PI;
-  sonne.position.set(6 + Math.cos(w) * -40, 6 + Math.max(0, Math.sin(w)) * 38, 18);
+  sonne.position.set(11 + Math.cos(w) * -45, 6 + Math.max(0, Math.sin(w)) * 40, 20);
   sonne.intensity = 0.3 + 1.45 * tag; hemi.intensity = 0.55 + 0.35 * tag;
   const winter = clamp((6 - temp) / 10), sommer = clamp((temp - 10) / 12);
-  const rasen = new THREE.Color('#2f4a2a').lerp(new THREE.Color('#7d8797'), winter).lerp(new THREE.Color('#3d6a2c'), sommer);
-  scene.traverse(o => { if (o.userData.rasen) o.material.color.copy(rasen); });
+  rasenMat.color.copy(new THREE.Color('#2f4a2a').lerp(new THREE.Color('#7d8797'), winter).lerp(new THREE.Color('#3d6a2c'), sommer));
   baumKronen.forEach(b => b.material.color.copy(new THREE.Color('#2f5a36').lerp(new THREE.Color('#9aa8b8'), winter * 0.5)));
-  fensterMat.emissiveIntensity = 0.15 + (1 - tag) * 0.9;
-  kellerLicht.intensity = 2 + 5 * clamp(on / NH);
-
-  return { temp, bed, gen, sp, on, lauf, deck };
 }
 
-// ---------- Panel «Diese Stunde» ----------
-const el = id => document.getElementById(id);
-function panelJetzt(i, w) {
-  const z = S.zeit[i];
-  el('datum').textContent = `${parseInt(z.slice(3, 5))}. ${['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'][parseInt(z.slice(0, 2)) - 1]} 2025 · ${z.slice(6, 8)}:00`;
-  el('wetter').textContent = `${fmt(S.temp[i], 1)} °C aussen`;
-  el('j-bed').textContent = fmt(S.h_bed[i], 1) + ' kWh';
-  el('j-deck').textContent = S.h_bed[i] > 0.01 ? fmt(100 * Math.min(1, S.h_gen[i] / S.h_bed[i])) + ' %' : '–';
-  el('j-deck-b').style.width = (S.h_bed[i] > 0.01 ? 100 * Math.min(1, S.h_gen[i] / S.h_bed[i]) : 0) + '%';
-  el('j-sp').textContent = `${fmt(S.h_sp[i], 1)} / ${fmt(M.speicher_haus_kwh)} kWh`;
-  el('j-sp-b').style.width = 100 * S.h_sp[i] / M.speicher_haus_kwh + '%';
-  el('j-on').textContent = `${S.h_on[i]} an · ${fmt(S.h_lauf[i], 1)} rechnen`;
-  el('j-punkte').innerHTML = Array.from({ length: NH }, (_, k) => {
-    const s = serverZustand(S.h_lauf[i], S.h_on[i], k);
-    return `<i class="${s === 'rechnet' ? 'rechnet' : s === 'bereit' ? 'an' : ''}" title="Server ${k + 1}"></i>`;
+// ---------- Satzzeile: was passiert gerade ----------
+function satz(i) {
+  const d = `${datumText(i)}, ${S.zeit[i].slice(6, 8)} Uhr, ${fmt(S.temp[i], 1)} °C`;
+  if (thermo.abspielen && thermo.sim) {
+    const p = thermo.sim.out[thermo.abspielen.idx];
+    return `Thermostat auf <em>${fmt(thermo.soll, 1)} °C</em>: Nach ${fmt(p.h, 1)} h hat der Raum <em>${fmt(p.tin, 1)} °C</em>, `
+      + `dafür rechnen <b>${fmt(p.nServer, 1)} Server</b>` + (p.qKessel > 0.05 ? `, der <span class="oel">Ölkessel hilft mit ${fmt(p.qKessel, 1)} kW</span>.` : '.');
+  }
+  const hd = HD[0], on = hd.on[i], bed = hd.bed[i], gen = hd.gen[i], k = kessel(hd, i);
+  const sp = hd.sp[i] / M.speicher_haus_kwh, badOffen = S.b_bed[i] > 0;
+  if (modus === 'pausieren' && NH - hd.lauf[i] > 0.5) {
+    const leer = NH - hd.lauf[i], weg = sp >= 0.85;
+    return `${d}: <span class="oel">Pausieren</span>: Alle ${NH} Server bleiben an, ${fmt(leer, 1)} davon ohne Arbeit im Leerlauf `
+      + `(je ${M.leerlauf_watt} W).` + (weg ? ' Der Speicher ist voll, ihre Wärme muss <span class="oel">weggekühlt</span> werden.' : '');
+  }
+  if (bed > 2) {
+    const deck = Math.round(100 * Math.min(1, gen / bed));
+    return `${d}: <b>${on} von ${NH} Servern</b> rechnen und decken <em>${deck} %</em> der Wärme`
+      + (k > 0.05 ? `, den Rest liefert der <span class="oel">Ölkessel</span>.` : '.') + (sp > 0.85 ? ' Der Speicher ist voll.' : '');
+  }
+  if (badOffen) return `${d}: Das Haus braucht fast nur Warmwasser, <b>${on} Server</b> ${on === 1 ? 'reicht' : 'reichen'}. `
+    + `Die übrige Arbeit rechnen <b>${S.b_on[i]} Server im Sportbad</b> und heizen das Becken.`;
+  if (sp > 0.85) return `${d}: Speicher voll, <b>${on} von ${NH} Servern</b> laufen, der Rest steht im Standby. Aufträge warten oder wandern zu Häusern mit Wärmebedarf.`;
+  return `${d}: <b>${on} von ${NH} Servern</b> rechnen für ${fmt(bed, 1)} kWh Wärmebedarf in dieser Stunde.`;
+}
+
+// ---------- Rechtes Panel ----------
+function punkte(on, lauf, n, echtK = -1) {
+  return Array.from({ length: n }, (_, k) => {
+    const s = serverZustand(lauf, on, k);
+    return `<i class="${s === 'rechnet' ? 'rechnet' : s === 'bereit' ? 'an' : ''}${k === echtK ? ' echt' : ''}" title="Server ${k + 1}"></i>`;
   }).join('');
-  el('j-bad').textContent = S.b_bed[i] > 0 ? fmt(S.b_bed[i]) + ' kWh Bedarf' : 'Saisonpause';
+}
+function panelJetzt(i) {
+  const z = S.zeit[i], hd = HD[0], k = kessel(hd, i);
+  el('datum').textContent = `${datumText(i)} 2025 · ${z.slice(6, 8)}:00`;
+  el('wetter').textContent = `${fmt(S.temp[i], 1)} °C aussen`;
+  el('j-bed').textContent = fmt(hd.bed[i], 1) + ' kWh';
+  const deck = hd.bed[i] > 0.01 ? Math.min(1, hd.gen[i] / hd.bed[i]) : 1;
+  el('j-deck').textContent = hd.bed[i] > 0.01 ? fmt(100 * deck) + ' %' : '–';
+  el('j-deck-b').style.width = 100 * deck + '%';
+  el('j-oel').innerHTML = k > 0.05 ? `<span class="nein">${fmt(k, 1)} kWh</span>` : 'aus';
+  el('j-sp').textContent = `${fmt(hd.sp[i], 1)} / ${fmt(M.speicher_haus_kwh)} kWh`;
+  el('j-sp-b').style.width = 100 * hd.sp[i] / M.speicher_haus_kwh + '%';
+  el('j-on').textContent = `${hd.on[i]} an · ${fmt(hd.lauf[i], 1)} rechnen`;
+  el('j-punkte').innerHTML = punkte(hd.on[i], hd.lauf[i], NH, liveJob && liveJob.ort === 'haus' ? NH - 1 : -1);
+  el('j2-on').textContent = `${S.h2_on[i]} an · ${fmt(S.h2_lauf[i], 1)} rechnen`;
+  el('j2-punkte').innerHTML = punkte(S.h2_on[i], S.h2_lauf[i], NH);
+  el('j-bad-z').textContent = S.b_bed[i] > 0 ? `offen · ${fmt(S.b_bed[i])} kWh Bedarf` : 'Saisonpause';
   el('j-bad-on').textContent = `${S.b_on[i]} / ${NB} an`;
   el('j-bad-b').style.width = 100 * S.b_lauf[i] / NB + '%';
   el('j-flotte').textContent = `${fmt(S.flotte_lauf[i])} Server`;
   el('j-mig').textContent = `${S.mig[i]} in dieser Stunde`;
+  el('j-oelspar').textContent = `${fmt(oelSpar[0][i])} Liter`;
+  el('j-co2').textContent = `${fmt(oelSpar[0][i] * W.co2_kg_l / 1000, 2)} t`;
+  // Zusage: heute 12 Uhr für morgen
+  const morgen = Math.min(Z.tag.length - 1, Math.floor(i / 24) + 1), zt = Z.tag[morgen];
+  el('z-titel').textContent = `Zusage für morgen, ${parseInt(zt.slice(3))}. ${MONATE[parseInt(zt.slice(0, 2)) - 1].slice(0, 3)}`;
+  el('z-temp').textContent = `${fmt(Z.prognose_temp[morgen], 1)} °C (ECMWF)`;
+  const zu = Z.zugesagt[morgen], ge = Z.geliefert[morgen];
+  el('z-zu').textContent = zu === null ? 'keine Zusage' : `${fmt(zu)} Server-h`;
+  el('z-ge').innerHTML = zu === null ? `${fmt(ge)} Server-h` : `${fmt(ge)} Server-h <span class="${ge >= zu ? 'ok' : 'nein'}">${ge >= zu ? '✓' : '✗'}</span>`;
+  // Betrieb: Abschalten gegenüber Pausieren (Haus 01)
+  const ab = stromJetzt(hd.on[i], hd.lauf[i], NH), pa = stromJetzt(NH, hd.lauf[i], NH);
+  const pause = modus === 'pausieren';
+  el('b-titel').textContent = `Betrieb: ${pause ? 'Pausieren' : 'Abschalten'}`;
+  el('b-jetzt').textContent = `${fmt(pause ? pa : ab, 2)} kWh`;
+  el('b-andere-t').textContent = `Bei «${pause ? 'Abschalten' : 'Pausieren'}» wären es`;
+  el('b-pause').textContent = `${fmt(pause ? ab : pa, 2)} kWh`;
+  if (CL.pausieren) {
+    const J = CL[modus], diff = CL.pausieren.strom_kwh - CL.abschalten.strom_kwh;
+    el('b-jahr').innerHTML = `${fmt(J.strom_kwh)} kWh <span class="${pause ? 'nein' : 'ok'}">${pause ? '+' : '−'}${fmt(diff)}</span>`;
+    el('b-weg').innerHTML = `<span class="${J.abgefuehrt_kwh > 50 ? 'nein' : 'ok'}">${fmt(J.abgefuehrt_kwh)} kWh</span>`;
+  }
+  wolkenKarten(i);
+  if (!tour) el('satz').innerHTML = satz(i);
   if (auswahl) zeigeDetail(auswahl, false);
+}
+// Die Karten hängen erst nach dem ersten Rendern im Dokument; darum direkt in den Knoten suchen.
+const wk = id => Object.values(KNOTEN).map(k => k.div.querySelector('#' + id)).find(Boolean);
+function wolkenKarten(i) {
+  const z = (a, b) => `<div class="z"><span>${a}</span><span>${b}</span></div>`;
+  const pause = modus === 'pausieren';
+  const flotteAn = pause ? NH * 20 + NB : S.h_on[i] + S.h2_on[i] + S.b_on[i] + Math.round(S.rest_on[i] * 18);
+  wk('w-pool').innerHTML = z('Aufträge jetzt', `${fmt(S.flotte_lauf[i])} Server-h`) + z('Preis', `${fmt(VERTRAG, 2)} CHF/Server-h`);
+  wk('w-router').innerHTML = z('Server an', `${fmt(flotteAn)} von ${NH * 20 + NB}`)
+    + z('Sportbad', S.b_bed[i] > 0 ? `${fmt(S.b_lauf[i], 1)} Server` : 'Pause') + z('Wechsel/Stunde', fmt(S.mig[i]));
+  if (CL.ml) {
+    const naechste = ML_PUNKTE.filter(p => p.i >= i && p.i <= i + 24);
+    wk('w-ml').innerHTML = z('Fehler ML', `${fmt(CL.ml.mae_ml, 2)} kWh`) + z('«Wie gestern»', `${fmt(CL.ml.mae_persistenz, 2)} kWh`)
+      + (naechste.length ? '' : '<small>Ausgewertet Juli bis Dezember 2025</small>');
+    const cv = wk('w-ml-c'), dpr = devicePixelRatio || 1, w = 166, h = 38;
+    cv.width = w * dpr; cv.height = h * dpr; const g = cv.getContext('2d'); g.scale(dpr, dpr);
+    const werte = []; for (let n = 0; n <= 24; n++) werte.push(S.h_bed[Math.min(N - 1, i + n)]);
+    const mx = Math.max(2, ...werte, ...naechste.map(p => p.m)) * 1.1, X = n => (n / 24) * (w - 2) + 1, Y = v => h - 4 - (v / mx) * (h - 8);
+    g.strokeStyle = 'rgba(120,180,255,.9)'; g.lineWidth = 1.5; g.beginPath(); werte.forEach((v, n) => n ? g.lineTo(X(n), Y(v)) : g.moveTo(X(n), Y(v))); g.stroke();
+    naechste.forEach(p => { g.fillStyle = '#ff8a3d'; g.beginPath(); g.arc(X(p.i - i), Y(p.m), 2.6, 0, 7); g.fill(); });
+    g.fillStyle = '#93a2c0'; g.font = '9px sans-serif'; g.fillText('Wärmebedarf nächste 24 h', 2, 9);
+    if (naechste.length) { g.fillStyle = '#ff8a3d'; g.fillText('● ML', w - 30, 9); }
+  }
+  const morgen = Math.min(Z.tag.length - 1, Math.floor(i / 24) + 1), zu = Z.zugesagt[morgen];
+  wk('w-zusage').innerHTML = z('Prognose', `${fmt(Z.prognose_temp[morgen], 1)} °C`) + z('Zugesagt', zu === null ? '–' : `${fmt(zu)} Server-h`);
 }
 
 // ---------- Detail beim Anklicken ----------
-const STATUS = { rechnet: ['rechnet', 'var(--compute)'], bereit: ['bereit, Leerlauf', 'var(--idle)'],
-  standby: ['Standby', '#8ea0c2'] };
-function zeilen(paare) { return paare.map(([a, b]) => `<div class="zeile"><span>${a}</span><span>${b}</span></div>`).join(''); }
-function miniChart(werte, max, farbe, markerIdx) {
-  const cv = el('d-chart'), dpr = devicePixelRatio || 1;
-  cv.width = cv.clientWidth * dpr; cv.height = 70 * dpr;
+const STATUS = { rechnet: ['rechnet', 'var(--compute)'], bereit: ['bereit, Leerlauf', 'var(--idle)'], standby: ['Standby', '#8ea0c2'] };
+const zeilen = paare => paare.map(([a, b]) => `<div class="zeile"><span>${a}</span><span>${b}</span></div>`).join('');
+function miniChart(werte, max, farbe) {
+  const cv = el('d-chart'), dpr = devicePixelRatio || 1, w = cv.clientWidth, h = 70;
+  cv.width = w * dpr; cv.height = h * dpr;
   const g = cv.getContext('2d'); g.scale(dpr, dpr);
-  const w = cv.clientWidth, h = 70, bw = w / werte.length;
-  g.clearRect(0, 0, w, h);
+  const bw = w / werte.length;
   werte.forEach((v, n) => {
-    g.fillStyle = n === markerIdx ? '#ffffff' : farbe;
-    g.globalAlpha = n === markerIdx ? 1 : 0.8;
-    const bh = Math.max(1, (v / max) * (h - 14));
-    g.fillRect(n * bw + 1, h - 12 - bh, bw - 2, bh);
+    g.fillStyle = n === 12 ? '#ffffff' : farbe; g.globalAlpha = n === 12 ? 1 : 0.8;
+    const bh = Math.max(1, (v / max) * (h - 14)); g.fillRect(n * bw + 1, h - 12 - bh, bw - 2, bh);
   });
   g.globalAlpha = 1; g.fillStyle = '#93a2c0'; g.font = '10px sans-serif';
   g.fillText('−12 h', 0, h - 1); g.fillText('jetzt', w / 2 - 10, h - 1); g.fillText('+12 h', w - 28, h - 1);
 }
-function fenster(f) { const out = []; for (let d = -12; d <= 12; d++) out.push(f(clamp(zeitH + d, 0, N - 1) | 0)); return out; }
+const fenster = f => { const out = []; for (let d = -12; d <= 12; d++) out.push(f(clamp(zeitH + d, 0, N - 1) | 0)); return out; };
+function detailHtml(art, titel, status, farbe, paare, text, extra = '') {
+  return `<h2 class="k">${art}</h2><h3>${titel}</h3><span class="status" style="background:${farbe}">${status}</span>
+    ${zeilen(paare)}<canvas id="d-chart" height="70"></canvas><p>${text}</p>${extra}`;
+}
+function ablaufHtml(hd, i, k) {
+  const vorher = i > 0 ? hd.on[i - 1] : hd.on[i];
+  let jetzt = { rechnet: 'Rechnet', bereit: 'Leerlauf', standby: 'Standby' }[serverZustand(hd.lauf[i], modus === 'pausieren' ? NH : hd.on[i], k)];
+  if (modus !== 'pausieren' && k >= vorher && k < hd.on[i]) jetzt = 'Start';
+  const farbe = { Standby: '#8ea0c2', Start: '#ffffff', Rechnet: 'var(--compute)', Leerlauf: 'var(--idle)' };
+  const chips = ['Standby', 'Start', 'Rechnet', 'Leerlauf'].map(s => `<span class="${s === jetzt ? 'jetzt' : ''}" style="${s === jetzt ? 'background:' + farbe[s] : ''}">${s}</span>`).join('<i>→</i>');
+  return `<h2 class="k" style="margin-top:12px">Ablauf beim ${modus === 'pausieren' ? 'Pausieren' : 'Abschalten'}</h2><div class="ablauf">${chips}</div>
+    <p class="hinweis-klein">${modus === 'pausieren'
+      ? `Pausieren: Der Server bleibt immer an. Ohne Arbeit läuft er im Leerlauf mit ${M.leerlauf_watt} W, auch wenn niemand die Wärme braucht.`
+      : `Standby ${M.standby_watt} W → Start ${M.start_minuten} min (1'000 W, noch keine Arbeit) → Rechnet 1'000 W → Leerlauf ${M.leerlauf_watt} W, nach 1 h ohne Arbeit zurück in den Standby. Der Speicher lädt ab 35 % und hört bei 85 % auf.`}</p>`;
+}
+function serviceHtml(k) {
+  if (!SVC || !SVC[k]) return '';
+  const s = SVC[k], d = s.naechste_wartung.split('-'), sv = CL.service;
+  return `<h2 class="k" style="margin-top:12px">Service-ML · synthetische Daten</h2>${zeilen([
+    ['Risiko ungeplanter Service, 30 Tage', fmt(s.risiko_30d * 100, 1) + ' %'], ['Nächste Routinewartung', `${+d[2]}.${+d[1]}.${d[0]}`],
+    ['Erwartet ungeplant pro Jahr', fmt(s.ungeplant_pro_jahr, 2) + ' Einsätze'], ['Servicekosten pro Jahr', fmt(s.kosten_chf) + ' CHF']])}
+    <p class="hinweis-klein">Trainiert auf künstlichen Serverdaten (docs/SERVICE_ML.md). Im Test ist das Modell nicht besser als ein konstantes Risiko
+    (Brier ${sv.brier_modell.toFixed(5)} gegenüber ${sv.brier_konstant.toFixed(5)}). Es zeigt die Methode, keine echte L4-Ausfallrate.</p>`;
+}
 function zeigeDetail(info, fliegen = true) {
-  auswahl = info; el('detail').classList.add('offen');
-  const i = zeitH | 0;
+  auswahl = info; thermo.offen = false; thermo.abspielen = null; el('links').classList.add('offen');
+  const i = zeitH | 0, box = el('links-inhalt');
   if (info.art === 'server') {
-    const k = info.k, z = serverZustand(S.h_lauf[i], S.h_on[i], k), l = serverLast(S.h_lauf[i], S.h_on[i], k);
-    const watt = serverWatt(S.h_lauf[i], S.h_on[i], k), J = jahrServer[k];
-    el('d-art').textContent = 'Server im Keller · Haus 01';
-    el('d-titel').textContent = `Server ${k + 1} von ${NH}`;
-    el('d-status').textContent = STATUS[z][0]; el('d-status').style.background = STATUS[z][1];
-    el('d-zeilen').innerHTML = zeilen([
-      ['Hardware', '8 × NVIDIA L4'],
-      ['Leistung jetzt', fmt(watt) + ' W'],
-      ['Davon Rechnen', fmt(l * 100) + ' % der Stunde'],
-      ['Wärme an den Speicher', fmt(watt * 0.8 / 1000, 2) + ' kW'],
-      ['Eingeschaltet 2025', fmt(J.anH) + ' h'],
-      ['Gerechnet 2025', fmt(J.rechenH) + ' Server-h'],
-      ['Erlös 2025 (zum Vertragspreis)', fmt(J.rechenH * K.vertragspreis_chf_server_h) + ' CHF'],
-    ]);
-    miniChart(fenster(n => serverLast(S.h_lauf[n], S.h_on[n], k)), 1, '#3ee0c0', 12);
-    el('d-text').textContent = (k === NH - 1 ? 'In der Live-Demo steht dieser Server für den echten Embedding-Job auf dem Laptop. ' : '')
-      + 'Server werden der Reihe nach zugeschaltet: Server 1 läuft am längsten, die letzten nur an kalten Tagen. '
-      + `Ohne Arbeit braucht ein eingeschalteter Server ${M.leerlauf_watt} W, im Standby ${M.standby_watt} W.`;
-    if (fliegen) fliegeZu(hausRacks[k].g.position.clone().add(new THREE.Vector3(0, 1, 0)), new THREE.Vector3(1.4, 0.25, 3.6));
+    const hd = HD[info.haus - 1], k = info.k, z = serverZustand(hd.lauf[i], hd.on[i], k), l = serverLast(hd.lauf[i], hd.on[i], k);
+    const watt = serverWatt(hd.lauf[i], hd.on[i], k), J = jahrServer(info.haus, k);
+    const echt = liveJob && info.haus === 1 && k === NH - 1 && liveJob.ort === 'haus';
+    box.innerHTML = detailHtml(`Server im Keller · Haus 0${info.haus}`, `Server ${k + 1} von ${NH}`, echt ? 'echter Job' : STATUS[z][0],
+      echt ? '#ffffff' : STATUS[z][1], [
+        ['Hardware', '8 × NVIDIA L4'], ['Leistung jetzt', fmt(watt) + ' W'], ['Davon Rechnen', fmt(l * 100) + ' % der Stunde'],
+        ['Wärme an den Speicher', fmt(watt * ETA / 1000, 2) + ' kW'], ['Eingeschaltet 2025', fmt(J.anH) + ' h'],
+        ['Gerechnet 2025', fmt(J.rechenH) + ' Server-h'], ['Erlös 2025 (Vertragspreis)', fmt(J.rechenH * VERTRAG) + ' CHF'],
+      ], (info.haus === 1 && k === NH - 1 ? (echt ? `Live: ${liveJob.text}. ` : 'In der Live-Demo steht dieser Server für den echten Embedding-Job auf dem Laptop. ') : '')
+        + 'Server werden der Reihe nach zugeschaltet: Server 1 läuft am längsten, die letzten nur an kalten Tagen.',
+      ablaufHtml(hd, i, k) + (info.haus === 1 ? serviceHtml(k) : ''));
+    miniChart(fenster(n => serverLast(hd.lauf[n], hd.on[n], k)), 1, '#3ee0c0');
+    if (fliegen) fliegeZu(HAUS[info.haus - 1].racks[k].g.position.clone().add(V(0, 1, 0)), V(1.4, 0.25, 3.6));
   } else if (info.art === 'speicher') {
-    const fuell = S.h_sp[i] / M.speicher_haus_kwh;
-    el('d-art').textContent = 'Wärmespeicher · Haus 01';
-    el('d-titel').textContent = `${fmt(S.h_sp[i], 1)} von ${fmt(M.speicher_haus_kwh)} kWh`;
-    el('d-status').textContent = fuell > 0.85 ? 'voll' : fuell < 0.35 ? 'lädt' : 'puffert';
-    el('d-status').style.background = fuell > 0.85 ? 'var(--heat)' : 'var(--cold)';
-    el('d-zeilen').innerHTML = zeilen([
-      ['Wasser', "1'000 l, 30 K Spreizung"], ['Wärmebedarf jetzt', fmt(S.h_bed[i], 1) + ' kWh'],
-      ['Aus Serverwärme gedeckt', S.h_bed[i] > 0.01 ? fmt(100 * Math.min(1, S.h_gen[i] / S.h_bed[i])) + ' %' : '–'],
-      ['Ölkessel (Backup)', fmt(S.h_backup[i], 1) + ' kWh'],
-    ]);
-    miniChart(fenster(n => S.h_sp[n]), M.speicher_haus_kwh, '#ff8a3d', 12);
-    el('d-text').textContent = 'Fällt der Speicher unter 35 %, starten Server und laden ihn. Ab 85 % hören sie auf. '
-      + 'Ist er voll und das Haus braucht keine Wärme, wandern Aufträge ins Sportbad.';
-    if (fliegen) fliegeZu(new THREE.Vector3(3.55, KEL.boden + 1.4, 9.4), new THREE.Vector3(1.6, 0.3, 4.2));
+    const o = HAUS[info.haus - 1], hd = HD[info.haus - 1], f = hd.sp[i] / M.speicher_haus_kwh;
+    box.innerHTML = detailHtml(`Wärmespeicher · Haus 0${info.haus}`, `${fmt(hd.sp[i], 1)} von ${fmt(M.speicher_haus_kwh)} kWh`,
+      f > 0.85 ? 'voll' : f < 0.35 ? 'lädt' : 'puffert', f > 0.85 ? 'var(--heat)' : 'var(--cold)', [
+        ['Wasser', "1'000 l, 30 K Spreizung"], ['Wärmebedarf jetzt', fmt(hd.bed[i], 1) + ' kWh'],
+        ['Aus Serverwärme', hd.bed[i] > 0.01 ? fmt(100 * Math.min(1, hd.gen[i] / hd.bed[i])) + ' %' : '–'],
+      ], 'Fällt der Speicher unter 35 %, starten Server und laden ihn. Ab 85 % hören sie auf. Ist er voll und braucht das Haus keine Wärme, wandern Aufträge weiter.');
+    miniChart(fenster(n => hd.sp[n]), M.speicher_haus_kwh, '#ff8a3d');
+    if (fliegen) fliegeZu(V(o.tank.x, KBODEN + 1.4, o.tank.z), V(1.6, 0.3, 4.2));
+  } else if (info.art === 'kuehler') {
+    const o = HAUS[info.haus - 1], laeuft = o.kuehlerLabel._obj.visible;
+    box.innerHTML = detailHtml(`Rückkühler · Haus 0${info.haus}`, laeuft ? 'kühlt Leerlaufwärme weg' : 'aus', laeuft ? 'läuft' : 'aus',
+      laeuft ? 'var(--oil)' : '#8ea0c2', CL.pausieren ? [
+        ['Weggekühlt mit Pausieren', fmt(CL.pausieren.abgefuehrt_kwh) + ' kWh/Jahr'], ['Weggekühlt mit Abschalten', fmt(CL.abschalten.abgefuehrt_kwh) + ' kWh/Jahr'],
+        ['Strom mit Pausieren', fmt(CL.pausieren.strom_kwh) + ' kWh/Jahr'], ['Strom mit Abschalten', fmt(CL.abschalten.strom_kwh) + ' kWh/Jahr'],
+      ] : [], 'Bleiben Server ohne Arbeit an, erzeugen sie Wärme, die niemand braucht, sobald der Speicher voll ist. Diese Wärme muss weg. Mit Abschalten läuft der Rückkühler praktisch nie. Werte: Referenzhaus, 230 W Leerlauf, src/scheduler/serverbetrieb.py.');
+    miniChart(fenster(n => stromJetzt(modus === 'pausieren' ? NH : HD[info.haus - 1].on[n], HD[info.haus - 1].lauf[n], NH)), NH, '#ff5d4a');
+    if (fliegen) fliegeZu(V(o.h.x1 + 1.05, 0.6, 10.6), V(2.5, 2.5, 6));
+  } else if (info.art === 'kunde') {
+    box.innerHTML = detailHtml('Kunde (Beispiel)', 'Pharma-Kunde in Basel', 'schickt Aufträge', '#ffe2b8', [
+        ['Aufträge', 'Embeddings, Docking, Bildprüfung'], ['Daten bleiben', 'in der Schweiz'], ['Vertragspreis', `${fmt(VERTRAG, 2)} CHF/Server-h`],
+        ['Am Vortag zusagbar', `${fmt(Z.zusagbar * 100)} % der Kapazität`], ['Rechenarbeit jetzt', `${fmt(S.flotte_lauf[i])} Server-h`],
+      ], 'Der Turm steht für einen Basler Pharma-Kunden. Es gibt noch keinen Vertrag; Preis, Menge und Festbuchung sind Annahmen (docs/PHARMA_SICHT.md). Die Aufträge gehen in den Auftragspool der DigitalHeat-Cloud, der Wärme-Router verteilt sie auf Häuser mit Wärmebedarf.');
+    miniChart(fenster(n => S.flotte_lauf[n]), Math.max(...S.flotte_lauf), '#ffe2b8');
+    if (fliegen) fliegeZu(V(TURM.x, 9, TURM.z), V(12, 2, 18));
+  } else if (info.art === 'kessel') {
+    const o = HAUS[info.haus - 1], hd = HD[info.haus - 1], kw = kessel(hd, i);
+    let jahr = 0; for (let n = 0; n < N; n++) jahr += kessel(hd, n);
+    const liter = kwh => kwh / (W.heizoel_kwh_l * W.kessel_wirkungsgrad);
+    box.innerHTML = detailHtml(`Ölkessel · Haus 0${info.haus}`, kw > 0.05 ? `${fmt(kw, 1)} kWh in dieser Stunde` : 'aus',
+      kw > 0.05 ? 'brennt' : 'aus', kw > 0.05 ? 'var(--oil)' : '#8ea0c2', [
+        ['Ölwärme 2025', fmt(jahr) + ' kWh'], ['Heizöl 2025 mit Servern', fmt(liter(jahr)) + ' l'],
+        ['Heizöl ohne Server', fmt(liter(jahr) + oelSpar[info.haus - 1][N - 1]) + ' l'],
+        ['Gespart durch Server', fmt(oelSpar[info.haus - 1][N - 1]) + ' l'],
+      ], 'Der bestehende Kessel bleibt als Reserve. Er springt nur ein, wenn Serverwärme und Speicher in sehr kalten Stunden nicht reichen.');
+    miniChart(fenster(n => kessel(hd, n)), 4, '#ff5d4a');
+    if (fliegen) fliegeZu(V(o.kessel.x - 0.8, KBODEN + 1, o.kessel.z + 0.5), V(-3.2, 1.4, 7.5));
   } else {
     const ri = info.art === 'badrack' ? info.r : null, offen = S.b_bed[i] > 0;
-    el('d-art').textContent = 'Sommer-Senke';
-    el('d-titel').textContent = ri === null ? 'Sportbad St. Jakob' : `Bad-Rack ${ri + 1} · Server ${ri * 10 + 1}–${ri * 10 + 10}`;
-    el('d-status').textContent = offen ? 'offen' : 'Saisonpause';
-    el('d-status').style.background = offen ? 'var(--compute)' : '#8ea0c2';
     const fl = K.flotte, mit = fl['spot|Sportbad 50 (nach Nachfrage)'], ohne = fl['spot|0 Senken'];
-    el('d-zeilen').innerHTML = zeilen([
-      ['Wärmebedarf jetzt', fmt(S.b_bed[i]) + ' kWh'], ['Server an', `${S.b_on[i]} / ${NB}`],
-      ['Rechnen jetzt', fmt(S.b_lauf[i], 1) + ' Server'], ['Becken als Speicher', fmt(S.b_sp[i]) + " / 1'200 kWh"],
-      ['Ergebnis Flotte ohne Bad', fmt(ohne.ergebnis_chf) + ' CHF/J'], ['Ergebnis Flotte mit Bad', fmt(mit.ergebnis_chf) + ' CHF/J'],
-    ]);
-    miniChart(fenster(n => S.b_lauf[n]), NB, '#3ee0c0', 12);
-    el('d-text').textContent = `Offen vom 26.4. bis 5.10.2025, genau wenn die Häuser kaum Wärme brauchen. `
-      + 'Die Häuser haben immer Vorrang, das Bad nimmt nur Arbeit, deren Wärme kein Haus brauchen kann. '
-      + 'Wärmebedarf: Schätzung ±30 % (daten/HALLENBAD.md), Szenario «Genug Aufträge».';
-    if (fliegen) fliegeZu(ri === null ? new THREE.Vector3(BAD.x, 0.5, BAD.z) : badRacks[ri].g.position.clone().add(new THREE.Vector3(0, 1, 0)),
-      ri === null ? new THREE.Vector3(4, 9, 12) : new THREE.Vector3(1.5, 1, 4.5));
+    box.innerHTML = detailHtml('Sommer-Senke', ri === null ? 'Sportbad St. Jakob' : `Bad-Rack ${ri + 1} · Server ${ri * 10 + 1}–${ri * 10 + 10}`,
+      offen ? 'offen' : 'Saisonpause', offen ? 'var(--compute)' : '#8ea0c2', [
+        ['Wärmebedarf jetzt', fmt(S.b_bed[i]) + ' kWh'], ['Server an', `${S.b_on[i]} / ${NB}`], ['Rechnen jetzt', fmt(S.b_lauf[i], 1) + ' Server'],
+        ['Becken als Speicher', fmt(S.b_sp[i]) + " / 1'200 kWh"], ['Flotte ohne Bad', fmt(ohne.ergebnis_chf) + ' CHF/J'], ['Flotte mit Bad', fmt(mit.ergebnis_chf) + ' CHF/J'],
+      ], 'Offen vom 26.4. bis 5.10.2025, genau wenn die Häuser kaum Wärme brauchen. Die Häuser haben Vorrang, das Bad nimmt nur Arbeit, deren Wärme kein Haus brauchen kann. Wärmebedarf: Schätzung ±30 % (daten/HALLENBAD.md), Szenario «Genug Aufträge».');
+    miniChart(fenster(n => S.b_lauf[n]), NB, '#3ee0c0');
+    if (fliegen) fliegeZu(ri === null ? V(BAD.x, 0.5, BAD.z) : badRacks[ri].g.position.clone().add(V(0, 1, 0)),
+      ri === null ? V(4, 9, 12) : V(1.5, 1, 4.5));
   }
 }
-function schliesseDetail() { auswahl = null; el('detail').classList.remove('offen'); fliegeZu(HOME.target, null); }
-el('zu').onclick = schliesseDetail;
+function schliesseLinks() { auswahl = null; thermo.offen = false; thermo.abspielen = null; el('links').classList.remove('offen'); fliegeZu(HOME.target, null); }
+el('zu').onclick = schliesseLinks;
 
 // ---------- Kamerafahrt ----------
 let fahrt = null;
-function fliegeZu(ziel, versatz) {
+function fliegeZu(ziel, versatz, dauer = 900) {
   const zuPos = versatz ? ziel.clone().add(versatz) : HOME.pos.clone();
-  fahrt = { start: performance.now(), vonPos: camera.position.clone(), vonZiel: controls.target.clone(), zuPos, zuZiel: ziel.clone() };
+  fahrt = { start: performance.now(), dauer, vonPos: camera.position.clone(), vonZiel: controls.target.clone(), zuPos, zuZiel: ziel.clone() };
 }
+
+// ---------- Tour für den Pitch ----------
+const TOUR = [
+  { tag: '01-15T08', kam: [HOME.target, null], text: 'Ein kalter Januartag in Basel. Zwei Häuser der Flotte im Schnitt, rechts das Sportbad, hinten 18 weitere Häuser.', s: 7 },
+  { tag: '01-15T08', play: true, tempo: 1, kam: [V(CLOUD.x - 7, CLOUD.y - 1, CLOUD.z), V(1, 0, 25)], text: 'Ein Pharma-Kunde schickt Rechenaufträge in die DigitalHeat-Cloud. Der Wärme-Router verteilt sie auf die Häuser, die gerade Wärme brauchen.', s: 8 },
+  { tag: '01-15T08', kam: [V(-1.2, -2, 5.8), V(1.6, 0.6, 5.2)], text: 'Im Keller rechnen 8 Server KI-Aufträge. 80 % ihrer Abwärme gehen über den Speicher in die Heizkörper.', s: 7 },
+  { tag: '01-15T03', kam: [V(2.6, -2.0, 7.6), V(-3.2, 1.4, 7.5)], text: 'In den kältesten Stunden, hier −5 °C in der Nacht, reicht das nicht ganz. Dann springt der bestehende Ölkessel ein.', s: 7 },
+  { tag: '03-07T13', tempo: 1, play: true, kam: [V(2.5, -1.8, 8.5), V(2.6, 0.8, 6)], text: '7. März: Am Nachmittag ist der Speicher voll. Server gehen in den Standby, Aufträge warten oder wandern weiter.', s: 8 },
+  { tag: '07-15T10', tempo: 3, play: true, kam: [V(14, 1, 2), V(-2, 10, 34)], text: 'Im Sommer braucht das Haus nur Warmwasser, 1 Server reicht. Die übrige Arbeit fliegt ins Sportbad.', s: 9 },
+  { tag: '07-15T13', tempo: 3, play: true, kam: [V(TR.x, 1.2, TR.z), V(3, 2, 8)], text: 'Im Sportbad rechnen 50 Server und heizen das 50-m-Becken, von Ende April bis Anfang Oktober.', s: 7 },
+  { tag: '07-15T03', modus: 'pausieren', kam: [V(1, -1.5, 7), V(5, 3, 15)], text: 'Würden die Server nur pausieren, liefen im Sommer alle 8 im Leerlauf mit je 230 W. Ist der Speicher voll, muss ihre Wärme weggekühlt werden.', s: 8 },
+  { tag: '07-15T03', kam: [V(1, -1.5, 7), V(5, 3, 15)], text: CL.pausieren ? `Mit Abschalten läuft nur, was gebraucht wird, der Rest ist im Standby (10 W). Das spart ${fmt(CL.pausieren.strom_kwh - CL.abschalten.strom_kwh)} kWh Strom pro Haus und Jahr.` : 'Mit Abschalten läuft nur, was gebraucht wird.', s: 8 },
+  { tag: '09-15T06', kam: [V(CLOUD.x + 4, CLOUD.y, CLOUD.z), V(0, 1, 20)], text: CL.ml ? `Ein ML-Modell sagt den Wärmebedarf der nächsten Stunden voraus: Fehler ${fmt(CL.ml.mae_ml, 2)} kWh statt ${fmt(CL.ml.mae_persistenz, 2)} kWh mit «wie gestern». Strom spart es bisher kaum, den grossen Effekt bringt das Abschalten.` : 'ML-Prognose des Wärmebedarfs.', s: 9 },
+  { tag: '11-20T12', kam: [HOME.target, null], panel: true, text: `Jeden Mittag sagt DigitalHeat mit der Wetterprognose verbindlich zu, wie viel Rechenzeit morgen bereitsteht: ${fmt(Z.zusagbar * 100)} % der Kapazität sind zusagbar.`, s: 8 },
+  { tag: '01-15T08', kam: [HOME.target, null], text: `Ergebnis nach Case-Regel: 8 Server pro Haus decken ${fmt(kc.deckung * 100, 1)} % der Wärme, ${fmt(kc.abgefuehrt_kwh)} kWh werden weggekühlt, keine Frist wird verpasst.`, s: 7 },
+];
+let tour = null;
+function tourSchritt(n) {
+  if (n >= TOUR.length) return tourStopp();
+  const t = TOUR[n]; tour = { n, start: performance.now() };
+  zeitH = S.zeit.findIndex(z => z.startsWith(t.tag));
+  tempo = t.tempo || 1; el('tempo').value = String(tempo);
+  spielt = !!t.play; el('play').textContent = spielt ? '❚❚' : '▶';
+  auswahl = null; thermo.offen = false; thermo.abspielen = null; el('links').classList.remove('offen');
+  setModus(t.modus || 'abschalten'); setCloud(true);
+  if (t.panel) panelAuf(true);
+  fliegeZu(t.kam[0], t.kam[1], 1600);
+  el('tour-knopf').textContent = `■ Tour ${n + 1}/${TOUR.length}`;
+  el('satz').innerHTML = `<b>${n + 1}/${TOUR.length}</b> · ${t.text}`;
+}
+function tourStopp() {
+  tour = null; el('tour-knopf').textContent = '▶ Tour'; spielt = false; el('play').textContent = '▶'; el('satz').innerHTML = satz(zeitH | 0);
+}
+el('tour-knopf').onclick = () => tour ? tourStopp() : tourSchritt(0);
 
 // ---------- Klicken und Hover ----------
 const ray = new THREE.Raycaster(), maus = new THREE.Vector2();
@@ -638,15 +1075,14 @@ renderer.domElement.addEventListener('pointerdown', e => downXY = [e.clientX, e.
 renderer.domElement.addEventListener('pointerup', e => {
   if (!downXY || Math.hypot(e.clientX - downXY[0], e.clientY - downXY[1]) > 5) return;
   const hit = treffer(e);
-  if (hit) zeigeDetail(hit.object.userData); else if (auswahl) schliesseDetail();
+  if (tour) tourStopp();
+  if (hit) zeigeDetail(hit.object.userData); else if (auswahl || thermo.offen) schliesseLinks();
 });
-renderer.domElement.addEventListener('pointermove', e => {
-  renderer.domElement.style.cursor = treffer(e) ? 'pointer' : 'grab';
-});
+renderer.domElement.addEventListener('pointermove', e => renderer.domElement.style.cursor = treffer(e) ? 'pointer' : 'grab');
 function treffer(e) {
   maus.set((e.clientX / innerWidth) * 2 - 1, -(e.clientY / innerHeight) * 2 + 1);
   ray.setFromCamera(maus, camera);
-  return ray.intersectObjects(klickbar, false)[0];
+  return ray.intersectObjects(klickbar, false).find(h => h.object.visible);
 }
 
 // ---------- Zeitleiste ----------
@@ -655,83 +1091,156 @@ function zeichneJahr() {
   const dpr = devicePixelRatio || 1, w = jahrC.clientWidth, h = jahrC.clientHeight;
   jahrC.width = w * dpr; jahrC.height = h * dpr;
   const g = jahrC.getContext('2d'); g.scale(dpr, dpr);
-  const tage = Math.ceil(N / 24), bed = [], gen = [], bad = [];
+  const tage = Math.ceil(N / 24), bed = [], gen = [], bad = [], oel = [];
   for (let d = 0; d < tage; d++) {
-    let a = 0, b = 0, c = 0;
-    for (let s = d * 24; s < Math.min(N, d * 24 + 24); s++) { a += S.h_bed[s]; b += S.h_gen[s]; c += S.b_lauf[s]; }
-    bed.push(a); gen.push(b); bad.push(c);
+    let a = 0, b = 0, c = 0, o = 0;
+    for (let s = d * 24; s < Math.min(N, d * 24 + 24); s++) { a += S.h_bed[s]; b += S.h_gen[s]; c += S.b_lauf[s]; o += kessel(HD[0], s); }
+    bed.push(a); gen.push(b); bad.push(c); oel.push(o);
   }
-  const mb = Math.max(...bed), mc = Math.max(...bad), bw = w / tage;
+  const mb = Math.max(...bed), mc = Math.max(...bad), bw = w / tage, H = h - 14;
   g.clearRect(0, 0, w, h);
   for (let d = 0; d < tage; d++) {
-    const hb = (bed[d] / mb) * (h - 12), hg = (gen[d] / mb) * (h - 12), hc = (bad[d] / mc) * (h - 12) * 0.55;
-    g.fillStyle = 'rgba(90,168,255,.35)'; g.fillRect(d * bw, h - 10 - hb, Math.max(1, bw - 0.3), hb);
-    g.fillStyle = 'rgba(255,138,61,.9)'; g.fillRect(d * bw, h - 10 - hg, Math.max(1, bw - 0.3), hg);
-    g.fillStyle = 'rgba(62,224,192,.75)'; g.fillRect(d * bw, h - 10 - hc, Math.max(1, bw - 0.3), Math.min(2, hc));
+    const hb = (bed[d] / mb) * H, hg = (gen[d] / mb) * H, ho = (oel[d] / mb) * H, hc = (bad[d] / mc) * H * 0.5;
+    g.fillStyle = 'rgba(90,168,255,.3)'; g.fillRect(d * bw, h - 12 - hb, Math.max(1, bw - 0.3), hb);
+    g.fillStyle = 'rgba(255,138,61,.9)'; g.fillRect(d * bw, h - 12 - hg, Math.max(1, bw - 0.3), hg);
+    g.fillStyle = 'rgba(255,93,74,.95)'; g.fillRect(d * bw, h - 12 - hg - ho, Math.max(1, bw - 0.3), ho);
+    if (hc > 0.5) { g.fillStyle = 'rgba(62,224,192,.85)'; g.fillRect(d * bw, h - 12 - hc, Math.max(1, bw - 0.3), 2); }
   }
-  g.fillStyle = '#93a2c0'; g.font = '10px sans-serif';
-  ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'].forEach((m, n) => g.fillText(m, (n / 12) * w + 3, h - 1));
+  g.fillStyle = '#93a2c0'; g.font = '11px sans-serif';
+  MONATE.forEach((m, n) => g.fillText(m.slice(0, 3), (n / 12) * w + 3, h - 1));
   g.textAlign = 'right';
-  g.fillStyle = 'rgba(255,138,61,1)'; g.fillText('Haus: von Servern gedeckt', w - 4, 10);
-  g.fillStyle = 'rgba(90,168,255,.9)'; g.fillText('Wärmebedarf', w - 160, 10);
-  g.fillStyle = 'rgba(62,224,192,1)'; g.fillText('Bad rechnet', w - 236, 10);
+  let x = w - 4;
+  [['Bad rechnet', '#3ee0c0'], ['Ölkessel', '#ff5d4a'], ['Server decken', '#ff8a3d'], ['Wärmebedarf Haus 01', 'rgba(120,180,255,.95)']]
+    .forEach(([t, c]) => { g.fillStyle = c; g.fillText(t, x, 11); x -= g.measureText(t).width + 22; });
 }
 el('jahr').addEventListener('pointerdown', e => {
+  if (tour) tourStopp();
+  thermo.abspielen = null;
   const set = ev => { const r = el('jahr').getBoundingClientRect(); zeitH = clamp((ev.clientX - r.left) / r.width) * (N - 1); };
   set(e);
   const move = ev => set(ev), up = () => { removeEventListener('pointermove', move); removeEventListener('pointerup', up); };
   addEventListener('pointermove', move); addEventListener('pointerup', up);
 });
-el('play').onclick = () => { spielt = !spielt; el('play').textContent = spielt ? '❚❚' : '▶'; };
+el('play').onclick = () => { spielt = !spielt; thermo.abspielen = null; el('play').textContent = spielt ? '❚❚' : '▶'; };
 el('tempo').onchange = e => tempo = +e.target.value;
 document.querySelectorAll('.tag').forEach(b => b.onclick = () => {
+  if (tour) tourStopp();
+  thermo.abspielen = null;
   zeitH = S.zeit.findIndex(z => z.startsWith(b.dataset.tag + 'T00'));
   tempo = 1; el('tempo').value = '1'; spielt = true; el('play').textContent = '❚❚';
   document.querySelectorAll('.tag').forEach(x => x.classList.toggle('aktiv', x === b));
 });
-el('uebersicht').onclick = () => { if (auswahl) schliesseDetail(); else fliegeZu(HOME.target, null); };
+el('thermo-knopf').onclick = () => {
+  if (tour) tourStopp();
+  if (thermo.offen) return schliesseLinks();
+  spielt = false; el('play').textContent = '▶';
+  zeigeThermostat(); fliegeZu(V(2, 2, 8), V(4, 5.5, 22));
+};
+el('uebersicht').onclick = () => { if (tour) tourStopp(); (auswahl || thermo.offen) ? schliesseLinks() : fliegeZu(HOME.target, null); };
+function setModus(m) {
+  modus = m; el('m-pause').className = m === 'pausieren' ? 'an pause' : ''; el('m-ab').className = m === 'abschalten' ? 'an' : '';
+  letzteStunde = -1;
+}
+function setCloud(an) {
+  cloudGruppe.visible = an; el('cloud-knopf').classList.toggle('aktiv', an);
+  for (const k of Object.values(KNOTEN)) k.o.visible = an;  // CSS2D-Karten folgen nicht dem Gruppen-Sichtbarkeitsflag
+}
+el('m-pause').onclick = () => setModus('pausieren');
+el('m-ab').onclick = () => setModus('abschalten');
+el('cloud-knopf').onclick = () => setCloud(!cloudGruppe.visible);
+function panelAuf(auf) { el('jetzt').classList.toggle('zu', !auf); el('klapp').classList.toggle('offen', auf); el('klapp').textContent = auf ? '⟩' : '⟨'; }
+el('klapp').onclick = () => panelAuf(el('jetzt').classList.contains('zu'));
+if (innerWidth < 1350) panelAuf(false);
 addEventListener('keydown', e => {
-  if (e.key === 'Escape' && auswahl) schliesseDetail();
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
+  if (e.key === 'Escape') { if (tour) tourStopp(); else schliesseLinks(); }
   if (e.key === ' ') { e.preventDefault(); el('play').click(); }
+  if (e.key === 'p' || e.key === 'P') el('klapp').click();
+  if (e.key === 't' || e.key === 'T') el('tour-knopf').click();
+  if (e.key === 'c' || e.key === 'C') el('cloud-knopf').click();
 });
-setTimeout(() => el('hinweis').style.opacity = 0, 7000);
+setTimeout(() => el('hinweis').style.opacity = 0, 8000);
+
+// ---------- Live: echter Job aus src/scheduler/live.py (auch --flotte) ----------
+async function pruefeLive() {
+  try {
+    const r = await fetch('../live.json?' + Date.now(), { cache: 'no-store' });
+    if (!r.ok) throw 0;
+    const L = await r.json();
+    if (!(L.aktiv && L.aktualisiert && (Date.now() / 1000 - L.aktualisiert) < 20)) throw 0;
+    const ort = (L.standort || '').toLowerCase().includes('bad') ? 'bad' : 'haus', laeuft = L.prozess === 'läuft';
+    liveJob = { ort, text: `echter Embedding-Prozess ${laeuft ? 'rechnet' : 'pausiert'}, ${fmt(L.texte_fertig || 0)} Texte` };
+    el('live').classList.add('an');
+    el('live-text').textContent = `LIVE · echter Job ${laeuft ? 'rechnet' : 'pausiert'} · ${ort === 'bad' ? 'im Sportbad' : 'Haus 01, Server 8'} · ${fmt(L.texte_fertig || 0)} Texte`;
+    if (L.jetzt && L.jetzt.zeit && !tour && !thermo.abspielen) {
+      const idx = S.zeit.indexOf(L.jetzt.zeit.slice(5, 13));
+      if (idx >= 0) { zeitH = idx; spielt = false; el('play').textContent = '▶'; }
+    }
+  } catch { liveJob = null; el('live').classList.remove('an'); }
+}
+setInterval(pruefeLive, 1500); pruefeLive();
 
 // ---------- Schleife ----------
 const uhr = new THREE.Clock();
 let letzteStunde = -1, migRest = 0;
 function animiere() {
   requestAnimationFrame(animiere);
-  const dt = Math.min(0.05, uhr.getDelta());
-  if (spielt) { zeitH += dt * tempo; if (zeitH >= N - 1) zeitH = 0; }
+  const dt = Math.min(0.05, uhr.getDelta()), jetzt = performance.now();
+  if (spielt && !thermo.abspielen) { zeitH += dt * tempo; if (zeitH >= N - 1) zeitH = 0; }
+  // Thermostat-Wiedergabe: 24 h in 12 s
+  if (thermo.abspielen && thermo.sim) {
+    const a = thermo.abspielen, t = clamp((jetzt - a.start) / 12000);
+    a.idx = Math.floor(t * (thermo.sim.out.length - 1));
+    zeitH = Math.min(N - 1, a.i0 + t * 24);
+    const p = thermo.sim.out[a.idx], diff = p.nServer - thermo.sim.basis[a.idx];
+    a.rest = (a.rest || 0) + Math.min(3, Math.abs(diff)) * dt * 1.5;
+    if (a.rest >= 1) {
+      a.rest -= 1;
+      const zielV = a.ziel === 'andere' ? ORTE.nachbar() : ORTE[a.ziel];
+      diff > 0 ? flug(zielV, ORTE.haus1, '#ffd27d') : flug(ORTE.haus1, zielV, '#ffd27d');
+    }
+    zeichneThermo(thermo.sim, p.h);
+    el('satz').innerHTML = satz(zeitH | 0);
+    if (t >= 1) thermo.abspielen = null;
+  }
   const i = Math.floor(zeitH), frac = zeitH - i;
   wende(i, frac);
   if (i !== letzteStunde) { panelJetzt(i); letzteStunde = i; }
   el('marker').style.left = (100 * zeitH / (N - 1)) + '%';
-
-  // Wärmefluss in den Leitungen
-  for (const L of Object.values(leitungen)) {
+  if (tour && jetzt - tour.start > TOUR[tour.n].s * 1000) tourSchritt(tour.n + 1);
+  // Wärmefluss
+  for (const o of HAUS) for (const L of o.leitungen) {
     const f = L.fluss || 0; L.phase = (L.phase + dt * (0.08 + 0.35 * f)) % 1;
     const pos = L.pts.geometry.attributes.position;
-    for (let n = 0; n < L.n; n++) {
-      const p = L.kurve.getPointAt((L.phase + n / L.n) % 1);
-      pos.setXYZ(n, p.x, p.y, p.z);
-    }
+    for (let n = 0; n < L.n; n++) { const p = L.kurve.getPointAt((L.phase + n / L.n) % 1); pos.setXYZ(n, p.x, p.y, p.z); }
     pos.needsUpdate = true; L.pts.material.opacity = 0.1 + 0.9 * f; L.pts.visible = f > 0.02;
   }
-  // Migrationen
-  // Flotte: Migrationen pro Stunde, sichtbar als Lichtpunkte (höchstens ~3 pro Sekunde)
-  if (spielt) migRest += Math.min(3, S.mig[i] * tempo * 0.12) * dt;
-  if (migRest >= 1) { starteOrb(); migRest -= 1; }
+  // Cloud: Strahlen nach Last, Aufträge vom Kunden in den Pool
+  if (cloudGruppe.visible) {
+    const flotte = S.flotte_lauf[i] / 260;
+    const last = { kunde: 0.3 + flotte, pool: 0.3 + flotte, ml: 0.5, haus1: S.h_lauf[i] / NH, haus2: S.h2_lauf[i] / NH,
+      bad: S.b_lauf[i] / NB, flotte: S.rest_on[i] / NH };
+    for (const [k, St] of Object.entries(STRAHLEN)) {
+      const f = clamp(last[k]); St.phase = (St.phase + dt * (0.15 + 0.5 * f)) % 1;
+      const pos = St.pts.geometry.attributes.position;
+      for (let n = 0; n < St.n; n++) { const p = St.kurve.getPointAt((St.phase + n / St.n) % 1); pos.setXYZ(n, p.x, p.y, p.z); }
+      pos.needsUpdate = true; St.pts.material.opacity = f > 0.02 ? 0.25 + 0.75 * f : 0; St.tubeMat.opacity = 0.05 + 0.3 * f;
+    }
+    for (const kk of Object.values(KNOTEN)) kk.kern.rotation.y += dt * 0.6;
+  }
+  // Migrationen der Flotte: Häuser und Nachbarn → Bad
+  if (spielt && !thermo.abspielen) migRest += Math.min(3, S.mig[i] * tempo * 0.12) * dt;
+  if (migRest >= 1) {
+    migRest -= 1; const r = Math.random();
+    flug(r < 0.25 ? ORTE.haus1 : r < 0.5 ? ORTE.haus2 : ORTE.nachbar(), ORTE.bad);
+  }
   for (const o of orbs) {
     if (o.t >= 1) { o.o.visible = false; continue; }
     o.t = Math.min(1, o.t + dt * o.speed);
-    o.o.position.copy(o.kurve.getPoint(o.t));
-    o.o.scale.setScalar(0.6 + Math.sin(o.t * Math.PI));
+    o.o.position.copy(o.kurve.getPoint(o.t)); o.o.scale.setScalar(0.6 + Math.sin(o.t * Math.PI));
   }
-  // Kamerafahrt
   if (fahrt) {
-    const tf = Math.min(1, (performance.now() - fahrt.start) / 900);
-    const e = 1 - Math.pow(1 - tf, 3);
+    const tf = Math.min(1, (jetzt - fahrt.start) / fahrt.dauer), e = 1 - Math.pow(1 - tf, 3);
     camera.position.lerpVectors(fahrt.vonPos, fahrt.zuPos, e);
     controls.target.lerpVectors(fahrt.vonZiel, fahrt.zuZiel, e);
     if (tf >= 1) fahrt = null;
