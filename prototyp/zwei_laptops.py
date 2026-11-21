@@ -225,7 +225,7 @@ def haus(args):
         kasten("HAUS bereit (Laptop A)",
                f"Verbunden mit Schwimmbad {adresse}",
                f"Leinwand: http://127.0.0.1:{BILDSCHIRM_HAUS}",
-               "Dort «Batch starten», dann «Zum Sportbad wechseln»",
+               "Dort «Batch starten». Das Sportbad übernimmt automatisch.",
                "Beenden mit Ctrl+C")
         if not args.kein_browser:
             webbrowser.open(f"http://127.0.0.1:{BILDSCHIRM_HAUS}")

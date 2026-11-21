@@ -25,7 +25,7 @@ Das Case-Idealmodell ergibt für acht Referenzserver rund 93 % Wärmedeckung und
 |---|---|---|
 | Geführte Gesamtdemo | Die Jahresbilanz und drei Tagesausschnitte steuern einen echten Embedding-Prozess; Pausen werden anhand stabiler Checkpoints geprüft | Laptop repräsentiert einen modellierten Serverplatz; keine echte Heizung |
 | Pharma- und Serverhalter-Oberflächen | Aufträge und Ergebnisse sind von der einfachen Betriebsansicht getrennt; Übertragung mit TLS | Gemeinsamer Demo-Kundenzugang, keine vollständige Mandanten-/Pharma-Sicherheit |
-| Blisterprüfung | Helligkeitsprüfung auf 30 synthetischen Bildern; manueller Wechsel mit verschlüsselter Checkpoint-Übergabe zwischen Sender und Empfänger | Kein trainiertes/validiertes Pharma-Modell; noch nicht automatisch an den Wärme-Router angeschlossen |
+| Blisterprüfung | Helligkeitsprüfung auf 30 synthetischen Bildern; automatische Checkpoint-Übergabe per TLS anhand einer aufgezeichneten Router-Entscheidung | Wärme und Vorlauftemperatur dienen der Simulation; die Bildprüfung verwendet eine Helligkeitsregel |
 
 Die allgemeine Pharma-Oberfläche enthält Screening-, Cell-Painting- und Literaturvorlagen. Screening und Cell Painting erzeugen dort synthetische Ergebnisse; Literatur liefert echte Textstatistik. Die Blisterprüfung ist eine zusätzliche, separate bildhafte Demo.
 

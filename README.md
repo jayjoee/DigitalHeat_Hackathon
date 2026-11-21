@@ -34,7 +34,7 @@ Danach reicht auf macOS `Gesamtdemo_starten.command`. Die Oberfläche läuft unt
 | ML-Energievergleich untersuchen | [docs/ML_SYSTEM.md](docs/ML_SYSTEM.md), eigener Dienst auf Port 18100 |
 | Reale Laptop-Laufzeiten und Chip-Energieschätzungen vergleichen | [messwerkzeug/README.md](messwerkzeug/README.md) |
 
-Die Ansichten haben verschiedene Zwecke. Die Blister-Übergabe wird manuell ausgelöst; sie ist noch nicht automatisch an den Jahresrouter angeschlossen. Die Produktoberflächen, Gesamtdemo und ML-Untersuchung bleiben eigenständige Abläufe.
+Der Blister-Batch wechselt anhand einer aufgezeichneten Entscheidung des Wärme-Routers automatisch vom Haus zum Sportbad. Die Produktoberflächen, Gesamtdemo und ML-Untersuchung bleiben eigenständige Abläufe.
 
 ## Die wichtigsten Modellzahlen
 
