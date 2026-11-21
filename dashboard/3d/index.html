@@ -131,7 +131,7 @@
   <p id="d-text"></p>
 </aside>
 
-<div id="hinweis">Server, Speicher oder Bad anklicken · ziehen zum Drehen · scrollen zum Zoomen</div>
+<div id="hinweis">Server oder Bad anklicken · ziehen zum Drehen · scrollen zum Zoomen</div>
 
 <footer id="zeit" class="panel">
   <div id="zeitkopf">
@@ -362,18 +362,6 @@ for (let k = 0; k < NH; k++) {
 }
 label('Keller · 8 Server à 8 × NVIDIA L4', -1.1, -0.6, 7.1);
 
-// ---------- Wärmespeicher ----------
-const tankX = 3.55, tankZ = 9.4;
-const tankGlas = mesh(new THREE.CylinderGeometry(0.75, 0.75, 2.6, 40, 1, true),
-  new THREE.MeshPhysicalMaterial({ color: '#cfe6ff', transparent: true, opacity: 0.22, roughness: 0.05, side: THREE.DoubleSide,
-    depthWrite: false }), tankX, KEL.boden + 1.4, tankZ, scene, false);
-const tankFuellMat = new THREE.MeshStandardMaterial({ color: '#5aa8ff', emissive: new THREE.Color('#5aa8ff'),
-  emissiveIntensity: 0.6, transparent: true, opacity: 0.9 });
-const tankFuell = mesh(new THREE.CylinderGeometry(0.68, 0.68, 1, 40), tankFuellMat, tankX, KEL.boden + 0.1, tankZ, scene, false);
-mesh(new THREE.CylinderGeometry(0.8, 0.8, 0.12, 40), mat('#6b7487', { metalness: 0.5 }), tankX, KEL.boden + 2.75, tankZ);
-mesh(new THREE.CylinderGeometry(0.8, 0.8, 0.12, 40), mat('#6b7487', { metalness: 0.5 }), tankX, KEL.boden + 0.12, tankZ);
-for (const m of [tankGlas, tankFuell]) { m.userData = { art: 'speicher' }; klickbar.push(m); }
-label('Speicher 35 kWh', tankX, KEL.boden + 3.2, tankZ);
 
 // ---------- Leitungen mit fliessender Wärme ----------
 function leitung(punkte, farbe) {
@@ -388,9 +376,9 @@ function leitung(punkte, farbe) {
 }
 const Y0 = KEL.boden;
 const leitungen = {
-  serverZumTank: leitung([[-4, Y0 + 2.15, 6.1], [-1, Y0 + 2.4, 6.4], [2.5, Y0 + 2.4, 7.6], [tankX, Y0 + 2.8, tankZ]], '#ff9a52'),
-  tankZuOben1: leitung([[tankX, Y0 + 2.8, tankZ], [3.8, 0.2, 7], [2.3, 0.6, 5.6], [2.3, 0.9, 5.35]], '#ff7a2a'),
-  tankZuOben2: leitung([[tankX, Y0 + 2.8, tankZ], [4.2, 1.5, 6.6], [4.2, H.geschoss + 0.5, 5.6], [2.3, H.geschoss + 0.85, 5.35]], '#ff7a2a'),
+  serverZumTank: leitung([[-4, Y0 + 2.15, 6.1], [-1, Y0 + 2.4, 6.4], [2.5, Y0 + 2.4, 6.6], [3.8, Y0 + 2.6, 7]], '#ff9a52'),
+  tankZuOben1: leitung([[3.8, Y0 + 2.6, 7], [3.8, 0.2, 7], [2.3, 0.6, 5.6], [2.3, 0.9, 5.35]], '#ff7a2a'),
+  tankZuOben2: leitung([[3.8, Y0 + 2.6, 7], [4.2, 1.5, 6.6], [4.2, H.geschoss + 0.5, 5.6], [2.3, H.geschoss + 0.85, 5.35]], '#ff7a2a'),
 };
 
 // ---------- Umgebung: Bäume, Nachbarhäuser in der Ferne ----------
@@ -492,12 +480,6 @@ function wende(i, frac) {
     const sel = auswahl && auswahl.art === 'badrack' && auswahl.r === ri;
     r.koerper.material.emissiveIntensity = sel ? 0.1 : 0;
   }));
-
-  // Speicher: Höhe und Farbe
-  const fuell = clamp(sp / M.speicher_haus_kwh, 0.02, 1);
-  tankFuell.scale.y = fuell * 2.45; tankFuell.position.y = KEL.boden + 0.18 + fuell * 2.45 / 2;
-  const tf = C.cold.clone().lerp(C.heat, fuell);
-  tankFuellMat.color.copy(tf); tankFuellMat.emissive.copy(tf); tankFuellMat.emissiveIntensity = 0.35 + 0.5 * fuell;
 
   // Räume: warm, wenn Server den Bedarf decken
   const deck = bed > 0.01 ? clamp(gen / bed) : 1;
@@ -618,7 +600,7 @@ function zeigeDetail(info, fliegen = true) {
     miniChart(fenster(n => S.h_sp[n]), M.speicher_haus_kwh, '#ff8a3d', 12);
     el('d-text').textContent = 'Fällt der Speicher unter 35 %, starten Server und laden ihn. Ab 85 % hören sie auf. '
       + 'Ist er voll und das Haus braucht keine Wärme, wandern Aufträge ins Sportbad.';
-    if (fliegen) fliegeZu(new THREE.Vector3(tankX, KEL.boden + 1.4, tankZ), new THREE.Vector3(1.6, 0.3, 4.2));
+    if (fliegen) fliegeZu(new THREE.Vector3(3.55, KEL.boden + 1.4, 9.4), new THREE.Vector3(1.6, 0.3, 4.2));
   } else {
     const ri = info.art === 'badrack' ? info.r : null, offen = S.b_bed[i] > 0;
     el('d-art').textContent = 'Sommer-Senke';
