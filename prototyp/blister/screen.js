@@ -142,6 +142,7 @@ function showHeat(heat) {
   get("outdoor").textContent = heatNumber.format(heat.outside_c) + " °C draussen";
   get("heat-power").textContent = heatNumber.format(heat.heat_kw) + " kW";
   get("heat-forward").textContent = heat.forward_c == null ? "–" : heat.forward_c + " °C";
+  get("heat-room-target").textContent = heatNumber.format(heat.room_target_c) + " °C";
   get("heat-tank").textContent = heatNumber.format(heat.tank_kwh) + " kWh";
   get("tank-capacity").textContent = "von " + heatNumber.format(heat.tank_max_kwh) + " kWh Kapazität";
 }

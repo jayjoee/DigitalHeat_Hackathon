@@ -22,6 +22,7 @@ from digitalheat import APIError, Handler, init_credentials, tls_context
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
+from src.referenzprofil import INNEN_C  # noqa: E402
 from src.scheduler.annahmen import wert  # noqa: E402
 
 WIDTH, HEIGHT, TOTAL = 240, 144, 30
@@ -180,7 +181,7 @@ class Batch:
         working = self.state == "rechnet" and hour["standort_typ"] == self.local_site
         heat_kw = (wert("server_kw") * wert("waermerueckgewinnung") * hour["anteil_echter_server"]
                    if working else 0)
-        return {"time": hour["zeit"], "outside_c": hour["temp_c"],
+        return {"time": hour["zeit"], "outside_c": hour["temp_c"], "room_target_c": INNEN_C,
                 "tank_kwh": hour["haus_speicher_kwh"], "tank_max_kwh": wert("speicher_kwh"),
                 "heat_kw": round(heat_kw, 3), "forward_c": FORWARD_C if heat_kw else None,
                 "scheduled_pause": working and heat_kw == 0}

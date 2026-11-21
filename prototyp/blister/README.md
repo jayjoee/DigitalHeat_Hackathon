@@ -6,7 +6,7 @@ Der Demo-Ablauf beginnt mit der aufgezeichneten Simulation des Wärme-Routers vo
 
 Ab 10:00 Uhr folgt die Demo einem zusätzlichen Szenario. Das Haus entnimmt 0,5 kWh Wärme pro Modellstunde aus dem Speicher. Nach sechs Modellstunden sind noch 32 kWh gespeichert. Um 16:00 Uhr hält das Sportbad zwischen zwei Packungen an und das Haus holt den Prüfstand über dieselbe TLS-Verbindung zurück. Modellzeit und Batch-Zähler bleiben während der Übergaben auf beiden Leinwänden sichtbar. «Hier geprüft» zeigt die Packungsnummern, die der jeweilige Laptop tatsächlich verarbeitet hat.
 
-Die Anzeige führt Modellzeit, Aussentemperatur, Füllstand und die örtliche Wärmeleistung fürs Wasser auf. Bei voller Zuteilung ergeben 1 kW Serverleistung und 80 % Wärmerückgewinnung 0,8 kW für einen Modellserver. Teilzuteilungen ergeben einen niedrigeren Stundendurchschnitt. Bei 0 kW bleibt der Job stehen. Der Vorlauf von 55 °C ist ein illustrativer Annahmewert. Die Rechner führen die Bildprüfung und Übergabe aus, die Wärme ist simuliert.
+Die Anzeige führt Modellzeit, Aussentemperatur, Raum-Sollwert, Füllstand und die örtliche Wärmeleistung fürs Wasser auf. Der Raum-Sollwert von 20 °C stammt aus dem Referenzhaus im Case. Bei voller Zuteilung ergeben 1 kW Serverleistung und 80 % Wärmerückgewinnung 0,8 kW für einen Modellserver. Teilzuteilungen ergeben einen niedrigeren Stundendurchschnitt. Bei 0 kW bleibt der Job stehen. Der Vorlauf von 55 °C ist ein illustrativer Annahmewert. Die Rechner führen die Bildprüfung und Übergabe aus, die Wärme ist simuliert.
 
 Benötigt Python 3.10 oder neuer und OpenSSL für die Einrichtung. Alle Befehle aus dem Repository-Stamm ausführen. Beide Geräte benötigen dieselbe Version des Codes.
 
