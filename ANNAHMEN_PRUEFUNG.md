@@ -1,5 +1,7 @@
 # Kritische Prüfung aller Annahmen (Stand 21.11.2026)
 
+*Arbeitsstand der Prüfung. Die finalen Annahmen und Zahlen (alles in CHF, L4-Server statt H100) stehen in `KOSTEN_DH.md` und `src/scheduler/annahmen.py`.*
+
 Joëls Modell war als schnelle Übersicht gedacht. Hier wird jede Annahme einzeln geprüft: Woher kommt sie, hält sie, und was ändert sich, wenn nicht?
 
 **Legende:** ✓ hält · ⚠ schwach, Folgen benennen · ✗ falsch oder fehlt, ändert das Ergebnis

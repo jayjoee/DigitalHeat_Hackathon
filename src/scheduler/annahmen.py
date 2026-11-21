@@ -16,14 +16,40 @@ ANNAHMEN = {
     # --- Preise ---
     "strompreis_chf_kwh": (0.3325, "ElCom 2026, IWB Basel, H4, Total (daten/roh/elcom/iwb_h4_2026.json)"),
     "waermewert_chf_kwh": (0.3325 / 2.5, "Case: Strompreis ÷ 2,5 (ersetzt Wärmepumpe mit JAZ 2,5)"),
-    "usd_chf": (0.84, "Angabe Joël, 20.11.2026: 1 USD = 0,84 CHF"),
-    "rechenpreis_usd_server_h": (1.26, "Spot H100 0,79 $/GPU-h × 1,6 GPU pro kW (daten/PREISE.md), untere Spanne"),
-    # --- Hardware (daten/PREISE.md, Abschnitt Hardware) ---
-    "gpu_pro_server": (1.6, "MLPerf v5.0, ID 5.0-0023: 8× H100 NVL ziehen 4,85 kW → 1 kW ≈ 1,6 GPU samt Host"),
-    "hardware_usd_pro_gpu": (25000, "H100 NVL 2026: 24'500 $ (fluence.network) bis 32'383 $ (CDW, 21.09.2026, "
-                                    "auslaufend); untere Spanne, Host/Gehäuse/Kühlung nicht eingerechnet"),
-    "abschreibung_jahre": (5, "Amazon 5 Jahre, Microsoft/Alphabet 6 Jahre für Server (Geschäftsberichte, "
-                              "zitiert in daten/PREISE.md); 5 Jahre, weil GPUs schneller veralten"),
+    "usd_chf": (0.84, "Mitte November 2026 ≈ 0,839 (tradingeconomics.com, therighttrader.com)"),
+    # --- Wirtschaftlichkeit DigitalHeat (KOSTEN_DH.md, finale Fassung) ---
+    "karten_pro_server": (8, "Einheitsserver: 8× NVIDIA L4 (72 W) + Host ≈ 1 kW"),
+    "server_preis_chf": (32245, "Gigabyte G293-Z43 mit 16× L4, 2× EPYC 9335, 12× 32 GB: 76'774 $ (avadirect.com) "
+                                "→ halbes System pro Server mit 8 L4, × 0,84 CHF/$"),
+    "kuehlung_chf_pro_kw": (2520, "Flüssigkühlung 1'500–4'500 $/kW = 1'260–3'780 CHF (introl.com, servnetuk.com, stlpartners.com)"),
+    "einbau_chf": (9000, "Schätzung: 30–60 h × 143,80 CHF/h (SAK) + Material 2'000–4'000 CHF"),
+    "speicher_chf": (1800, "Pufferspeicher 900–1'110 € (klimaworld.com) plus Einbau"),
+    "netzwerk_chf": (1200, "Firewall FortiGate 40F 441 CHF (boll.ch) plus Switch"),
+    "abschreibung_jahre": (5, "Amazon 5 Jahre, Microsoft/Alphabet 6 Jahre für Server; 5 Jahre, weil GPUs schneller veralten"),
+    "restwert_anteil": (0.20, "Tesla T4 nach ≈ 7 Jahren 22–25 % des Neupreises (amcompute.com)"),
+    "zins": (0.045, "Schätzung: SARON ≈ 0 % + Bankmarge; Unternehmenskredite Euroraum 3,8 % (Bundesbank)"),
+    "vertragspreis_chf_karte_h": (0.60, "Schweizer Cloud für Kunden mit Datenstandort Schweiz (Pharma, Banken, Spitäler): "
+                                        "rund 12 % unter Schweizer GPU-Clouds (Hikube ≈ 0,68 CHF, Everyware 2,13 CHF pro L4-h); "
+                                        "vorsichtiger Fall 0,50 CHF (PHARMA_SICHT.md, KOSTEN_DH.md)"),
+    "anteil_fest_gebucht": (0.60, "Schätzung: Cloud-Kunden binden im Median 42 %, Ziel 70–80 % (FinOps-Vergleiche)"),
+    "spotpreis_chf_karte_h": (0.294, "Füllaufträge zum L4-Spot-Preis (AWS g6 Spot 0,35–0,45 $ = 0,29–0,38 CHF)"),
+    "spot_preisverfall": (0.10, "Annahme: Spot-Preis sinkt 10 % pro Jahr; H100-Index −23 % in einem Jahr (Silicon Data)"),
+    "plattform_anteil": (0.05, "Direktvertrag mit eigener Plattform statt Marktplatz (15–30 %)"),
+    "verfuegbarkeit": (0.993, "A100/H100-Knoten 99,3–99,4 % verfügbar (arXiv 2503.11901)"),
+    "waermepreis_haushalt_chf_kwh": (0.0, "Gratiswärme im Öl-Pilot (CustomerView_Joel.md)"),
+    "gpu_preis_chf": (2100, "L4 einzeln 2'000–3'000 $ = 1'680–2'520 CHF (jarvislabs.ai), für Ersatzteile"),
+    "gpu_ausfall": (0.045, "Meta Llama 3: 6,1 %/Jahr bei 24/7-Training; bei halber Laufzeit 3–6,1 %; L4 3 Jahre Garantie"),
+    "host_reparatur": (0.035, "Schätzung 2–5 % pro Jahr auf den Host-Anteil (35 % der Hardware), ab Jahr 2"),
+    "einsaetze_chf_pro_8_server": (2600, "SAK: 281 CHF Einsatz, 143,80 CHF/h, 1,60 CHF/km; 2–5 Einsätze"),
+    "service_hydraulik_chf": (390, "SAK-Serviceabo 275–500 CHF"),
+    "kuehlservice_chf_pro_kw": (16.8, "20'000 $ pro MW und Jahr = 16,80 CHF pro kW (DC Market Insights via servnetuk.com)"),
+    "monitoring_chf_pro_server_monat": (12.6, "Datadog Infrastructure Pro 15–18 $ = 12,60–15,10 CHF"),
+    "internet_chf": (1600, "Init7 777 CHF/Jahr bis Swisscom Business 205 CHF/Monat"),
+    "versicherung_anteil": (0.006, "Schätzung aus Hausratsätzen (≈ 0,8 ‰) mit Risikozuschlag; + 5 % Stempelabgabe"),
+    "lizenz_chf": (450, "FortiGate-Schutzlizenz (boll.ch)"),
+    "firmenanteil_chf": (1200, "Schätzung pro Haus bei rund 100 Häusern (ISO 27001, Personal, Haftpflicht)"),
+    "kostensteigerung": (0.045, "Wartungsverträge 3–6 % pro Jahr (servnetuk.com)"),
+    "gewinnsteuer": (0.1304, "Basel-Stadt, Gewinne unter 50 Mio. CHF (KPMG 2026)"),
     # --- Jobs ---
     "job_a_kwh": (_typ["A"]["energie_kwh"], _typ["A"]["quelle_energie"]),
     "job_a_frist_h": (_typ["A"]["frist_h"], _typ["A"]["quelle_frist"]),
@@ -42,11 +68,6 @@ ANNAHMEN = {
 
 def wert(name):
     return ANNAHMEN[name][0]
-
-
-def hardware_chf_pro_server_jahr():
-    """Abschreibung eines 1-kW-Servers pro Jahr: GPU-Preis × GPUs pro Server × Kurs ÷ Jahre."""
-    return wert("hardware_usd_pro_gpu") * wert("gpu_pro_server") * wert("usd_chf") / wert("abschreibung_jahre")
 
 
 def als_liste():

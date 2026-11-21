@@ -159,13 +159,14 @@ def simuliere(n_server, szenario="spot", bei_ueberschuss="rechnen", stunden_csv=
 
 
 def bilanz(n, szenario, regel, z, raten):
+    from src.wirtschaft import rechne, break_even  # Wirtschaftlichkeit DigitalHeat (KOSTEN_DH.md)
     preis_strom, preis_waerme = A.wert("strompreis_chf_kwh"), A.wert("waermewert_chf_kwh")
-    rechenpreis = A.wert("rechenpreis_usd_server_h") * A.wert("usd_chf")
     server_h = z["strom"] / A.wert("server_kw")
     stromkosten = z["strom"] * preis_strom
     waermewert = z["genutzt"] * preis_waerme
-    erloes = server_h * rechenpreis
-    hw = A.hardware_chf_pro_server_jahr()
+    w = rechne(n, server_h, z["genutzt"])
+    be = break_even(n, server_h, z["genutzt"])
+    karten = A.wert("karten_pro_server")
     return {
         "server_pro_haus": n, "szenario": szenario, "regel_ueberschuss": regel,
         "waermebedarf_kwh": round(z["bedarf"]),
@@ -182,17 +183,15 @@ def bilanz(n, szenario, regel, z, raten):
         "jobs_abgegeben": z["abgegeben"], "abgegeben_server_h": round(z["abgegeben_kwh"], 1),
         "stromkosten_chf": round(stromkosten),
         "waermewert_chf": round(waermewert),
-        "rechenerloes_chf": round(erloes),
-        "ergebnis_ohne_hardware_chf": round(erloes + waermewert - stromkosten),
+        # Case-Definition: (Strom − Wert der genutzten Wärme) ÷ verkaufte Server-Stunden, ohne Hardware
         "break_even_chf_pro_server_h": round((stromkosten - waermewert) / server_h, 4) if server_h else None,
-        "rechenpreis_chf_pro_server_h": round(rechenpreis, 3),
-        # Was ein Server pro Jahr für Hardware, Wartung, Netz höchstens kosten darf, damit es aufgeht
-        "max_hardware_chf_pro_server_jahr": round((erloes + waermewert - stromkosten) / n),
-        # Mit Hardware (Abschreibung, Annahmen hardware_usd_pro_gpu, gpu_pro_server, abschreibung_jahre)
-        "hardware_chf_pro_server_jahr": round(hw),
-        "ergebnis_mit_hardware_chf": round(erloes + waermewert - stromkosten - hw * n),
-        "noetiger_rechenpreis_mit_hardware_chf_pro_server_h":
-            round((stromkosten - waermewert + hw * n) / server_h, 4) if server_h else None,
+        # Vollrechnung DigitalHeat (src/wirtschaft.py): alle Kosten, Steuern, Zins, Restwert, 5 Jahre
+        "dh_investition_chf": w["investition_chf"],
+        "dh_rechenerloes_jahr1_chf": w["jahre"][0]["erloes"],
+        "dh_gewinn_nach_steuer_mittel_chf": w["gewinn_nach_steuer_mittel_chf"],
+        "dh_ergebnis_pro_jahr_chf": w["ergebnis_pro_jahr_chf"],
+        "dh_break_even_chf_karte_h": be,
+        "dh_break_even_chf_server_h": round(be * karten, 3),
         "ankuenfte": raten,
     }
 
@@ -222,13 +221,13 @@ def main():
     for sz in ("spot", "alibaba"):
         for regel in ("rechnen", "abgeben"):
             print(f"\n== Nachfrage {sz}, Überschuss: {regel}")
-            print(" N  Deckung  abgeführt  Auslast.  verpasst  abgegeben  Strom CHF  Wärme CHF  Break-even  max. HW/Server/J")
+            print(" N  Deckung  abgeführt  Auslast.  verpasst  abgegeben  Strom CHF  Break-even Case  DH Ergebnis/J  DH Break-even CHF/L4-h")
             for r in alle:
                 if r["szenario"] == sz and r["regel_ueberschuss"] == regel:
                     print(f"{r['server_pro_haus']:2d}  {r['deckungsgrad']:6.1%}  {r['waerme_abgefuehrt_kwh']:7,d} kWh"
                           f"  {r['auslastung']:6.1%}  {r['verpasste_fristen_anteil']:7.2%}  {r['jobs_abgegeben']:7d}"
-                          f"  {r['stromkosten_chf']:8,d}  {r['waermewert_chf']:8,d}   {r['break_even_chf_pro_server_h']:.3f}"
-                          f"     {r['max_hardware_chf_pro_server_jahr']:7,d}")
+                          f"  {r['stromkosten_chf']:8,d}      {r['break_even_chf_pro_server_h']:.3f}"
+                          f"     {r['dh_ergebnis_pro_jahr_chf']:9,d}     {r['dh_break_even_chf_karte_h']:.3f}")
 
 
 if __name__ == "__main__":

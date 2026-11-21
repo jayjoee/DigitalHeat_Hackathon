@@ -1,6 +1,6 @@
 # Sicht des Kunden: Pharmafirma (Stand 21.11.2026)
 
-Da die Gruppe Pharma keine eigenen Ergebnisse hat, ist hier ihre Arbeit übernommen: Wer ist der Kunde, welche Aufträge hat er, wie viel zahlt er heute, welche Verträge sind üblich und welche Sicherheitsnachweise verlangt er? Am Ende stehen die Werte, die ins Modell gehören.
+**Alle Preise in CHF** (0,84 CHF/$). Da die Gruppe Pharma keine eigenen Ergebnisse hat, ist hier ihre Arbeit übernommen: Wer ist der Kunde, welche Aufträge hat er, wie viel zahlt er heute, welche Verträge sind üblich und welche Sicherheitsnachweise verlangt er? Am Ende stehen die Werte, die ins Modell gehören.
 
 Grundlage: 8 Server pro Haus (64 L4-Karten), Jahressimulation Referenzhaus 2025, Kosten aus `KOSTEN_DH.md` (mittlerer Fall).
 
@@ -45,7 +45,7 @@ Keine Firma veröffentlicht, wie viele GPU-Stunden sie pro Jahr braucht. Die Men
 |---|---|---|---|
 | Docking: 1 Mio. Moleküle | ≈ 31 GPU-h (V100) | Uni-Dock: 38,2 Mio. Moleküle = 1'200 GPU-h | ≈ 9'000 solche Aufträge (= 9 Mrd. Moleküle) |
 | Bindungsenergie (FEP), 1 Molekülvergleich | ≈ 3,8 GPU-h | Flare FEP: 28 Vergleiche = 106 GPU-h | ≈ 76'000 Vergleiche |
-| FEP-Kampagne einer grossen Firma | 20'000 Rechnungen in 3 Tagen auf 3'500 GPU-Instanzen | AWS-Fallstudie, 16 $ pro Ergebnis (Spot) | – |
+| FEP-Kampagne einer grossen Firma | 20'000 Rechnungen in 3 Tagen auf 3'500 GPU-Instanzen | AWS-Fallstudie, 16 $ ≈ 13 CHF pro Ergebnis (Spot) | – |
 
 **Zum Vergleich der Grössen:**
 - Roche betreibt über 3'500 GPUs. Voll ausgelastet wären das rund 30 Mio. GPU-Stunden pro Jahr, also so viel wie gut 100 DH-Häuser liefern.
@@ -58,15 +58,23 @@ Keine Firma veröffentlicht, wie viele GPU-Stunden sie pro Jahr braucht. Die Men
 
 | Angebot | Preis pro L4-Stunde | Quelle |
 |---|---|---|
-| AWS g6.xlarge, On-Demand | ≈ 0,80 $ | doit.com (us-east-1) |
-| Google Cloud g2-standard-4, On-Demand | ≈ 0,71 $ | cloud.google.com, holori.com |
-| Google Cloud, 1 Jahr fest | ≈ 0,65 $ (−8 %) | holori.com |
-| Google Cloud, 3 Jahre fest | ≈ 0,63 $ (−11 %) | holori.com |
-| Spot (unterbrechbar, ohne Garantie) | 0,35–0,45 $ | AWS Spot g6, Joëls Preisliste |
+| AWS g6.xlarge, auf Abruf | ≈ 0,67 CHF (0,80 $) | doit.com (us-east-1) |
+| Google Cloud g2-standard-4, auf Abruf | ≈ 0,60 CHF (0,71 $) | cloud.google.com, holori.com |
+| Google Cloud, 1 Jahr fest | ≈ 0,55 CHF (−8 %) | holori.com |
+| Google Cloud, 3 Jahre fest | ≈ 0,53 CHF (−11 %) | holori.com |
+| Spot (unterbrechbar, ohne Garantie) | 0,29–0,38 CHF (0,35–0,45 $) | AWS Spot g6, Joëls Preisliste |
 
 **Wichtig:** Bei GPU-Maschinen sind die Rabatte für feste Verträge klein (8–11 %). Die hohen Rabatte von 66–72 %, die man oft liest, gelten für normale Server, nicht für GPUs.
 
-**Folge für DH:** Planbare Rechenzeit kostet in der Cloud rund **0,63–0,65 $**. DH kann mit **0,50–0,55 $** rund 15–20 % günstiger sein und verdient trotzdem (siehe Abschnitt 7).
+**Folge für DH:** Bei US-Clouds kostet planbare Rechenzeit rund 0,53–0,55 CHF. Für Kunden, deren Daten in der Schweiz und unter Schweizer Recht bleiben müssen (Pharma mit Forschungsgeheimnissen, Banken unter FINMA-Aufsicht, Spitäler), fallen US-Anbieter aber weg. Sie vergleichen mit **Schweizer GPU-Clouds**:
+
+| Schweizer Anbieter | Preis pro L4-Stunde |
+|---|---|
+| Hikube (Rechenzentren in der Schweiz) | ≈ 0,68 CHF (0,81 $) |
+| Everyware (Sovereign Cloud) | 2,13 CHF |
+| Infomaniak | L4 im Angebot, Preis nicht öffentlich gefunden |
+
+**Vertragspreis DH: 0,60 CHF** (rund 12 % unter Hikube). Für Aufträge ohne Standortpflicht gilt der vorsichtige Fall **0,50 CHF**. DH verkauft dabei keine «Nicht-Cloud», sondern eine **Schweizer Cloud**: Schweizer Firma, Server in Schweizer Häusern, nur Schweizer Recht.
 
 ## 5. Welche Verträge im GPU-Markt üblich sind
 
@@ -92,24 +100,22 @@ Mittlerer Kostenfall, 8 Server, 5 Jahre, nach Steuern. Direktvertrag mit festem 
 
 | Vertragspreis pro L4-Stunde | 60 % fest gebucht | 80 % fest gebucht |
 |---|---|---|
-| 0,40 $ | −8'600 CHF/Jahr | −3'800 CHF/Jahr |
-| 0,45 $ | −2'200 | +4'300 |
-| **0,50 $** | +3'900 | **+12'300** |
-| **0,55 $** | +9'900 | **+20'300** |
-| 0,60 $ | +15'900 | +28'300 |
-| *Bisher (Marktplatz, 0,60 $, −10 %/Jahr)* | | *−1'500* |
+| 0,42 CHF | +8'800 CHF/Jahr | +17'300 CHF/Jahr |
+| **0,50 CHF (vorsichtig)** | **+20'300** | +32'500 |
+| 0,55 CHF | +27'400 | +42'000 |
+| **0,60 CHF (final)** | **+34'500** | +51'500 |
 
-**Break-even mit Direktvertrag: rund 0,42 $ pro L4-Stunde** (bei 80 % fest gebucht).
+**Break-even mit Direktvertrag: 0,36 CHF pro L4-Stunde** bei 60 % fest gebucht, 0,33 CHF bei 80 %. Über einen Marktplatz (20 % Gebühr, Preisverfall auf dem ganzen Preis) bräuchte es rund 0,50 CHF.
 
-*Diese Tabelle rechnet noch mit der früheren Hardware-Schätzung. Die finale Rechnung mit dem belegten Komplettpreis eines L4-Servers steht in `KOSTEN_DH.md`: Referenzhaus +16'300 CHF pro Jahr bei 0,50 $, Break-even 0,40 $.*
+Gerechnet mit dem finalen Modell (`src/wirtschaft.py`, `KOSTEN_DH.md`): Referenzhaus, 8 Server, alle Kosten, Steuern, Zins und Restwert, Gratiswärme.
 
 ## 8. Antworten auf die offenen Fragen
 
 | Frage | Antwort |
 |---|---|
 | Welche Aufträge, wie viele Stunden? | Screening (Docking) als grosser Winterauftrag, Mikroskopbilder als nächtlicher Batch. Die Menge hängt am Kunden; ein Haus liefert 290'000 L4-Stunden pro Jahr, davon 82 % im Winterhalbjahr |
-| Was zahlt Pharma heute? | 0,71–0,80 $ On-Demand, 0,63–0,65 $ mit festem Vertrag, 0,35–0,45 $ Spot |
-| Fester Preis über mehrere Jahre? | Im GPU-Markt Standard (2–5 Jahre, mit Abnahmepflicht). Für Pharma attraktiv, wenn DH unter dem Cloud-Vertragspreis liegt |
+| Was zahlt Pharma heute? | US-Clouds: 0,60–0,67 CHF auf Abruf, 0,53–0,55 CHF mit festem Vertrag, 0,29–0,38 CHF Spot. Schweizer Clouds (Datenstandort Schweiz): ab ≈ 0,68 CHF bis 2,13 CHF |
+| Fester Preis über mehrere Jahre? | Im GPU-Markt Standard (2–5 Jahre, mit Abnahmepflicht). Für Pharma attraktiv, wenn DH unter dem Preis Schweizer Clouds liegt |
 | Welche Sicherheitsnachweise? | ISO 27001 oder SOC 2 Type II, Penetrationstests, Vertragsklauseln. Kein GxP, solange nur Forschungsdaten |
 
 ## 9. Werte für das Modell
@@ -118,7 +124,7 @@ Mittlerer Kostenfall, 8 Server, 5 Jahre, nach Steuern. Direktvertrag mit festem 
 |---|---|---|
 | Jobtyp A | Nachrichtentexte einbetten, Frist 24 h | **Screening-Kampagne** (Docking), unterbrechbar, Frist bis Ende März |
 | Jobtyp B | Bilderkennung, Frist 2 h | **Mikroskopbilder** auswerten, Frist 12 h |
-| Rechenpreis | 0,35–0,87 $ (Marktplatz) | **0,50–0,55 $ Vertragspreis** |
+| Rechenpreis | 0,29–0,73 CHF (Marktplatz) | **0,60 CHF Vertragspreis** (vorsichtig 0,50 CHF) |
 | Marktplatzgebühr | 15–30 % | **5 %** (eigene Plattform) |
 | Preisverfall | −10 % pro Jahr | **0 %** im Vertrag, −10 % nur für Füllaufträge |
 | Verkaufsquote | 85 % | **60 %** fest gebucht (42–80 %, Herleitung in `KOSTEN_DH.md` Abschnitt 2b) |

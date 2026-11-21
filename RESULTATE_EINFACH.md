@@ -32,12 +32,15 @@ Ein Server braucht Strom und macht daraus fast vollständig Wärme. Normalerweis
 - **Lösung:** Im Sommer gehen die Aufträge an Orte, die dann Wärme brauchen, etwa ein Hotel mit Spa oder eine Trocknungsanlage in der Landwirtschaft.
 
 ## Lohnt es sich?
-- **Der Strom ist nicht das Problem.** Schon ab 0,23 CHF pro Server-Stunde rechnet es sich. Rechenzeit wird heute für etwa 1–4 CHF pro Stunde verkauft.
-- **Entscheidend sind die Kosten der Hardware.** Bei einem Rechenpreis von 1,06 CHF pro Stunde darf ein Server höchstens rund **3'800 CHF pro Jahr** kosten.
-- Ein Server mit H100-Grafikkarten kostet aber rund **6'700 CHF pro Jahr** (Kaufpreis über 5 Jahre verteilt). Darum braucht es mindestens **1,71 CHF pro Server-Stunde**. Das zahlt der Markt heute, aber nicht zum tiefsten Preis.
+- **Der Strom ist nicht das Problem.** Nur für Strom (abzüglich Wärmewert) reichen schon 0,23 CHF pro Server-Stunde.
+- **Entscheidend sind die Computer.** DigitalHeat kauft pro Haus 8 Server mit je 8 Grafikkarten (NVIDIA L4) und investiert dafür mit Einbau rund **290'000 CHF**.
+- Die Kunden sind Firmen, deren Daten in der Schweiz bleiben müssen: Pharma, Banken, Spitäler. Sie zahlen DigitalHeat **0,60 CHF pro Grafikkarte und Stunde**, rund 12 % weniger als bei anderen Schweizer Clouds (ab 0,68 CHF).
+- Damit bleiben DigitalHeat nach allen Kosten, Steuern und Zinsen rund **34'500 CHF pro Haus und Jahr**. Das Geld für die Computer ist nach **3 Jahren** zurück, die Rendite liegt bei rund **21 %**. Mit 100 Häusern rund 3,5 Mio. CHF pro Jahr.
+- Vorsichtig gerechnet mit 0,50 CHF sind es noch rund 20'300 CHF pro Haus und Jahr.
+- Der Haushalt bekommt die **Wärme gratis**.
 - **Es lohnt sich NICHT, wenn:**
-  - der Rechenpreis unter 0,23 CHF pro Stunde fällt, oder
-  - die Hardware teurer ist, als die Erlöse hergeben, oder
+  - der Preis unter **0,36 CHF pro Grafikkarte und Stunde** fällt, oder
+  - weniger als rund 40 % der Stunden fest verkauft werden, oder
   - es nicht genug flexible Aufträge gibt. Dann deckt das System nur 52 % und muss im Sommer Wärme wegkühlen.
 
 ## Welche Aufträge passen?
@@ -58,10 +61,9 @@ Ein Server braucht Strom und macht daraus fast vollständig Wärme. Normalerweis
 - Nach einem Stopp macht der Auftrag genau dort weiter, wo er aufgehört hat. Das Ergebnis ist identisch.
 
 ## Wichtigste Annahmen
-- Es gibt immer genug Rechenaufträge zu kaufen (Spot-Markt). Ohne diese Annahme sinkt die Deckung auf 52 %.
-- Strompreis 33,25 Rp./kWh (IWB Basel 2026). Die Wärme ist 13,3 Rp./kWh wert, weil sie eine Wärmepumpe ersetzt.
-- Rechenpreis rund 1,06 CHF pro Server-Stunde (günstigster Marktpreis, 1 $ = 0,84 CHF).
-- Hardware: eine H100-Grafikkarte für 25'000 $, 1,6 Karten pro Server, 5 Jahre Lebensdauer.
+- Es gibt genug Rechenaufträge: Eine Pharmafirma bucht 60 % der Stunden fest, der Rest wird günstiger verkauft. Ohne genug Aufträge sinkt die Deckung auf 52 %.
+- Strompreis 33,25 Rp./kWh (IWB Basel 2026). Die Wärme ist 13,3 Rp./kWh wert, weil sie eine Wärmepumpe ersetzt (Case-Regel).
+- Ein Server mit 8 Grafikkarten kostet 32'245 CHF und hält 5 Jahre. Alle Beträge in CHF, Herleitung in `KOSTEN_DH.md`.
 
 ## In einem Satz
-**8 Server pro Haus decken 93 % der Wärme und verschwenden fast nichts. Mit heutiger Hardware lohnt es sich ab 1,71 CHF pro Server-Stunde und wenn es im Sommer einen zweiten Wärmeabnehmer gibt.**
+**8 Server pro Haus decken 93 % der Wärme, verschwenden fast nichts und geben dem Haushalt die Wärme gratis. Als Schweizer Cloud für Pharma, Banken und Spitäler verdient DigitalHeat daran rund 34'500 CHF pro Haus und Jahr und hat die Investition nach 3 Jahren zurück.**

@@ -53,7 +53,6 @@ def main():
     messung = json.loads((ROOT / "messungen" / "energie.json").read_text())
     jobtypen = json.loads((ROOT / "daten" / "jobtypen.json").read_text())["typen"]
     daten = {"erzeugt": "python3 src/dashboard_daten.py", "annahmen": A.als_liste(),
-             "hardware_chf_pro_server_jahr": round(A.hardware_chf_pro_server_jahr()),
              "messung_a": messung, "jobtypen": jobtypen, "tage": TAGE, "laeufe": laeufe}
     aus = ROOT / "dashboard" / "daten.js"
     aus.write_text("window.DATEN = " + json.dumps(daten, ensure_ascii=False) + ";\n")

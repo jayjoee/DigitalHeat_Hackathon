@@ -108,7 +108,7 @@ details summary { cursor: pointer; font-weight: 600; }
       <div class="range"><input id="n" type="range" min="1" max="13" value="8"><output id="nOut">8</output></div></div>
     <div class="ctl"><label>Nachfrage nach Rechenzeit</label>
       <div class="seg" data-key="sz">
-        <button data-v="spot" aria-pressed="true">Spot-Markt, jederzeit</button>
+        <button data-v="spot" aria-pressed="true">Genug Aufträge</button>
         <button data-v="alibaba" aria-pressed="false">Nur Jobs mit Frist</button></div></div>
     <div class="ctl"><label>Wärme nicht gebraucht, Frist drängt</label>
       <div class="seg" data-key="regel">
@@ -123,10 +123,14 @@ details summary { cursor: pointer; font-weight: 600; }
   <div class="controls card">
     <div class="ctl"><label for="pStrom">Strompreis</label>
       <div class="range"><input id="pStrom" type="range" min="10" max="60" step="0.25" value="33.25"><output id="pStromOut"></output></div></div>
-    <div class="ctl"><label for="pRechen">Rechenpreis pro Server-Stunde</label>
-      <div class="range"><input id="pRechen" type="range" min="0" max="5" step="0.01" value="1.06"><output id="pRechenOut"></output></div></div>
-    <div class="ctl"><label for="pHw">Hardware pro Server und Jahr (Abschreibung)</label>
-      <div class="range"><input id="pHw" type="range" min="0" max="15000" step="10" value="0"><output id="pHwOut"></output></div></div>
+    <div class="ctl"><label for="pRechen">Vertragspreis pro L4-Stunde</label>
+      <div class="range"><input id="pRechen" type="range" min="0.15" max="1.00" step="0.01" value="0.60"><output id="pRechenOut"></output></div></div>
+    <div class="ctl"><label for="pFest">Fest gebucht</label>
+      <div class="range"><input id="pFest" type="range" min="20" max="100" step="5" value="60"><output id="pFestOut"></output></div></div>
+    <div class="ctl"><label for="pHw">Kaufpreis pro Server (8 L4)</label>
+      <div class="range"><input id="pHw" type="range" min="15000" max="50000" step="5" value="32245"><output id="pHwOut"></output></div></div>
+    <div class="ctl"><label for="pWaerme">Wärmepreis an den Haushalt</label>
+      <div class="range"><input id="pWaerme" type="range" min="0" max="13.3" step="0.1" value="0"><output id="pWaermeOut"></output></div></div>
   </div>
 
   <section class="card" style="margin-bottom:16px">
@@ -163,8 +167,7 @@ details summary { cursor: pointer; font-weight: 600; }
   <section class="card" style="margin-bottom:16px">
     <h2>Lohnt sich ein Server mehr?</h2>
     <div class="note" id="nGrenz"></div>
-    <div class="legend"><span><i style="background:var(--s1)"></i>Zusätzliches Ergebnis dieses Servers pro Jahr (ohne Hardware)</span>
-      <span><i style="background:var(--s2)"></i>Hardware pro Server und Jahr</span></div>
+    <div class="legend"><span><i style="background:var(--s1)"></i>Was dieser Server zum Ergebnis von DigitalHeat beiträgt, CHF pro Jahr (alle Kosten, Steuern, Zins)</span></div>
     <div id="chGrenz"></div>
   </section>
 
@@ -233,18 +236,48 @@ function saeule(svg, x, y, w, h, fill, rundOben = true) {
   return el("path", { d, fill }, svg); }
 
 // ---------- Kennzahlen und Wirtschaftlichkeit ----------
-function oekonomie(b, n) {
-  const p = +$("pStrom").value / 100, preis = +$("pRechen").value, hw = +$("pHw").value;
-  const serverH = b.strom_kwh, strom = serverH * p, waerme = b.genutzt_kwh_genau * p / 2.5;
-  const be = serverH ? (strom - waerme) / serverH : 0;
-  const erloes = serverH * preis;
-  const proServer = (erloes + waerme - strom) / n - hw;
-  const noetig = be + (serverH ? hw / (serverH / n) : 0);
-  const ergebnis = erloes + waerme - strom;  // pro Haus und Jahr, ohne Hardware
-  return { p, preis, hw, serverH, strom, waerme, be, erloes, proServer, noetig, ergebnis };
+// Gleiche Formel wie src/wirtschaft.py (alles in CHF): Gewinn pro Haus über 5 Jahre, mit Zins, Steuer, Restwert.
+function wirtschaft(n, serverH, waermeKwh, ueber = {}) {
+  const a = (k) => (k in ueber ? ueber[k] : D.annahmen[k].wert);
+  const J = a("abschreibung_jahre"), i = a("zins"), k = a("karten_pro_server");
+  const hw = n * a("server_preis_chf");
+  const inv = hw + n * a("server_kw") * a("kuehlung_chf_pro_kw") + a("einbau_chf") + a("speicher_chf") + a("netzwerk_chf");
+  const rest = hw * a("restwert_anteil"), abschr = (inv - rest) / J;
+  let bw = -inv; const jahre = [];
+  for (let t = 1; t <= J; t++) {
+    const fest = a("anteil_fest_gebucht");
+    const preis = fest * a("vertragspreis_chf_karte_h") + (1 - fest) * a("spotpreis_chf_karte_h") * Math.pow(1 - a("spot_preisverfall"), t - 1);
+    const erloes = serverH * k * (1 - a("plattform_anteil")) * a("verfuegbarkeit") * preis;
+    const waerme = waermeKwh * a("waermepreis_haushalt_chf_kwh"), strom = serverH * a("strompreis_chf_kwh");
+    const e = Math.pow(1 + a("kostensteigerung"), t - 1);
+    const laufend = e * ((t > 3 ? n * k * a("gpu_ausfall") * a("gpu_preis_chf") : 0) + (t > 1 ? a("host_reparatur") * hw * 0.35 : 0)
+      + a("einsaetze_chf_pro_8_server") * n / 8 + n * a("server_kw") * a("kuehlservice_chf_pro_kw") + a("service_hydraulik_chf")
+      + a("monitoring_chf_pro_server_monat") * 12 * n + a("internet_chf") + hw * a("versicherung_anteil") * 1.05
+      + a("lizenz_chf") + a("firmenanteil_chf"));
+    const vorSteuer = erloes + waerme - strom - laufend - abschr, steuer = Math.max(0, vorSteuer) * a("gewinnsteuer");
+    const cf = erloes + waerme - strom - laufend - steuer + (t === J ? rest : 0);
+    bw += cf / Math.pow(1 + i, t);
+    jahre.push({ erloes, waerme, strom, laufend, abschr, nachSteuer: vorSteuer - steuer });
+  }
+  const ergebnis = bw * i / (1 - Math.pow(1 + i, -J));
+  return { inv, hw, ergebnis, jahre, mittel: jahre.reduce((s, j) => s + j.nachSteuer, 0) / J };
 }
-// Rechenpreis pro Server-h → $ pro H100-Stunde (zum Vergleich mit Spot-Preisen 0,79–2,50 $/GPU-h)
-const proGpuH = (chfServerH) => chfServerH / D.annahmen.usd_chf.wert / D.annahmen.gpu_pro_server.wert;
+function regler() {
+  return { strompreis_chf_kwh: +$("pStrom").value / 100, vertragspreis_chf_karte_h: +$("pRechen").value,
+    anteil_fest_gebucht: +$("pFest").value / 100, server_preis_chf: +$("pHw").value,
+    waermepreis_haushalt_chf_kwh: +$("pWaerme").value / 100 };
+}
+function oekonomie(b, n) {
+  const r = regler(), serverH = b.strom_kwh, waermeKwh = b.genutzt_kwh_genau;
+  const w = wirtschaft(n, serverH, waermeKwh, r);
+  // Case-Definition: (Strom − Wert der genutzten Wärme nach Case-Regel) ÷ Server-Stunden, ohne Hardware
+  const strom = serverH * r.strompreis_chf_kwh, waermeCase = waermeKwh * r.strompreis_chf_kwh / 2.5;
+  const beCase = serverH ? (strom - waermeCase) / serverH : 0;
+  let lo = 0, hi = 3;  // nötiger Vertragspreis pro L4-Stunde (Ergebnis = 0)
+  for (let s = 0; s < 40; s++) { const m = (lo + hi) / 2;
+    if (wirtschaft(n, serverH, waermeKwh, { ...r, vertragspreis_chf_karte_h: m }).ergebnis < 0) lo = m; else hi = m; }
+  return { ...w, r, beCase, beKarte: hi, karten: D.annahmen.karten_pro_server.wert };
+}
 function kacheln() {
   const L = lauf(), b = L.bilanz, o = oekonomie(b, S.n);
   const t = [
@@ -253,26 +286,29 @@ function kacheln() {
     ["Wärme abgeführt", fmt(b.waerme_abgefuehrt_kwh) + " kWh", pct(b.anteil_abgefuehrt_von_serverwaerme, 2) + " der Serverwärme"],
     ["Auslastung", pct(b.auslastung), `${fmt(b.server_h)} Server-h von ${fmt(S.n * 8760)}`],
     ["Verpasste Fristen", pct(b.verpasste_fristen_anteil, 2), (S.sz === "spot"
-      ? `${fmt(b.jobs_mit_frist)} Aufträge B mit Frist (A im Spot-Markt ohne Frist)`
+      ? `${fmt(b.jobs_mit_frist)} Aufträge B mit Frist (A als Winterkontingent ohne feste Stundenfrist)`
       : `${fmt(b.jobs_mit_frist)} Aufträge A und B mit Frist`) +
       (b.jobs_abgegeben ? `, ${fmt(b.jobs_abgegeben)} abgegeben` : "")],
-    ["Break-even-Rechenpreis", chf(o.be, 3), "pro Server-h = (Strom − Wärmewert) ÷ Server-h, Case-Definition ohne Hardware"],
-    ["Nötig mit Hardware", chf(o.noetig, 2), `pro Server-h = ${fmt(proGpuH(o.noetig), 2)} $ pro H100-Stunde ` +
-      `(Spot heute 0,79–2,50 $)`],
+    ["Break-even (Case)", chf(o.beCase, 3), "pro Server-h = (Strom − Wärmewert) ÷ Server-h, ohne Hardware"],
+    ["Ergebnis DigitalHeat", chf(o.ergebnis), "pro Haus und Jahr, nach allen Kosten, Steuern und Zins"],
+    ["Nötiger Vertragspreis", chf(o.beKarte, 2), `pro L4-Stunde = ${chf(o.beKarte * o.karten, 2)} pro Server-h, mit allen Kosten`],
   ];
   $("tiles").innerHTML = t.map(([l, v, h]) =>
     `<div class="tile card"><div class="lab">${l}</div><div class="val">${v}</div><div class="hint">${h}</div></div>`).join("");
-  const ok = o.proServer >= 0;
+  const ok = o.ergebnis >= 0, j1 = o.jahre[0];
   $("verdict").className = "verdict card " + (ok ? "ok" : "nein");
-  $("verdict").innerHTML = `<div class="icon">${ok ? "✓" : "✕"}</div><div><b>${ok ? "Rechnet sich" : "Rechnet sich nicht"}: ${chf(o.proServer)} pro Server und Jahr</b>
-    Erlös ${chf(o.erloes)} + Wärmewert ${chf(o.waerme)} − Strom ${chf(o.strom)}${o.hw ? ` − Hardware ${chf(o.hw * S.n)}` : ""} für ${S.n} Server.
-    Nötig sind mindestens <b style="display:inline">${chf(o.noetig, 2)} pro Server-h</b>${o.hw ? "" : " (ohne Hardware)"}
-    (${fmt(proGpuH(o.noetig), 2)} $ pro H100-Stunde), verkauft wird zu ${chf(o.preis, 2)} (${fmt(proGpuH(o.preis), 2)} $).
-    ${o.hw ? "" : "<b style=\"display:inline\">Achtung: Hardware steht auf 0, das Urteil gilt nur für Strom und Wärme.</b> "}
-    ${S.sz === "spot" ? "Annahme: Der Spot-Markt nimmt jederzeit Rechenzeit ab." : "Nur Jobs mit Frist: Im Sommer fehlt der Wärmeabnehmer."}</div>`;
+  $("verdict").innerHTML = `<div class="icon">${ok ? "✓" : "✕"}</div><div><b>${ok ? "Rechnet sich" : "Rechnet sich nicht"}: ${chf(o.ergebnis)} pro Haus und Jahr</b>
+    Investition ${chf(o.inv)} für ${S.n} Server (${S.n * o.karten} L4). Im 1. Jahr: Erlös ${chf(j1.erloes)}${j1.waerme ? ` + Wärme ${chf(j1.waerme)}` : ""}
+    − Strom ${chf(j1.strom)} − laufende Kosten ${chf(j1.laufend)} − Abschreibung ${chf(j1.abschr)}.
+    Gewinn nach Steuern im Mittel ${chf(o.mittel)} pro Jahr, nach Zins ${chf(o.ergebnis)}.
+    Nötig sind mindestens <b style="display:inline">${chf(o.beKarte, 2)} pro L4-Stunde</b>, verkauft wird zu ${chf(o.r.vertragspreis_chf_karte_h, 2)}.
+    Schweizer GPU-Clouds verlangen ab rund 0,68 CHF, US-Clouds mit festem Vertrag 0,53–0,55 CHF (Daten nicht nur unter Schweizer Recht).
+    ${S.sz === "spot" ? "Annahme: Es gibt genug Aufträge (Vertrag plus Füllaufträge zum Spot-Preis)." : "Nur Jobs mit Frist: weniger Stunden, im Sommer fehlt der Wärmeabnehmer."}</div>`;
   $("pStromOut").textContent = fmt(+$("pStrom").value, 2) + " Rp./kWh";
   $("pRechenOut").textContent = chf(+$("pRechen").value, 2);
+  $("pFestOut").textContent = fmt(+$("pFest").value) + " %";
   $("pHwOut").textContent = chf(+$("pHw").value);
+  $("pWaermeOut").textContent = fmt(+$("pWaerme").value, 1) + " Rp./kWh";
 }
 
 // ---------- Diagramm: Monate (gestapelt) ----------
@@ -340,19 +376,21 @@ function serverkurve() {
 }
 
 // ---------- Diagramm: Lohnt sich ein Server mehr? ----------
-// Zusatzergebnis des n-ten Servers = Ergebnis(n) − Ergebnis(n−1), mit den Preisen der Regler, ohne Hardware.
-// Ein Server mehr lohnt sich, solange dieser Betrag die Hardware pro Server und Jahr übersteigt.
+// Zusatzergebnis des n-ten Servers = Ergebnis(n) − Ergebnis(n−1), mit allen Kosten (wirtschaft()).
+// Ein Server mehr lohnt sich, solange dieser Betrag positiv ist. Server 1 trägt auch die Fixkosten des Hauses.
 function grenzwert() {
   const W = 1100, H = 200, x0 = 56, x1 = W - 8, y0 = H - 24, y1 = 10;
-  const svg = svgNeu($("chGrenz"), W, H);
-  const erg = [0]; for (let n = 1; n <= 13; n++) erg.push(oekonomie(lauf(n).bilanz, n).ergebnis);
+  const svg = svgNeu($("chGrenz"), W, H), r = regler();
+  const erg = [0]; for (let n = 1; n <= 13; n++) { const b = lauf(n).bilanz;
+    erg.push(wirtschaft(n, b.strom_kwh, b.genutzt_kwh_genau, r).ergebnis); }
   const zus = []; for (let n = 1; n <= 13; n++) zus.push(erg[n] - erg[n - 1]);
-  const hw = +$("pHw").value;
-  const lo = Math.min(0, ...zus), hi = niceMax(Math.max(hw, ...zus));
+  const hw = 0;
+  const lo = niceMax(-Math.min(0, ...zus)) * (Math.min(0, ...zus) < 0 ? -1 : 0), hi = niceMax(Math.max(1, ...zus));
   const ys = (v) => y0 - (v - lo) / (hi - lo) * (y0 - y1);
   for (let i = 0; i <= 4; i++) { const v = lo + (hi - lo) * i / 4, y = ys(v);
     el("line", { x1: x0, x2: x1, y1: y, y2: y, stroke: Math.abs(v) < 1e-9 ? "var(--axis)" : "var(--grid)" }, svg);
     const t = el("text", { x: x0 - 6, y: y + 4, "text-anchor": "end" }, svg); t.textContent = fmt(v); }
+  el("line", { x1: x0, x2: x1, y1: ys(0), y2: ys(0), stroke: "var(--axis)", "stroke-width": 1.5 }, svg);
   const bw = (x1 - x0) / 13, w = bw * 0.6;
   zus.forEach((v, i) => { const n = i + 1, x = x0 + i * bw + (bw - w) / 2, top = ys(Math.max(v, 0)), bot = ys(Math.min(v, 0));
     const b = saeule(svg, x, top, w, bot - top, "var(--s1)");
@@ -360,18 +398,15 @@ function grenzwert() {
     if (n === S.n) el("rect", { x: x - 3, y: y1, width: w + 6, height: y0 - y1, fill: "none", stroke: "var(--axis)", rx: 4 }, svg);
     const t = el("text", { x: x + w / 2, y: H - 6, "text-anchor": "middle" }, svg); t.textContent = n;
     const hit = el("rect", { x: x0 + i * bw, y: y1, width: bw, height: y0 - y1, fill: "transparent", style: "cursor:pointer" }, svg);
-    hover(hit, `<b>Server Nr. ${n}</b><br><span class="k">bringt zusätzlich</span> ${chf(v)} pro Jahr<br>
-      <span class="k">kostet</span> ${chf(hw)} pro Jahr<br>${v >= hw ? "lohnt sich" : "lohnt sich nicht"}`);
+    hover(hit, `<b>Server Nr. ${n}</b><br><span class="k">verändert das Ergebnis um</span> ${chf(v)} pro Jahr<br>
+      ${v >= 0 ? "lohnt sich" : "lohnt sich nicht"}${n === 1 ? "<br>(trägt auch Einbau, Internet, Firmenanteil)" : ""}`);
     hit.addEventListener("click", () => { $("n").value = n; S.n = n; alles(); }); });
-  if (hw > 0) el("line", { x1: x0, x2: x1, y1: ys(hw), y2: ys(hw), stroke: "var(--s2)", "stroke-width": 2,
-    "stroke-dasharray": "6 4" }, svg);
-  let bis = 0; while (bis < 13 && zus[bis] >= hw) bis++;
-  $("nGrenz").textContent = bis === 0
-    ? `Bei ${chf(hw)} Hardware pro Server und Jahr lohnt sich schon der erste Server nicht.` +
-      (S.sz === "spot" ? ` Mehr Server decken mehr Wärme, verdienen aber weniger: Jeder weitere rechnet nur noch in kälteren Stunden.` : "")
-    : `Bei ${chf(hw)} Hardware pro Server und Jahr lohnt sich jeder Server bis Nr. ${bis}` +
-      (bis < 13 ? `, der ${bis + 1}. bringt nur noch ${chf(zus[bis])}.` : ".") +
-      ` Mehr Server decken mehr Wärme, rechnen aber seltener.`;
+  let bis = 0; while (bis < 13 && zus[bis] >= 0) bis++;
+  let best = 1; for (let n = 2; n <= 13; n++) if (erg[n] > erg[best]) best = n;
+  $("nGrenz").textContent = (bis === 0
+    ? `Bei diesen Preisen lohnt sich schon der erste Server nicht.`
+    : `Bei diesen Preisen lohnt sich jeder Server bis Nr. ${bis}` + (bis < 13 ? `, der ${bis + 1}. verändert das Ergebnis um ${chf(zus[bis])}.` : "."))
+    + ` Am meisten verdient DH mit ${best} Server${best > 1 ? "n" : ""} (${chf(erg[best])} pro Jahr). Mehr Server decken mehr Wärme, rechnen aber seltener.`;
 }
 
 // ---------- Diagramm: Tag ----------
@@ -464,23 +499,25 @@ function annahmenKurz() {
       `1 Server = ${fmt(a("server_kw"))} kW Strom, ${pct(a("waermerueckgewinnung"), 0)} davon als nutzbare Wärme`,
       `Wärme ohne Wärmepumpe direkt für Heizung und Warmwasser ${s("Case")}`,
       `<b>Läuft ein Server, läuft er voll</b> (Aufträge dicht gepackt)`,
-      `1 kW entspricht ≈ 1,6 H100-GPUs ${s("MLPerf v5.0, 8 GPUs = 4,85 kW")}`]],
+      `1 Server = ${a("karten_pro_server")}× NVIDIA L4 (72 W) + Prozessor ≈ 1 kW ${s("Einheitsserver für alle Branchen")}`,
+      `Server werden <b>ausgeschaltet</b>, wenn keine Wärme gebraucht wird ${s("sonst 23 % Leerlaufstrom")}`]],
     ["So baut DigitalHeat", [
       `Direkte Flüssigkeitskühlung an den Prozessoren, eigener Kühlkreis ${s("digitalheat.ch")}`,
       `Wärmetauscher trennt Kühlkreis und Heizwasser: Das Heizwasser kommt nie an die Server`,
       `50–70 °C Vorlauf: reicht für Heizung und Warmwasser ohne Wärmepumpe`,
       `5–20 kW pro Einheit: <b>unsere 8 Server = eine Einheit von 8 kW</b>`,
-      `DigitalHeat besitzt die Server, das Haus kauft Wärme als Dienstleistung`,
+      `DigitalHeat besitzt und bezahlt alles, der Haushalt bekommt die Wärme <b>gratis</b> ${s("Öl-Pilot, CustomerView_Joel.md")}`,
       `Nicht angegeben: Kühlmittel, Anteil zurückgewonnener Wärme, Preise`]],
-    ["Preise", [
+    ["Geld (alles in CHF)", [
       `Strom ${fmt(a("strompreis_chf_kwh") * 100, 2)} Rp./kWh ${s("ElCom 2026, IWB Basel, H4")}`,
-      `Wärme ${fmt(a("waermewert_chf_kwh") * 100, 1)} Rp./kWh = Strompreis ÷ 2,5 ${s("ersetzt Wärmepumpe")}`,
-      `Rechenzeit ${fmt(a("rechenpreis_usd_server_h"), 2)} $ pro Server-h ${s("günstigster Spot-Preis H100 × 1,6")}`,
-      `Wechselkurs ${fmt(a("usd_chf"), 2)} CHF pro $ ${s("Stand 20.11.2026")}`,
-      `= ${fmt(a("rechenpreis_usd_server_h") * a("usd_chf"), 2)} CHF pro Server-h (Startwert des Reglers)`,
-      `<b>Hardware</b>: ${fmt(a("gpu_pro_server"), 1)} × ${fmt(a("hardware_usd_pro_gpu"))} $ pro H100 × ${fmt(a("usd_chf"), 2)} ÷ ` +
-        `${a("abschreibung_jahre")} Jahre = <b>${chf(D.hardware_chf_pro_server_jahr)} pro Server und Jahr</b> ` +
-        `(Startwert des Reglers) ${s("H100 NVL 24'500–32'383 $, untere Spanne; ohne Host, Wartung, Netz")}`]],
+      `Wärmewert ${fmt(a("waermewert_chf_kwh") * 100, 1)} Rp./kWh = Strompreis ÷ 2,5 ${s("Case: ersetzt Wärmepumpe, nur für den Break-even des Case")}`,
+      `<b>Vertragspreis Pharma ${chf(a("vertragspreis_chf_karte_h"), 2)} pro L4-Stunde</b>, ${pct(a("anteil_fest_gebucht"), 0)} fest gebucht ` +
+        `${s("Schweizer Clouds ab ≈ 0,68 CHF; vorsichtiger Fall 0,50 CHF")}`,
+      `Rest als Füllauftrag zu ${chf(a("spotpreis_chf_karte_h"), 2)}, sinkt ${pct(a("spot_preisverfall"), 0)} pro Jahr ${s("L4-Spot-Preis")}`,
+      `<b>Server ${chf(a("server_preis_chf"))}</b> pro 8 L4 inkl. Prozessor und Speicher ${s("Gigabyte G293-Z43, 16× L4: 76'774 $")}`,
+      `Kühlung ${chf(a("kuehlung_chf_pro_kw"))}/kW, Einbau ${chf(a("einbau_chf"))}, Speicher ${chf(a("speicher_chf"))}, Netzwerk ${chf(a("netzwerk_chf"))}`,
+      `${a("abschreibung_jahre")} Jahre, Zins ${pct(a("zins"), 1)}, Restwert ${pct(a("restwert_anteil"), 0)}, Gewinnsteuer ${pct(a("gewinnsteuer"), 1)}`,
+      `Laufend: Ersatzteile, Einsätze, Service, Monitoring, Internet, Versicherung ${pct(a("versicherung_anteil"), 1)}, Firmenanteil ${s("KOSTEN_DH.md")}`]],
     ["Aufträge", [
       `A: ${fmt(M.texte_pro_kwh / 1e6, 1)} Mio. Texte pro kWh einbetten, 1 Auftrag = ${fmt(JA.einheiten_pro_job / 1e6)} Mio. Texte ` +
         `= ${fmt(a("job_a_kwh"), 3)} kWh ≈ ${fmt(JA.laufzeit_min_1kw, 1)} min auf 1 kW, pausierbar, Frist ${a("job_a_frist_h")} h`,
@@ -491,7 +528,7 @@ function annahmenKurz() {
       `Umrechnung auf 1 kW: gleiche Arbeit pro kWh wie gemessen`,
       `Fristen und Auftragsgrössen selbst festgelegt`]],
     ["Nachfrage nach Rechenzeit", [
-      `<b>Spot-Markt: Es gibt jederzeit genug Aufträge A</b> (Standard)`,
+      `<b>Genug Aufträge</b> (Standard): Pharma-Vertrag mit Winterkontingent, der Rest als Füllaufträge ${s("PHARMA_SICHT.md")}`,
       `Alternative: nur Aufträge mit Frist, ${fmt(a("nachfrage_server_h_pro_server_tag"), 1)} Server-h pro Server und Tag ${s("Alibaba-GPU-Trace 2020")}`,
       `Kurze Aufträge (B) = ${pct(a("anteil_kurze_jobs_gpu_h"), 0)} der Rechenzeit ${s("Alibaba")}`,
       `Ankünfte über den Tag nach Alibaba-Tagesform, feste Zufallssaat`]],
@@ -505,9 +542,11 @@ function annahmenKurz() {
   const ali = D.laeufe[`alibaba|${S.regel}|${S.n}`].bilanz, o = oekonomie(lauf().bilanz, S.n);
   const grenzen = [
     `Gibt es weniger flexible Aufträge als angenommen, sinkt die Deckung bei ${S.n} Servern auf ${pct(ali.deckungsgrad, 0)} (Umschalter «Nur Jobs mit Frist»).`,
-    `Fällt der Rechenpreis unter den Break-even (${chf(o.be, 3)} pro Server-h), deckt der Erlös nicht einmal den Strom.`,
-    `Mit Hardware braucht es mindestens ${chf(o.noetig, 2)} pro Server-h (${fmt(proGpuH(o.noetig), 2)} $ pro H100-Stunde). ` +
-      `Darunter lohnt es sich nicht. Der günstigste Spot-Preis (0,79 $) reicht ${proGpuH(o.noetig) > 0.79 ? "nicht" : "knapp"}.`,
+    `Unter ${chf(o.beCase, 3)} pro Server-h (Break-even des Case) deckt der Erlös nicht einmal den Strom.`,
+    `Mit allen Kosten braucht es mindestens ${chf(o.beKarte, 2)} pro L4-Stunde. Darunter lohnt es sich nicht.`,
+    `Am stärksten wirken Vertragspreis und fest gebuchter Anteil. Im vorsichtigen Fall (0,50 CHF) verdient DH rund 60 % weniger.`,
+    `Das Preisargument gilt nur für Kunden, deren Daten in der Schweiz bleiben müssen. Andere rechnen bei US-Clouds mit festem Vertrag billiger (0,53–0,55 CHF).`,
+    `Im Pilot mit wenigen Häusern sind die Firmenkosten (Zertifikat, Software, Personal) pro Haus viel höher als hier angenommen.`,
     "Im Sommer fehlt im Einfamilienhaus der Wärmeabnehmer. Ohne zweiten Standort (Hotel, Landwirtschaft) bleiben die Server dann fast still.",
     "DigitalHeat zielt auf feste Rechenkunden (Firmen, Forschung, Hochschulen) statt auf einen Spot-Markt. Das Szenario «Nur Jobs mit Frist» liegt deshalb womöglich näher an der Realität.",
   ];
@@ -530,15 +569,17 @@ function alles() { $("nOut").textContent = S.n; preise(); monate(); auslastung()
   tag("januar", "chJan", "spJan", "tJan", "nJan"); tag("uebergang", "chUeb", "spUeb", "tUeb", "nUeb");
   tag("juli", "chJul", "spJul", "tJul", "nJul"); }
 $("n").addEventListener("input", (e) => { S.n = +e.target.value; alles(); });
-for (const id of ["pStrom", "pRechen", "pHw"]) $(id).addEventListener("input", preise);
+for (const id of ["pStrom", "pRechen", "pFest", "pHw", "pWaerme"]) $(id).addEventListener("input", preise);
 document.querySelectorAll(".seg").forEach((seg) => seg.addEventListener("click", (e) => {
   const b = e.target.closest("button"); if (!b) return;
   seg.querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", x === b));
   S[seg.dataset.key] = b.dataset.v; alles(); }));
 document.querySelectorAll("[data-table]").forEach((b) => b.addEventListener("click", () => {
   const t = $(b.dataset.table); t.hidden = !t.hidden; b.textContent = t.hidden ? "Tabelle zeigen" : "Tabelle ausblenden"; }));
-$("pRechen").value = (D.annahmen.rechenpreis_usd_server_h.wert * D.annahmen.usd_chf.wert).toFixed(2);
-$("pHw").value = D.hardware_chf_pro_server_jahr;
+$("pRechen").value = D.annahmen.vertragspreis_chf_karte_h.wert;
+$("pFest").value = D.annahmen.anteil_fest_gebucht.wert * 100;
+$("pHw").value = D.annahmen.server_preis_chf.wert;
+$("pWaerme").value = D.annahmen.waermepreis_haushalt_chf_kwh.wert * 100;
 annahmen(); alles(); live(); if (!window.LIVE_AUFZEICHNUNG) setInterval(live, 1000);
 </script>
 </body>
