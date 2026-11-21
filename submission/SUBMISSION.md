@@ -1,6 +1,6 @@
 # Vorschläge für die Submission (vorübergehend)
 
-Das Formular ist auf Englisch, darum sind die Texte zum Einfügen auf Englisch. Alle Zahlen stammen aus `docs/ERGEBNISSE.md` und `docs/KOSTEN_DH.md`. Nach der Abgabe kann dieser Ordner gelöscht werden.
+Das Formular ist auf Englisch, darum sind die Texte zum Einfügen auf Englisch. Alle Zahlen stammen aus `docs/ergebnisse/ERGEBNISSE.md` und `docs/wirtschaft/KOSTEN_DH.md`. Nach der Abgabe kann dieser Ordner gelöscht werden.
 
 ---
 

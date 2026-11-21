@@ -48,7 +48,7 @@ def find_python():
         if not candidate or not Path(candidate).exists():continue
         r=subprocess.run([str(candidate),'-c',"import importlib.util; raise SystemExit(0 if importlib.util.find_spec('fastembed') else 1)"],capture_output=True,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'})
         if r.returncode==0:return str(candidate)
-    raise ValueError('FastEmbed-Umgebung fehlt. Siehe docs/GESAMTDEMO.md.')
+    raise ValueError('FastEmbed-Umgebung fehlt. Siehe docs/technik/GESAMTDEMO.md.')
 
 def atomic(path,data):
     tmp=path.with_suffix('.tmp');tmp.write_text(json.dumps(data,ensure_ascii=False,indent=1));tmp.replace(path)

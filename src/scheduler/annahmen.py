@@ -83,7 +83,7 @@ ANNAHMEN = {
                             "mit 1 Thread SIGTERM bis Checkpoint 6,4 s (messungen/vektorvergleich.json). "
                             "Ohne Übertragung von Checkpoint und Modell über das Netz zwischen Standorten"),
     # --- Flotte und Senke (src/scheduler/flotte.py, daten/HALLENBAD.md) ---
-    "flotte_haeuser": (20, "Arbeitsannahme Design-Doc; vorerst 20 × Referenzhaus (TODOS.md, D3)"),
+    "flotte_haeuser": (20, "Arbeitsannahme Design-Doc; vorerst 20 × Referenzhaus (docs/TODO.md, D3)"),
     "bad_jahresbedarf_kwh": (650000, "Schätzung ±30 %: VHF/EnergieSchweiz-Leitfaden 2018, 430–480 kWh/m² pro "
                                      "120-Tage-Saison (S. 156) × 1'050 m² (Annahme 50 m × 21 m, 8 Bahnen) "
                                      "× 163/123 Betriebstage; Sportbad St. Jakob (daten/HALLENBAD.md)"),

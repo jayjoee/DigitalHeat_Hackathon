@@ -23,4 +23,4 @@ Identische fertiggestellte Aufträge: True
 - **price:** 0,3325 CHF/kWh als Projektwert; nur Stromkosten, keine Unternehmensrendite
 - **exclusions:** Steuerungsenergie, Datenübertragung, Speicherung, reale Wärmeabnahme, Pumpen, Ersatzheizung und Wartungsausfälle fehlen.
 
-Die Ergebnisse dürfen nicht mit der Jahresbilanz oder dem früheren Halbjahresvergleich gleichgesetzt werden. Forschungsgrundlage und übernommene Verfahren stehen in docs/RESSOURCEN_SCHEDULER.md im Projekt.
+Die Ergebnisse dürfen nicht mit der Jahresbilanz oder dem früheren Halbjahresvergleich gleichgesetzt werden. Forschungsgrundlage und übernommene Verfahren stehen in docs/technik/RESSOURCEN_SCHEDULER.md im Projekt.

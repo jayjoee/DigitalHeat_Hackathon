@@ -24,7 +24,7 @@ def main():
         print(f"{r['strategy']}: {r['completed']}/{r['submitted']} fertig, {r['missed']} Fristen verpasst, {r['it_kwh']:.3f} kWh")
     text+=['',f"Identische fertiggestellte Aufträge: {result['same_completed_jobs']}",'','## Annahmen','']
     text += [f'- **{k}:** {v}' for k,v in result['assumptions'].items()]
-    text+=['','Die Ergebnisse dürfen nicht mit der Jahresbilanz oder dem früheren Halbjahresvergleich gleichgesetzt werden. Forschungsgrundlage und übernommene Verfahren stehen in docs/RESSOURCEN_SCHEDULER.md im Projekt.']
+    text+=['','Die Ergebnisse dürfen nicht mit der Jahresbilanz oder dem früheren Halbjahresvergleich gleichgesetzt werden. Forschungsgrundlage und übernommene Verfahren stehen in docs/technik/RESSOURCEN_SCHEDULER.md im Projekt.']
     (args.output/'Bericht.md').write_text('\n'.join(text)+'\n',encoding='utf-8')
     print(f'Bericht: {(args.output/"Bericht.md").resolve()}')
 

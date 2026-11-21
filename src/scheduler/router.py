@@ -1,7 +1,7 @@
 """Wärme-Router: ein gemeinsamer Auftragspool für mehrere Standorte (Häuser und Sommer-Senken).
 
 Der Router verteilt die Jobs. Standorte mit Serverbetrieb wählen zusätzlich ihre aktive Kapazität.
-Design: docs/designs/waerme-router-basel.md, Baustein 3. Pro Stunde h:
+Design: docs/technik/waerme-router-basel.md, Baustein 3. Pro Stunde h:
 
   0. Pool: Ankünfte (Alibaba-Rate × Server der Häuser) und Spot-Nachschub für alle Server der Flotte.
   Vorrang (Team-Entscheid 21.11.2026): Wohnhäuser haben immer Vorrang vor Senken. Senken (Sportbad) nehmen

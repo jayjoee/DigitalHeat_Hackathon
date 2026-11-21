@@ -1,4 +1,4 @@
-> Früher Pharma-Arbeitsentwurf aus dieser Entwicklung. Für den aktuellen gemeinsamen Stand gelten [PHARMA_SICHT.md](../PHARMA_SICHT.md) und [PROJEKTUEBERSICHT.md](../PROJEKTUEBERSICHT.md). Vorschläge sind keine umgesetzten oder zertifizierten Sicherheitsnachweise.
+> Früher Pharma-Arbeitsentwurf aus dieser Entwicklung. Für den aktuellen gemeinsamen Stand gelten [PHARMA_SICHT.md](../kunden/PHARMA_SICHT.md) und [README.md](../../README.md). Vorschläge sind keine umgesetzten oder zertifizierten Sicherheitsnachweise.
 
 # Pharmaperspektive für DigitalHeat
 

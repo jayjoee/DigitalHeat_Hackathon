@@ -123,7 +123,7 @@ Warum der Haushalt die Anlage nicht selbst kauft: Eine 8-kW-Einheit kostet rund 
 **Wohin der Ertrag der Rechenleistung fliesst:** Der Pharmakunde zahlt DigitalHeat für die Rechenzeit. DigitalHeat zahlt davon Strom, Hardware, Einbau und Unterhalt. Der Haushalt bekommt keinen Anteil am Rechenerlös, sondern die Wärme gratis und trägt kein Risiko. Ob er zusätzlich einen Bonus oder eine Platzmiete erhält, entscheidet die Säule Firma (Abschnitt 11).
 
 #### 3.2 Reserve: Holzofen statt Öl- oder Gaskessel
-Die Serverheizung **ersetzt** die bestehende Heizung. Ölkessel und Tank werden zurückgebaut (≈ 4'000 CHF, Schätzung, bezahlt DigitalHeat). Für die kältesten Stunden nutzt der Haushalt seinen vorhandenen Holzofen oder sein Cheminée (Team-Annahme, keine Kosten). Beim Durchschnitts-EFH fehlt die Serverwärme nur an rund 30 Tagen und höchstens 1,4 kW; ohne Ofen bliebe es über 18 °C. Beim grossen Referenzhaus sind es 77 Tage mit bis zu 4,1 kW (docs/FIRMA.md).
+Die Serverheizung **ersetzt** die bestehende Heizung. Ölkessel und Tank werden zurückgebaut (≈ 4'000 CHF, Schätzung, bezahlt DigitalHeat). Für die kältesten Stunden nutzt der Haushalt seinen vorhandenen Holzofen oder sein Cheminée (Team-Annahme, keine Kosten). Beim Durchschnitts-EFH fehlt die Serverwärme nur an rund 30 Tagen und höchstens 1,4 kW; ohne Ofen bliebe es über 18 °C. Beim grossen Referenzhaus sind es 77 Tage mit bis zu 4,1 kW (docs/wirtschaft/FIRMA.md).
 
 | Heute | Reserve neu | Bemerkung |
 |---|---|---|

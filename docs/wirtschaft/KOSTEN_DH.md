@@ -144,7 +144,7 @@ Das Skript simuliert auch das Durchschnitts-EFH (`profil_haus2` aus `src/dashboa
 | **Verkaufter Anteil der Rechenstunden** | **100 %** | offen | E | Annahme «genug Aufträge». Kein Nachfragebeleg; siehe Kurzfassung und Abschnitt 8 |
 | Untergrenze übrige Stunden | Spot 0,29 CHF | 0,29–0,38 CHF | Q | L4-Spot-Preis (AWS g6 Spot 0,35–0,45 $); Rückfall, wenn kein Kunde ohne Mindestmenge gefunden wird |
 | Plattformkosten | 5 % | 0–5 % | E | Direktvertrag statt Marktplatz (15–30 %) |
-| Laufzeit Roche-Vertrag | 5 Jahre | – | E | Mehrjährige Verträge mit Abnahmepflicht sind im GPU-Markt üblich (2–5 Jahre). `PHARMA_SICHT.md` nennt 3 Jahre, der Pilot läuft 1 Jahr: Laufzeiten sind noch nicht abgeglichen (`TODO_KURZ.md`) |
+| Laufzeit Roche-Vertrag | 5 Jahre | – | E | Mehrjährige Verträge mit Abnahmepflicht sind im GPU-Markt üblich (2–5 Jahre). `PHARMA_SICHT.md` nennt 3 Jahre, der Pilot läuft 1 Jahr: Laufzeiten sind noch nicht abgeglichen (`docs/TODO.md`) |
 
 ## 2b. Wie die unsicheren Werte geschätzt sind
 
@@ -237,7 +237,7 @@ In allen drei Spalten sind alle Rechenstunden verkauft und Roche nimmt 60 %. Die
 - **Teurer Fall** (Roche 0,45 CHF, übrige Stunden 0,45 CHF, Kosten am oberen Rand): nur noch +6'400 CHF pro Jahr.
 - **Nur Marktplatz statt Direktvertrag:** Mit 20 % Gebühr und Preisverfall von 10 % pro Jahr auf allen Stunden braucht es rund 0,47 CHF im ersten Jahr.
 - **Vertrauliche Aufträge:** L4 schützt Daten während der Verarbeitung nicht. Solche Aufträge sind ausgeschlossen (`L4_ANGEBOT.md`). Neue H100 mit diesem Schutz rechneten sich in der früheren Rechnung selbst im günstigen Fall nicht, weil die Hardware für Dauerbetrieb gebaut ist, DH aber nur die halbe Zeit rechnet. Im Abschaltmodell ist das nicht neu gerechnet.
-- **Server nur pausieren:** Bei 230 W Leerlauf rund 5'200 kWh mehr Strom (1'740 CHF) und 2'340 Rechenstunden weniger, weil die Leerlaufwärme den Speicher füllt. Das Ergebnis fällt von +35'000 auf +26'100 CHF pro Jahr. Details im [Betriebsvergleich](ERGEBNISSE.md#leerlauf-und-abschalten-im-referenzhaus).
+- **Server nur pausieren:** Bei 230 W Leerlauf rund 5'200 kWh mehr Strom (1'740 CHF) und 2'340 Rechenstunden weniger, weil die Leerlaufwärme den Speicher füllt. Das Ergebnis fällt von +35'000 auf +26'100 CHF pro Jahr. Details im [Betriebsvergleich](../ergebnisse/ERGEBNISSE.md#leerlauf-und-abschalten-im-referenzhaus).
 - **Pilot mit wenigen Häusern:** Die Firmenkosten (Zertifikat, Software, Personal) verteilen sich auf wenige Häuser. Laut `FIRMA.md` trägt die Firma ihre Fixkosten ab 6 Häusern, wenn alle Stunden verkauft sind, und erst ab 45 Häusern, wenn nur Roche abnimmt (knappe Nachfrage).
 
 ## 6. Abgleich mit Joëls Kundensicht

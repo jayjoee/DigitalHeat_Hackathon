@@ -17,7 +17,7 @@ Das Dashboard zeigt alle Kennzahlen für 1–13 Server und beide Nachfrageszenar
 
 **Alle Beträge in CHF.** Die Wirtschaftlichkeit von DigitalHeat rechnet `src/wirtschaft.py`; Herleitung aller Annahmen in `KOSTEN_DH.md`, Kundensicht Pharma in `PHARMA_SICHT.md`.
 
-Firmenrechnung mit Ausbau, Skaleneffekten, Förderbeitrag und Holzofen: `docs/FIRMA.md`.
+Firmenrechnung mit Ausbau, Skaleneffekten, Förderbeitrag und Holzofen: `docs/wirtschaft/FIRMA.md`.
 
 ## Kennzahlen für 8 Server pro Haus
 

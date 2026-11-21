@@ -1,5 +1,6 @@
 daten/roh/alibaba/
 __pycache__/
+.pytest_cache/
 .venv/
 .DS_Store
 messungen/*/vektoren_*.npy

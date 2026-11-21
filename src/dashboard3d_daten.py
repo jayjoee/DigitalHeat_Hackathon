@@ -24,7 +24,7 @@ from src.scheduler import annahmen as A  # noqa: E402
 N_HAEUSER, N_HAUS, N_BAD = 20, 8, 50
 # Haus 02 ist kein Klon des Referenzhauses, sondern ein Durchschnitts-Einfamilienhaus (Kundensicht von Joël)
 HAUS2 = {"jahr_kwh": 17000, "server": 5,
-         "quelle": "docs/CustomerView_Joel.md: Durchschnitts-EFH 17'000 kWh Wärme pro Jahr, 5-kW-Einheit"}
+         "quelle": "docs/kunden/CustomerView_Joel.md: Durchschnitts-EFH 17'000 kWh Wärme pro Jahr, 5-kW-Einheit"}
 
 
 def profil_haus2(profil):

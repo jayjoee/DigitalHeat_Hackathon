@@ -2,7 +2,13 @@
 
 **DigitalHeat erledigt Rechenaufträge und nutzt ihre Abwärme zum Heizen von Häusern und im Sommer eines Sportbads.** Das Hackathon-Projekt verbindet Jahresmodell, Wärme-Router, echte Laptop-Aufträge und getrennte Produktoberflächen.
 
-**Neu hier?** [Projektübersicht](docs/PROJEKTUEBERSICHT.md) lesen. Sie zeigt, welche Teile vorhanden sind, was gemessen ist und was noch simuliert wird.
+Damit das funktioniert, müssen drei Dinge zusammenpassen:
+
+1. Die Wärme wird im Haus tatsächlich gebraucht.
+2. Die Rechenaufträge werden sinnvoll und rechtzeitig erledigt.
+3. Die Einnahmen decken Hardware und Betrieb.
+
+Diese README ist der einzige Einstieg. Alle weiteren Dokumente stehen unten unter [Dokumente](#dokumente).
 
 ## Die geführte Gesamtdemo starten
 
@@ -19,7 +25,7 @@ python3 -m venv .venv
 
 Danach reicht auf macOS `Gesamtdemo_starten.command`. Die Oberfläche läuft unter **http://127.0.0.1:18200**. Dort **Live-Demo starten** drücken. Winter, Sommer und voller Speicher werden in etwa 90 Sekunden gezeigt. Der Embedding-Prozess und seine Pausen sind echt; Haus und Wärme sind simuliert.
 
-[Kurze Orientierung](docs/START_HIER.md) · [Ablauf und Methode](docs/GESAMTDEMO.md)
+[Was die Demo zeigt, Ablauf und Methode](docs/technik/GESAMTDEMO.md)
 
 ## Welche Ansicht wofür?
 
@@ -31,7 +37,7 @@ Danach reicht auf macOS `Gesamtdemo_starten.command`. Die Oberfläche läuft unt
 | Echten Auftrag im Wärme-Router zeigen | `.venv/bin/python src/scheduler/live.py --flotte --sekunden 3`; mit `--abschalten` auch Serverzustände simulieren |
 | Pharma-Kunde und Serverhalter getrennt bedienen | [prototyp/README.md](prototyp/README.md) |
 | Tablettenprüfung mit zwei Leinwänden und Checkpoint-Übergabe zeigen | [prototyp/blister/README.md](prototyp/blister/README.md) |
-| ML-Energievergleich untersuchen | [docs/ML_SYSTEM.md](docs/ML_SYSTEM.md), eigener Dienst auf Port 18100 |
+| ML-Energievergleich untersuchen | [docs/technik/ML_SYSTEM.md](docs/technik/ML_SYSTEM.md), eigener Dienst auf Port 18100 |
 | Reale Laptop-Laufzeiten und Chip-Energieschätzungen vergleichen | [messwerkzeug/README.md](messwerkzeug/README.md) |
 
 Der Blister-Batch wechselt im Demo-Wärmeverlauf automatisch vom Haus zum Sportbad und bei erneutem Wärmebedarf zurück. Die Produktoberflächen, Gesamtdemo und ML-Untersuchung bleiben eigenständige Abläufe.
@@ -45,10 +51,10 @@ Der Blister-Batch wechselt im Demo-Wärmeverlauf automatisch vom Haus zum Sportb
 | Rund 90,5 % Wärmedeckung mit Abschalten | Erweiterte Rechnung mit angenommenen Betriebszuständen |
 | Rund 5'200 kWh weniger Strom pro Jahr durch Abschalten statt Prozesspause | Simulationsvergleich bei angenommenen 230 W Leerlauf |
 | Rund CHF 290'000 Investition pro Haus | Hardware-/Einbauannahmen, keine gemessene Pilotinstallation |
-| CHF 0,50 pro L4-Stunde (Roche, 60 %) und 0,55 für den Rest | Angenommene Zielpreise, kein belegter Kundenauftrag (`docs/KOSTEN_DH.md`) |
+| CHF 0,50 pro L4-Stunde (Roche, 60 %) und 0,55 für den Rest | Angenommene Zielpreise, kein belegter Kundenauftrag |
 | Rund CHF 35'000 jährliches Modellergebnis mit Abschalten | Nur wenn jede Stunde verkauft ist; bei 66 % verkauften Stunden null |
 
-Die Unternehmenskennzahl wird als jährliches Kapitalwertäquivalent berechnet. Sie ist kein bereits erzielter realer Jahresgewinn. Bei knapper Nachfrage kann das System Verlust machen. [Ergebnisse und Grenzen](docs/ERGEBNISSE.md)
+Massgebend sind [KOSTEN_DH.md](docs/wirtschaft/KOSTEN_DH.md) und [ERGEBNISSE.md](docs/ergebnisse/ERGEBNISSE.md); diese Tabelle fasst sie nur zusammen. Die Unternehmenskennzahl wird als jährliches Kapitalwertäquivalent berechnet. Sie ist kein bereits erzielter realer Jahresgewinn. Bei knapper Nachfrage kann das System Verlust machen.
 
 ## Was ist echt und was ist simuliert?
 
@@ -60,15 +66,50 @@ Die Unternehmenskennzahl wird als jährliches Kapitalwertäquivalent berechnet. 
 
 Transportverschlüsselung und getrennte Oberflächen schützen nicht automatisch vor Administratorzugriff auf den verarbeitenden Rechner.
 
+## Die Bausteine
+
+| Baustein | Zweck | Ort |
+|---|---|---|
+| Jahresmodell | Wärmebedarf, Speicher, Rechenlast, Fristen und Kosten über 8'760 Stunden berechnen | `src/scheduler/jahr.py`, `kern.py` |
+| Wärme-Router | Aufträge zwischen Häusern und einem Sportbad als Sommer-Wärmeabnehmer verteilen | `src/scheduler/router.py`, `flotte.py` |
+| Zusage am Vortag | Rechenkapazität anhand der Wetterprognose mit Reserve zusagen | `src/scheduler/zusage.py` |
+| Serverbetrieb | Leerlauf, Startzeit, Standby und Abschalten in Häusern und Sportbad simulieren | `src/scheduler/serverbetrieb.py` |
+| Unternehmensrechnung | Investition, Erlöse, laufende Kosten, Steuern und Restwert abbilden | `src/wirtschaft.py`, `src/kosten_dh.py`, `src/firma.py` |
+| Annahmen | Alle Modellannahmen an einem Ort, jede mit Quelle | `src/scheduler/annahmen.py` |
+| Echter KI-Auftrag | Öffentliche Nachrichtentexte auf der CPU in Suchvektoren umwandeln | `src/jobs/embedding_job.py` |
+| Live-Steuerung | Prozesspause, Weiterlauf und Checkpoint-Neustart aus dem Wärme-Router steuern | `src/scheduler/live.py`, `live_flotte.py` |
+| Analyse-Dashboard | Jahresresultate, Tagesverläufe, Flotte und Serverbetrieb untersuchen | `dashboard/` |
+
+**Die Demonstratoren:**
+
+| Demonstrator | Was tatsächlich passiert | Grenze |
+|---|---|---|
+| Geführte Gesamtdemo | Die Jahresbilanz und drei Tagesausschnitte steuern einen echten Embedding-Prozess; Pausen werden anhand stabiler Checkpoints geprüft | Laptop repräsentiert einen modellierten Serverplatz; keine echte Heizung |
+| Pharma- und Serverhalter-Oberflächen | Aufträge und Ergebnisse sind von der einfachen Betriebsansicht getrennt; Übertragung mit TLS | Gemeinsamer Demo-Kundenzugang, keine vollständige Mandanten-/Pharma-Sicherheit |
+| Blisterprüfung | Helligkeitsprüfung auf 30 synthetischen Bildern; automatische Checkpoint-Übergabe per TLS anhand einer aufgezeichneten Router-Entscheidung | Wärme und Vorlauftemperatur dienen der Simulation; die Bildprüfung verwendet eine Helligkeitsregel |
+
+Die allgemeine Pharma-Oberfläche enthält Screening-, Cell-Painting- und Literaturvorlagen. Screening und Cell Painting erzeugen dort synthetische Ergebnisse; Literatur liefert echte Textstatistik.
+
+**Ergänzende Untersuchungen:**
+
+- **ML-Energievergleich:** Ein Gradient-Boosting-Modell prognostiziert den berechneten Case-Wärmebedarf (Training Januar–Mai, Kalibrierung Juni, Auswertung ab Juli). Gegenüber derselben sparsamen Steuerung ohne ML spart es im Referenzversuch zusätzlich rund 0,77 kWh oder 0,0045 % Strom. Das ist kein belastbarer Effizienznachweis. [ML_ERGEBNISSE.md](docs/ergebnisse/ML_ERGEBNISSE.md)
+- **Laptop-Messung:** Neun Durchläufe mit je 2'048 Texten auf dem M1 Pro. Standard hatte den niedrigsten Median: rund 22,8 Sekunden und 0,178 Wh geschätzte Chip-Energie. Weniger Threads und grössere Pakete sparten nichts. macOS-Chipschätzungen, keine Steckdosenmessung und kein L4-Nachweis. [messungen/MESSUNG.md](messungen/MESSUNG.md)
+- **Weitere Bausteine:** gewähltes L4-Angebot, Confidential-Computing-Recherche, ressourcenbasierte Auftragsvergabe, ML-Serviceplanung und kontrollierter Vergleich der Betriebsstrategien. [WEITERE_BAUSTEINE.md](docs/technik/WEITERE_BAUSTEINE.md)
+
 ## Rechnen und prüfen
 
-Der bisherige Jahres-Scheduler benötigt keine zusätzlichen Python-Pakete. Für die ML-Tests separat `requirements-ml.txt` installieren; das Embedding-Setup bleibt in `.venv`.
+Alle Ergebnisdateien und alle Zahlen der Wirtschaftlichkeit mit einem Befehl neu erzeugen, zum Beispiel nach einer Änderung in `src/scheduler/annahmen.py`. Es braucht keine zusätzlichen Python-Pakete:
+
+```sh
+python3 alles_neu_rechnen.py
+```
+
+Einzelne Schritte und Tests:
 
 ```sh
 python3 src/scheduler/jahr.py --server 8
-python3 -m src.scheduler.serverbetrieb --ausgabe daten/ergebnisse/serverbetrieb.json
-python3 src/scheduler/zusage.py
-python3 src/scheduler/flotte.py --abschalten
+python3 src/kosten_dh.py
+python3 -m unittest discover -s tests -v
 
 # ML-Umgebung separat einrichten
 python3 -m venv .venv-ml
@@ -82,67 +123,35 @@ python3 -m unittest discover -s messwerkzeug/tests -v
 
 Die vollständige stündliche ML-Auswertung und neue Live-Vektoren werden lokal erzeugt. Kompakte Referenzergebnisse und Messprotokolle sind versioniert; Zugangsdaten und virtuelle Umgebungen nicht.
 
-## Dokumente und Abgabe
+## Was noch offen ist
 
-### Gewähltes Angebot: öffentliche L4-Aufträge
+Die gemeinsame Aufgabenliste steht in [docs/TODO.md](docs/TODO.md). Die wichtigsten Punkte: einen zahlenden Kunden mit konkreter Arbeitsmenge finden, echte NVIDIA-Server messen, einen realen Wärmestandort erproben und den Schutz vertraulicher Pharma-Daten nachweisen.
 
-Das Team behält L4 und verarbeitet öffentliche/synthetische sowie beim Kunden bereits
-ausreichend anonymisierte und freigegebene Aufgaben. Die lokale Demo ist ausdrücklich
-auf öffentliche Verarbeitung begrenzt. Die geprüfte Hybridvariante wurde verworfen.
-[Angebot, Freigabemechanismus und Grenzen](docs/L4_ANGEBOT.md).
+## Dokumente
 
-### Confidential-Computing-Rechercheoption – nicht das gewählte Angebot
+| Ordner | Datei | In einem Satz |
+|---|---|---|
+| `docs/` | [CASE.md](docs/CASE.md) | Die Aufgabe von DigitalHeat, so wie wir sie bekommen haben |
+| | [PITCH.md](docs/PITCH.md) | Was wir im 5-Minuten-Pitch sagen, Demo-Befehle und Antworten auf Fragen der Jury |
+| | [TODO.md](docs/TODO.md) | Die nächsten Aufgaben und bewusst verschobene Punkte |
+| `docs/ergebnisse/` | [RESULTATE_EINFACH.md](docs/ergebnisse/RESULTATE_EINFACH.md) | Alle Resultate ohne Fachbegriffe erklärt. **Hier anfangen** |
+| | [ERGEBNISSE.md](docs/ergebnisse/ERGEBNISSE.md) | Alle Ergebnisse mit Zahlen, Tabellen und Grenzen, für Fachleute |
+| | [ML_ERGEBNISSE.md](docs/ergebnisse/ML_ERGEBNISSE.md) | Der kleine zusätzliche ML-Effekt im bisherigen Szenario |
+| `docs/wirtschaft/` | [KOSTEN_DH.md](docs/wirtschaft/KOSTEN_DH.md) | Was DigitalHeat investiert, was es kostet und was es verdient |
+| | [FIRMA.md](docs/wirtschaft/FIRMA.md) | Rechnung für die ganze Firma über 10 Jahre mit Ausbauplan und Finanzierung |
+| | [ANNAHMEN_PRUEFUNG.md](docs/wirtschaft/ANNAHMEN_PRUEFUNG.md) | Jede Annahme kritisch geprüft: Hält sie, und was passiert, wenn nicht? |
+| `docs/kunden/` | [L4_ANGEBOT.md](docs/kunden/L4_ANGEBOT.md) | Gewählte Ausrichtung: L4 für öffentliche/synthetische oder kundenseitig anonymisierte und freigegebene Aufgaben |
+| | [PHARMA_SICHT.md](docs/kunden/PHARMA_SICHT.md) | Wer die Rechenzeit kauft, was Kunden heute zahlen und welche Verträge üblich sind |
+| | [CustomerView_Joel.md](docs/kunden/CustomerView_Joel.md) | Die Sicht des Hausbesitzers: Was hat der Haushalt davon? |
+| `docs/technik/` | [GESAMTDEMO.md](docs/technik/GESAMTDEMO.md) | Was die Gesamtdemo zeigt, Start, Prozesssteuerung und Grenzen |
+| | [waerme-router-basel.md](docs/technik/waerme-router-basel.md) | Bauplan für den Wärme-Router und unsere Entscheide |
+| | [RESSOURCEN_SCHEDULER.md](docs/technik/RESSOURCEN_SCHEDULER.md) | Vergabecode, Wettbewerbsrecherche, Quellen, Annahmen und Grenzen der Ressourcenwarteschlange |
+| | [ML_SYSTEM.md](docs/technik/ML_SYSTEM.md) | Aufbau und Aussagekraft der separaten ML-Untersuchung |
+| | [SERVICE_ML.md](docs/technik/SERVICE_ML.md) | ML-Serviceplanung: Methode und Datenschema |
+| | [CONFIDENTIAL_COMPUTING.md](docs/technik/CONFIDENTIAL_COMPUTING.md) | Verschlüsselte Aufträge, externer Schlüsseldienst, Hardwarevoraussetzungen, Mehrkosten und offene Hardware-Abnahme |
+| | [WEITERE_BAUSTEINE.md](docs/technik/WEITERE_BAUSTEINE.md) | L4-Angebot, Confidential Computing, Auftragsvergabe, Serviceplanung und Strategievergleich in Kürze |
+| `docs/archiv/` | [archiv](docs/archiv/) | Erste Notizen, Testprotokolle und frühere Entwürfe, nur zur Nachvollziehbarkeit |
 
-`confidential_start.py` verschlüsselt Testaufträge auf dem Kundengerät, plant Kata/CoCo-Jobs
-und berechnet angenommene Mehrkosten. Ein separater Worker-Endpunkt nimmt nur verschlüsselte
-Pakete an; Schlüssel kommen ausschliesslich vom externen Trustee nach dessen Attestierung.
-Die Softwareintegration ist getestet, eine echte TDX-/Confidential-GPU-Umgebung ist noch
-nicht eingerichtet. **L4 ist für diesen GPU-Schutzpfad nicht unterstützt.**
-[Architektur, Quellen, Annahmen und reale Bereitstellung](docs/CONFIDENTIAL_COMPUTING.md).
-
-### Ressourcenbasierte Auftragsvergabe
-
-Die getrennte Pharma-/Host-Demo (`python3 prototyp/digitalheat.py demo --pharma --open`)
-verwendet jetzt eine Warteschlange mit GPU-/VRAM-, RAM-, CPU-, Standort- und Freigabeprüfung,
-Kundenpriorität, Kontingenten, Backfill und Wartungssperren. CPU-Demoaufträge laufen;
-GPU-Aufträge warten auf einen echten GPU-Worker. Nur öffentliche/synthetische Inhalte sind zugelassen.
-`python3 queue_start.py` vergleicht die Vergabestrategien und simuliertes Schlafenlegen.
-[Recherche, Annahmen, Grenzen und Betreiberkonfiguration](docs/RESSOURCEN_SCHEDULER.md).
-
-### ML-Serviceplanung
-
-`python3 service_start.py --demo --case --open` trainiert ein ML-Risikomodell und berechnet
-Serviceintervalle, erwartete geplante/ungeplante Eingriffe und Kosten pro physischem
-Server. Voraussetzung: `requirements-ml.txt`. HTML, CSV und JSON entstehen unter
-`daten/ergebnisse/service_ml/`. Eigene CSV-Dateien sind über `--history` und `--fleet`
-anschliessbar. Der Case-Modus übernimmt getrennte Betriebsstunden, Rechenstunden und
-Starts je Server aus dem bestehenden Jahres-Scheduler. Die gemeinsame Kühlung hat
-einen unabhängigen Wartungskalender. **Die Demo nutzt künstliche Trainingsdaten und angenommene Servicewirkungen;
-sie ist kein realer L4-Wartungsnachweis.** [Methode und Datenschema](docs/SERVICE_ML.md)
-
-### Kontrollierter Vergleich der Betriebsstrategien
-
-`python3 vergleich_start.py --days 184` berechnet vier Varianten mit identischen
-endlichen Aufträgen, Fristen und aktiven Leistungs-/Geschwindigkeitsprofilen.
-Voraussetzung: `requirements-ml.txt`. Bericht, Kennzahlen-CSV und vollständiges JSON
-entstehen unter `daten/ergebnisse/strategievergleich/`; das bisherige ML-Dashboard bleibt erhalten.
-
-Referenzlauf Juli–Dezember 2025 (4’416 Stunden, acht Server):
-
-| Strategie | Gesamtstrom inkl. Zusatzheizung | Fristgerecht / eingereicht |
-|---|---:|---:|
-| Ohne Wärmesteuerung, Abwärme wird trotzdem genutzt | 21’618,1 kWh | 22’436 / 22’436 |
-| Wärmesteuerung, Server bleiben an | 21’559,0 kWh | 22’436 / 22’436 |
-| Wärmesteuerung + Abschalten | 18’121,5 kWh | 22’436 / 22’436 |
-| Zusätzlich ML-Prognose | 18’121,6 kWh | 22’436 / 22’436 |
-
-Keine verpassten oder am Ende offenen Aufträge; identische erledigte Auftrags-IDs.
-Rund 16,2 % weniger Gesamtstrom durch Wärmesteuerung mit Abschalten gegenüber der
-Basis, unter diesen **ungemessenen Szenarioannahmen**. Weniger Leerlaufwärme erhöht
-den Zusatzheizbedarf; dieser ist mit COP 2,5 im Gesamtstrom enthalten. Das ist kein
-Öl-Pilot-Nachweis. ML bringt in diesem Lauf keinen zusätzlichen Stromvorteil.
-Die Auswertung ist ein Halbjahresvergleich eines Hauses, keine Jahres- oder Flottenbilanz.
-
-[Dokumentenverzeichnis](docs/README.md) · [Case](docs/CASE.md) · [Pitch](docs/PITCH.md) · [Pharma-Sicht](docs/PHARMA_SICHT.md) · [Kundensicht](docs/CustomerView_Joel.md) · [Kosten](docs/KOSTEN_DH.md) · [Nächste Aufgaben](docs/TODO_KURZ.md) · [Abgabevorschläge](submission/SUBMISSION.md) · [Firmenrechnung](docs/FIRMA.md)
+Weitere Hintergründe liegen bei den Daten: [HALLENBAD.md](daten/HALLENBAD.md) (Wärmebedarf Sportbad), [PREISE.md](daten/PREISE.md), [QUELLEN.md](daten/QUELLEN.md), [ALIBABA_AUSWERTUNG.md](daten/ALIBABA_AUSWERTUNG.md), [MESSUNG.md](messungen/MESSUNG.md). Abgabetexte: [submission/SUBMISSION.md](submission/SUBMISSION.md).
 
 Code, Analysen und Texte wurden mit Claude Code und Codex erarbeitet. Der ursprüngliche Wärme-Router, die neue Serverbetriebssimulation und die Blister-Demo sind erhalten; Gesamtdemo, ML-Untersuchung und Messwerkzeug ergänzen diesen gemeinsamen Stand.

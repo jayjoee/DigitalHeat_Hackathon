@@ -198,7 +198,7 @@
   },
   "flotte_haeuser": {
    "wert": 20,
-   "quelle": "Arbeitsannahme Design-Doc; vorerst 20 × Referenzhaus (TODOS.md, D3)"
+   "quelle": "Arbeitsannahme Design-Doc; vorerst 20 × Referenzhaus (docs/TODO.md, D3)"
   },
   "bad_jahresbedarf_kwh": {
    "wert": 650000,

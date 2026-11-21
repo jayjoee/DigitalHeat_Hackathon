@@ -1,4 +1,4 @@
-"""Alle Zahlen für docs/KOSTEN_DH.md aus einer Quelle.
+"""Alle Zahlen für docs/wirtschaft/KOSTEN_DH.md aus einer Quelle.
 
 Simuliert das Referenzhaus und das Durchschnitts-EFH (17'000 kWh) im Abschaltmodell
 (230 W Leerlauf, 10 W Standby, 5 min Start) und im Idealmodell des Case. Danach rechnet

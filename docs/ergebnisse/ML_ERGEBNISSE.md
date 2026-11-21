@@ -20,4 +20,4 @@ ML wird mit Januar–Mai trainiert, mit Juni kalibriert und ab Juli ausgewertet.
 
 Der dargestellte finanzielle Periodenbeitrag ist **kein Jahresgewinn**. Vergütung wird auf die fertiggestellte Referenzarbeit normalisiert; tatsächliche Kundenabnahme ist eine Annahme.
 
-Alle Einzelwerte und Annahmen stehen in `daten/ergebnisse/ml/vergleich.json`; die Methode ist in `docs/ML_SYSTEM.md` beschrieben.
+Alle Einzelwerte und Annahmen stehen in `daten/ergebnisse/ml/vergleich.json`; die Methode ist in `docs/technik/ML_SYSTEM.md` beschrieben.

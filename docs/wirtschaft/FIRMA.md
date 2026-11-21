@@ -1,6 +1,6 @@
 # Firmenrechnung DigitalHeat: Ausbau, Skaleneffekte, Förderung, Holz statt Öl
 
-**Geltungsgrenze nach der Angebotsentscheidung:** Gewählt ist [L4 für freigegebene nicht vertrauliche Aufgaben](L4_ANGEBOT.md). Die folgenden Ergebnisse setzen die angenommenen Preise und Mengen voraus. Sie bestätigen weder genügend öffentliche Winteraufträge noch die Zahlungsbereitschaft dafür; vertrauliche Pharma-Nachfrage darf nicht als verfügbarer L4-Auftrag weitergezählt werden.
+**Geltungsgrenze nach der Angebotsentscheidung:** Gewählt ist [L4 für freigegebene nicht vertrauliche Aufgaben](../kunden/L4_ANGEBOT.md). Die folgenden Ergebnisse setzen die angenommenen Preise und Mengen voraus. Sie bestätigen weder genügend öffentliche Winteraufträge noch die Zahlungsbereitschaft dafür; vertrauliche Pharma-Nachfrage darf nicht als verfügbarer L4-Auftrag weitergezählt werden.
 
 Stand 21.11.2026. Reproduzieren: `python3 src/firma.py` → `daten/ergebnisse/firma.json`; prüfen: `python3 -m unittest tests.test_firma`. Alle Beträge in CHF.
 

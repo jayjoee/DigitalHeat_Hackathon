@@ -1,6 +1,6 @@
 # Vertrauliche Verarbeitung auf Servern in Privathäusern
 
-**Nicht gewählter Forschungspfad.** Das Team hat sich für [L4 mit freigegebenen nicht vertraulichen Aufgaben](L4_ANGEBOT.md) entschieden. Die folgenden Implementierungs- und Rechercheangaben dokumentieren eine untersuchte Option, keine zugesagte Funktion des L4-Angebots.
+**Nicht gewählter Forschungspfad.** Das Team hat sich für [L4 mit freigegebenen nicht vertraulichen Aufgaben](../kunden/L4_ANGEBOT.md) entschieden. Die folgenden Implementierungs- und Rechercheangaben dokumentieren eine untersuchte Option, keine zugesagte Funktion des L4-Angebots.
 
 Stand: 21. November 2026. **Softwareintegration vorhanden, reale TEE-Bereitstellung noch nicht erfolgt.** Auf diesem Entwicklungsgerät stehen weder eine nachgewiesene TDX-Plattform noch ein Confidential-GPU-Cluster, Trustee, Kata oder Kubernetes zur Verfügung. Die Tests beweisen Verschlüsselung und Ablehnungsregeln, keinen Schutz auf bereits installierter Hardware. Echte Pharma-Daten dürfen bis zum bestandenen Hardware-Abnahmetest nicht eingesetzt werden.
 

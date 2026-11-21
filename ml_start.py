@@ -86,7 +86,7 @@ class Handler(BaseHTTPRequestHandler):
                    '/daten/ergebnisse/ml/vergleich.json':ROOT/'daten/ergebnisse/ml/vergleich.json',
                    '/daten/ergebnisse/ml/tage.csv':ROOT/'daten/ergebnisse/ml/tage.csv',
                    '/daten/ergebnisse/ml/stunden.csv':ROOT/'daten/ergebnisse/ml/stunden.csv',
-                   '/docs/ML_SYSTEM.md':ROOT/'docs/ML_SYSTEM.md'}
+                   '/docs/ML_SYSTEM.md':ROOT/'docs/technik/ML_SYSTEM.md'}
             path=files.get(self.path)
             if path is None:return self.reply(404,{'error':'Nicht gefunden.'})
             if not path.exists():

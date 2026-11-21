@@ -1,6 +1,6 @@
 """Day-ahead-Zusage: Wie viele Server-Stunden kann DigitalHeat einen Tag im Voraus verbindlich verkaufen?
 
-Ablauf pro Zieltag D (Ansatz A, Design-Doc docs/designs/waerme-router-basel.md, Baustein 5):
+Ablauf pro Zieltag D (Ansatz A, Design-Doc docs/technik/waerme-router-basel.md, Baustein 5):
 1. Entscheid um 12 Uhr Ortszeit Basel am Vortag D−1 (R3-16: in UTC umgerechnet, 11 bzw. 10 UTC).
 2. Prognoseprofil: Open-Meteo «Previous Runs», Modell ECMWF IFS 0,25°. Pro Zielstunde T wird
    `previous_day1` nur verwendet, wenn der Lauf (spätestens T − 24 h) plus Veröffentlichungsverzug vor
