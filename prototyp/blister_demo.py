@@ -9,11 +9,16 @@ import json
 from pathlib import Path
 import random
 import secrets
+import subprocess
+import sys
+import tempfile
+import time
 import threading
 import uuid
 from urllib.parse import urlsplit
+import webbrowser
 
-from digitalheat import APIError, Handler, tls_context
+from digitalheat import APIError, Handler, init_credentials, tls_context
 
 WIDTH, HEIGHT, TOTAL = 240, 144, 30
 POCKETS = [(x, y) for y in (43, 101) for x in (42, 94, 146, 198)]
@@ -161,16 +166,58 @@ class ScreenHandler(Handler):
                 batch.state = "übergeben"
 
 
+def local_demo(open_browser):
+    """Start both screens with temporary localhost TLS credentials."""
+    with tempfile.TemporaryDirectory() as folder:
+        credentials = Path(folder) / "blister"
+        init_credentials("127.0.0.1", credentials)
+        processes = []
+        try:
+            for role, options in (
+                ("worker", ["--bind", "127.0.0.1"]),
+                ("sender", ["--target", "https://127.0.0.1:8445"]),
+            ):
+                command = [sys.executable, str(Path(__file__).resolve()), role,
+                           "--credentials", str(credentials / role), *options]
+                process = subprocess.Popen(command, stdout=subprocess.PIPE, text=True)
+                processes.append(process)
+                ready = process.stdout.readline()
+                if not ready:
+                    raise SystemExit(f"{role} konnte nicht starten. Prüfe die Ports 8082, 8092 und 8445.")
+                print(ready.strip(), flush=True)
+            if open_browser:
+                for port in (8082, 8092):
+                    webbrowser.open_new_tab(f"http://127.0.0.1:{port}")
+            while all(process.poll() is None for process in processes):
+                time.sleep(0.25)
+        except KeyboardInterrupt:
+            pass
+        finally:
+            for process in processes:
+                if process.poll() is None:
+                    process.terminate()
+            for process in processes:
+                process.wait()
+                process.stdout.close()
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("role", choices=("sender", "worker"))
-    parser.add_argument("--credentials", type=Path, required=True)
+    parser.add_argument("role", choices=("sender", "worker", "demo"))
+    parser.add_argument("--credentials", type=Path)
     parser.add_argument("--port", type=int, default=8445)
     parser.add_argument("--screen-port", type=int)
     parser.add_argument("--bind", default="0.0.0.0")
     parser.add_argument("--target")
     parser.add_argument("--interval", type=float, default=1.6)
+    parser.add_argument("--open", action="store_true", help="Lokale Demo in zwei Browser-Tabs öffnen")
     args = parser.parse_args()
+    if args.role == "demo":
+        return local_demo(args.open)
+    if args.credentials is None:
+        parser.error("--credentials ist für sender und worker erforderlich.")
+    if args.open:
+        parser.error("--open ist für demo vorgesehen.")
     target = urlsplit(args.target or "")
     if args.role == "sender" and (target.scheme != "https" or not target.hostname
                                   or target.path not in ("", "/") or target.username

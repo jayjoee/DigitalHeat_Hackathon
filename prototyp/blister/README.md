@@ -4,6 +4,16 @@ Zwei Rechner prüfen einen Batch mit 30 synthetischen Kamerabildern von Blisterp
 
 Benötigt Python 3.10 oder neuer und OpenSSL für die Einrichtung. Alle Befehle aus dem Repository-Stamm ausführen. Beide Geräte benötigen dieselbe Version des Codes.
 
+## Auf einem Laptop starten
+
+```sh
+python3 prototyp/blister_demo.py demo --open
+```
+
+Auf **Haus · Laptop A** auf **Batch starten** klicken. Nach ein paar Bildern **Zum Sportbad wechseln** drücken und zum Tab **Sportbad · Laptop B** wechseln.
+
+## Auf zwei Laptops starten
+
 1. Auf Laptop B einmalig die Zugangsdaten erstellen. `192.168.1.42` durch die LAN-Adresse von Laptop B ersetzen.
 
    ```sh
