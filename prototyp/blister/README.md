@@ -12,7 +12,17 @@ python3 prototyp/blister_demo.py demo --open
 
 Auf **Haus · Laptop A** auf **Batch starten** klicken. Nach ein paar Bildern **Zum Sportbad wechseln** drücken und zum Tab **Sportbad · Laptop B** wechseln.
 
-## Auf zwei Laptops starten
+## Auf zwei Laptops starten (einfach)
+
+Beide Laptops im selben WLAN, auf beiden liegt das Repo.
+
+1. **Laptop B (Schwimmbad):** `Schwimmbad_starten.command` doppelklicken, oder `python3 prototyp/schwimmbad.py`. Es zeigt einen 6-stelligen Code. Falls macOS fragt, eingehende Verbindungen für Python **erlauben**.
+2. **Laptop A (Haus):** `Haus_starten.command` doppelklicken, oder `python3 prototyp/haus.py`. Es findet das Schwimmbad von selbst und fragt nach dem Code.
+3. Beide Leinwände öffnen sich. Auf dem Haus **Batch starten**, dann **Zum Sportbad wechseln**.
+
+Das Schwimmbad erzeugt bei jedem Start neue Zugangsdaten in einem temporären Ordner; beim Beenden (Ctrl+C) sind sie weg. Das Haus holt Zertifikat und Token mit dem Code über TLS ab. Findet das Haus nichts, trennt das WLAN die Geräte (häufig bei Gast-WLANs): Handy-Hotspot verwenden oder die Adresse direkt angeben, `python3 prototyp/haus.py --bad 192.168.1.42` (die Adresse steht auf dem Schwimmbad-Laptop). Grenze: Der Code schützt vor dem falschen Gerät, nicht vor jemandem, der im selben WLAN genau bei der Paarung aktiv dazwischengeht. Für synthetische Demo-Bilder reicht das.
+
+## Auf zwei Laptops starten (von Hand)
 
 1. Auf Laptop B einmalig die Zugangsdaten erstellen. `192.168.1.42` durch die LAN-Adresse von Laptop B ersetzen.
 

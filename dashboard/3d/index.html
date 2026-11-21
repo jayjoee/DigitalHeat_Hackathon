@@ -1,0 +1,770 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DigitalHeat 3D</title>
+<style>
+  :root {
+    --bg: #070b16;
+    --panel: rgba(13, 19, 36, 0.78);
+    --panel-solid: #0d1324;
+    --line: rgba(140, 170, 220, 0.16);
+    --text: #e8eefb;
+    --muted: #93a2c0;
+    --heat: #ff8a3d;
+    --compute: #3ee0c0;
+    --cold: #5aa8ff;
+    --idle: #ffc857;
+    --standby: #5b6b8c;
+    --danger: #ff5d6c;
+    --radius: 14px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text);
+    font: 14px/1.4 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Segoe UI", Roboto, sans-serif;
+    overflow: hidden; }
+  #szene { position: fixed; inset: 0; }
+  .panel { position: fixed; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
+    backdrop-filter: blur(14px) saturate(140%); -webkit-backdrop-filter: blur(14px) saturate(140%); }
+  /* Kopf mit Case-Kennzahlen */
+  #kopf { top: 14px; left: 14px; right: 14px; padding: 12px 16px; display: flex; gap: 18px; align-items: center; }
+  #kopf h1 { margin: 0; font-size: 17px; font-weight: 650; letter-spacing: .2px; white-space: nowrap; }
+  #kopf h1 small { display: block; font-size: 11px; font-weight: 450; color: var(--muted); letter-spacing: 0; }
+  #kpis { display: flex; gap: 8px; flex: 1; justify-content: flex-end; flex-wrap: wrap; }
+  .kpi { min-width: 104px; padding: 6px 10px; border-radius: 10px; background: rgba(255,255,255,.035);
+    border: 1px solid var(--line); }
+  .kpi b { display: block; font-size: 19px; font-weight: 650; font-variant-numeric: tabular-nums; }
+  .kpi span { font-size: 11px; color: var(--muted); }
+  .kpi.heat b { color: var(--heat); } .kpi.compute b { color: var(--compute); }
+  /* Stundenwerte rechts */
+  #jetzt { top: 104px; right: 14px; width: 270px; padding: 14px 16px; }
+  #jetzt h2, #detail h2 { margin: 0 0 8px; font-size: 13px; font-weight: 600; color: var(--muted);
+    text-transform: uppercase; letter-spacing: .8px; }
+  .zeile { display: flex; justify-content: space-between; padding: 3px 0; font-variant-numeric: tabular-nums; }
+  .zeile span:first-child { color: var(--muted); }
+  .trenn { height: 1px; background: var(--line); margin: 8px 0; }
+  .balken { height: 6px; border-radius: 3px; background: rgba(255,255,255,.07); overflow: hidden; margin: 4px 0 6px; }
+  .balken i { display: block; height: 100%; width: 0; border-radius: 3px; transition: width .2s; }
+  .punkte { display: flex; gap: 4px; margin: 6px 0 2px; flex-wrap: wrap; }
+  .punkte i { width: 14px; height: 14px; border-radius: 4px; background: var(--standby); opacity: .5; }
+  .punkte i.an { background: var(--idle); opacity: 1; } .punkte i.rechnet { background: var(--compute); opacity: 1; }
+  .legende { display: flex; gap: 10px; font-size: 11px; color: var(--muted); margin-top: 6px; flex-wrap: wrap; }
+  .legende em { font-style: normal; display: inline-flex; align-items: center; gap: 4px; }
+  .legende em::before { content: ""; width: 9px; height: 9px; border-radius: 3px; background: var(--c); }
+  /* Detail beim Anklicken */
+  #detail { top: 104px; left: 14px; width: 300px; padding: 14px 16px; display: none; }
+  #detail.offen { display: block; }
+  #detail h3 { margin: 0 0 2px; font-size: 18px; }
+  #detail .status { display: inline-block; margin: 4px 0 10px; padding: 2px 9px; border-radius: 99px; font-size: 12px;
+    font-weight: 600; color: #08101f; }
+  #detail canvas { width: 100%; height: 70px; display: block; margin-top: 6px; }
+  #detail p { color: var(--muted); font-size: 12px; margin: 8px 0 0; }
+  #zu { position: absolute; top: 10px; right: 10px; background: none; border: 0; color: var(--muted); font-size: 18px;
+    cursor: pointer; }
+  /* Zeitleiste */
+  #zeit { left: 14px; right: 14px; bottom: 14px; padding: 10px 16px 12px; }
+  #zeitkopf { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  #datum { font-size: 16px; font-weight: 650; min-width: 172px; font-variant-numeric: tabular-nums; }
+  #wetter { color: var(--muted); min-width: 90px; font-variant-numeric: tabular-nums; }
+  button.knopf, select.knopf { background: rgba(255,255,255,.06); color: var(--text); border: 1px solid var(--line);
+    border-radius: 9px; padding: 6px 11px; font: inherit; font-size: 13px; cursor: pointer; }
+  button.knopf:hover, select.knopf:hover { background: rgba(255,255,255,.12); }
+  button.knopf.aktiv { border-color: var(--compute); color: var(--compute); }
+  #play { width: 40px; font-size: 15px; }
+  .spacer { flex: 1; }
+  #jahr { position: relative; margin-top: 8px; height: 46px; cursor: pointer; }
+  #jahr canvas { width: 100%; height: 100%; display: block; }
+  #marker { position: absolute; top: -2px; bottom: -2px; width: 2px; background: #fff; border-radius: 2px;
+    box-shadow: 0 0 10px #fff; pointer-events: none; }
+  #hinweis { position: fixed; left: 50%; transform: translateX(-50%); bottom: 112px; font-size: 12px; color: var(--muted);
+    background: var(--panel); border: 1px solid var(--line); padding: 5px 12px; border-radius: 99px; pointer-events: none;
+    transition: opacity .6s; }
+  .label { color: var(--text); font-size: 12px; font-weight: 600; padding: 3px 8px; border-radius: 99px;
+    background: rgba(7, 11, 22, .72); border: 1px solid var(--line); white-space: nowrap; pointer-events: none; }
+  .label small { color: var(--muted); font-weight: 450; }
+  @media (max-width: 900px) {
+    #kopf { flex-direction: column; align-items: flex-start; }
+    #kpis { justify-content: flex-start; }
+    #jetzt { display: none; }
+    #detail { top: auto; bottom: 150px; left: 14px; right: 14px; width: auto; }
+  }
+</style>
+</head>
+<body>
+<div id="szene"></div>
+
+<header id="kopf" class="panel">
+  <h1>Rechnen, das heizt<small>Case-Kennzahlen Referenzhaus Basel 2025 (Case-Regel)</small></h1>
+  <div id="kpis"></div>
+</header>
+
+<aside id="jetzt" class="panel">
+  <h2>Diese Stunde</h2>
+  <div class="zeile"><span>Wärmebedarf Haus</span><span id="j-bed">–</span></div>
+  <div class="zeile"><span>Von Servern gedeckt</span><span id="j-deck">–</span></div>
+  <div class="balken"><i id="j-deck-b" style="background:var(--heat)"></i></div>
+  <div class="zeile"><span>Speicher</span><span id="j-sp">–</span></div>
+  <div class="balken"><i id="j-sp-b" style="background:linear-gradient(90deg,var(--cold),var(--heat))"></i></div>
+  <div class="zeile"><span>Server im Haus</span><span id="j-on">–</span></div>
+  <div class="punkte" id="j-punkte"></div>
+  <div class="trenn"></div>
+  <div class="zeile"><span>Sportbad St. Jakob</span><span id="j-bad">–</span></div>
+  <div class="zeile"><span>Server im Bad</span><span id="j-bad-on">–</span></div>
+  <div class="balken"><i id="j-bad-b" style="background:var(--compute)"></i></div>
+  <div class="trenn"></div>
+  <div class="zeile"><span>Flotte rechnet</span><span id="j-flotte">–</span></div>
+  <div class="zeile"><span>Migrationen</span><span id="j-mig">–</span></div>
+  <div class="legende">
+    <em style="--c:var(--compute)">rechnet</em><em style="--c:var(--idle)">bereit</em><em style="--c:var(--standby)">Standby</em>
+  </div>
+  <p style="color:var(--muted);font-size:11px;margin:10px 0 0" id="modell"></p>
+</aside>
+
+<aside id="detail" class="panel">
+  <button id="zu" title="Schliessen (Esc)">×</button>
+  <h2 id="d-art">Server</h2>
+  <h3 id="d-titel">–</h3>
+  <span class="status" id="d-status">–</span>
+  <div id="d-zeilen"></div>
+  <canvas id="d-chart"></canvas>
+  <p id="d-text"></p>
+</aside>
+
+<div id="hinweis">Server, Speicher oder Bad anklicken · ziehen zum Drehen · scrollen zum Zoomen</div>
+
+<footer id="zeit" class="panel">
+  <div id="zeitkopf">
+    <button class="knopf" id="play" title="Abspielen (Leertaste)">▶</button>
+    <div id="datum">–</div>
+    <div id="wetter">–</div>
+    <select class="knopf" id="tempo" title="Tempo">
+      <option value="1">1 h/s</option>
+      <option value="3" selected>3 h/s</option>
+      <option value="24">1 Tag/s</option>
+      <option value="168">1 Woche/s</option>
+    </select>
+    <div class="spacer"></div>
+    <button class="knopf tag" data-tag="01-15">Januartag</button>
+    <button class="knopf tag" data-tag="03-07">7. März</button>
+    <button class="knopf tag" data-tag="05-25">25. Mai</button>
+    <button class="knopf tag" data-tag="07-15">Julitag</button>
+    <button class="knopf" id="uebersicht">Übersicht</button>
+  </div>
+  <div id="jahr"><canvas id="jahr-c"></canvas><div id="marker"></div></div>
+</footer>
+
+<script src="daten3d.js"></script>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
+
+const D = window.D3, S = D.stunden, K = D.kennzahlen, M = D.modell;
+const N = S.zeit.length, NH = M.server_haus, NB = M.server_bad;
+const fmt = (x, d = 0) => x.toLocaleString('de-CH', { minimumFractionDigits: d, maximumFractionDigits: d });
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const lerp = (a, b, t) => a + (b - a) * t;
+const C = {
+  compute: new THREE.Color('#3ee0c0'), idle: new THREE.Color('#ffc857'), standby: new THREE.Color('#2a3550'),
+  heat: new THREE.Color('#ff8a3d'), cold: new THREE.Color('#5aa8ff'), metal: new THREE.Color('#1b2233'),
+};
+
+// ---------- Kennzahlen oben (Case-Regel) ----------
+const kc = K.case;
+document.getElementById('kpis').innerHTML = [
+  ['Server pro Haus', fmt(kc.server_pro_haus), ''],
+  ['Wärme gedeckt', fmt(kc.deckung * 100, 1) + ' %', 'heat'],
+  ['Weggekühlt', fmt(kc.abgefuehrt_kwh) + ' kWh', ''],
+  ['Auslastung', fmt(kc.auslastung * 100, 1) + ' %', 'compute'],
+  ['Fristen verpasst', fmt(kc.verpasst * 100, 1) + ' %', ''],
+  ['Break-even', fmt(kc.break_even_chf_server_h, 2) + ' CHF/Server-h', ''],
+].map(([t, v, c]) => `<div class="kpi ${c}"><b>${v}</b><span>${t}</span></div>`).join('');
+document.getElementById('modell').textContent =
+  `Szene: Flotte aus ${M.haeuser} Häusern und Sportbad (${NB} Server), Server werden bei Bedarf ein- und `
+  + `ausgeschaltet (${M.leerlauf_watt} W Leerlauf, ${M.standby_watt} W Standby). Gezeigt: Haus 01.`;
+
+// ---------- Pro Server: Zustand und Jahreswerte ----------
+function serverLast(lauf, an, k) { return k < an ? clamp(lauf - k) : 0; }
+function serverZustand(lauf, an, k) {
+  if (k >= an) return 'standby';
+  return serverLast(lauf, an, k) > 0.02 ? 'rechnet' : 'bereit';
+}
+function serverWatt(lauf, an, k) {
+  if (k >= an) return M.standby_watt;
+  const l = serverLast(lauf, an, k);
+  return 1000 * l + M.leerlauf_watt * (1 - l);
+}
+const jahrServer = Array.from({ length: NH }, (_, k) => {
+  let anH = 0, rechenH = 0, kwh = 0;
+  for (let i = 0; i < N; i++) {
+    if (S.h_on[i] > k) anH++;
+    rechenH += serverLast(S.h_lauf[i], S.h_on[i], k);
+    kwh += serverWatt(S.h_lauf[i], S.h_on[i], k) / 1000;
+  }
+  return { anH, rechenH, kwh };
+});
+
+// ---------- Renderer, Szene, Kamera ----------
+const box = document.getElementById('szene');
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(innerWidth, innerHeight);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.05;
+box.appendChild(renderer.domElement);
+const labels = new CSS2DRenderer();
+labels.setSize(innerWidth, innerHeight);
+Object.assign(labels.domElement.style, { position: 'absolute', top: 0, left: 0, pointerEvents: 'none' });
+box.appendChild(labels.domElement);
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color('#070b16');
+scene.fog = new THREE.Fog('#070b16', 55, 120);
+const camera = new THREE.PerspectiveCamera(42, innerWidth / innerHeight, 0.1, 400);
+const HOME = { pos: new THREE.Vector3(5, 8, 37), target: new THREE.Vector3(8, -0.8, 2) };
+camera.position.copy(HOME.pos);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.target.copy(HOME.target);
+controls.enableDamping = true;
+controls.maxPolarAngle = Math.PI * 0.49;
+controls.minDistance = 3; controls.maxDistance = 90;
+
+const composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+const bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 0.6, 0.45, 0.85);
+composer.addPass(bloom);
+composer.addPass(new OutputPass());
+
+const hemi = new THREE.HemisphereLight('#9fb8ff', '#1a1410', 0.5);
+scene.add(hemi);
+const sonne = new THREE.DirectionalLight('#fff1dc', 1.4);
+sonne.castShadow = true;
+sonne.shadow.mapSize.set(2048, 2048);
+Object.assign(sonne.shadow.camera, { left: -40, right: 40, top: 30, bottom: -30, near: 1, far: 120 });
+scene.add(sonne, sonne.target);
+sonne.target.position.set(6, 0, 0);
+
+const mat = (color, o = {}) => new THREE.MeshStandardMaterial({ color, roughness: 0.8, metalness: 0.05, ...o });
+function mesh(geo, material, x, y, z, parent = scene, schatten = true) {
+  const m = new THREE.Mesh(geo, material);
+  m.position.set(x, y, z);
+  m.castShadow = schatten; m.receiveShadow = true;
+  parent.add(m);
+  return m;
+}
+function label(html, x, y, z, parent = scene) {
+  const div = document.createElement('div');
+  div.className = 'label'; div.innerHTML = html;
+  const o = new CSS2DObject(div); o.position.set(x, y, z); parent.add(o);
+  return div;
+}
+const klickbar = [];
+
+// ---------- Diorama-Sockel: Erde mit Schnitt durch den Keller ----------
+const erdeMat = mat('#2a2119', { roughness: 1 });
+const rasenMat = mat('#2f4a2a', { roughness: 1 });
+const SOCKEL = { x0: -16, x1: 30, z0: -14, z1: 12, tiefe: 3.6 };
+// Häuser-Grundriss mit Keller: x -4.6..4.6, z 5..12 (Keller offen nach vorne)
+const KEL = { x0: -4.6, x1: 4.6, z0: 5, z1: 12, boden: -3.2 };
+function sockelBlock(x0, x1, z0, z1) {
+  const g = new THREE.BoxGeometry(x1 - x0, SOCKEL.tiefe, z1 - z0);
+  mesh(g, erdeMat, (x0 + x1) / 2, -SOCKEL.tiefe / 2, (z0 + z1) / 2, scene, false);
+  const r = mesh(new THREE.BoxGeometry(x1 - x0, 0.12, z1 - z0), rasenMat, (x0 + x1) / 2, 0.06, (z0 + z1) / 2, scene, false);
+  r.userData.rasen = true;
+}
+sockelBlock(SOCKEL.x0, KEL.x0, SOCKEL.z0, SOCKEL.z1);
+sockelBlock(KEL.x1, SOCKEL.x1, SOCKEL.z0, SOCKEL.z1);
+sockelBlock(KEL.x0, KEL.x1, SOCKEL.z0, KEL.z0);
+mesh(new THREE.BoxGeometry(KEL.x1 - KEL.x0, SOCKEL.tiefe + KEL.boden, KEL.z1 - KEL.z0),
+  erdeMat, 0, (-SOCKEL.tiefe + KEL.boden) / 2, (KEL.z0 + KEL.z1) / 2, scene, false);
+const kellerBoden = mesh(new THREE.BoxGeometry(KEL.x1 - KEL.x0, 0.08, KEL.z1 - KEL.z0), mat('#3a4152'),
+  0, KEL.boden + 0.04, (KEL.z0 + KEL.z1) / 2, scene, false);
+// Kellerdecke als Betonplatte (= Boden EG)
+mesh(new THREE.BoxGeometry(KEL.x1 - KEL.x0, 0.25, KEL.z1 - KEL.z0), mat('#5b6170'), 0, -0.05, (KEL.z0 + KEL.z1) / 2);
+const kellerLicht = new THREE.PointLight('#7fd8ff', 6, 12, 1.6);
+kellerLicht.position.set(0, -0.8, 9.5); scene.add(kellerLicht);
+
+// ---------- Haus im Schnitt ----------
+const haus = new THREE.Group(); scene.add(haus);
+const wandMat = mat('#d9d4c9', { roughness: 0.9 });
+const glasMat = new THREE.MeshPhysicalMaterial({ color: '#a8c8ff', transparent: true, opacity: 0.16, roughness: 0.1,
+  metalness: 0, depthWrite: false });
+const H = { x0: -4.6, x1: 4.6, z0: 5, z1: 12, geschoss: 2.9 };
+const breite = H.x1 - H.x0, tief = H.z1 - H.z0;
+// Rückwand und Seitenwände, Vorderseite offen (Schnitt)
+mesh(new THREE.BoxGeometry(breite, H.geschoss * 2, 0.25), wandMat, 0, H.geschoss, H.z0, haus);
+mesh(new THREE.BoxGeometry(0.25, H.geschoss * 2, tief), glasMat, H.x0, H.geschoss, (H.z0 + H.z1) / 2, haus, false);
+mesh(new THREE.BoxGeometry(0.25, H.geschoss * 2, tief), wandMat, H.x1, H.geschoss, (H.z0 + H.z1) / 2, haus);
+mesh(new THREE.BoxGeometry(breite, 0.2, tief), mat('#8b7f70'), 0, H.geschoss, (H.z0 + H.z1) / 2, haus);
+// Dach (zwei Flächen), vorne etwas zurückgesetzt damit man hineinsieht
+const dachMat = mat('#6b3b2f', { roughness: 0.85 });
+for (const s of [-1, 1]) {
+  const d = mesh(new THREE.BoxGeometry(breite / 2 + 0.9, 0.22, tief - 1.6), dachMat,
+    s * breite / 4.2, H.geschoss * 2 + 1.25, (H.z0 + H.z1) / 2 - 0.8, haus);
+  d.rotation.z = -s * 0.55;
+}
+// Räume: vier Zimmer, Farbe nach Wärme
+const raumMats = [], heizkoerper = [];
+const raeume = [[-1, 0], [1, 0], [-1, 1], [1, 1]];
+for (const [sx, etage] of raeume) {
+  const m = mat('#3a4560', { emissive: new THREE.Color('#ff8a3d'), emissiveIntensity: 0, transparent: true, opacity: 0.92 });
+  raumMats.push(m);
+  mesh(new THREE.BoxGeometry(breite / 2 - 0.5, 0.06, tief - 0.6), m, sx * breite / 4, etage * H.geschoss + 0.14,
+    (H.z0 + H.z1) / 2, haus, false);
+  // Heizkörper an der Rückwand
+  const hk = mesh(new THREE.BoxGeometry(1.6, 0.7, 0.12),
+    mat('#ddd', { emissive: new THREE.Color('#ff6a1a'), emissiveIntensity: 0 }),
+    sx * breite / 4, etage * H.geschoss + 0.8, H.z0 + 0.25, haus);
+  heizkoerper.push(hk);
+  // Möbel-Andeutung
+  mesh(new THREE.BoxGeometry(1.4, 0.5, 0.8), mat('#4b5675'), sx * breite / 4 + sx * 0.6, etage * H.geschoss + 0.4, 9.5, haus);
+}
+const hausLicht = new THREE.PointLight('#ffb070', 0, 14, 1.5);
+hausLicht.position.set(0, 3.2, 9); scene.add(hausLicht);
+label('Haus 01 <small>· Öl-Pilot Basel</small>', 0, H.geschoss * 2 + 3.2, 8.5);
+
+// ---------- Server-Racks im Keller ----------
+function baueRack(x, y, z, einheiten, parent, info) {
+  const g = new THREE.Group(); g.position.set(x, y, z); parent.add(g);
+  const koerper = mesh(new THREE.BoxGeometry(0.62, 1.95, 0.9),
+    mat(C.metal, { metalness: 0.6, roughness: 0.35, emissive: new THREE.Color('#3ee0c0'), emissiveIntensity: 0 }),
+    0, 0.975, 0, g);
+  const leds = [];
+  for (let u = 0; u < einheiten; u++) {
+    const led = mesh(new THREE.BoxGeometry(0.46, Math.min(0.12, 1.5 / einheiten - 0.04), 0.02),
+      new THREE.MeshStandardMaterial({ color: '#000', emissive: C.standby.clone(), emissiveIntensity: 1 }),
+      0, 0.3 + u * (1.5 / einheiten), 0.46, g, false);
+    leds.push(led);
+  }
+  // Lüfter-Punkte
+  const luefter = mesh(new THREE.CircleGeometry(0.09, 16),
+    new THREE.MeshBasicMaterial({ color: '#0e1424' }), 0.18, 1.78, 0.455, g, false);
+  for (const m of [koerper, ...leds]) { m.userData = info; klickbar.push(m); }
+  return { g, koerper, leds, luefter };
+}
+const hausRacks = [];
+for (let k = 0; k < NH; k++) {
+  const r = baueRack(-4 + k * 0.82, KEL.boden + 0.08, 5.7, 6, scene, { art: 'server', k });
+  hausRacks.push(r);
+}
+label('Keller · 8 Server à 8 × NVIDIA L4', -1.1, -0.6, 7.1);
+
+// ---------- Wärmespeicher ----------
+const tankX = 3.55, tankZ = 9.4;
+const tankGlas = mesh(new THREE.CylinderGeometry(0.75, 0.75, 2.6, 40, 1, true),
+  new THREE.MeshPhysicalMaterial({ color: '#cfe6ff', transparent: true, opacity: 0.22, roughness: 0.05, side: THREE.DoubleSide,
+    depthWrite: false }), tankX, KEL.boden + 1.4, tankZ, scene, false);
+const tankFuellMat = new THREE.MeshStandardMaterial({ color: '#5aa8ff', emissive: new THREE.Color('#5aa8ff'),
+  emissiveIntensity: 0.6, transparent: true, opacity: 0.9 });
+const tankFuell = mesh(new THREE.CylinderGeometry(0.68, 0.68, 1, 40), tankFuellMat, tankX, KEL.boden + 0.1, tankZ, scene, false);
+mesh(new THREE.CylinderGeometry(0.8, 0.8, 0.12, 40), mat('#6b7487', { metalness: 0.5 }), tankX, KEL.boden + 2.75, tankZ);
+mesh(new THREE.CylinderGeometry(0.8, 0.8, 0.12, 40), mat('#6b7487', { metalness: 0.5 }), tankX, KEL.boden + 0.12, tankZ);
+for (const m of [tankGlas, tankFuell]) { m.userData = { art: 'speicher' }; klickbar.push(m); }
+label('Speicher 35 kWh', tankX, KEL.boden + 3.2, tankZ);
+
+// ---------- Leitungen mit fliessender Wärme ----------
+function leitung(punkte, farbe) {
+  const kurve = new THREE.CatmullRomCurve3(punkte.map(p => new THREE.Vector3(...p)));
+  mesh(new THREE.TubeGeometry(kurve, 80, 0.055, 8, false), mat('#7a8295', { metalness: 0.6, roughness: 0.3 }), 0, 0, 0, scene, false);
+  const n = 26, geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(n * 3), 3));
+  const pts = new THREE.Points(geo, new THREE.PointsMaterial({ color: farbe, size: 0.22, transparent: true,
+    opacity: 0.95, depthWrite: false, blending: THREE.AdditiveBlending }));
+  scene.add(pts);
+  return { kurve, pts, n, phase: Math.random() };
+}
+const Y0 = KEL.boden;
+const leitungen = {
+  serverZumTank: leitung([[-4, Y0 + 2.15, 6.1], [-1, Y0 + 2.4, 6.4], [2.5, Y0 + 2.4, 7.6], [tankX, Y0 + 2.8, tankZ]], '#ff9a52'),
+  tankZuOben1: leitung([[tankX, Y0 + 2.8, tankZ], [3.8, 0.2, 7], [2.3, 0.6, 5.6], [2.3, 0.9, 5.35]], '#ff7a2a'),
+  tankZuOben2: leitung([[tankX, Y0 + 2.8, tankZ], [4.2, 1.5, 6.6], [4.2, H.geschoss + 0.5, 5.6], [2.3, H.geschoss + 0.85, 5.35]], '#ff7a2a'),
+};
+
+// ---------- Umgebung: Bäume, Nachbarhäuser in der Ferne ----------
+const baumKronen = [];
+function baum(x, z, s = 1) {
+  mesh(new THREE.CylinderGeometry(0.12 * s, 0.16 * s, 1.2 * s, 8), mat('#3b2a1e'), x, 0.6 * s, z);
+  const k = mesh(new THREE.ConeGeometry(0.9 * s, 2.4 * s, 10), mat('#2f5a36', { roughness: 1 }), x, 2.2 * s, z);
+  baumKronen.push(k);
+}
+[[-9, 9], [-11, 3], [-7, -6], [-13, -10], [8, 10.5], [27, 9], [28, -8], [-2, -11], [12, -12]].forEach(([x, z], i) => baum(x, z, 0.9 + (i % 3) * 0.2));
+const nachbarMat = mat('#232a3b', { roughness: 0.9 });
+const fensterMat = new THREE.MeshStandardMaterial({ color: '#000', emissive: new THREE.Color('#ff9a52'), emissiveIntensity: 0.6 });
+const nachbarDach = mat('#4a2b24');
+for (let i = 0; i < 6; i++) {
+  const x = -13 + i * 3.1, z = -11.5 - (i % 2) * 1.2, hoehe = 1.5 + (i % 3) * 0.3;
+  mesh(new THREE.BoxGeometry(2, hoehe, 1.8), nachbarMat, x, hoehe / 2, z);
+  const d = mesh(new THREE.ConeGeometry(1.55, 0.9, 4), nachbarDach, x, hoehe + 0.45, z); d.rotation.y = Math.PI / 4;
+  mesh(new THREE.BoxGeometry(0.5, 0.4, 0.02), fensterMat, x - 0.45, hoehe * 0.55, z + 0.91, scene, false);
+  mesh(new THREE.BoxGeometry(0.5, 0.4, 0.02), fensterMat, x + 0.45, hoehe * 0.55, z + 0.91, scene, false);
+}
+label('19 weitere Häuser der Flotte', -5.2, 3.4, -11.5);
+
+// ---------- Sportbad St. Jakob ----------
+const BAD = { x: 18.5, z: 4.5 };
+mesh(new THREE.BoxGeometry(13, 0.5, 7.2), mat('#cfd6df'), BAD.x, 0.25, BAD.z);
+const wasserMat = new THREE.MeshPhysicalMaterial({ color: '#1fa7c4', emissive: new THREE.Color('#2ad3e6'), emissiveIntensity: 0.1,
+  roughness: 0.08, metalness: 0, transparent: true, opacity: 0.92 });
+const wasser = mesh(new THREE.BoxGeometry(12, 0.3, 6.2), wasserMat, BAD.x, 0.42, BAD.z, scene, false);
+for (let b = 1; b < 8; b++)
+  mesh(new THREE.BoxGeometry(12, 0.03, 0.04), new THREE.MeshBasicMaterial({ color: '#7f97ab' }), BAD.x, 0.59, BAD.z - 3.1 + b * 0.775, scene, false);
+wasser.userData = { art: 'bad' }; klickbar.push(wasser);
+const badLicht = new THREE.PointLight('#41e3ff', 0, 16, 1.4);
+badLicht.position.set(BAD.x, 2.5, BAD.z); scene.add(badLicht);
+const badLabel = label('Sportbad St. Jakob <small>· 50-m-Becken</small>', BAD.x, 2.2, BAD.z + 3.4);
+// Technikraum mit 50 Servern (5 Racks à 10)
+const TR = { x: 18.5, z: -4.2 };
+mesh(new THREE.BoxGeometry(8.6, 0.15, 4.2), mat('#3a4152'), TR.x, 0.08, TR.z);
+mesh(new THREE.BoxGeometry(8.6, 3.2, 0.2), wandMat, TR.x, 1.6, TR.z - 2.05);
+mesh(new THREE.BoxGeometry(0.2, 3.2, 4.2), wandMat, TR.x - 4.3, 1.6, TR.z);
+mesh(new THREE.BoxGeometry(0.2, 3.2, 4.2), glasMat, TR.x + 4.3, 1.6, TR.z, scene, false);
+mesh(new THREE.BoxGeometry(8.8, 0.2, 4.4), mat('#4a5163'), TR.x, 3.25, TR.z - 0.6);
+const badRacks = [];
+for (let r = 0; r < 5; r++) badRacks.push(baueRack(TR.x - 3.2 + r * 1.6, 0.15, TR.z - 1.2, 10, scene, { art: 'badrack', r }));
+label('Technikraum Bad · 50 Server', TR.x, 3.9, TR.z);
+
+// ---------- Migrationen: Aufträge fliegen zwischen Haus und Bad ----------
+const orbGeo = new THREE.SphereGeometry(0.16, 12, 12);
+const orbs = [];
+for (let i = 0; i < 24; i++) {
+  const o = new THREE.Mesh(orbGeo, new THREE.MeshBasicMaterial({ color: '#7dfbe0' }));
+  o.visible = false; scene.add(o);
+  orbs.push({ o, t: 1, kurve: null });
+}
+const flugHin = new THREE.QuadraticBezierCurve3(new THREE.Vector3(0, -0.5, 7), new THREE.Vector3(10, 12, 2),
+  new THREE.Vector3(TR.x - 1, 2, TR.z));
+const flugAusFlotte = new THREE.QuadraticBezierCurve3(new THREE.Vector3(-1, 3, -10), new THREE.Vector3(9, 11, -9),
+  new THREE.Vector3(TR.x - 2, 2.5, TR.z));
+function starteOrb() {
+  const f = orbs.find(x => x.t >= 1); if (!f) return;
+  f.t = 0; f.o.visible = true; f.kurve = Math.random() < 0.35 ? flugHin : flugAusFlotte;
+  f.speed = 0.55 + Math.random() * 0.35;
+}
+
+// ---------- Zustand anwenden ----------
+let zeitH = S.zeit.findIndex(z => z.startsWith('01-15T08'));
+let spielt = false, tempo = 3, auswahl = null;
+
+function farbeLed(zustand, last) {
+  if (zustand === 'standby') return [C.standby, 0.6];
+  if (zustand === 'bereit') return [C.idle, 1.3];
+  return [C.compute, 0.8 + 1.3 * last];
+}
+function wende(i, frac) {
+  const j = Math.min(N - 1, i + 1);
+  const L = (a) => lerp(a[i], a[j], frac);
+  const temp = L(S.temp), bed = L(S.h_bed), gen = L(S.h_gen), sp = L(S.h_sp);
+  const on = S.h_on[i], lauf = S.h_lauf[i];
+  const stunde = parseInt(S.zeit[i].slice(6, 8)) + frac;
+  const monat = parseInt(S.zeit[i].slice(0, 2));
+
+  // Server im Haus
+  hausRacks.forEach((r, k) => {
+    const z = serverZustand(lauf, on, k), l = serverLast(lauf, on, k);
+    const [c, inten] = farbeLed(z, l);
+    r.leds.forEach((led, u) => {
+      const flacker = z === 'rechnet' ? 0.75 + 0.25 * Math.sin(performance.now() / (90 + u * 17) + k) : 1;
+      led.material.emissive.copy(c); led.material.emissiveIntensity = inten * flacker;
+    });
+    const sel = auswahl && auswahl.art === 'server' && auswahl.k === k;
+    r.koerper.material.emissiveIntensity = sel ? 0.1 : 0;
+    r.luefter.rotation.z += z === 'standby' ? 0 : 0.05 + 0.3 * l;
+  });
+  // Bad-Server (5 Racks à 10)
+  const bOn = S.b_on[i], bLauf = S.b_lauf[i];
+  badRacks.forEach((r, ri) => r.leds.forEach((led, u) => {
+    const k = ri * 10 + u, z = serverZustand(bLauf, bOn, k), l = serverLast(bLauf, bOn, k);
+    const [c, inten] = farbeLed(z, l);
+    led.material.emissive.copy(c); led.material.emissiveIntensity = inten;
+    const sel = auswahl && auswahl.art === 'badrack' && auswahl.r === ri;
+    r.koerper.material.emissiveIntensity = sel ? 0.1 : 0;
+  }));
+
+  // Speicher: Höhe und Farbe
+  const fuell = clamp(sp / M.speicher_haus_kwh, 0.02, 1);
+  tankFuell.scale.y = fuell * 2.45; tankFuell.position.y = KEL.boden + 0.18 + fuell * 2.45 / 2;
+  const tf = C.cold.clone().lerp(C.heat, fuell);
+  tankFuellMat.color.copy(tf); tankFuellMat.emissive.copy(tf); tankFuellMat.emissiveIntensity = 0.35 + 0.5 * fuell;
+
+  // Räume: warm, wenn Server den Bedarf decken
+  const deck = bed > 0.01 ? clamp(gen / bed) : 1;
+  const heizung = clamp(bed / 9);
+  raumMats.forEach(m => { m.color.copy(new THREE.Color('#4a5470').lerp(C.heat, 0.35 * deck * heizung));
+    m.emissiveIntensity = 0.18 * deck * heizung; });
+  heizkoerper.forEach(h => h.material.emissiveIntensity = 1.8 * deck * heizung);
+  hausLicht.intensity = 8 * deck * heizung;
+
+  // Wärme in den Leitungen
+  const strom = lauf + 0.23 * Math.max(0, on - lauf);
+  leitungen.serverZumTank.fluss = clamp(strom / NH);
+  leitungen.tankZuOben1.fluss = clamp(gen / 8);
+  leitungen.tankZuOben2.fluss = clamp(gen / 8) * (bed > 1.5 ? 1 : 0.2);
+
+  // Bad: offen im Sommer, Wasser leuchtet mit genutzter Wärme
+  const bGen = L(S.b_gen), offen = S.b_bed[i] > 0;
+  wasserMat.emissiveIntensity = offen ? 0.12 + 0.5 * clamp(bGen / 120) : 0.02;
+  wasserMat.color.set(offen ? '#1fa7c4' : '#163f52');
+  badLicht.intensity = offen ? 4 + 10 * clamp(bGen / 120) : 0;
+  badLabel.innerHTML = 'Sportbad St. Jakob <small>· ' + (offen ? 'offen, nimmt Sommerarbeit' : 'Saisonpause') + '</small>';
+
+  // Himmel, Sonne, Jahreszeit
+  const tag = clamp(Math.sin(((stunde - 6) / 12) * Math.PI));
+  const nacht = new THREE.Color('#0c1428'), mittag = new THREE.Color(monat >= 5 && monat <= 9 ? '#2d4f78' : '#24344f');
+  scene.background.copy(nacht.clone().lerp(mittag, tag)); scene.fog.color.copy(scene.background);
+  const w = ((stunde - 6) / 12) * Math.PI;
+  sonne.position.set(6 + Math.cos(w) * -40, 6 + Math.max(0, Math.sin(w)) * 38, 18);
+  sonne.intensity = 0.3 + 1.45 * tag; hemi.intensity = 0.55 + 0.35 * tag;
+  const winter = clamp((6 - temp) / 10), sommer = clamp((temp - 10) / 12);
+  const rasen = new THREE.Color('#2f4a2a').lerp(new THREE.Color('#7d8797'), winter).lerp(new THREE.Color('#3d6a2c'), sommer);
+  scene.traverse(o => { if (o.userData.rasen) o.material.color.copy(rasen); });
+  baumKronen.forEach(b => b.material.color.copy(new THREE.Color('#2f5a36').lerp(new THREE.Color('#9aa8b8'), winter * 0.5)));
+  fensterMat.emissiveIntensity = 0.15 + (1 - tag) * 0.9;
+  kellerLicht.intensity = 2 + 5 * clamp(on / NH);
+
+  return { temp, bed, gen, sp, on, lauf, deck };
+}
+
+// ---------- Panel «Diese Stunde» ----------
+const el = id => document.getElementById(id);
+function panelJetzt(i, w) {
+  const z = S.zeit[i];
+  el('datum').textContent = `${parseInt(z.slice(3, 5))}. ${['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'][parseInt(z.slice(0, 2)) - 1]} 2025 · ${z.slice(6, 8)}:00`;
+  el('wetter').textContent = `${fmt(S.temp[i], 1)} °C aussen`;
+  el('j-bed').textContent = fmt(S.h_bed[i], 1) + ' kWh';
+  el('j-deck').textContent = S.h_bed[i] > 0.01 ? fmt(100 * Math.min(1, S.h_gen[i] / S.h_bed[i])) + ' %' : '–';
+  el('j-deck-b').style.width = (S.h_bed[i] > 0.01 ? 100 * Math.min(1, S.h_gen[i] / S.h_bed[i]) : 0) + '%';
+  el('j-sp').textContent = `${fmt(S.h_sp[i], 1)} / ${fmt(M.speicher_haus_kwh)} kWh`;
+  el('j-sp-b').style.width = 100 * S.h_sp[i] / M.speicher_haus_kwh + '%';
+  el('j-on').textContent = `${S.h_on[i]} an · ${fmt(S.h_lauf[i], 1)} rechnen`;
+  el('j-punkte').innerHTML = Array.from({ length: NH }, (_, k) => {
+    const s = serverZustand(S.h_lauf[i], S.h_on[i], k);
+    return `<i class="${s === 'rechnet' ? 'rechnet' : s === 'bereit' ? 'an' : ''}" title="Server ${k + 1}"></i>`;
+  }).join('');
+  el('j-bad').textContent = S.b_bed[i] > 0 ? fmt(S.b_bed[i]) + ' kWh Bedarf' : 'Saisonpause';
+  el('j-bad-on').textContent = `${S.b_on[i]} / ${NB} an`;
+  el('j-bad-b').style.width = 100 * S.b_lauf[i] / NB + '%';
+  el('j-flotte').textContent = `${fmt(S.flotte_lauf[i])} Server`;
+  el('j-mig').textContent = `${S.mig[i]} in dieser Stunde`;
+  if (auswahl) zeigeDetail(auswahl, false);
+}
+
+// ---------- Detail beim Anklicken ----------
+const STATUS = { rechnet: ['rechnet', 'var(--compute)'], bereit: ['bereit, Leerlauf', 'var(--idle)'],
+  standby: ['Standby', '#8ea0c2'] };
+function zeilen(paare) { return paare.map(([a, b]) => `<div class="zeile"><span>${a}</span><span>${b}</span></div>`).join(''); }
+function miniChart(werte, max, farbe, markerIdx) {
+  const cv = el('d-chart'), dpr = devicePixelRatio || 1;
+  cv.width = cv.clientWidth * dpr; cv.height = 70 * dpr;
+  const g = cv.getContext('2d'); g.scale(dpr, dpr);
+  const w = cv.clientWidth, h = 70, bw = w / werte.length;
+  g.clearRect(0, 0, w, h);
+  werte.forEach((v, n) => {
+    g.fillStyle = n === markerIdx ? '#ffffff' : farbe;
+    g.globalAlpha = n === markerIdx ? 1 : 0.8;
+    const bh = Math.max(1, (v / max) * (h - 14));
+    g.fillRect(n * bw + 1, h - 12 - bh, bw - 2, bh);
+  });
+  g.globalAlpha = 1; g.fillStyle = '#93a2c0'; g.font = '10px sans-serif';
+  g.fillText('−12 h', 0, h - 1); g.fillText('jetzt', w / 2 - 10, h - 1); g.fillText('+12 h', w - 28, h - 1);
+}
+function fenster(f) { const out = []; for (let d = -12; d <= 12; d++) out.push(f(clamp(zeitH + d, 0, N - 1) | 0)); return out; }
+function zeigeDetail(info, fliegen = true) {
+  auswahl = info; el('detail').classList.add('offen');
+  const i = zeitH | 0;
+  if (info.art === 'server') {
+    const k = info.k, z = serverZustand(S.h_lauf[i], S.h_on[i], k), l = serverLast(S.h_lauf[i], S.h_on[i], k);
+    const watt = serverWatt(S.h_lauf[i], S.h_on[i], k), J = jahrServer[k];
+    el('d-art').textContent = 'Server im Keller · Haus 01';
+    el('d-titel').textContent = `Server ${k + 1} von ${NH}`;
+    el('d-status').textContent = STATUS[z][0]; el('d-status').style.background = STATUS[z][1];
+    el('d-zeilen').innerHTML = zeilen([
+      ['Hardware', '8 × NVIDIA L4'],
+      ['Leistung jetzt', fmt(watt) + ' W'],
+      ['Davon Rechnen', fmt(l * 100) + ' % der Stunde'],
+      ['Wärme an den Speicher', fmt(watt * 0.8 / 1000, 2) + ' kW'],
+      ['Eingeschaltet 2025', fmt(J.anH) + ' h'],
+      ['Gerechnet 2025', fmt(J.rechenH) + ' Server-h'],
+      ['Erlös 2025 (zum Vertragspreis)', fmt(J.rechenH * K.vertragspreis_chf_server_h) + ' CHF'],
+    ]);
+    miniChart(fenster(n => serverLast(S.h_lauf[n], S.h_on[n], k)), 1, '#3ee0c0', 12);
+    el('d-text').textContent = (k === NH - 1 ? 'In der Live-Demo steht dieser Server für den echten Embedding-Job auf dem Laptop. ' : '')
+      + 'Server werden der Reihe nach zugeschaltet: Server 1 läuft am längsten, die letzten nur an kalten Tagen. '
+      + `Ohne Arbeit braucht ein eingeschalteter Server ${M.leerlauf_watt} W, im Standby ${M.standby_watt} W.`;
+    if (fliegen) fliegeZu(hausRacks[k].g.position.clone().add(new THREE.Vector3(0, 1, 0)), new THREE.Vector3(1.4, 0.25, 3.6));
+  } else if (info.art === 'speicher') {
+    const fuell = S.h_sp[i] / M.speicher_haus_kwh;
+    el('d-art').textContent = 'Wärmespeicher · Haus 01';
+    el('d-titel').textContent = `${fmt(S.h_sp[i], 1)} von ${fmt(M.speicher_haus_kwh)} kWh`;
+    el('d-status').textContent = fuell > 0.85 ? 'voll' : fuell < 0.35 ? 'lädt' : 'puffert';
+    el('d-status').style.background = fuell > 0.85 ? 'var(--heat)' : 'var(--cold)';
+    el('d-zeilen').innerHTML = zeilen([
+      ['Wasser', "1'000 l, 30 K Spreizung"], ['Wärmebedarf jetzt', fmt(S.h_bed[i], 1) + ' kWh'],
+      ['Aus Serverwärme gedeckt', S.h_bed[i] > 0.01 ? fmt(100 * Math.min(1, S.h_gen[i] / S.h_bed[i])) + ' %' : '–'],
+      ['Ölkessel (Backup)', fmt(S.h_backup[i], 1) + ' kWh'],
+    ]);
+    miniChart(fenster(n => S.h_sp[n]), M.speicher_haus_kwh, '#ff8a3d', 12);
+    el('d-text').textContent = 'Fällt der Speicher unter 35 %, starten Server und laden ihn. Ab 85 % hören sie auf. '
+      + 'Ist er voll und das Haus braucht keine Wärme, wandern Aufträge ins Sportbad.';
+    if (fliegen) fliegeZu(new THREE.Vector3(tankX, KEL.boden + 1.4, tankZ), new THREE.Vector3(1.6, 0.3, 4.2));
+  } else {
+    const ri = info.art === 'badrack' ? info.r : null, offen = S.b_bed[i] > 0;
+    el('d-art').textContent = 'Sommer-Senke';
+    el('d-titel').textContent = ri === null ? 'Sportbad St. Jakob' : `Bad-Rack ${ri + 1} · Server ${ri * 10 + 1}–${ri * 10 + 10}`;
+    el('d-status').textContent = offen ? 'offen' : 'Saisonpause';
+    el('d-status').style.background = offen ? 'var(--compute)' : '#8ea0c2';
+    const fl = K.flotte, mit = fl['spot|Sportbad 50 (nach Nachfrage)'], ohne = fl['spot|0 Senken'];
+    el('d-zeilen').innerHTML = zeilen([
+      ['Wärmebedarf jetzt', fmt(S.b_bed[i]) + ' kWh'], ['Server an', `${S.b_on[i]} / ${NB}`],
+      ['Rechnen jetzt', fmt(S.b_lauf[i], 1) + ' Server'], ['Becken als Speicher', fmt(S.b_sp[i]) + " / 1'200 kWh"],
+      ['Ergebnis Flotte ohne Bad', fmt(ohne.ergebnis_chf) + ' CHF/J'], ['Ergebnis Flotte mit Bad', fmt(mit.ergebnis_chf) + ' CHF/J'],
+    ]);
+    miniChart(fenster(n => S.b_lauf[n]), NB, '#3ee0c0', 12);
+    el('d-text').textContent = `Offen vom 26.4. bis 5.10.2025, genau wenn die Häuser kaum Wärme brauchen. `
+      + 'Die Häuser haben immer Vorrang, das Bad nimmt nur Arbeit, deren Wärme kein Haus brauchen kann. '
+      + 'Wärmebedarf: Schätzung ±30 % (daten/HALLENBAD.md), Szenario «Genug Aufträge».';
+    if (fliegen) fliegeZu(ri === null ? new THREE.Vector3(BAD.x, 0.5, BAD.z) : badRacks[ri].g.position.clone().add(new THREE.Vector3(0, 1, 0)),
+      ri === null ? new THREE.Vector3(4, 9, 12) : new THREE.Vector3(1.5, 1, 4.5));
+  }
+}
+function schliesseDetail() { auswahl = null; el('detail').classList.remove('offen'); fliegeZu(HOME.target, null); }
+el('zu').onclick = schliesseDetail;
+
+// ---------- Kamerafahrt ----------
+let fahrt = null;
+function fliegeZu(ziel, versatz) {
+  const zuPos = versatz ? ziel.clone().add(versatz) : HOME.pos.clone();
+  fahrt = { start: performance.now(), vonPos: camera.position.clone(), vonZiel: controls.target.clone(), zuPos, zuZiel: ziel.clone() };
+}
+
+// ---------- Klicken und Hover ----------
+const ray = new THREE.Raycaster(), maus = new THREE.Vector2();
+let downXY = null;
+renderer.domElement.addEventListener('pointerdown', e => downXY = [e.clientX, e.clientY]);
+renderer.domElement.addEventListener('pointerup', e => {
+  if (!downXY || Math.hypot(e.clientX - downXY[0], e.clientY - downXY[1]) > 5) return;
+  const hit = treffer(e);
+  if (hit) zeigeDetail(hit.object.userData); else if (auswahl) schliesseDetail();
+});
+renderer.domElement.addEventListener('pointermove', e => {
+  renderer.domElement.style.cursor = treffer(e) ? 'pointer' : 'grab';
+});
+function treffer(e) {
+  maus.set((e.clientX / innerWidth) * 2 - 1, -(e.clientY / innerHeight) * 2 + 1);
+  ray.setFromCamera(maus, camera);
+  return ray.intersectObjects(klickbar, false)[0];
+}
+
+// ---------- Zeitleiste ----------
+const jahrC = el('jahr-c');
+function zeichneJahr() {
+  const dpr = devicePixelRatio || 1, w = jahrC.clientWidth, h = jahrC.clientHeight;
+  jahrC.width = w * dpr; jahrC.height = h * dpr;
+  const g = jahrC.getContext('2d'); g.scale(dpr, dpr);
+  const tage = Math.ceil(N / 24), bed = [], gen = [], bad = [];
+  for (let d = 0; d < tage; d++) {
+    let a = 0, b = 0, c = 0;
+    for (let s = d * 24; s < Math.min(N, d * 24 + 24); s++) { a += S.h_bed[s]; b += S.h_gen[s]; c += S.b_lauf[s]; }
+    bed.push(a); gen.push(b); bad.push(c);
+  }
+  const mb = Math.max(...bed), mc = Math.max(...bad), bw = w / tage;
+  g.clearRect(0, 0, w, h);
+  for (let d = 0; d < tage; d++) {
+    const hb = (bed[d] / mb) * (h - 12), hg = (gen[d] / mb) * (h - 12), hc = (bad[d] / mc) * (h - 12) * 0.55;
+    g.fillStyle = 'rgba(90,168,255,.35)'; g.fillRect(d * bw, h - 10 - hb, Math.max(1, bw - 0.3), hb);
+    g.fillStyle = 'rgba(255,138,61,.9)'; g.fillRect(d * bw, h - 10 - hg, Math.max(1, bw - 0.3), hg);
+    g.fillStyle = 'rgba(62,224,192,.75)'; g.fillRect(d * bw, h - 10 - hc, Math.max(1, bw - 0.3), Math.min(2, hc));
+  }
+  g.fillStyle = '#93a2c0'; g.font = '10px sans-serif';
+  ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'].forEach((m, n) => g.fillText(m, (n / 12) * w + 3, h - 1));
+  g.textAlign = 'right';
+  g.fillStyle = 'rgba(255,138,61,1)'; g.fillText('Haus: von Servern gedeckt', w - 4, 10);
+  g.fillStyle = 'rgba(90,168,255,.9)'; g.fillText('Wärmebedarf', w - 160, 10);
+  g.fillStyle = 'rgba(62,224,192,1)'; g.fillText('Bad rechnet', w - 236, 10);
+}
+el('jahr').addEventListener('pointerdown', e => {
+  const set = ev => { const r = el('jahr').getBoundingClientRect(); zeitH = clamp((ev.clientX - r.left) / r.width) * (N - 1); };
+  set(e);
+  const move = ev => set(ev), up = () => { removeEventListener('pointermove', move); removeEventListener('pointerup', up); };
+  addEventListener('pointermove', move); addEventListener('pointerup', up);
+});
+el('play').onclick = () => { spielt = !spielt; el('play').textContent = spielt ? '❚❚' : '▶'; };
+el('tempo').onchange = e => tempo = +e.target.value;
+document.querySelectorAll('.tag').forEach(b => b.onclick = () => {
+  zeitH = S.zeit.findIndex(z => z.startsWith(b.dataset.tag + 'T00'));
+  tempo = 1; el('tempo').value = '1'; spielt = true; el('play').textContent = '❚❚';
+  document.querySelectorAll('.tag').forEach(x => x.classList.toggle('aktiv', x === b));
+});
+el('uebersicht').onclick = () => { if (auswahl) schliesseDetail(); else fliegeZu(HOME.target, null); };
+addEventListener('keydown', e => {
+  if (e.key === 'Escape' && auswahl) schliesseDetail();
+  if (e.key === ' ') { e.preventDefault(); el('play').click(); }
+});
+setTimeout(() => el('hinweis').style.opacity = 0, 7000);
+
+// ---------- Schleife ----------
+const uhr = new THREE.Clock();
+let letzteStunde = -1, migRest = 0;
+function animiere() {
+  requestAnimationFrame(animiere);
+  const dt = Math.min(0.05, uhr.getDelta());
+  if (spielt) { zeitH += dt * tempo; if (zeitH >= N - 1) zeitH = 0; }
+  const i = Math.floor(zeitH), frac = zeitH - i;
+  wende(i, frac);
+  if (i !== letzteStunde) { panelJetzt(i); letzteStunde = i; }
+  el('marker').style.left = (100 * zeitH / (N - 1)) + '%';
+
+  // Wärmefluss in den Leitungen
+  for (const L of Object.values(leitungen)) {
+    const f = L.fluss || 0; L.phase = (L.phase + dt * (0.08 + 0.35 * f)) % 1;
+    const pos = L.pts.geometry.attributes.position;
+    for (let n = 0; n < L.n; n++) {
+      const p = L.kurve.getPointAt((L.phase + n / L.n) % 1);
+      pos.setXYZ(n, p.x, p.y, p.z);
+    }
+    pos.needsUpdate = true; L.pts.material.opacity = 0.1 + 0.9 * f; L.pts.visible = f > 0.02;
+  }
+  // Migrationen
+  // Flotte: Migrationen pro Stunde, sichtbar als Lichtpunkte (höchstens ~3 pro Sekunde)
+  if (spielt) migRest += Math.min(3, S.mig[i] * tempo * 0.12) * dt;
+  if (migRest >= 1) { starteOrb(); migRest -= 1; }
+  for (const o of orbs) {
+    if (o.t >= 1) { o.o.visible = false; continue; }
+    o.t = Math.min(1, o.t + dt * o.speed);
+    o.o.position.copy(o.kurve.getPoint(o.t));
+    o.o.scale.setScalar(0.6 + Math.sin(o.t * Math.PI));
+  }
+  // Kamerafahrt
+  if (fahrt) {
+    const tf = Math.min(1, (performance.now() - fahrt.start) / 900);
+    const e = 1 - Math.pow(1 - tf, 3);
+    camera.position.lerpVectors(fahrt.vonPos, fahrt.zuPos, e);
+    controls.target.lerpVectors(fahrt.vonZiel, fahrt.zuZiel, e);
+    if (tf >= 1) fahrt = null;
+  }
+  controls.update();
+  composer.render();
+  labels.render(scene, camera);
+}
+addEventListener('resize', () => {
+  camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight); composer.setSize(innerWidth, innerHeight);
+  labels.setSize(innerWidth, innerHeight); zeichneJahr();
+});
+zeichneJahr();
+animiere();
+</script>
+</body>
+</html>

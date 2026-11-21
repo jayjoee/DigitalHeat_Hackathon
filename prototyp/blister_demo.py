@@ -166,27 +166,30 @@ class ScreenHandler(Handler):
                 batch.state = "übergeben"
 
 
-def local_demo(open_browser):
+def local_demo(open_browser, sender_port=8082, host_port=8092, worker_port=8445):
     """Start both screens with temporary localhost TLS credentials."""
+    ports = (sender_port, host_port, worker_port)
+    if len(set(ports)) != 3 or any(not 1 <= port <= 65535 for port in ports):
+        raise ValueError("Die Demo benötigt drei verschiedene Ports zwischen 1 und 65535.")
     with tempfile.TemporaryDirectory() as folder:
         credentials = Path(folder) / "blister"
         init_credentials("127.0.0.1", credentials)
         processes = []
         try:
-            for role, options in (
-                ("worker", ["--bind", "127.0.0.1"]),
-                ("sender", ["--target", "https://127.0.0.1:8445"]),
+            for role, screen_port, options in (
+                ("worker", host_port, ["--bind", "127.0.0.1", "--port", str(worker_port)]),
+                ("sender", sender_port, ["--target", f"https://127.0.0.1:{worker_port}"]),
             ):
                 command = [sys.executable, str(Path(__file__).resolve()), role,
-                           "--credentials", str(credentials / role), *options]
+                           "--credentials", str(credentials / role), "--screen-port", str(screen_port), *options]
                 process = subprocess.Popen(command, stdout=subprocess.PIPE, text=True)
                 processes.append(process)
                 ready = process.stdout.readline()
                 if not ready:
-                    raise SystemExit(f"{role} konnte nicht starten. Prüfe die Ports 8082, 8092 und 8445.")
+                    raise SystemExit(f"{role} konnte nicht starten. Prüfe die Ports {sender_port}, {host_port} und {worker_port}.")
                 print(ready.strip(), flush=True)
             if open_browser:
-                for port in (8082, 8092):
+                for port in (sender_port, host_port):
                     webbrowser.open_new_tab(f"http://127.0.0.1:{port}")
             while all(process.poll() is None for process in processes):
                 time.sleep(0.25)
