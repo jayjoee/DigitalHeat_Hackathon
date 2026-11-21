@@ -7,6 +7,9 @@
   und wird danach mit SIGSTOP angehalten. SIGCONT setzt ihn fort.
 - Am Ende: SIGTERM → Checkpoint. Ein späterer Lauf macht dort weiter.
 
+Flottenmodus (Wärme-Router, Job wandert vom Haus ins Sportbad): siehe src/scheduler/live_flotte.py
+  .venv/bin/python src/scheduler/live.py --flotte
+
 Aufruf:
   .venv/bin/python src/scheduler/live.py --tag 2025-01-15 --server 8
   .venv/bin/python src/scheduler/live.py --tag 2025-07-15 --server 8 --sekunden 4
@@ -155,4 +158,8 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    if "--flotte" in sys.argv:
+        from src.scheduler.live_flotte import main as flotte_main
+        flotte_main()
+    else:
+        main()

@@ -171,6 +171,40 @@ details summary { cursor: pointer; font-weight: 600; }
     <div id="chGrenz"></div>
   </section>
 
+  <section class="card" style="margin-bottom:16px" id="flotte">
+    <h2>Flotte: 20 Häuser und das Sportbad St. Jakob</h2>
+    <div class="note" id="nFlotte"></div>
+    <div class="controls" style="margin:12px 0 8px">
+      <div class="ctl"><label>Nachfrage nach Rechenzeit</label><div class="seg" id="segFlotteSz">
+        <button data-v="alibaba" aria-pressed="true">Nur Jobs mit Frist</button>
+        <button data-v="spot" aria-pressed="false">Genug Aufträge</button></div></div>
+      <div class="ctl"><label>Sommer-Senke</label><div class="seg" id="segVariante"></div></div>
+    </div>
+    <div class="tiles" id="tilesFlotte"></div>
+    <div class="grid3">
+      <div>
+        <h2 style="font-size:15px">Wo die Rechenarbeit läuft</h2>
+        <div class="note">Server-Stunden pro Monat. Häuser haben Vorrang, das Bad nimmt nur, was kein Haus als Wärme braucht.</div>
+        <div class="legend"><span><i style="background:var(--s1)"></i>Server in den Häusern</span>
+          <span><i style="background:var(--s2)"></i>Server im Sportbad</span>
+          <span><i style="background:var(--s3)"></i>an andere Cloud abgegeben (kein Erlös)</span></div>
+        <div id="chFlotte"></div>
+        <button class="toggle" data-table="tblFlotte">Tabelle zeigen</button><div id="tblFlotte" hidden></div>
+      </div>
+      <div>
+        <h2 style="font-size:15px">Wie gross soll das Bad sein?</h2>
+        <div class="note">Ergebnis der Flotte pro Jahr bei «Nur Jobs mit Frist», nach Serverzahl im Bad</div>
+        <div id="chSuche"></div>
+        <div class="note" id="nSuche"></div>
+      </div>
+    </div>
+    <h2 style="font-size:15px">Zusage am Vortag: zugesagt und geliefert</h2>
+    <div class="note" id="nZusage"></div>
+    <div class="legend"><span><i style="background:var(--s1)"></i>geliefert (Server-h pro Tag)</span>
+      <span><i style="background:var(--s2)"></i>am Vortag um 12 Uhr zugesagt</span></div>
+    <div id="chZusage"></div>
+  </section>
+
   <div class="tage3">
     <section class="card"><h2 id="tJan">Ein Januartag</h2><div class="note" id="nJan"></div>
       <div class="legend"><span><i style="background:var(--s2)"></i>Wärmebedarf</span>
@@ -254,10 +288,12 @@ function wirtschaft(n, serverH, waermeKwh, ueber = {}) {
       + a("einsaetze_chf_pro_8_server") * n / 8 + n * a("server_kw") * a("kuehlservice_chf_pro_kw") + a("service_hydraulik_chf")
       + a("monitoring_chf_pro_server_monat") * 12 * n + a("internet_chf") + hw * a("versicherung_anteil") * 1.05
       + a("lizenz_chf") + a("firmenanteil_chf"));
-    const vorSteuer = erloes + waerme - strom - laufend - abschr, steuer = Math.max(0, vorSteuer) * a("gewinnsteuer");
-    const cf = erloes + waerme - strom - laufend - steuer + (t === J ? rest : 0);
+    // Day-ahead-Zusage nicht geliefert (src/scheduler/zusage.py), gleiche Formel wie src/wirtschaft.py
+    const fehl = (ueber.fehlmenge_server_h || 0) * k * a("vertragspreis_chf_karte_h") * a("sla_gutschrift_anteil") * e;
+    const vorSteuer = erloes + waerme - strom - laufend - fehl - abschr, steuer = Math.max(0, vorSteuer) * a("gewinnsteuer");
+    const cf = erloes + waerme - strom - laufend - fehl - steuer + (t === J ? rest : 0);
     bw += cf / Math.pow(1 + i, t);
-    jahre.push({ erloes, waerme, strom, laufend, abschr, nachSteuer: vorSteuer - steuer });
+    jahre.push({ erloes, waerme, strom, laufend, fehl, abschr, nachSteuer: vorSteuer - steuer });
   }
   const ergebnis = bw * i / (1 - Math.pow(1 + i, -J));
   return { inv, hw, ergebnis, jahre, mittel: jahre.reduce((s, j) => s + j.nachSteuer, 0) / J };
@@ -440,6 +476,107 @@ function tag(name, box, sp, titel, notiz) {
     (name === "uebergang" ? ". Mittags ist der Speicher voll, die Server drosseln und laufen abends wieder hoch." : "");
 }
 
+// ---------- Flotte (Wärme-Router, src/scheduler/router.py + flotte.py) ----------
+S.variante = 1; S.szF = "alibaba";  // Hauptszenario der Flotte: «Nur Jobs mit Frist» (eigener Umschalter)
+function flotteVarianten() { return D.flotte.ergebnisse.filter((b) => b.szenario === S.szF); }
+function flotte() {
+  const F = D.flotte;
+  if (!F) { $("flotte").innerHTML = `<h2>Flotte</h2><div class="note">Noch keine Flottenrechnung: <code>python3 src/scheduler/flotte.py</code>, dann <code>python3 src/dashboard_daten.py</code>.</div>`; return; }
+  const V = flotteVarianten(), b = V[Math.min(S.variante, V.length - 1)], ohne = V[0], g = b.gruppen;
+  $("segVariante").innerHTML = V.map((v, i) => `<button data-i="${i}" aria-pressed="${i === S.variante}">${
+    v.server_bad ? `Sportbad ${v.server_bad} Server ${v.server_bad === F.server_bad_regel ? "(Senkenregel)" : "(nach Nachfrage)"}` : "keine"}</button>`).join("");
+  $("segVariante").querySelectorAll("button").forEach((x) => x.addEventListener("click", () => { S.variante = +x.dataset.i; flotte(); }));
+  $("nFlotte").textContent = `Ein gemeinsamer Auftragspool für ${g.haus.standorte} Häuser mit je ${F.server_pro_haus} Servern` +
+    (g.bad ? ` und das Sportbad (offen 26.4.–5.10., ca. 650 MWh/Jahr, Schätzung ±30 %)` : "") +
+    `. Der Wärme-Router verteilt jede Stunde die Aufträge, der Kern pro Standort bleibt derselbe. Wohnhäuser haben Vorrang. ` +
+    `Wärme nicht gebraucht und Frist drängt: Auftrag an eine andere Schweizer Cloud. Nachfrage: «${S.szF === "spot" ? "Genug Aufträge" : "Nur Jobs mit Frist"}».`;
+  const d = b.dh_ergebnis_pro_jahr_chf - ohne.dh_ergebnis_pro_jahr_chf;
+  const t = [
+    ["An andere Cloud abgegeben", fmt(b.abgegeben_server_h) + " h", b === ohne ? "Server-h ohne Erlös, weil kein Haus Wärme braucht"
+      : `statt ${fmt(ohne.abgegeben_server_h)} h ohne Bad`],
+    ["Auslastung Haus-Server", pct(g.haus.auslastung), `Deckung der Häuser ${pct(g.haus.deckungsgrad)}`],
+    ["Auslastung Bad-Server", g.bad ? pct(g.bad.auslastung) : "–", g.bad ? "übers Jahr; offen ist das Bad 163 von 365 Tagen" : "kein Bad"],
+    ["Migrationen", fmt(b.migrationen), "Job wandert per Checkpoint an einen anderen Standort"],
+    ["Verpasste Fristen", pct(b.verpasste_fristen_anteil, 2), `${fmt(b.jobs_mit_frist)} Aufträge mit Frist`],
+    ["Ergebnis Flotte, CHF pro Jahr", (b.dh_ergebnis_pro_jahr_chf < 0 ? "−" : "") + fmt(Math.abs(b.dh_ergebnis_pro_jahr_chf)),
+      b === ohne ? "alle Standorte, alle Kosten, Steuern und Zins" : `${d >= 0 ? "+" : "−"}${chf(Math.abs(d))} gegenüber ohne Bad`],
+  ];
+  $("tilesFlotte").innerHTML = t.map(([l, v, h]) =>
+    `<div class="tile card"><div class="lab">${l}</div><div class="val">${v}</div><div class="hint">${h}</div></div>`).join("");
+  flotteMonate(b); flotteSuche(F); flotteZusage(F, b);
+}
+function flotteMonate(b) {
+  const M = b.monate, W = 640, H = 250, x0 = 52, x1 = W - 8, y0 = H - 22, y1 = 10;
+  const svg = svgNeu($("chFlotte"), W, H);
+  const teile = [["haus_server_h", "var(--s1)", "Häuser"], ["senke_server_h", "var(--s2)", "Sportbad"], ["abgegeben_server_h", "var(--s3)", "abgegeben"]];
+  const max = niceMax(Math.max(...M.map((m) => teile.reduce((s, [k]) => s + (m[k] || 0), 0))));
+  yAchse(svg, x0, x1, y0, y1, max, 4, (v) => fmt(v));
+  const bw = (x1 - x0) / 12, w = bw * 0.62, sk = (y0 - y1) / max;
+  M.forEach((m, i) => {
+    const x = x0 + i * bw + (bw - w) / 2; let y = y0;
+    const da = teile.filter(([k]) => (m[k] || 0) > 0.5);
+    da.forEach(([k, c], j) => { const h = m[k] * sk; y -= h;
+      saeule(svg, x, y, w, h, c, j === da.length - 1);
+      if (j > 0) el("line", { x1: x, x2: x + w, y1: y + h, y2: y + h, stroke: "var(--surface)", "stroke-width": 2 }, svg); });
+    const hit = el("rect", { x: x0 + i * bw, y: y1, width: bw, height: y0 - y1, fill: "transparent" }, svg);
+    hover(hit, `<b>${MON[i]} 2025</b><br>` + teile.map(([k, , n]) => `<span class="k">${n}</span> ${fmt(m[k] || 0)} Server-h`).join("<br>") +
+      `<br><span class="k">Wärme Häuser gedeckt</span> ${pct((m.haus_genutzt_kwh || 0) / (m.haus_bedarf_kwh || 1), 0)}`);
+    const t = el("text", { x: x + w / 2, y: H - 6, "text-anchor": "middle" }, svg); t.textContent = MON[i];
+  });
+  $("tblFlotte").innerHTML = `<table><tr><th>Monat</th><th class="num">Häuser</th><th class="num">Sportbad</th><th class="num">abgegeben</th>
+    <th class="num">Wärme Häuser gedeckt</th></tr>` + M.map((m, i) => `<tr><td>${MON[i]}</td><td class="num">${fmt(m.haus_server_h)}</td>
+    <td class="num">${fmt(m.senke_server_h)}</td><td class="num">${fmt(m.abgegeben_server_h || 0)}</td>
+    <td class="num">${pct((m.haus_genutzt_kwh || 0) / (m.haus_bedarf_kwh || 1), 0)}</td></tr>`).join("") + "</table>";
+}
+function flotteSuche(F) {
+  const R = [{ server_bad: 0, ergebnis_chf: D.flotte.ergebnisse.find((b) => b.szenario === "alibaba" && !b.server_bad).dh_ergebnis_pro_jahr_chf }]
+    .concat(F.suche_senkengroesse_alibaba);
+  const W = 320, H = 250, x0 = 58, x1 = W - 6, y0 = H - 22, y1 = 10, svg = svgNeu($("chSuche"), W, H);
+  const lo = -niceMax(-Math.min(...R.map((r) => r.ergebnis_chf), -1)), hi = 0;
+  const ys = (v) => y1 + (hi - v) / (hi - lo) * (y0 - y1);
+  for (let i = 0; i <= 4; i++) { const v = hi - (hi - lo) * i / 4, y = ys(v);
+    el("line", { x1: x0, x2: x1, y1: y, y2: y, stroke: i ? "var(--grid)" : "var(--axis)" }, svg);
+    const t = el("text", { x: x0 - 6, y: y + 4, "text-anchor": "end" }, svg); t.textContent = fmt(v / 1000) + "k"; }
+  const bw = (x1 - x0) / R.length, w = bw * 0.6, best = F.server_bad_nach_nachfrage;
+  R.forEach((r, i) => { const x = x0 + i * bw + (bw - w) / 2, h = ys(r.ergebnis_chf) - ys(0);
+    // negative Werte: Säule hängt an der Nulllinie, runde Kante am Datenende (unten)
+    const p = saeule(svg, x, ys(0), w, h, "var(--s1)");
+    if (p) { p.setAttribute("transform", `translate(0 ${2 * ys(0) + h}) scale(1 -1)`); if (r.server_bad !== best) p.setAttribute("opacity", 0.45); }
+    const t = el("text", { x: x + w / 2, y: H - 6, "text-anchor": "middle" }, svg); t.textContent = r.server_bad;
+    const hit = el("rect", { x: x0 + i * bw, y: y1, width: bw, height: y0 - y1, fill: "transparent" }, svg);
+    hover(hit, `<b>${r.server_bad ? r.server_bad + " Server im Bad" : "ohne Bad"}</b><br><span class="k">Ergebnis Flotte</span> ${chf(r.ergebnis_chf)} pro Jahr` +
+      (r.abgegeben_server_h != null ? `<br><span class="k">abgegeben</span> ${fmt(r.abgegeben_server_h)} Server-h` : "")); });
+  $("nSuche").textContent = `Am besten: ${best} Server. Die Senkenregel (Wärmebedarf im Sommer) ergäbe ${F.server_bad_regel} Server, ` +
+    `viel mehr, als Aufträge da sind. Mit Alibaba-Nachfrage bleibt die Flotte im Minus: Der Engpass sind die Aufträge, nicht die Wärme.`;
+}
+function flotteZusage(F, b) {
+  const Z = F.zusage[b.variante] || F.zusage[Object.keys(F.zusage)[0]], name = F.zusage[b.variante] ? b.variante : Object.keys(F.zusage)[0];
+  const f = Z.sicherheitsfaktor, T = Z.tage.slice(1) /* 1.1. ohne Zusage */, W = 1100, H = 200, x0 = 52, x1 = W - 8, y0 = H - 22, y1 = 10;
+  const svg = svgNeu($("chZusage"), W, H);
+  const max = niceMax(Math.max(...T.map((t) => Math.max(t[2], f * t[1]))));
+  yAchse(svg, x0, x1, y0, y1, max, 4, (v) => fmt(v));
+  const xs = (i) => x0 + (i + 0.5) * (x1 - x0) / T.length, ys = (v) => y0 - v / max * (y0 - y1);
+  [[2, "var(--s1)", (t) => t[2]], [1, "var(--s2)", (t) => f * t[1]]].forEach(([, c, wert]) =>
+    el("polyline", { points: T.map((t, i) => `${xs(i)},${ys(wert(t))}`).join(" "), fill: "none", stroke: c, "stroke-width": 2,
+      "stroke-linejoin": "round" }, svg));
+  const ersterTag = new Date(T[0][0]);
+  for (let m = 0; m < 12; m++) { const i = Math.round((new Date(2025, m, 1) - ersterTag) / 864e5);
+    const t = el("text", { x: xs(Math.max(0, i)) + 20, y: H - 6, "text-anchor": "middle" }, svg); t.textContent = MON[m]; }
+  const kreuz = el("line", { x1: 0, x2: 0, y1: y1, y2: y0, stroke: "var(--axis)", visibility: "hidden" }, svg);
+  const hit = el("rect", { x: x0, y: y1, width: x1 - x0, height: y0 - y1, fill: "transparent" }, svg);
+  hit.addEventListener("mousemove", (e) => { const r = svg.getBoundingClientRect(), vx = (e.clientX - r.left) / r.width * W;
+    const i = Math.max(0, Math.min(T.length - 1, Math.floor((vx - x0) / (x1 - x0) * T.length))), t = T[i];
+    kreuz.setAttribute("x1", xs(i)); kreuz.setAttribute("x2", xs(i)); kreuz.setAttribute("visibility", "visible");
+    const fehl = Math.max(0, f * t[1] - t[2]);
+    zeigeTip(e, `<b>${t[0].split("-").reverse().join(".")}</b><br><span class="k">zugesagt</span> ${fmt(f * t[1], 1)} Server-h<br>
+      <span class="k">geliefert</span> ${fmt(t[2], 1)} Server-h${fehl > 0.01 ? `<br><span class="k">Fehlmenge</span> ${fmt(fehl, 1)} Server-h` : ""}`); });
+  hit.addEventListener("mouseleave", () => { versteckeTip(); kreuz.setAttribute("visibility", "hidden"); });
+  const j = Z.jahr;
+  $("nZusage").innerHTML = `${name}, verfügbare Kapazität («Genug Aufträge»). Prognose ECMWF vom Vortag, Sicherheitsfaktor ${fmt(f, 2)} ` +
+    `(kalibriert Januar–Juni). <b>${pct(j.zusagbarer_anteil, 0)} der Server-h sind zusagbar</b>, fest verkauft werden ${pct(j.anteil_fest_gebucht, 0)}. ` +
+    `Juli–Dezember fehlte an ${pct(Z.fehltage_auswertung, 1)} der Tage etwas. Ergebnis mit Zusage und Gutschrift: ${chf(Z.ergebnis_mit_zusage_chf)} pro Jahr.`;
+}
+
 // ---------- Live ----------
 let liveZuletzt = null;
 async function live() {
@@ -454,7 +591,8 @@ async function live() {
     }
     liveZuletzt = L;
     const z = L.jetzt || (L.stunden && L.stunden[L.stunden.length - 1]) || {};
-    const an = L.aktiv && L.prozess === "läuft", aus = L.aktiv && L.prozess === "pausiert";
+    const an = L.aktiv && L.prozess === "läuft", aus = L.aktiv && L.prozess === "pausiert", FL = L.modus === "flotte";
+    const migr = (L.migrationen || []).map((m) => `${m.zeit.slice(11, 16)} Uhr: ${m.von} → ${m.nach}, Checkpoint bei ${fmt(m.checkpoint_texte)} Texten, neuer Prozess PID ${m.neue_pid}`);
     const W = 700, H = 120, x0 = 34, x1 = W - 8, y0 = H - 20, y1 = 8;
     const st = (L.stunden || []).concat(L.aktiv && L.jetzt ? [{ ...L.jetzt, anteil_echter_server: L.anteil }] : []);
     box.innerHTML = `<div><div class="lamp"><span class="dot ${an ? "an" : aus ? "aus" : ""}"></span>
@@ -462,22 +600,29 @@ async function live() {
       <dl><dt>Tag</dt><dd>${L.tag}${z.zeit ? ", " + z.zeit.slice(11, 16) + " Uhr" : ""}</dd>
       <dt>Aussen</dt><dd>${z.temp_c != null ? fmt(z.temp_c, 1) + " °C" : "–"}</dd>
       <dt>Wärmebedarf</dt><dd>${z.bedarf_kwh != null ? fmt(z.bedarf_kwh, 2) + " kWh" : "–"}</dd>
-      <dt>Speicher</dt><dd>${z.speicher_kwh != null ? fmt(z.speicher_kwh, 1) + " von 35 kWh" : "–"}</dd>
-      <dt>Server an</dt><dd>${z.server_laufend != null ? fmt(z.server_laufend, 2) + " von " + L.server : "–"}</dd>
-      <dt>Echter Job</dt><dd>Server ${L.echter_server}, PID ${L.pid}, ${L.prozess}</dd>
+      ${FL ? `<dt>Standort</dt><dd><b>${L.standort}</b></dd>` : ""}
+      <dt>Speicher</dt><dd>${z.speicher_kwh != null ? fmt(z.speicher_kwh, 1) + (FL ? " kWh" : " von 35 kWh") : "–"}</dd>
+      <dt>Server an</dt><dd>${z.server_laufend != null ? fmt(z.server_laufend, 2) + (FL ? "" : " von " + L.server) : "–"}</dd>
+      <dt>Echter Job</dt><dd>${FL ? "markierter Job im Pool" : "Server " + L.echter_server}, PID ${L.pid}, ${L.prozess}</dd>
       <dt>Fertig</dt><dd>${fmt(L.texte_fertig || 0)} Texte${L.aktiv ? "" : " (Checkpoint)"}</dd></dl></div>
       <div><div class="note">Anteil jeder Stunde, in dem der echte Job rechnen durfte${window.LIVE_AUFZEICHNUNG ?
-        ` (Aufzeichnung eines echten Laufs auf dem Laptop, ${L.server} Server, 1 h = ${L.sekunden_pro_stunde} s)` : ""}</div><div id="chLive"></div></div>`;
+        ` (Aufzeichnung eines echten Laufs auf dem Laptop, ${FL ? "Flotte mit Sportbad" : L.server + " Server"}, 1 h = ${L.sekunden_pro_stunde} s)` : ""}</div>
+        ${FL ? `<div class="legend"><span><i style="background:var(--s1)"></i>rechnet in ${L.standort_start}</span>
+          <span><i style="background:var(--s2)"></i>rechnet im ${L.bad}</span></div>` : ""}
+        <div id="chLive"></div>${migr.length ? `<div class="note">Migration: ${migr.join("; ")}</div>` : ""}</div>`;
     const svg = svgNeu($("chLive"), W, H);
     yAchse(svg, x0, x1, y0, y1, 1, 2, (v) => fmt(v * 100) + " %");
     const bw = (x1 - x0) / 24;
     st.forEach((s, i) => { const a = s.anteil_echter_server ?? 0;
-      saeule(svg, x0 + i * bw + bw * 0.18, y0 - a * (y0 - y1), bw * 0.64, a * (y0 - y1), "var(--s1)"); });
+      const b = saeule(svg, x0 + i * bw + bw * 0.18, y0 - a * (y0 - y1), bw * 0.64, a * (y0 - y1), s.standort_typ === "bad" ? "var(--s2)" : "var(--s1)");
+      const hit = el("rect", { x: x0 + i * bw, y: y1, width: bw, height: y0 - y1, fill: "transparent" }, svg);
+      hover(hit, `<b>${(s.zeit || "").slice(11, 16)} Uhr</b><br>${s.standort ? `<span class="k">Standort</span> ${s.standort}<br>` : ""}<span class="k">Job rechnet</span> ${pct(a, 0)} der Stunde`); });
     for (let h = 0; h < 24; h += 3) { const t = el("text", { x: x0 + (h + 0.5) * bw, y: H - 4, "text-anchor": "middle" }, svg);
       t.textContent = String(h).padStart(2, "0"); }
   } catch (e) {
     box.innerHTML = `<div class="note" style="grid-column:1/-1">Noch kein Live-Lauf. Start im Terminal:<br>
       <code>.venv/bin/python src/scheduler/live.py --tag 2025-03-07 --server ${S.n} --sekunden 3</code><br>
+      Flotte, Job wandert vom Haus ins Sportbad: <code>.venv/bin/python src/scheduler/live.py --flotte</code><br>
       (7.3.2025: Der echte Job pausiert mittags 7 h bei vollem Speicher und läuft abends weiter.)<br>
       Die Seite muss dafür über <code>bash dashboard/starten.sh</code> geöffnet sein.</div>`;
   }
@@ -565,17 +710,20 @@ function annahmen() {
 
 // ---------- Steuerung ----------
 function preise() { kacheln(); grenzwert(); annahmenKurz(); }
-function alles() { $("nOut").textContent = S.n; preise(); monate(); auslastung(); serverkurve();
+function alles() { $("nOut").textContent = S.n; preise(); monate(); auslastung(); serverkurve(); flotte();
   tag("januar", "chJan", "spJan", "tJan", "nJan"); tag("uebergang", "chUeb", "spUeb", "tUeb", "nUeb");
   tag("juli", "chJul", "spJul", "tJul", "nJul"); }
 $("n").addEventListener("input", (e) => { S.n = +e.target.value; alles(); });
 for (const id of ["pStrom", "pRechen", "pFest", "pHw", "pWaerme"]) $(id).addEventListener("input", preise);
-document.querySelectorAll(".seg").forEach((seg) => seg.addEventListener("click", (e) => {
+document.querySelectorAll(".seg[data-key]").forEach((seg) => seg.addEventListener("click", (e) => {
   const b = e.target.closest("button"); if (!b) return;
   seg.querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", x === b));
   S[seg.dataset.key] = b.dataset.v; alles(); }));
 document.querySelectorAll("[data-table]").forEach((b) => b.addEventListener("click", () => {
   const t = $(b.dataset.table); t.hidden = !t.hidden; b.textContent = t.hidden ? "Tabelle zeigen" : "Tabelle ausblenden"; }));
+$("segFlotteSz").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return;
+  $("segFlotteSz").querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", x === b));
+  S.szF = b.dataset.v; flotte(); });
 $("pRechen").value = D.annahmen.vertragspreis_chf_karte_h.wert;
 $("pFest").value = D.annahmen.anteil_fest_gebucht.wert * 100;
 $("pHw").value = D.annahmen.server_preis_chf.wert;

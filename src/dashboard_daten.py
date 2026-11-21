@@ -20,6 +20,21 @@ ROOT = A.ROOT
 TAGE = {"januar": "2025-01-15", "uebergang": "2025-03-07", "juli": "2025-07-15"}
 
 
+def flotte_daten():
+    """Wärme-Router (daten/ergebnisse/flotte.json, src/scheduler/flotte.py) kompakt fürs Dashboard."""
+    p = ROOT / "daten" / "ergebnisse" / "flotte.json"
+    if not p.exists():
+        return None
+    d = json.loads(p.read_text())
+    zusage = {}
+    for name, z in d["zusage_spot"].items():
+        zusage[name] = {k: z[k] for k in ("sicherheitsfaktor", "fehltage_kalibrierung", "fehltage_auswertung",
+                                          "jahr", "ergebnis_mit_zusage_chf")}
+        zusage[name]["tage"] = [[t["tag"], t["prognose_server_h"], t["geliefert_server_h"]] for t in z["tage"]]
+    return {k: d[k] for k in ("server_pro_haus", "server_bad_regel", "server_bad_nach_nachfrage",
+                              "suche_senkengroesse_alibaba", "ergebnisse", "regel_ueberschuss")} | {"zusage": zusage}
+
+
 def main():
     profil = profil_laden()
     laeufe = {}
@@ -53,7 +68,8 @@ def main():
     messung = json.loads((ROOT / "messungen" / "energie.json").read_text())
     jobtypen = json.loads((ROOT / "daten" / "jobtypen.json").read_text())["typen"]
     daten = {"erzeugt": "python3 src/dashboard_daten.py", "annahmen": A.als_liste(),
-             "messung_a": messung, "jobtypen": jobtypen, "tage": TAGE, "laeufe": laeufe}
+             "messung_a": messung, "jobtypen": jobtypen, "tage": TAGE, "laeufe": laeufe,
+             "flotte": flotte_daten()}
     aus = ROOT / "dashboard" / "daten.js"
     aus.write_text("window.DATEN = " + json.dumps(daten, ensure_ascii=False) + ";\n")
     print(f"{aus.relative_to(ROOT)}: {len(laeufe)} Läufe, {aus.stat().st_size / 1e3:.0f} kB")
