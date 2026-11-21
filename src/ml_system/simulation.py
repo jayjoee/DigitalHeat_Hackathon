@@ -38,23 +38,27 @@ def make_jobs(config, start, end):
             for i,(h,t) in enumerate((h,t) for h in range(start,end) for t in arrivals.get(h,[]))]
 
 
-def schedule(h, demand, storage, target, config, queue, speed, power, slots):
+def schedule(h, demand, storage, target, config, queue, speed, power, slots, unrestricted=False):
     # Convert kernel units: power -> reference-work/h, eta -> recovered-heat/reference-work.
     # Its decision.strom_kwh is therefore WORK, converted back to real energy below.
     heat_per_work=power*config.recovery/speed
-    return entscheide(Lage(h,demand,storage,max(storage,target),slots,speed,heat_per_work),queue,'rechnen')
+    return entscheide(Lage(h,demand,storage,max(storage,target),slots,speed,heat_per_work,
+                          rechenziel_kwh=slots*speed if unrestricted else None),queue,'rechnen')
 
 
 def simulate(profile, config, jobs, start, end, variant, forecasts=None, margin=0):
-    if variant not in ('standard','efficient','ml'):raise ValueError('Unbekanntes Szenario.')
-    efficient=variant!='standard'
-    speed=config.economy_speed if efficient else 1.0
-    power=config.economy_kw if efficient else config.active_kw
+    controlled=variant in ('uncontrolled','heat','heat_off','heat_ml')
+    if not controlled and variant not in ('standard','efficient','ml'):raise ValueError('Unbekanntes Szenario.')
+    efficient=variant in ('efficient','ml','heat_off','heat_ml')
+    predictive=efficient or variant=='heat'
+    speed=config.economy_speed if efficient and not controlled else 1.0
+    power=config.economy_kw if efficient and not controlled else config.active_kw
     queue=[]; by_hour=defaultdict(list)
     for j in jobs:by_hour[j.ankunft_h].append(WorkJob(**vars(j)))
     failed_remaining=0.0
     storage=0.0; on=config.servers if not efficient else 0
     rows=[]; completed=failed=0; billed_hours=finished_work=processed_work=0.0
+    completed_ids=[]; missed_ids=[]
     for h in range(start,end):
         queue.extend(by_hour[h])
         opening=storage
@@ -62,11 +66,11 @@ def simulate(profile, config, jobs, start, end, variant, forecasts=None, margin=
         storage-=loss
         p=profile[h]; demand=p['heizung']+p['ww']
         target=config.storage_kwh
-        if efficient:
+        if predictive:
             prediction=forecasts[h]
             # Same control rule in both efficient arms. Only the heat predictor differs.
             target=min(config.storage_kwh,sum(max(0,v+margin) for v in prediction))
-        e=schedule(h,demand,storage,target,config,queue,speed,power,config.servers)
+        e=schedule(h,demand,storage,target,config,queue,speed,power,config.servers,variant=='uncontrolled')
         work=sum(amount for _,amount in e.laeufe)
         wanted=min(config.servers,math.ceil(work/speed-1e-10)) if efficient else config.servers
         starts=max(0,wanted-on)
@@ -97,9 +101,11 @@ def simulate(profile, config, jobs, start, end, variant, forecasts=None, margin=
             processed_work+=amount
             if j.remaining_work<=1e-9:
                 completed+=1; billed_hours+=j.busy_hours; finished_work+=j.total_work
+                completed_ids.append(j.id)
         queue=[j for j in queue if j.remaining_work>1e-9]
         late=[j for j in queue if h+1>=j.frist_h]
         failed+=len(late)
+        missed_ids.extend(j.id for j in late)
         failed_remaining+=sum(j.remaining_work for j in late)
         queue=[j for j in queue if h+1<j.frist_h]
         backup_electricity=backup_heat/config.backup_cop
@@ -115,7 +121,7 @@ def simulate(profile, config, jobs, start, end, variant, forecasts=None, margin=
                          active_kwh=active_energy,idle_kwh=idle_energy,off_kwh=off_energy,
                          startup_kwh=startup_energy,on_servers=wanted,starts=starts,
                          active_server_hours=busy,work=work,queue=len(queue),reserve_target_kwh=target,
-                         next_hour_heat_prediction=forecasts[h][0] if efficient and forecasts[h] else None))
+                         next_hour_heat_prediction=forecasts[h][0] if predictive and forecasts[h] else None))
         on=wanted
     remaining=sum(j.remaining_work for j in queue)
     if abs(sum(j.total_work for j in jobs)-processed_work-remaining-failed_remaining)>1e-6:
@@ -123,6 +129,7 @@ def simulate(profile, config, jobs, start, end, variant, forecasts=None, margin=
     result=dict(pending_work=remaining,failed_remaining_work=failed_remaining,variant=variant,completed_jobs=completed,missed_jobs=failed,pending_jobs=len(queue),
                 submitted_jobs=len(jobs),submitted_work=sum(j.total_work for j in jobs),
                 completed_work=finished_work,processed_work=processed_work,
+                completed_job_ids=sorted(completed_ids),missed_job_ids=sorted(missed_ids),pending_job_ids=sorted(j.id for j in queue),
                 billed_server_hours=billed_hours,rows=rows)
     return summarise(result,config)
 

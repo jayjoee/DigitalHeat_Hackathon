@@ -14,7 +14,7 @@ from src.scheduler.jahr import profil_laden
 
 ROOT=Path(__file__).resolve().parents[2]
 
-def compare(config=None,days=30,start='2025-07-01',progress=lambda text:None):
+def compare(config=None,days=30,start='2025-07-01',progress=lambda text:None,controlled=False):
     config=config or Config()
     if type(days) is not int or not 1<=days<=184:raise ValueError('Zeitraum: 1 bis 184 Tage.')
     try:begin=datetime.strptime(start,'%Y-%m-%d'); finish=begin+timedelta(days=days)
@@ -44,10 +44,11 @@ def compare(config=None,days=30,start='2025-07-01',progress=lambda text:None):
             forecast_rows.append({'origin':profile[h]['zeit'],'target':profile[target]['zeit'],
                                   'horizon_hours':offset,'actual_kwh':actual,'ml_kwh':m,'persistence_kwh':p})
     jobs=make_jobs(config,first,last)
-    progress('Drei Energie- und Auftragsbilanzen berechnen')
-    original=simulate(profile,config,jobs,first,last,'standard')
-    efficient=simulate(profile,config,jobs,first,last,'efficient',persistence,persistence_margin)
-    learned=simulate(profile,config,jobs,first,last,'ml',ml,model.margin)
+    progress('Energie- und Auftragsbilanzen berechnen')
+    original=simulate(profile,config,jobs,first,last,'uncontrolled' if controlled else 'standard')
+    heat=simulate(profile,config,jobs,first,last,'heat',persistence,persistence_margin) if controlled else None
+    efficient=simulate(profile,config,jobs,first,last,'heat_off' if controlled else 'efficient',persistence,persistence_margin)
+    learned=simulate(profile,config,jobs,first,last,'heat_ml' if controlled else 'ml',ml,model.margin)
     # Timed software execution × assumed host power. Not a wall-meter measurement.
     ml_energy=model.seconds/3600*config.ml_host_kw
     learned['rows'][0]['ml_kwh']+=ml_energy
@@ -69,7 +70,7 @@ def compare(config=None,days=30,start='2025-07-01',progress=lambda text:None):
                 'same_completed_work':comparable,'identical_input_jobs':True,'jobs_sha256':jobs_digest(jobs),
                 'verdict':(('Unterschied unter 0,1 %: kein belastbarer zusätzlicher Effizienznachweis für ML.' if abs(savings/a*100)<0.1 else ('ML spart in diesem Szenario zusätzlich Strom.' if savings>0 else 'ML spart in diesem Szenario keinen zusätzlichen Strom.')))+
                            ('' if comparable else ' Achtung: Vollendete Arbeitsmenge unterscheidet sich; kein Vergleich bei gleicher Lieferleistung.')},
-            'scenarios':[original,efficient,learned],
+            'scenarios':[original,heat,efficient,learned] if controlled else [original,efficient,learned],
             'limitations':[
                 'Nur Referenzhaus; bestehender Flottenrouter und Live-Prototyp bleiben unverändert. Keine physische Steuerung.',
                 'Echtes trainiertes ML-Modell auf synthetischem Case-Wärmebedarf; kein Nachweis an echten Häusern.',

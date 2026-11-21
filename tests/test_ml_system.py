@@ -103,6 +103,33 @@ class EnergyTests(unittest.TestCase):
         self.assertEqual(r['business']['revenue_chf'],0)
         self.assertGreater(r['energy']['startup_kwh'],0)
 
+    def test_controlled_comparison_changes_timing_without_changing_speed(self):
+        p=self.profile(2);cfg=Config(servers=1,storage_kwh=0,pump_kw=0)
+        # No heat needed now, heat needed in the second hour. Both must finish the same job.
+        p[0]['ww']=0.;p[1]['ww']=.8
+        jobs=[WorkJob(1,'A',0,10,1.,True,1.)]
+        f={0:[0.],1:[0.]}
+        base=simulate(p,cfg,jobs,0,2,'uncontrolled')
+        heat=simulate(p,cfg,jobs,0,2,'heat',f)
+        self.assertEqual(base['completed_job_ids'],heat['completed_job_ids'])
+        self.assertEqual(base['rows'][0]['work'],1.)
+        self.assertEqual(heat['rows'][0]['work'],0.)
+        self.assertAlmostEqual(heat['rows'][1]['work'],1.)
+        self.assertGreater(base['energy']['dumped_heat_kwh'],heat['energy']['dumped_heat_kwh'])
+        self.assertAlmostEqual(base['energy']['active_kwh'],heat['energy']['active_kwh'])
+
+    def test_controlled_arms_do_not_use_economy_speed_or_power(self):
+        p=self.profile(2);cfg=Config(servers=1,startup_minutes=0)
+        jobs=[WorkJob(1,'A',0,1,1.,True,1.)]
+        f={0:[.5],1:[.5]}
+        for variant in ('uncontrolled','heat','heat_off','heat_ml'):
+            r=simulate(p,cfg,jobs,0,2,variant,f)
+            self.assertEqual(r['completed_job_ids'],[1])
+            self.assertAlmostEqual(r['energy']['active_kwh'],cfg.active_kw)
+            self.assertAlmostEqual(r['energy']['active_server_hours'],1.)
+            self.assertEqual(r['missed_job_ids'],[])
+            self.assertEqual(r['pending_job_ids'],[])
+
 class APITests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):

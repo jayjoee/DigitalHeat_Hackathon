@@ -83,6 +83,29 @@ Die vollständige stündliche ML-Auswertung und neue Live-Vektoren werden lokal 
 
 ## Dokumente und Abgabe
 
+### Kontrollierter Vergleich der Betriebsstrategien
+
+`python3 vergleich_start.py --days 184` berechnet vier Varianten mit identischen
+endlichen Aufträgen, Fristen und aktiven Leistungs-/Geschwindigkeitsprofilen.
+Voraussetzung: `requirements-ml.txt`. Bericht, Kennzahlen-CSV und vollständiges JSON
+entstehen unter `daten/ergebnisse/strategievergleich/`; das bisherige ML-Dashboard bleibt erhalten.
+
+Referenzlauf Juli–Dezember 2025 (4’416 Stunden, acht Server):
+
+| Strategie | Gesamtstrom inkl. Zusatzheizung | Fristgerecht / eingereicht |
+|---|---:|---:|
+| Ohne Wärmesteuerung, Abwärme wird trotzdem genutzt | 21’618,1 kWh | 22’436 / 22’436 |
+| Wärmesteuerung, Server bleiben an | 21’559,0 kWh | 22’436 / 22’436 |
+| Wärmesteuerung + Abschalten | 18’121,5 kWh | 22’436 / 22’436 |
+| Zusätzlich ML-Prognose | 18’121,6 kWh | 22’436 / 22’436 |
+
+Keine verpassten oder am Ende offenen Aufträge; identische erledigte Auftrags-IDs.
+Rund 16,2 % weniger Gesamtstrom durch Wärmesteuerung mit Abschalten gegenüber der
+Basis, unter diesen **ungemessenen Szenarioannahmen**. Weniger Leerlaufwärme erhöht
+den Zusatzheizbedarf; dieser ist mit COP 2,5 im Gesamtstrom enthalten. Das ist kein
+Öl-Pilot-Nachweis. ML bringt in diesem Lauf keinen zusätzlichen Stromvorteil.
+Die Auswertung ist ein Halbjahresvergleich eines Hauses, keine Jahres- oder Flottenbilanz.
+
 [Dokumentenverzeichnis](docs/README.md) · [Case](docs/CASE.md) · [Pitch](docs/PITCH.md) · [Pharma-Sicht](docs/PHARMA_SICHT.md) · [Kundensicht](docs/CustomerView_Joel.md) · [Kosten](docs/KOSTEN_DH.md) · [Nächste Aufgaben](docs/TODO_KURZ.md) · [Abgabevorschläge](submission/SUBMISSION.md)
 
 Code, Analysen und Texte wurden mit Claude Code und Codex erarbeitet. Der ursprüngliche Wärme-Router, die neue Serverbetriebssimulation und die Blister-Demo sind erhalten; Gesamtdemo, ML-Untersuchung und Messwerkzeug ergänzen diesen gemeinsamen Stand.
