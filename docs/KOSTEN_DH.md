@@ -32,9 +32,11 @@ Die +35'000 CHF gelten nur, wenn alle fünf Punkte zutreffen. Die ersten beiden 
 
 1. **Jede gerechnete Stunde findet einen Käufer.** Die Server laufen, wenn das Haus Wärme braucht. Das Modell verkauft alle diese Stunden. Bleibt ein Teil unverkauft, läuft der Strom trotzdem:
 
-   | Verkaufte Stunden | 100 % | 90 % | 80 % | 70 % | 68 % | 60 % |
+   | Verkaufte Stunden | 100 % | 90 % | 80 % | 70 % | 66 % | 60 % |
    |---|---|---|---|---|---|---|
-   | Ergebnis pro Jahr | **+35'000 CHF** | +24'100 CHF | +13'100 CHF | +2'200 CHF | 0 | −9'200 CHF |
+   | Ergebnis pro Jahr | **+35'000 CHF** | +24'700 CHF | +14'400 CHF | +4'100 CHF | 0 | −6'400 CHF |
+
+   Roche nimmt seine 60 % immer ab, es fehlen Stunden aus dem Rest (gleiche Regel wie `FIRMA.md`).
 
    Roche allein (60 %) trägt das Haus nicht: −6'400 CHF pro Jahr. Mit der Nachfrage aus dem Alibaba-Trace ist die Flotte negativ (Abschnitt 8).
 2. **Die übrigen 40 % bringen 0,55 CHF pro L4-Stunde.** Das ist der am wenigsten belegte Wert, und er trägt das Ergebnis: Bringt der Rest nur den Spot-Preis, bleiben +15'800 CHF. Die Kunden dafür (ohne Mindestmenge, unterbrechbar, Lieferung nur in Heizstunden) sind noch nicht gefunden. Nach `L4_ANGEBOT.md` rechnet DH nur öffentliche, synthetische oder vom Kunden freigegebene anonymisierte Aufgaben.
@@ -217,7 +219,7 @@ DH verdient am meisten mit 7 Servern. Der 8. Server kostet rund 800 CHF Ergebnis
 In allen drei Spalten sind alle Rechenstunden verkauft und Roche nimmt 60 %. Diese Bandbreite deckt das Absatzrisiko also nicht ab.
 
 **Was am meisten bewegt:**
-1. **Verkaufte Stunden.** Je 10 % unverkaufte Stunden fehlen rund 10'900 CHF pro Jahr. Unter 68 % ist das Ergebnis negativ.
+1. **Verkaufte Stunden.** Je 10 % unverkaufte Stunden fehlen rund 10'300 CHF pro Jahr. Unter 66 % ist das Ergebnis negativ.
 2. **Preis der übrigen Stunden.** Nur Spot statt 0,55 CHF kostet rund 19'200 CHF pro Jahr; 10 Rappen machen rund 7'500 CHF aus.
 3. **Roche-Preis.** 5 Rappen pro L4-Stunde machen rund 6'800 CHF pro Jahr aus (0,45 CHF: +28'200, 0,55 CHF: +41'800 CHF).
 4. **Preisbindung.** Fällt auch der Roche-Preis 10 % pro Jahr, fehlen rund 11'800 CHF pro Jahr. Bleibt umgekehrt auch der Preis der übrigen Stunden fest, kommen rund 8'600 CHF dazu.
@@ -229,14 +231,14 @@ In allen drei Spalten sind alle Rechenstunden verkauft und Roche nimmt 60 %. Die
 
 ## 5. Wann es sich nicht lohnt
 
-- **Zu wenig Aufträge.** Unter 68 % verkauften Rechenstunden ist das Ergebnis negativ. Roche allein reicht nicht (−6'400 CHF pro Jahr). Mit der Nachfrage aus dem Alibaba-Trace verliert die Flotte Geld (Abschnitt 8).
+- **Zu wenig Aufträge.** Unter 66 % verkauften Rechenstunden ist das Ergebnis negativ. Roche allein reicht nicht (−6'400 CHF pro Jahr). Mit der Nachfrage aus dem Alibaba-Trace verliert die Flotte Geld (Abschnitt 8).
 - **Übrige Stunden nur zum Spot-Preis und Roche-Preis unter 0,38 CHF pro L4-Stunde.**
 - **Kein Ankerkunde, alles nur zum Spot-Preis:** −20'900 CHF pro Jahr.
 - **Teurer Fall** (Roche 0,45 CHF, übrige Stunden 0,45 CHF, Kosten am oberen Rand): nur noch +6'400 CHF pro Jahr.
 - **Nur Marktplatz statt Direktvertrag:** Mit 20 % Gebühr und Preisverfall von 10 % pro Jahr auf allen Stunden braucht es rund 0,47 CHF im ersten Jahr.
 - **Vertrauliche Aufträge:** L4 schützt Daten während der Verarbeitung nicht. Solche Aufträge sind ausgeschlossen (`L4_ANGEBOT.md`). Neue H100 mit diesem Schutz rechneten sich in der früheren Rechnung selbst im günstigen Fall nicht, weil die Hardware für Dauerbetrieb gebaut ist, DH aber nur die halbe Zeit rechnet. Im Abschaltmodell ist das nicht neu gerechnet.
 - **Server nur pausieren:** Bei 230 W Leerlauf rund 5'200 kWh mehr Strom (1'740 CHF) und 2'340 Rechenstunden weniger, weil die Leerlaufwärme den Speicher füllt. Das Ergebnis fällt von +35'000 auf +26'100 CHF pro Jahr. Details im [Betriebsvergleich](ERGEBNISSE.md#leerlauf-und-abschalten-im-referenzhaus).
-- **Pilot mit wenigen Häusern:** Die Firmenkosten (Zertifikat, Software, Personal) verteilen sich auf wenige Häuser. `FIRMA.md` rechnet das noch mit den alten Preisen: Die Firma trägt ihre Fixkosten dort ab 7 Häusern bei genug Aufträgen und erst ab 68 Häusern bei knapper Nachfrage.
+- **Pilot mit wenigen Häusern:** Die Firmenkosten (Zertifikat, Software, Personal) verteilen sich auf wenige Häuser. Laut `FIRMA.md` trägt die Firma ihre Fixkosten ab 6 Häusern, wenn alle Stunden verkauft sind, und erst ab 45 Häusern, wenn nur Roche abnimmt (knappe Nachfrage).
 
 ## 6. Abgleich mit Joëls Kundensicht
 

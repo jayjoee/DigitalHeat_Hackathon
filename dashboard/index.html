@@ -323,8 +323,9 @@ function geldbasis(n = S.n) {
     : { serverH: b.strom_kwh, stromKwh: b.strom_kwh, waermeKwh: b.genutzt_kwh_genau, ab: null };
 }
 function ergebnisHaus(n, r, anteilVerkauft = 1) {
-  const g = geldbasis(n);
-  return wirtschaft(n, g.serverH * anteilVerkauft, g.waermeKwh, { ...r, strom_kwh: g.stromKwh });
+  // Weniger verkauft: Roche nimmt seinen festen Anteil der vollen Stunden ab, es fehlen Stunden aus dem Rest (wie src/firma.py)
+  const g = geldbasis(n), fest = Math.min(1, r.anteil_fest_gebucht / anteilVerkauft);
+  return wirtschaft(n, g.serverH * anteilVerkauft, g.waermeKwh, { ...r, strom_kwh: g.stromKwh, anteil_fest_gebucht: fest });
 }
 function oekonomie(b, n) {
   const r = regler(), g = geldbasis(n);
@@ -337,7 +338,7 @@ function oekonomie(b, n) {
   for (let s = 0; s < 60; s++) { const m = (lo + hi) / 2;
     if (ergebnisHaus(n, { ...r, vertragspreis_chf_karte_h: m }).ergebnis < 0) lo = m; else hi = m; }
   // Anteil der Rechenstunden, der mindestens verkauft sein muss (Strom läuft trotzdem)
-  let ul = 0, uh = 1;
+  let ul = r.anteil_fest_gebucht, uh = 1;
   for (let s = 0; s < 40; s++) { const m = (ul + uh) / 2; if (ergebnisHaus(n, r, m).ergebnis < 0) ul = m; else uh = m; }
   const ideal = wirtschaft(n, serverH, waermeKwh, r).ergebnis;
   return { ...w, r, g, beCase, beKarte: hi, absatzMin: w.ergebnis >= 0 ? uh : null, ideal,
@@ -368,9 +369,9 @@ function kacheln() {
     Investition ${chf(o.inv)} für ${S.n} Server (${S.n * o.karten} L4). Im 1. Jahr: Erlös ${chf(j1.erloes)}${j1.waerme ? ` + Wärme ${chf(j1.waerme)}` : ""}
     − Strom ${chf(j1.strom)} − laufende Kosten ${chf(j1.laufend)} − Abschreibung ${chf(j1.abschr)}.
     Gewinn nach Steuern im Mittel ${chf(o.mittel)} pro Jahr, nach Zins ${chf(o.ergebnis)}.
-    Nötig sind mindestens <b style="display:inline">${chf(o.beKarte, 2)} pro L4-Stunde</b>, verkauft wird zu ${chf(o.r.vertragspreis_chf_karte_h, 2)}.
+    Nötig sind mindestens <b style="display:inline">${chf(o.beKarte, 2)} pro L4-Stunde</b>, Roche zahlt ${chf(o.r.vertragspreis_chf_karte_h, 2)} für ${pct(o.r.anteil_fest_gebucht, 0)} der Stunden, die übrigen bringen ${chf(D.annahmen.spotpreis_chf_karte_h.wert, 2)}.
     Schweizer GPU-Clouds verlangen ab rund 0,68 CHF, US-Clouds mit festem Vertrag 0,53–0,55 CHF.
-    ${S.sz === "spot" ? `Annahme: Es gibt genug Aufträge, jede Rechenstunde ist verkauft (Vertrag plus Füllaufträge zum Spot-Preis).${
+    ${S.sz === "spot" ? `Annahme: Es gibt genug Aufträge, jede Rechenstunde ist verkauft (Roche-Anteil fest, die übrigen Stunden an Kunden ohne Mindestmenge).${
       o.absatzMin != null ? ` Unter ${pct(o.absatzMin, 0)} verkauften Stunden wird das Ergebnis negativ.` : ""}`
       : "Nur Jobs mit Frist: weniger Stunden, im Sommer fehlt der Wärmeabnehmer."}
     ${o.g.ab ? `Gerechnet mit Servern, die ohne Arbeit abschalten (${fmt(D.abschalt_profil.leerlauf_watt)} W Leerlauf, ${fmt(D.abschalt_profil.standby_watt)} W Standby, Annahme ohne L4-Messung):

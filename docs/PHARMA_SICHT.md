@@ -98,14 +98,14 @@ Historischer Preisvergleich mit Schweizer GPU-Clouds: Ein Schweizer Standort all
 
 ## 7. Was das für DH bedeutet
 
-Mittlerer Kostenfall, 8 Server, 5 Jahre, nach Steuern, Abschaltmodell mit 230 W Leerlauf, alle Rechenstunden verkauft. Direktvertrag mit festem Preis, 5 % eigene Plattformkosten statt Marktplatzgebühr. Der Rest der Stunden läuft als Füllauftrag zum Spot-Preis (sinkt 10 % pro Jahr).
+Mittlerer Kostenfall, 8 Server, 5 Jahre, nach Steuern, Abschaltmodell mit 230 W Leerlauf, alle Rechenstunden verkauft. Direktvertrag mit festem Preis, 5 % eigene Plattformkosten statt Marktplatzgebühr. Vorsichtiger Fall: Der Rest der Stunden läuft nur als Füllauftrag zum Spot-Preis von 0,294 CHF (sinkt 10 % pro Jahr). Im Grundfall bringt der Rest 0,55 CHF, dann sind es +35'000 CHF pro Jahr (`KOSTEN_DH.md`).
 
-| Vertragspreis pro L4-Stunde | 60 % fest gebucht | 80 % fest gebucht |
+| Roche-Preis pro L4-Stunde (Rest zum Spot-Preis) | 60 % fest gebucht | 80 % fest gebucht |
 |---|---|---|
 | 0,42 CHF | +4'900 CHF/Jahr | +12'900 CHF/Jahr |
-| **0,50 CHF (vorsichtig)** | **+15'800** | +27'400 |
+| **0,50 CHF (Annahme)** | **+15'800** | +27'400 |
 | 0,55 CHF | +22'600 | +36'500 |
-| **0,60 CHF (Zielannahme)** | **+29'400** | +45'600 |
+| 0,60 CHF | +29'400 | +45'600 |
 
 **Break-even mit Direktvertrag: 0,38 CHF pro L4-Stunde** bei 60 % fest gebucht, 0,35 CHF bei 80 %. Über einen Marktplatz (20 % Gebühr, Preisverfall auf dem ganzen Preis) bräuchte es rund 0,47 CHF. Im Idealmodell ohne Leerlauf lagen die Werte höher (+34'500 CHF bei 0,60 CHF und 60 %, Break-even 0,36 CHF).
 

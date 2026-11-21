@@ -580,12 +580,12 @@
   "mischpreis_chf_karte_h": 0.52,
   "verkaufte_stunden": {
    "100%": 34970,
-   "90%": 24056,
-   "80%": 13143,
-   "70%": 2217,
-   "60%": -9187
+   "90%": 24673,
+   "80%": 14376,
+   "70%": 4079,
+   "60%": -6359
   },
-  "verkaufte_stunden_nullpunkt": 0.6802,
+  "verkaufte_stunden_nullpunkt": 0.6604,
   "anker_preis": {
    "0.40": 21380,
    "0.45": 28175,

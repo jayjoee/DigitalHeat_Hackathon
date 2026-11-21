@@ -1,13 +1,15 @@
 """Baut aus dashboard/index.html eine eigenständige Seite zum Veröffentlichen.
 
 - Daten (dashboard/daten.js) direkt eingebettet
-- Live-Panel zeigt die lokale Aufzeichnung oder den aufgezeichneten Flottenlauf aus dem Repo
+- Live-Panel zeigt den aufgezeichneten Flottenlauf aus dem Repo (Wechsel Haus → Sportbad, wie in PITCH.md).
+  Die lokale, nicht eingecheckte dashboard/live.json nur mit --lokal, damit der Build reproduzierbar bleibt.
 - Ohne doctype/html/head/body (die Veröffentlichung legt sie selbst an)
 
 Aufruf: python3 src/artifact_bauen.py  -> dashboard/artifact/index.html
 """
 import json
 import re
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -17,9 +19,9 @@ D = ROOT / "dashboard"
 def main():
     html = (D / "index.html").read_text()
     daten = (D / "daten.js").read_text().strip()
-    aufzeichnung = D / "live.json"
-    if not aufzeichnung.exists():
-        aufzeichnung = ROOT / "daten" / "ergebnisse" / "live_flotte_2025-05-25.json"
+    aufzeichnung = ROOT / "daten" / "ergebnisse" / "live_flotte_2025-05-25.json"
+    if "--lokal" in sys.argv[1:]:
+        aufzeichnung = D / "live.json"
     live = json.loads(aufzeichnung.read_text())
     live["aktiv"] = False
     live.pop("jetzt", None)

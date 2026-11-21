@@ -37,7 +37,7 @@ Häuser, Serverplätze, Wärme und die beschleunigte Modellzeit sind simuliert. 
 Das Unternehmensmodell braucht zahlende Kunden und passende Hardware. In der Oberfläche stehen zwei unterschiedliche Preisgrenzen:
 
 - rund CHF 0,23 pro Serverstunde für Strom nach Gutschrift der verwendeten Wärme;
-- rund CHF 2,87 pro Serverstunde im umfassenderen Unternehmensmodell. Das ist der Wert des Case-Modells ohne Leerlauf; mit abschaltenden Servern und 230 W Leerlauf sind es CHF 3,07 (`KOSTEN_DH.md`).
+- rund CHF 1,95 pro Serverstunde als nötiger Roche-Preis mit allen Kosten (abschaltende Server, 230 W Leerlauf), wenn die übrigen Stunden 0,55 CHF pro L4-Stunde bringen; im Case-Modell ohne Leerlauf CHF 1,75. Bringen die übrigen Stunden nur den Spot-Preis von 0,294 CHF, sind es CHF 3,07 bzw. 2,87 (`KOSTEN_DH.md`).
 
 Diese Grenzen nicht verwechseln. Die Rechnung enthält Preis- und Absatzannahmen; tatsächliche Abnahmezusagen und Messungen der vorgesehenen NVIDIA-Hardware fehlen noch.
 

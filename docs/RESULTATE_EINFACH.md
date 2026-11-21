@@ -52,7 +52,7 @@ Ein Server braucht Strom und macht daraus fast vollständig Wärme. Normalerweis
 - **Entscheidend sind die Computer.** DigitalHeat kauft pro Haus 8 Server mit je 8 Grafikkarten (NVIDIA L4) und investiert dafür mit Einbau rund **290'000 CHF**.
 - DigitalHeat rechnet öffentliche und vom Kunden freigegebene, nicht vertrauliche Aufgaben (`L4_ANGEBOT.md`). Angenommen ist ein Ankerkunde (Roche), der 60 % der Stunden fest für **0,50 CHF pro Grafikkarte und Stunde** kauft; die übrigen Stunden gehen für **0,55 CHF** an andere Kunden. Beides ist noch mit keinem Kunden bestätigt; Schweizer Clouds verlangen ab 0,68 CHF.
 - Findet jede Rechenstunde einen Käufer, bleiben DigitalHeat nach allen Kosten, Steuern und Zinsen rund **35'000 CHF pro Haus und Jahr**. Das Geld für die Computer ist nach **knapp 3 Jahren** zurück, der interne Zinsfuss liegt bei rund **22 %**. Bleibt ein Drittel der Stunden unverkauft, ist der Gewinn weg. Gerechnet ist mit Servern, die ohne Arbeit abschalten (230 W Leerlauf). Die Rechnung für die ganze Firma mit ihren Fixkosten steht in `FIRMA.md`.
-- Vorsichtig gerechnet mit 0,50 CHF sind es noch rund 15'800 CHF pro Haus und Jahr.
+- Bringen die übrigen Stunden nur den Spot-Preis von 0,294 CHF, sind es noch rund 15'800 CHF pro Haus und Jahr.
 - Der Haushalt bekommt die **Wärme gratis**.
 - **Es lohnt sich NICHT, wenn:**
   - der Preis unter **0,38 CHF pro Grafikkarte und Stunde** fällt, oder

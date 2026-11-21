@@ -37,7 +37,7 @@ Szenario **Genug Aufträge**: Ein Pharma-Vertrag bucht 60 % der Stunden fest (Wi
 | Rechenerlös im 1. Jahr | 135'400 CHF (Roche 60 % zu 0,50 CHF pro L4-Stunde, Rest 0,55 CHF; Schweizer Clouds ab ≈ 0,68 CHF) |
 | Wärme an den Haushalt | gratis (Pilot in ehemaligen Öl-Häusern, vorhandener Holzofen als Reserve) |
 | **Ergebnis DigitalHeat** | **+35'000 CHF pro Jahr** im Abschaltmodell (230 W Leerlauf, 90,5 % Deckung, 34'512 verkaufte Server-h) nach allen Kosten, Steuern und Zins; interner Zinsfuss 21,6 %, Investition nach 2,9 Jahren zurück. Im Idealmodell dieser Tabelle (0 W Leerlauf): +40'400 CHF. Preise: Roche 60 % zu 0,50 CHF pro L4-h, Rest 0,55 CHF. Voraussetzung in beiden Fällen: jede Rechenstunde ist verkauft (`KOSTEN_DH.md`) |
-| Vorsichtiger Fall (0,50 CHF) | +15'800 CHF pro Jahr, Investition nach 3,9 Jahren zurück (Idealmodell: +20'300 CHF, 3,6 Jahre) |
+| Rest nur zum Spot-Preis (0,294 CHF) | +15'800 CHF pro Jahr, Investition nach 3,9 Jahren zurück (Idealmodell: +20'300 CHF, 3,6 Jahre) |
 | **Nötiger Roche-Preis mit allen Kosten** | **0,24 CHF pro L4-Stunde**, wenn der Rest 0,55 CHF bringt; **0,38 CHF** (= 3,07 CHF pro Server-h), wenn der Rest nur den Spot-Preis bringt (`KOSTEN_DH.md`) |
 
 ## Leerlauf und Abschalten im Referenzhaus
@@ -70,7 +70,7 @@ Der Einzelhausvergleich bildet die lokale Ausführung ab. Der Wärme-Router nutz
 | Deckung | 58,1 % | 79,6 % | **93,0 %** | 99,3 % | 100 % |
 | Auslastung | 64,7 % | 59,1 % | **51,8 %** | 44,2 % | 37,2 % |
 | Abgeführt | 0 | 0 | **5 kWh** | 12 kWh | 28 kWh |
-| Ergebnis DigitalHeat pro Jahr | 26'600 | 34'900 | **34'500** | 26'800 | 13'200 CHF |
+| Ergebnis DigitalHeat pro Jahr | 30'200 | 39'900 | **40'400** | 33'000 | 19'500 CHF |
 
 - Bis 8 Server bringt jeder weitere Server 6–13 Prozentpunkte Deckung, der 9. nur noch 3,9.
 - Die Kosten tragen die Winterstunden: Ab Server 9 laufen die zusätzlichen Server nur in wenigen kalten Stunden, die Auslastung fällt unter 50 %.
@@ -110,9 +110,9 @@ Von Juni bis August laufen die Server nur noch für das Warmwasser (0,6 Server).
 
 ## Annahmen und Grenzen
 Alle Annahmen mit Quelle stehen in `src/scheduler/annahmen.py` und in jeder Ergebnisdatei (`daten/ergebnisse/serverzahl.json`, Feld `annahmen`). Die wichtigsten:
-- **Genug Aufträge** (Szenario Standard): Ein Pharma-Vertrag bucht 60 % der Stunden fest, der Rest findet als Füllauftrag zum Spot-Preis Abnehmer. Das ist die stärkste Annahme. Das Szenario Alibaba zeigt, was ohne sie passiert.
+- **Genug Aufträge** (Szenario Standard): Roche bucht 60 % der Stunden fest, die übrigen Stunden finden Abnehmer zu 0,55 CHF pro L4-Stunde. Das ist die stärkste Annahme. Das Szenario Alibaba zeigt, was ohne sie passiert.
 - Ankerkunde Roche 60 % zu 0,50 CHF pro L4-Stunde fest, übrige Stunden 0,55 CHF mit −10 % pro Jahr, als unbestätigte Zielpreise für öffentliche und freigegebene, nicht vertrauliche Aufgaben (`L4_ANGEBOT.md`; Schweizer GPU-Clouds ab ≈ 0,68 CHF, vorsichtig: Rest zum Spot-Preis 0,294 CHF), Server mit 8 L4 für 32'245 CHF (belegter Komplettpreis), 5 Jahre, Zins 4,5 %, Restwert 20 %. Alle Werte mit Quelle in `src/scheduler/annahmen.py` und `KOSTEN_DH.md`.
-- Die Case-Kennzahl «Break-even» bleibt ohne Hardware (0,226 CHF pro Server-h); daneben steht der nötige Preis mit allen Kosten (3,07 CHF pro Server-h im Abschaltmodell, 2,87 CHF im Idealmodell).
+- Die Case-Kennzahl «Break-even» bleibt ohne Hardware (0,226 CHF pro Server-h); daneben steht der nötige Roche-Preis mit allen Kosten: 1,95 CHF pro Server-h im Abschaltmodell (1,75 CHF im Idealmodell), wenn die übrigen Stunden 0,55 CHF bringen. Bringen sie nur den Spot-Preis von 0,294 CHF, sind es 3,07 CHF (2,87 CHF).
 - Keine Wetterprognose: Bei verlustfreiem Speicher und unbegrenzten Aufträgen A ist «Speicher immer füllen» schon die beste Deckung. Eine Prognose bringt erst etwas, wenn Aufträge knapp sind oder der Speicher Verluste hat.
 - Wärmeabgabe = Strom × 0,8, unabhängig von der Auslastung der GPU im Server. Läuft ein Server, läuft er voll (Alibaba zeigt im Median 4 % GPU-Nutzung: Jobs müssen dicht gepackt werden).
 - Stündliche Auflösung, perfekte Kenntnis des Bedarfs der laufenden Stunde, keine Prognose über die Stunde hinaus.

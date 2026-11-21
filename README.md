@@ -46,7 +46,7 @@ Der Blister-Batch wechselt im Demo-Wärmeverlauf automatisch vom Haus zum Sportb
 | Rund 5'200 kWh weniger Strom pro Jahr durch Abschalten statt Prozesspause | Simulationsvergleich bei angenommenen 230 W Leerlauf |
 | Rund CHF 290'000 Investition pro Haus | Hardware-/Einbauannahmen, keine gemessene Pilotinstallation |
 | CHF 0,50 pro L4-Stunde (Roche, 60 %) und 0,55 für den Rest | Angenommene Zielpreise, kein belegter Kundenauftrag (`docs/KOSTEN_DH.md`) |
-| Rund CHF 35'000 jährliches Modellergebnis mit Abschalten | Nur wenn jede Stunde verkauft ist; bei 68 % verkauften Stunden null |
+| Rund CHF 35'000 jährliches Modellergebnis mit Abschalten | Nur wenn jede Stunde verkauft ist; bei 66 % verkauften Stunden null |
 
 Die Unternehmenskennzahl wird als jährliches Kapitalwertäquivalent berechnet. Sie ist kein bereits erzielter realer Jahresgewinn. Bei knapper Nachfrage kann das System Verlust machen. [Ergebnisse und Grenzen](docs/ERGEBNISSE.md)
 

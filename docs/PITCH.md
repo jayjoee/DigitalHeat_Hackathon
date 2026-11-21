@@ -32,13 +32,13 @@ Danach in einem Satz das Problem: Server machen aus Strom fast nur Wärme, und d
 - Angebot: L4-Rechenzeit für öffentliche, synthetische oder vom Kunden anonymisierte und freigegebene Aufgaben (`docs/L4_ANGEBOT.md`). Vertrauliche Daten gehören nicht dazu.
 - Angenommene Preise: Ankerkunde Roche nimmt 60 % der Stunden fest zu **0,50 CHF pro L4-h** (= 4,00 CHF pro Server-h), die übrigen Stunden gehen zu **0,55 CHF** (= 4,40 CHF) an Kunden ohne Mindestmenge. Beides sind Zielpreise, kein Kunde hat sie bestätigt.
 - **Zusage am Vortag um 12 Uhr** aus der ECMWF-Wetterprognose. Im Abschaltmodell mit Bad sind rund 91 % der Stunden zusagbar. Knapp 60 % gehen in der Rechnung als Festbuchung ein.
-- Das Einzelhaus mit Abschalten erreicht rund **+35'000 CHF pro Jahr**, bei rund 290'000 CHF Investition, wenn jede Stunde verkauft ist (`docs/KOSTEN_DH.md`). Bei 68 % verkauften Stunden ist es bei null.
+- Das Einzelhaus mit Abschalten erreicht rund **+35'000 CHF pro Jahr**, bei rund 290'000 CHF Investition, wenn jede Stunde verkauft ist (`docs/KOSTEN_DH.md`). Bei 66 % verkauften Stunden ist es bei null.
 - Bringen die übrigen Stunden nur den Spot-Preis (0,294 CHF), braucht DH von Roche mindestens **0,38 CHF pro L4-h**.
-- **Firma** (`docs/FIRMA.md`): Ab **6 Häusern** trägt DigitalHeat ihre Fixkosten. Ausbau auf 170 Häuser bis 2031, jedes Haus 5 Jahre: Projekt-IRR **28,8 %** ohne Kredit und ohne Endwert, Kapitalbedarf **15,8 Mio. CHF**, Payback 2033. Der Förderbeitrag wie für eine Wärmepumpe (rund 7'200 CHF pro Haus) hilft wenig, Skaleneffekte vor allem bei den Fixkosten.
+- **Firma** (`docs/FIRMA.md`): Ab **6 Häusern** trägt DigitalHeat ihre Fixkosten. Ausbau auf 170 Häuser bis 2031, jedes Haus 5 Jahre: Projekt-IRR **19,9 %** ohne Kredit und ohne Endwert, Kapitalbedarf **23,4 Mio. CHF**, Payback 2033. Gerechnet mit einem halben ersten Betriebsjahr pro Haus und Fixkosten, die jedes Jahr 4,5 % steigen. Der Förderbeitrag wie für eine Wärmepumpe (rund 7'200 CHF pro Haus) hilft wenig, Skaleneffekte vor allem bei den Fixkosten.
 
 **6. Ehrlich: wo es nicht trägt (30 s)** (Transparenz)
 - Bei der knappen Nachfrage aus dem Alibaba-Trace bleibt die Flotte mit Bad bei rund **−79’000 CHF pro Jahr**. Der feste Absatz von Rechenzeit entscheidet, ob sich die Investition trägt.
-- Roche als Ankerkunde und der Absatz der übrigen Stunden sind Annahmen, die wir mit Kunden prüfen müssen. Bei 80 % verkauften Stunden fällt die Projekt-IRR auf 13,8 %, mit nur Roche auf 0,4 %, mit knapper Nachfrage auf −7,7 %. Nächster Schritt: ein bezahltes Winterkontingent.
+- Roche als Ankerkunde und der Absatz der übrigen Stunden sind Annahmen, die wir mit Kunden prüfen müssen. Unter rund 85 % verkauften Stunden liegt die Projekt-IRR unter den 12 %, die Investoren erwarten: bei 80 % 9,3 %, mit nur Roche (das ist auch der Fall knapper Nachfrage) −1,1 %. Nächster Schritt: ein bezahltes Winterkontingent.
 - Der Wärmebedarf des Bads ist eine Schätzung (±30 %). Ein Messwert vom Sportamt würde sie ersetzen.
 
 **7. Schluss (15 s)**

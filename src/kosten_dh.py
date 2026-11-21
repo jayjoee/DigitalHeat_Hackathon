@@ -101,8 +101,13 @@ def sensitivitaeten(s):
     ohne_preis = lambda d: {k: v for k, v in d.items() if k != "vertragspreis_chf_karte_h"}  # noqa: E731
     return {
         "mischpreis_chf_karte_h": round(mix, 4),
-        "verkaufte_stunden": {f"{x:.0%}": erg(s["server_h"] * x) for x in (1.0, 0.9, 0.8, 0.7, 0.6)},
-        "verkaufte_stunden_nullpunkt": round(nullstelle(lambda x: erg(s["server_h"] * x), 0, 1), 4),
+        # Weniger verkauft: Roche nimmt seinen festen Anteil der vollen Stunden immer ab, es fehlen Stunden aus dem Rest
+        # (gleiche Regel wie src/firma.py). Darum höchstens bis auf den festen Anteil hinunter.
+        "verkaufte_stunden": {f"{x:.0%}": erg(s["server_h"] * x, anteil_fest_gebucht=p["anteil_fest_gebucht"] / x)
+                              for x in (1.0, 0.9, 0.8, 0.7, 0.6) if x >= p["anteil_fest_gebucht"]},
+        "verkaufte_stunden_nullpunkt": round(nullstelle(
+            lambda x: erg(s["server_h"] * x, anteil_fest_gebucht=p["anteil_fest_gebucht"] / x),
+            p["anteil_fest_gebucht"], 1), 4),
         "anker_preis": {f"{x:.2f}": erg(vertragspreis_chf_karte_h=x) for x in (0.40, 0.45, 0.50, 0.55, 0.60)},
         "rest_preis": {f"{x:.3f}": erg(spotpreis_chf_karte_h=x) for x in (0.0, SPOT, 0.40, 0.50, 0.55, 0.60, 0.68)},
         "fest_gebucht": {f"{x:.0%}": erg(anteil_fest_gebucht=x) for x in (0.0, 0.42, 0.60, 0.80, 1.0)},
