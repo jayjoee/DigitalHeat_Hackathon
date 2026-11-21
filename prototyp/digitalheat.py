@@ -19,6 +19,7 @@ import shutil
 import socket
 import ssl
 import subprocess
+import sys
 import tempfile
 import threading
 import time
@@ -27,6 +28,8 @@ import uuid
 import webbrowser
 
 ROOT = Path(__file__).resolve().parent
+sys.path.insert(0,str(ROOT.parent))
+from src.scheduler.resource_queue import ResourceQueue, Requirements, Node, Customer, next_maintenance
 MAX_BODY = 300_000
 MAX_TEXT = 200_000
 MAX_JOBS = 30
@@ -83,13 +86,21 @@ def init_credentials(host, directory):
 
 
 class Store:
-    def __init__(self, workers=1):
+    def __init__(self, workers=1, scheduler=None):
         self.lock = threading.RLock()
         self.jobs = {}
         self.stopping = threading.Event()
         self.pool = concurrent.futures.ThreadPoolExecutor(max_workers=workers)
         self.workers = workers
         self.heat_enabled = True
+        self.health_monitor=None
+        self._last_health_poll=0.
+        self.scheduler = scheduler or ResourceQueue(
+            [Node('local-cpu-demo',ram_gb=4,cpu_cores=workers,slots=workers)],
+            [Customer('demo',max_running=workers)])
+        self.wakeup=threading.Event()
+        self.dispatcher=threading.Thread(target=self._dispatch_loop,daemon=True)
+        self.dispatcher.start()
         self.cleaner = threading.Thread(target=self._clean_loop, daemon=True)
         self.cleaner.start()
 
@@ -98,7 +109,26 @@ class Store:
         for jid in list(self.jobs):
             job = self.jobs[jid]
             if job["state"] in TERMINAL and job["updated_at"] < cutoff:
+                if jid in self.scheduler.jobs and self.scheduler.jobs[jid].state=='running':continue
                 del self.jobs[jid]
+                self.scheduler.jobs.pop(jid,None)
+
+    def _dispatch_loop(self):
+        while not self.stopping.is_set():
+            if self.health_monitor is not None and time.monotonic()-self._last_health_poll>=.5:
+                self.health_monitor.poll();self._last_health_poll=time.monotonic()
+            with self.lock:
+                occupied=sum(j.state=='running' for j in self.scheduler.jobs.values())
+                assigned=self.scheduler.dispatch(executors=('local_cpu_demo',),max_assignments=max(0,self.workers-occupied))
+                for ticket in assigned:
+                    job=self.jobs.get(ticket.id)
+                    if job and not job['_cancel']:
+                        job.update(state='running',updated_at=time.time())
+                        self.pool.submit(self._run,ticket.id)
+                for jid,ticket in self.scheduler.jobs.items():
+                    if ticket.state=='expired' and jid in self.jobs and self.jobs[jid]['state'] not in TERMINAL:
+                        self.jobs[jid].update(state='failed',_text=None,updated_at=time.time())
+            self.wakeup.wait(.05);self.wakeup.clear()
 
     def _clean_loop(self):
         while not self.stopping.wait(30):
@@ -106,22 +136,35 @@ class Store:
                 self._prune()
 
     def snapshot(self, job):
-        return {k: v for k, v in job.items() if not k.startswith("_")}
+        public={k: v for k, v in job.items() if not k.startswith("_")}
+        if job['id'] in self.scheduler.jobs:
+            info=self.scheduler.snapshot(job['id']);info.pop('state')
+            public.update(info)
+        return public
 
-    def list(self):
+    def list(self,customer=None):
         with self.lock:
             self._prune()
-            return [self.snapshot(j) for j in reversed(list(self.jobs.values()))]
+            return [self.snapshot(j) for j in reversed(list(self.jobs.values())) if customer is None or j['_customer']==customer]
 
-    def get(self, jid):
+    def get(self, jid, customer=None):
         with self.lock:
-            if jid not in self.jobs:
+            if jid not in self.jobs or (customer is not None and self.jobs[jid]['_customer']!=customer):
                 raise APIError(404, "Auftrag nicht gefunden oder bereits entfernt.")
             return self.snapshot(self.jobs[jid])
 
-    def submit(self, data):
+    def submit(self, data, customer='demo'):
         if not isinstance(data, dict):
             raise APIError(400, "Ein JSON-Objekt wird erwartet.")
+        if set(data)&{'customer_id','priority','security_approved','maintenance_state'}:
+            raise APIError(403,'Kunde, Priorität und Freigaben werden aus dem Zugang und der Betreiberkonfiguration bestimmt.')
+        try:
+            requirements=Requirements.parse(data.get('requirements',{}))
+        except ValueError as exc:raise APIError(400,str(exc))
+        # This prototype's intake receives the payload on a privately hosted CPU device.
+        # Restricted data must use a separate, validated metadata-first control plane.
+        if requirements.classification!='public':
+            raise APIError(403,'Dieser CPU-Demozugang nimmt nur öffentliche oder synthetische Daten an.')
         task_type = data.get("task_type", "text_analysis")
         if task_type not in ("text_analysis", "virtual_screening", "microscopy", "literature"):
             raise APIError(400, "Unbekannte Auftragsvorlage.")
@@ -138,46 +181,60 @@ class Store:
             raise APIError(400, "Der Titel muss 1 bis 80 Zeichen enthalten.")
         if type(duration) is not int or not 2 <= duration <= 60:
             raise APIError(400, "Die Simulationsdauer muss zwischen 2 und 60 Sekunden liegen.")
+        deadline=data.get('deadline_seconds',86400)
+        if type(deadline) is not int or not 1<=deadline<=604800:
+            raise APIError(400,'Die Frist muss zwischen 1 Sekunde und 7 Tagen liegen.')
         with self.lock:
             self._prune()
             if len(self.jobs) >= MAX_JOBS:
                 raise APIError(429, "30 Aufträge gespeichert. Bitte abgeschlossene Aufträge entfernen.")
             jid = str(uuid.uuid4())
             now = time.time()
+            try:
+                self.scheduler.submit(jid,customer,requirements,task_type,runtime_seconds=duration*2+2,deadline_at=now+deadline)
+            except PermissionError as exc:raise APIError(403,str(exc))
+            except ValueError as exc:raise APIError(400,str(exc))
             job = dict(id=jid, title=title.strip(), state="queued", progress=0,
                        created_at=now, updated_at=now, duration=duration, active_seconds=0,
                        task_type=task_type, sample_count=count if task_type in ("virtual_screening", "microscopy") else None,
                        target=target if task_type in ("virtual_screening", "microscopy") else None,
                        characters=len(text), receiver=socket.gethostname(), result=None,
-                       _text=text, _pause=False, _cancel=False)
+                       _text=text, _pause=False, _cancel=False,_customer=customer)
+            if not self.heat_enabled:job['state']='paused'
             self.jobs[jid] = job
-            self.pool.submit(self._run, jid)
+            self.wakeup.set()
             return self.snapshot(job)
 
-    def control(self, jid, action):
+    def control(self, jid, action, customer=None):
         with self.lock:
-            self.get(jid)
+            self.get(jid,customer)
             job = self.jobs[jid]
             if action == "delete":
                 if job["state"] not in TERMINAL:
                     raise APIError(409, "Laufenden Auftrag zuerst abbrechen.")
+                if self.scheduler.jobs[jid].state=='running':raise APIError(409,'Abbruch wird noch bestätigt; Ressourcen bleiben bis dahin reserviert.')
                 del self.jobs[jid]
+                self.scheduler.jobs.pop(jid,None)
                 return {"deleted": True}
             if job["state"] in TERMINAL:
                 raise APIError(409, "Dieser Auftrag ist bereits beendet.")
             if action == "pause":
                 job["_pause"] = True
+                self.scheduler.jobs[jid].paused=True
                 job["state"] = "paused"
             elif action == "resume":
                 job["_pause"] = False
+                self.scheduler.jobs[jid].paused=False
                 job["state"] = ("running" if job.get("_started") else "queued") if self.heat_enabled else "paused"
             elif action == "cancel":
                 job["_cancel"] = True
                 job["_text"] = None
                 job["state"] = "cancelled"
+                if self.scheduler.jobs[jid].state!='running':self.scheduler.finish(jid,'cancelled')
             else:
                 raise APIError(404, "Unbekannte Aktion.")
             job["updated_at"] = time.time()
+            self.wakeup.set()
             return self.snapshot(job)
 
     def _run(self, jid):
@@ -189,6 +246,12 @@ class Store:
                 if jid in self.jobs:
                     self.jobs[jid].update(state="failed", _text=None, updated_at=time.time())
             print(f"Auftrag {jid[:8]}: Verarbeitung fehlgeschlagen.", flush=True)
+        finally:
+            with self.lock:
+                if jid in self.scheduler.jobs:
+                    state=self.jobs.get(jid,{}).get('state','cancelled')
+                    self.scheduler.finish(jid,state if state in TERMINAL else 'failed')
+            self.wakeup.set()
 
     def _process(self, jid):
         active, digest, text = 0.0, b"digitalheat-demo", None
@@ -200,7 +263,11 @@ class Store:
                     job = self.jobs.get(jid)
                     if not job or job["_cancel"]:
                         return
-                    paused = job["_pause"] or not self.heat_enabled
+                    allowed,reason=self.scheduler.can_run(jid)
+                    if reason in ('Laufzeitlimit erreicht','Frist erreicht'):
+                        job.update(state='failed',_text=None,updated_at=time.time())
+                        return
+                    paused = job["_pause"] or not self.heat_enabled or not allowed
                     if paused:
                         job["state"] = "paused"
                     if not paused:
@@ -264,9 +331,11 @@ class Store:
             raise APIError(400, "Wärmebedarf muss ein Wahrheitswert sein.")
         with self.lock:
             self.heat_enabled = enabled
+            for node in self.scheduler.nodes.values():node.heat_enabled=enabled
             for job in self.jobs.values():
                 if job["state"] not in TERMINAL:
                     job["state"] = "paused" if not enabled or job["_pause"] else ("running" if job.get("_started") else "queued")
+            self.wakeup.set()
             return self.host_status()
 
     def host_status(self):
@@ -274,17 +343,22 @@ class Store:
         with self.lock:
             self._prune()
             jobs = list(self.jobs.values())
+            now=time.time()
+            nodes=list(self.scheduler.nodes.values())
+            maintenance='isolated' if any(n.maintenance=='isolated' for n in nodes) else 'drain' if any(n.maintenance=='drain' or (next_maintenance(n) is not None and now>=next_maintenance(n)) for n in nodes) else 'ready'
             return {"heat_enabled": self.heat_enabled, "running": sum(j["state"] == "running" for j in jobs),
                     "waiting": sum(j["state"] in ("queued", "paused") for j in jobs),
                     "completed": sum(j["state"] == "completed" for j in jobs),
-                    "processing": "CPU-Simulation", "connected": True}
+                    "processing": "CPU-Simulation", "connected": True,"maintenance_state":maintenance}
 
     def close(self):
         self.stopping.set()
+        self.wakeup.set()
         with self.lock:
             for job in self.jobs.values():
                 job["_cancel"] = True
                 job["_text"] = None
+        self.dispatcher.join(timeout=2)
         self.pool.shutdown(wait=True, cancel_futures=True)
         self.cleaner.join(timeout=2)
         with self.lock:
@@ -352,27 +426,31 @@ class Handler(BaseHTTPRequestHandler):
 
 class WorkerHandler(Handler):
     def route(self, method):
-        if not hmac.compare_digest(self.headers.get("Authorization", ""), "Bearer " + self.server.token):
+        authorization=self.headers.get('Authorization','')
+        token=authorization[7:] if authorization.startswith('Bearer ') else ''
+        digest=hashlib.sha256(token.encode()).hexdigest()
+        customer=next((cid for key,cid in self.server.identities.items() if hmac.compare_digest(key,digest)),None)
+        if customer is None:
             raise APIError(401, "Ungültiger Zugangsschlüssel.")
         path = self.path
         store = self.server.store
         if method == "GET" and path == "/v1/status":
-            jobs = store.list()
+            jobs = store.list(customer)
             return self.reply(200, dict(connected=True, receiver=socket.gethostname(),
                                       workers=store.workers, jobs=jobs, tls="TLS 1.3",
                                       processing="CPU-Simulation", retention_seconds=RETENTION))
         if path == "/v1/jobs" and method == "POST":
-            return self.reply(202, store.submit(self.body()))
+            return self.reply(202, store.submit(self.body(),customer))
         match = re.fullmatch(r"/v1/jobs/([0-9a-f-]{36})(?:/(pause|resume|cancel|delete))?", path)
         if match:
             jid, action = match.groups()
             if method == "GET" and not action:
-                return self.reply(200, store.get(jid))
+                return self.reply(200, store.get(jid,customer))
             if method == "POST" and action:
                 body = self.body()
                 if not isinstance(body, dict):
                     raise APIError(400, "Ein JSON-Objekt wird erwartet.")
-                return self.reply(200, store.control(jid, action))
+                return self.reply(200, store.control(jid, action,customer))
         raise APIError(404, "Endpunkt nicht gefunden.")
 
 
@@ -388,7 +466,7 @@ def tls_context(cert=None, key=None):
     return context
 
 
-def make_worker(host, port, credentials, workers=1):
+def make_worker(host, port, credentials, workers=1, scheduler=None, customer_tokens=None, health_file=None):
     credentials = Path(credentials)
     server = ThreadingHTTPServer((host, port), WorkerHandler)
     server.token = (credentials / "token.txt").read_text().strip()
@@ -401,7 +479,20 @@ def make_worker(host, port, credentials, workers=1):
     except Exception:
         server.server_close()
         raise
-    server.store = Store(workers)
+    server.store = Store(workers,scheduler)
+    if 'demo' not in server.store.scheduler.customers:
+        server.server_close();server.store.close();raise ValueError('Die Betreiberkonfiguration muss den öffentlichen Standardkunden demo enthalten.')
+    server.identities={hashlib.sha256(server.token.encode()).hexdigest():'demo'}
+    for cid,token in (customer_tokens or {}).items():
+        if cid not in server.store.scheduler.customers or not isinstance(token,str) or len(token)<40:
+            server.server_close();server.store.close();raise ValueError('Ungültiger Kundenzugang.')
+        digest=hashlib.sha256(token.encode()).hexdigest()
+        if digest in server.identities:
+            server.server_close();server.store.close();raise ValueError('Ein Zugangsschlüssel darf nur einem Kunden gehören.')
+        server.identities[digest]=cid
+    if health_file is not None:
+        from src.scheduler.runtime_config import HealthFile
+        server.store.health_monitor=HealthFile(health_file,server.store.scheduler)
     return server
 
 
@@ -520,6 +611,10 @@ def main():
     worker.add_argument("--credentials", default="credentials/worker")
     worker.add_argument("--host-port", type=int, default=8090)
     worker.add_argument("--workers", type=int, choices=range(1, 5), default=1)
+    worker.add_argument('--scheduler-config',help='Betreiber-JSON: Server, Kundenprioritäten, Kontingente und Token-Umgebungsvariablen')
+    worker.add_argument('--health-file',help='Vertrauenswürdige lokale Gesundheitsdatei; fehlende/veraltete Meldungen sperren neue Zuteilungen')
+    worker.add_argument('--service-plan',help='Ergebnis-JSON unserer Serviceplanung; standardmässig nur Hinweise')
+    worker.add_argument('--approve-service-dates',action='store_true',help='Betreiber übernimmt individuelle und gemeinsame Wartungstermine aus dem Serviceplan')
     sender = commands.add_parser("sender", help="Lokale Kundenseite auf dem Sender starten")
     sender.add_argument("--worker", required=True, help="https://EMPFÄNGER-IP:8443")
     sender.add_argument("--port", type=int, default=8080)
@@ -539,7 +634,16 @@ def main():
             print(f"Einrichtung bereit: {args.out}/worker und {args.out}/sender")
             print("Nur den Sender-Ordner sicher zum Sendergerät übertragen. Den privaten Worker-Schlüssel nicht teilen.")
         elif args.command == "worker":
-            server = make_worker(args.bind, args.port, args.credentials, args.workers)
+            scheduler,tokens=None,None
+            if args.scheduler_config:
+                from src.scheduler.runtime_config import load_config
+                scheduler,tokens=load_config(args.scheduler_config)
+            if args.approve_service_dates and not args.service_plan:raise ValueError('--approve-service-dates benötigt --service-plan.')
+            if args.service_plan and scheduler is None:raise ValueError('Serviceplan benötigt eine Betreiberkonfiguration mit passenden Server-IDs.')
+            if args.service_plan:
+                from src.scheduler.runtime_config import apply_service_plan
+                apply_service_plan(scheduler,json.loads(Path(args.service_plan).read_text()),args.approve_service_dates)
+            server = make_worker(args.bind, args.port, args.credentials, args.workers,scheduler,tokens,args.health_file)
             print(f"Empfänger bereit auf Port {server.server_port}. TLS 1.3, {args.workers} Rechenplatz/Rechenplätze.", flush=True)
             host = make_host(args.host_port, server.store)
             host_thread = threading.Thread(target=host.serve_forever, daemon=True)

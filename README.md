@@ -83,6 +83,15 @@ Die vollständige stündliche ML-Auswertung und neue Live-Vektoren werden lokal 
 
 ## Dokumente und Abgabe
 
+### Ressourcenbasierte Auftragsvergabe
+
+Die getrennte Pharma-/Host-Demo (`python3 prototyp/digitalheat.py demo --pharma --open`)
+verwendet jetzt eine Warteschlange mit GPU-/VRAM-, RAM-, CPU-, Standort- und Freigabeprüfung,
+Kundenpriorität, Kontingenten, Backfill und Wartungssperren. CPU-Demoaufträge laufen;
+GPU-Aufträge warten auf einen echten GPU-Worker. Nur öffentliche/synthetische Inhalte sind zugelassen.
+`python3 queue_start.py` vergleicht die Vergabestrategien und simuliertes Schlafenlegen.
+[Recherche, Annahmen, Grenzen und Betreiberkonfiguration](docs/RESSOURCEN_SCHEDULER.md).
+
 ### ML-Serviceplanung
 
 `python3 service_start.py --demo --case --open` trainiert ein ML-Risikomodell und berechnet

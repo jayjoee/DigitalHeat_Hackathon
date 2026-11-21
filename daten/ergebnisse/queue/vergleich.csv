@@ -1,0 +1,4 @@
+strategy,submitted,completed,missed,pending,completed_reference_gpu_hours,it_kwh,electricity_chf,simulated_starts,mean_wait_seconds,max_wait_seconds,active_node_hours,scheduler_cpu_seconds,limits
+fifo_spread,48,48,0,0,6.9527777777777775,6.1892048611120964,2.0579106163197722,0,0.0,0,3.063888888888889,0.011614112736424431,"Serverstrommodell, keine echte GPU-Ausführung; keine Pumpen-/Backup-/Wärmebilanz oder Servicekosten."
+priority_pack,48,48,0,0,6.9527777777777775,6.189204861112123,2.057910616319781,0,0.0,0,1.9916666666666667,0.010819485760293901,"Serverstrommodell, keine echte GPU-Ausführung; keine Pumpen-/Backup-/Wärmebilanz oder Servicekosten."
+priority_pack_sleep,48,48,0,0,6.9527777777777775,2.322704861111526,0.7722993663195824,10,211.04166666666666,540,1.5055555555555555,0.020900036237435415,"Serverstrommodell, keine echte GPU-Ausführung; keine Pumpen-/Backup-/Wärmebilanz oder Servicekosten."

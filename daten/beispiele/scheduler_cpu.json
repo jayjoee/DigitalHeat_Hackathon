@@ -1,0 +1,13 @@
+{
+  "nodes": [
+    {"id": "local-cpu-demo", "ram_gb": 4, "cpu_cores": 2, "slots": 2,
+     "executor": "local_cpu_demo", "region": "LOCAL_DEMO",
+     "max_classification": "public", "approved_customers": ["demo", "pharma-priority", "pharma-batch"]}
+  ],
+  "customers": [
+    {"id": "demo", "priority": 2, "max_running": 2, "gpu_quota": 0},
+    {"id": "pharma-priority", "priority": 0, "max_running": 1, "gpu_quota": 0, "token_env": "DIGITALHEAT_PRIORITY_TOKEN"},
+    {"id": "pharma-batch", "priority": 3, "max_running": 1, "gpu_quota": 0, "token_env": "DIGITALHEAT_BATCH_TOKEN"}
+  ],
+  "scheduler": {"aging_seconds": 900, "health_ttl": 120, "idle_sleep_seconds": 300}
+}
