@@ -50,6 +50,7 @@ Browser öffnen und zum Abschnitt «Echter Job, live gesteuert» scrollen.
 
 **Demo A: Der Job wandert vom Haus ins Bad** (ca. 90 s, zweites Terminal):
 ```sh
+rm -rf messungen/live_job_flotte             # frischer Arbeitsordner, damit die Textzahlen wie unten stimmen
 .venv/bin/python src/scheduler/live.py --flotte --sekunden 3
 ```
 - Der Trockenlauf wählt den 25.5.2025. Das dauert rund 20 s vor dem Start; währenddessen erklären.
