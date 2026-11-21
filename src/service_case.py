@@ -110,6 +110,7 @@ def site_plan(as_of, horizon_days, server_count, interval_days=180, days_since_s
     offsets=list(range(first,horizon_days,interval_days))
     dates=[(date.fromisoformat(as_of)+timedelta(days=i)).isoformat() for i in offsets]
     return dict(site_id=site_id,interval_days=interval_days,scheduled_dates=dates,
+                days_since_service=days_since_service,
                 cost_per_visit_chf=cost_chf,downtime_per_visit_h=downtime_h,
                 scheduled_cooling_visits=len(dates),cooling_budget_chf=len(dates)*cost_chf,
                 allocated_budget_per_server_chf=len(dates)*cost_chf/server_count,

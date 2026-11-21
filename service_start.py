@@ -10,9 +10,11 @@ import csv
 import html
 import json
 from pathlib import Path
+import shutil
 import webbrowser
 from src.service_ml import ServiceConfig, calculate, demo_data, read_csv
 from src.service_case import case_trace, calendar_operations, case_fleet, site_plan
+from src.service_assumptions import assumption_register, assumptions_markdown
 
 
 def write_csv(path, rows):
@@ -23,6 +25,12 @@ def write_csv(path, rows):
 
 def save_report(result,output):
     output=Path(output);output.mkdir(parents=True,exist_ok=True)
+    result['assumptions']=assumption_register(result)
+    (output/'Annahmen_und_Quellen.md').write_text(assumptions_markdown(result['assumptions']),encoding='utf-8')
+    write_csv(output/'annahmen.csv',result['assumptions'])
+    if result.get('case_operation'):
+        sources=output/'quellen';sources.mkdir(exist_ok=True)
+        shutil.copy2(Path(__file__).resolve().parent/'docs/CASE.md',sources/'CASE.md')
     (output/'service_plan.json').write_text(json.dumps(result,ensure_ascii=False,indent=2,allow_nan=False)+'\n',encoding='utf-8')
     rows=[];candidates=[]
     for s in result['servers']:
@@ -52,6 +60,11 @@ def save_report(result,output):
         details+=f"<details><summary>{esc(s['server_id'])}: alle Intervalle</summary><table><tr><th>Intervall</th><th>Geplant</th><th>Ungeplant</th><th>Kosten</th></tr>{candidate_rows}</table><p>Aktuell ausserhalb Trainingsbereich: {esc(', '.join(s['outside_training_range']) or 'keine Merkmale')}. In zukünftigen Szenariozuständen: {esc(', '.join(s['future_scenario_outside_training_range']) or 'keine Merkmale')}.</p></details>"
     warnings=''.join(f'<li>{esc(v)}</li>' for v in result['limitations'])
     info=result['model'];config=result['config']; totals=result['fleet_totals']
+    assumptions_rows=''
+    for a in result['assumptions']:
+        source=f'<a href="{esc(a["source_url"])}">{esc(a["source"])}</a>' if a['source_url'] else esc(a['source'])
+        assumptions_rows+=f'<tr><td>{esc(a["parameter"])}</td><td>{esc(a["value"])}</td><td>{esc(a["category"])}</td><td>{source}</td><td>{esc(a["scope"])}</td></tr>'
+    assumptions_html=f'<section id="annahmen"><h2>Welche Annahmen gelten und woher kommen sie?</h2><p><strong>Eigene Testwerte sind ausdrücklich mit „Keine empirische Quelle“ gekennzeichnet.</strong> Case-Vorgaben und Herstellerangaben sind jeweils nur für ihren angegebenen Geltungsbereich belegt. Quellen für ML-Methoden belegen keine Hardware-Ausfallraten. Die NVIDIA-MTBF ist ein Vergleichswert und wird nicht für das ML-Training verwendet.</p><p><a href="Annahmen_und_Quellen.md">Annahmen und Quellen als Dokument</a> · <a href="annahmen.csv">Annahmen als CSV</a></p><div class="scroll"><table><tr><th>Annahme</th><th>Wert im aktuellen Lauf</th><th>Einordnung</th><th>Quelle</th><th>Geltung und Grenze</th></tr>{assumptions_rows}</table></div></section>'
     exposure=''
     if result.get('case_operation'):
         items=''.join(f"<tr><td>{esc(s['server_id'])}</td><td>{s['forecast_exposure']['powered_hours']:.1f}</td><td>{s['forecast_exposure']['compute_hours']:.1f}</td><td>{s['forecast_exposure']['starts']:.0f}</td></tr>" for s in result['servers'])
@@ -64,13 +77,13 @@ def save_report(result,output):
     document=f'''<!doctype html><html lang="de"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DigitalHeat · Serviceplanung</title>
 <style>body{{font:16px system-ui,sans-serif;background:#f4f5f7;color:#202124;margin:0}}main{{max-width:1250px;margin:auto;padding:32px 22px}}h1{{font-size:34px}}.notice{{background:#fff2cf;padding:20px;border-radius:14px}}section,details{{background:white;padding:20px;margin:18px 0;border-radius:14px}}table{{border-collapse:collapse;width:100%;font-size:14px}}th,td{{padding:12px 9px;text-align:left;border-bottom:1px solid #ddd}}.scroll{{overflow:auto}}summary{{cursor:pointer;font-weight:600}}li{{margin:10px 0}}p{{line-height:1.55}}a{{color:#1464c8}}</style>
 <main><p>DigitalHeat · Kühlplatten · Wartungsmodell</p><h1>Service pro Server planen</h1>
-<div class="notice"><strong>{esc(result['status'])}</strong><p>Die Zahlen sind modellierte Erwartungen, keine Wartungszusagen. {config['horizon_days']} Tage Planung ab dem jeweiligen Serverdatum. Herstellerintervalle und Schutzfunktionen haben Vorrang.</p></div>
+<div class="notice"><strong>{esc(result['status'])}</strong><p>Die Zahlen sind modellierte Erwartungen, keine Wartungszusagen. {config['horizon_days']} Tage Planung ab dem jeweiligen Serverdatum. Herstellerintervalle und Schutzfunktionen haben Vorrang. <a href="#annahmen">Alle Annahmen und Quellen ansehen</a>.</p></div>
 <section><h2>Ergebnis pro physischem Server</h2><p>Das gewählte Intervall hat unter den eingegebenen Kosten und Serviceannahmen die niedrigsten erwarteten Gesamtkosten. Der nächste Termin gilt, solange kein ungeplanter Service dazwischenkommt. Das 30-Tage-Risiko gilt ohne Service.</p><div class="scroll"><table><tr><th>Server</th><th>Intervall</th><th>Nächster Termin</th><th>30-Tage-Risiko</th><th>Geplant</th><th>Ungeplant</th><th>Eingriffe gesamt</th><th>Serverkosten / Zeitraum</th><th>Hinweis</th></tr>{table}</table></div>
 <p>Flotte: {totals['expected_total']:.2f} erwartete Servereingriffe, {totals['expected_total_cost_chf']:.0f} CHF. Mehrere Eingriffe können bei einem einzigen Standortbesuch erledigt werden. Ungeplante Vollservices ersetzen anstehende Routinen; deshalb können weniger als ein geplanter Eingriff pro Jahr erwartet werden. Bruchteile sind Durchschnittswerte, keine halben Besuche.</p></section>
 {exposure}{site_html}<section><h2>Intervalle vergleichen</h2>{details}</section>
 <section><h2>Was das ML tatsächlich gelernt hat</h2><p>Gradient Boosting lernt das Ereignis „ungeplanter Servicebedarf innerhalb der nächsten 24 Stunden“. Eine separate Kalibrierung passt die Wahrscheinlichkeiten an. Training, Kalibrierung und Test verwenden verschiedene Server.</p>
 <p>Test: {info['rows'][2]} Tagesfenster, {info['events'][2]} Ereignisse. Brier-Fehler: ML {info['test_brier']:.6f}, konstante Basis {info['baseline_brier']:.6f}. Log-Loss: ML {info['test_log_loss']:.5f}, Basis {info['baseline_log_loss']:.5f}. Bei diesen beiden Fehlerwerten ist kleiner besser. Eine gute Bewertung auf künstlichen Daten belegt keinen Nutzen an echter Hardware.</p></section>
-<section><h2>Kosten und Annahmen</h2><p>Geplanter Eingriff: {config['planned_chf']:.0f} CHF / {config['planned_downtime_h']:g} h. Ungeplanter Eingriff: {config['unplanned_chf']:.0f} CHF / {config['unplanned_downtime_h']:g} h. Entgangener Deckungsbeitrag: {config['lost_margin_chf_h']:g} CHF/h. Keine automatische Übernahme in die bestehende Gewinnrechnung.</p><ul>{warnings}</ul></section>
+{assumptions_html}<section><h2>Kosten und Modellgrenzen</h2><p>Geplanter Eingriff: {config['planned_chf']:.0f} CHF / {config['planned_downtime_h']:g} h. Ungeplanter Eingriff: {config['unplanned_chf']:.0f} CHF / {config['unplanned_downtime_h']:g} h. Entgangener Deckungsbeitrag: {config['lost_margin_chf_h']:g} CHF/h. Keine automatische Übernahme in die bestehende Gewinnrechnung.</p><ul>{warnings}</ul></section>
 <p><a href="server_service.csv">Server-Kennzahlen CSV</a> · <a href="intervalle.csv">Alle Intervalle CSV</a> · <a href="service_plan.json">Vollständige Ergebnisse JSON</a></p></main></html>'''
     (output/'index.html').write_text(document,encoding='utf-8')
     return output/'index.html'

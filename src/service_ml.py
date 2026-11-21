@@ -167,6 +167,7 @@ class ServiceModel:
         constant=np.full(len(y),float(np.mean(arrays[0][1])))
         self.bounds=np.array([[min(r[f] for r in sets[0]),max(r[f] for r in sets[0])] for f in FEATURES])
         self.info=dict(model='HistGradientBoostingClassifier + separate sigmoid calibration',
+                       estimator_parameters={k:base.get_params()[k] for k in ('max_iter','max_leaf_nodes','min_samples_leaf','l2_regularization','early_stopping')},
                        seed=seed, features=FEATURES, target=TARGET,
                        split='60/20/20 nach Server-ID; keine gemeinsame Hardware zwischen den Gruppen',
                        groups=[sorted(p) for p in parts], rows=[len(y) for _,y in arrays],

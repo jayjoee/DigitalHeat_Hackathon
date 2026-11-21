@@ -129,5 +129,23 @@ class MLIntegrationTests(unittest.TestCase):
             self.assertEqual(data['servers'][0]['selected']['interval_days'],s['recommended_interval_days'])
             self.assertTrue((Path(tmp)/'server_service.csv').exists())
 
+    def test_assumptions_follow_actual_costs_without_inventing_evidence(self):
+        cfg=ServiceConfig(horizon_days=30,intervals=(60,365),planned_chf=123.45,unplanned_chf=678.9)
+        s=plan_server(self.model,self.fleet[0],cfg)
+        result={'status':'SYNTHETISCH','synthetic':True,'servers':[s],'model':self.model.info,
+                'config':cfg.__dict__,'fleet_totals':s['selected'],'limitations':[]}
+        with tempfile.TemporaryDirectory() as tmp:
+            page=save_report(result,tmp)
+            entries={r['id']:r for r in result['assumptions']}
+            self.assertIn('123.45',entries['planned_cost']['value'])
+            self.assertIn('Keine empirische Quelle',entries['planned_cost']['source'])
+            self.assertEqual(entries['planned_cost']['source_url'],'')
+            self.assertFalse(entries['l4_reference']['used_in_calculation'])
+            self.assertEqual(entries['generator_hazard']['source_url'],'')
+            self.assertIn('nicht',entries['generator_hazard']['scope'])
+            self.assertIn('id="annahmen"',page.read_text())
+            self.assertTrue((Path(tmp)/'Annahmen_und_Quellen.md').exists())
+            self.assertTrue((Path(tmp)/'annahmen.csv').exists())
+
 
 if __name__=='__main__':unittest.main()

@@ -23,6 +23,21 @@ HTML, CSV und JSON entstehen unter `daten/ergebnisse/service_ml/`.
 Es gibt keinen neuen Netzwerkdienst oder Zugriff auf die Hardware.
 Ohne `--case` bleibt die bisherige reine Szenario-Demo verfügbar.
 
+## Annahmen und Quellen im Bericht
+
+Jede Auswertung enthält eine eigene Tabelle mit Wert, Einordnung, Quelle und
+Geltungsgrenze. Die Werte werden aus der tatsächlichen Konfiguration des Laufs
+übernommen, auch wenn Kosten oder Intervalle geändert wurden. Die Tabelle wird
+zusätzlich als `Annahmen_und_Quellen.md`, `annahmen.csv` und im Ergebnis-JSON gespeichert.
+Der Case wird für die gekoppelte Auswertung unter `quellen/CASE.md` mitgeliefert.
+
+Case-Vorgaben, Simulationsergebnisse und übertragene Vergleichswerte sind getrennt
+von unseren eigenen Annahmen gekennzeichnet. Frei gesetzte Kosten, Sensordaten und
+Ereignisformeln tragen ausdrücklich den Hinweis **Keine empirische Quelle**.
+Die vollständige synthetische Ereignisformel und die Erzeugung der Sensorwerte
+sind enthalten. Die NVIDIA-MTBF wird nur als Referenz aufgeführt und kalibriert
+weder die künstlichen Labels noch das trainierte Risikomodell.
+
 ## Case Betrieb pro Server
 
 Der vorhandene Jahres-Scheduler wird mit acht Servern, genug flexiblen Aufträgen,
