@@ -6,6 +6,9 @@
   Rechnet der Scheduler für diesen Server einen Anteil x der Stunde, läuft der Prozess x der Zeit
   und wird danach mit SIGSTOP angehalten. SIGCONT setzt ihn fort.
 - Am Ende: SIGTERM → Checkpoint. Ein späterer Lauf macht dort weiter.
+- Mit --job docking ist der echte Prozess ein virtuelles Screening (src/jobs/docking_job.py, AutoDock Vina):
+  Moleküle werden an die Abl-Kinase gedockt. Pause und Weiterlauf gelten für die ganze Prozessgruppe,
+  also auch für ein Vina-Programm, das der Auftrag startet.
 
 Flottenmodus (Wärme-Router, Job wandert vom Haus ins Sportbad): siehe src/scheduler/live_flotte.py
   .venv/bin/python src/scheduler/live.py --flotte
@@ -13,6 +16,7 @@ Flottenmodus (Wärme-Router, Job wandert vom Haus ins Sportbad): siehe src/sched
 Aufruf:
   .venv/bin/python src/scheduler/live.py --tag 2025-01-15 --server 8
   .venv/bin/python src/scheduler/live.py --tag 2025-07-15 --server 8 --sekunden 4
+  python3 src/scheduler/live.py --tag 2025-03-07 --server 8 --sekunden 3 --job docking
 """
 import argparse
 import json
@@ -51,6 +55,20 @@ def waehle_server(zeilen, n):
     return max(range(n), key=streuung)
 
 
+JOBS = {  # Skript, Einheit, Startargumente, Arbeitsordner, Wartezeit beim Beenden (s)
+    "embedding": ("src/jobs/embedding_job.py", "Texte", ["--anzahl", "500000"], "messungen/live_job", 30),
+    "docking": ("src/jobs/docking_job.py", "Moleküle", ["--anzahl", "100000"], "messungen/docking_job", 300),
+}
+
+
+def gruppe(job, sig):
+    """Signal an die ganze Prozessgruppe des Auftrags (auch an Kindprozesse wie das Vina-Programm)."""
+    try:
+        os.killpg(job.pid, sig)
+    except ProcessLookupError:
+        pass
+
+
 def fortschritt(ordner):
     try:
         s = json.loads((ordner / "stand.json").read_text())
@@ -84,8 +102,10 @@ def main():
     ap.add_argument("--szenario", default="spot", choices=["spot", "alibaba"])
     ap.add_argument("--sekunden", type=float, default=5.0, help="Echtzeit pro simulierter Stunde")
     ap.add_argument("--echter-server", type=int, help="Index 0..N-1, Standard: automatisch")
-    ap.add_argument("--arbeitsordner", default="messungen/live_job")
+    ap.add_argument("--job", default="embedding", choices=sorted(JOBS), help="echter Prozess: Text-Embedding oder Docking")
+    ap.add_argument("--arbeitsordner", help="Standard je nach Auftrag (messungen/live_job bzw. messungen/docking_job)")
     a = ap.parse_args()
+    skript, einheit, job_args, ordner_standard, warten_s = JOBS[a.job]
 
     # 1) Jahresmodell bis zum Tag vorrechnen, dann den Tag trocken rechnen, um den Server zu wählen
     haus = Haus(a.server, a.szenario)
@@ -99,19 +119,20 @@ def main():
         [probe.schritt(h) for h in range(h0, h0 + 24)], a.server)
 
     # 2) Echten Job starten (läuft lange, damit er den Tag nicht vorzeitig beendet)
-    ordner = ROOT / a.arbeitsordner
-    log = open(ROOT / "messungen" / "live_job.log", "a")
-    job = subprocess.Popen([str(PY), str(ROOT / "src/jobs/embedding_job.py"), "--arbeitsordner",
-                            str(ordner), "--anzahl", "500000"], stdout=log, stderr=log)
-    time.sleep(1.5)  # Modell laden
-    os.kill(job.pid, signal.SIGSTOP)
+    ordner = ROOT / (a.arbeitsordner or ordner_standard)
+    log = open(ROOT / "messungen" / f"live_{a.job}.log", "a")
+    python = str(PY) if PY.exists() else sys.executable
+    job = subprocess.Popen([python, str(ROOT / skript), "--arbeitsordner", str(ordner), *job_args],
+                           stdout=log, stderr=log, start_new_session=True)  # eigene Prozessgruppe
+    time.sleep(1.5)  # Modell bzw. Bindetasche laden
+    gruppe(job, signal.SIGSTOP)
     laeuft = False
     protokoll = []
     print(f"Tag {a.tag}, {a.server} Server, echter Job = Server {k + 1} (PID {job.pid}), "
           f"1 h = {a.sekunden:g} s")
-    print("Zeit   Temp   Bedarf  Speicher  Server an   Server " f"{k + 1}  Job     Texte")
+    print("Zeit   Temp   Bedarf  Speicher  Server an   Server " f"{k + 1}  Job     {einheit}")
     kopf = {"tag": a.tag, "server": a.server, "szenario": a.szenario, "echter_server": k + 1,
-            "pid": job.pid, "sekunden_pro_stunde": a.sekunden}
+            "pid": job.pid, "sekunden_pro_stunde": a.sekunden, "auftrag": a.job, "einheit": einheit}
 
     def melden(z, x, phase, stunden):
         status_schreiben({**kopf, "aktiv": True, "phase": phase, "anteil": round(x, 3),
@@ -125,12 +146,12 @@ def main():
             ein_s = x * a.sekunden
             t_start = time.time()
             if ein_s > 0.05:
-                os.kill(job.pid, signal.SIGCONT)
+                gruppe(job, signal.SIGCONT)
                 laeuft = True
                 melden(z, x, "rechnet", protokoll)
                 time.sleep(ein_s)
             if a.sekunden - ein_s > 0.05:
-                os.kill(job.pid, signal.SIGSTOP)
+                gruppe(job, signal.SIGSTOP)
                 laeuft = False
                 melden(z, x, "pausiert", protokoll)
                 time.sleep(max(0, a.sekunden - (time.time() - t_start)))
@@ -142,19 +163,19 @@ def main():
                               "texte_fertig": n_texte, "echtzeit_ein_s": round(ein_s, 2)})
     finally:
         if not laeuft:
-            os.kill(job.pid, signal.SIGCONT)
-        job.send_signal(signal.SIGTERM)  # Block fertig, Checkpoint, Ende
-        job.wait(timeout=30)
+            gruppe(job, signal.SIGCONT)
+        job.send_signal(signal.SIGTERM)  # Block bzw. Molekül fertig, Checkpoint, Ende
+        job.wait(timeout=warten_s)
         log.close()
         status_schreiben({**kopf, "aktiv": False, "phase": "Checkpoint gespeichert", "prozess": "beendet",
                           "texte_fertig": fortschritt(ordner), "stunden": protokoll,
                           "aktualisiert": time.time()})
-    aus = ROOT / "daten" / "ergebnisse" / f"live_{a.tag}.json"
+    aus = ROOT / "daten" / "ergebnisse" / (f"live_{a.tag}.json" if a.job == "embedding" else f"live_{a.job}_{a.tag}.json")
     aus.parent.mkdir(parents=True, exist_ok=True)
-    aus.write_text(json.dumps({"tag": a.tag, "server": a.server, "szenario": a.szenario,
+    aus.write_text(json.dumps({"tag": a.tag, "server": a.server, "szenario": a.szenario, "auftrag": a.job,
                                "echter_server": k + 1, "pid": job.pid, "stunden": protokoll},
                               indent=1, ensure_ascii=False))
-    print(f"Checkpoint bei {fortschritt(ordner):,} Texten, Exit {job.returncode}. Protokoll: {aus.relative_to(ROOT)}")
+    print(f"Checkpoint bei {fortschritt(ordner):,} {einheit}n, Exit {job.returncode}. Protokoll: {aus.relative_to(ROOT)}")
 
 
 if __name__ == "__main__":

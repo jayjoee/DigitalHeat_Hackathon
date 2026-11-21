@@ -1220,9 +1220,10 @@ async function pruefeLive() {
     const L = await r.json();
     if (!(L.aktiv && L.aktualisiert && (Date.now() / 1000 - L.aktualisiert) < 20)) throw 0;
     const ort = (L.standort || '').toLowerCase().includes('bad') ? 'bad' : 'haus', laeuft = L.prozess === 'läuft';
-    liveJob = { ort, text: `echter Embedding-Prozess ${laeuft ? 'rechnet' : 'pausiert'}, ${fmt(L.texte_fertig || 0)} Texte` };
+    const art = L.auftrag === 'docking' ? 'Docking-Prozess (Abl-Kinase)' : 'Embedding-Prozess', einheit = L.einheit || 'Texte';
+    liveJob = { ort, text: `echter ${art} ${laeuft ? 'rechnet' : 'pausiert'}, ${fmt(L.texte_fertig || 0)} ${einheit}` };
     el('live').classList.add('an');
-    el('live-text').textContent = `LIVE · echter Job ${laeuft ? 'rechnet' : 'pausiert'} · ${ort === 'bad' ? 'im Sportbad' : 'Haus 01, Server 8'} · ${fmt(L.texte_fertig || 0)} Texte`;
+    el('live-text').textContent = `LIVE · echter Job ${laeuft ? 'rechnet' : 'pausiert'} · ${ort === 'bad' ? 'im Sportbad' : 'Haus 01, Server ' + (L.echter_server || 8)} · ${fmt(L.texte_fertig || 0)} ${einheit}`;
     if (L.jetzt && L.jetzt.zeit && !tour && !thermo.abspielen) {
       const idx = S.zeit.indexOf(L.jetzt.zeit.slice(5, 13));
       if (idx >= 0) { zeitH = idx; spielt = false; el('play').textContent = '▶'; }

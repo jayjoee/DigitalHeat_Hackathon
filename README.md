@@ -49,6 +49,7 @@ Danach reicht auf macOS `start/Gesamtdemo_starten.command`. Die Oberfläche läu
 | Projekt als Ganzes verstehen | Gesamtdemo, Port 18200 |
 | 3D-Ansicht: Häuser im Schnitt, Holzofen statt Öl, Sportbad, Cloud mit ML-Prognose, Pausieren vs. Abschalten, Thermostat, Tour für den Pitch | `bash dashboard/starten.sh`, dann http://localhost:8765/3d/ (läuft ohne Internet; Daten neu: `python3 src/dashboard3d_daten.py`) |
 | Jahreszahlen, Flotte und Serverbetrieb untersuchen | `bash dashboard/starten.sh`, Port 8765; alternativ `dashboard/artifact/index.html` mit Aufzeichnung |
+| Echtes Docking (Moleküle gegen ein Protein testen) vom Scheduler steuern lassen | `python3 src/scheduler/live.py --tag 2025-03-07 --server 8 --sekunden 3 --job docking`; Einrichtung in [daten/docking/README.md](daten/docking/README.md) |
 | Echten Auftrag im Wärme-Router zeigen | `.venv/bin/python src/scheduler/live.py --flotte --sekunden 3`; mit `--abschalten` auch Serverzustände simulieren |
 | Pharma-Kunde und Serverhalter getrennt bedienen | [prototyp/README.md](prototyp/README.md) |
 | Tablettenprüfung mit zwei Leinwänden und Checkpoint-Übergabe zeigen | [prototyp/blister/README.md](prototyp/blister/README.md) |
@@ -75,7 +76,7 @@ Massgebend sind [KOSTEN_DH.md](docs/wirtschaft/KOSTEN_DH.md) und [ERGEBNISSE.md]
 
 ## Was ist echt und was ist simuliert?
 
-- **Echt:** Text-Embeddings auf dem Laptop, Prozesspause/Weiterlauf, Checkpoint-Neustart, gemessene Laufzeiten und macOS-Chip-Leistungsschätzungen.
+- **Echt:** Docking von 28 Molekülen gegen die Abl-Kinase mit AutoDock Vina (die drei besten sind echte Leukämie-Medikamente), Text-Embeddings auf dem Laptop, Prozesspause/Weiterlauf, Checkpoint-Neustart, gemessene Laufzeiten und macOS-Chip-Leistungsschätzungen.
 - **Echt auf künstlichen Daten:** Die Blister-Demo prüft Pixel mit einer Helligkeitsregel und übergibt den Bearbeitungsstand per TLS. Kein trainiertes oder validiertes Pharma-Modell.
 - **Simuliert:** Häuser, Sportbad, Heizsystem, NVIDIA-Leistung, Rechenauftragsmengen und viele Kosten-/Vertragswerte.
 - **ML tatsächlich trainiert:** Das zusätzliche Modell lernt den berechneten Case-Wärmebedarf. Im bisherigen Vergleich ist der zusätzliche Energieeffekt sehr klein und kein belastbarer Effizienznachweis.
@@ -93,6 +94,7 @@ Transportverschlüsselung und getrennte Oberflächen schützen nicht automatisch
 | Serverbetrieb | Leerlauf, Startzeit, Standby und Abschalten in Häusern und Sportbad simulieren | `src/scheduler/serverbetrieb.py` |
 | Unternehmensrechnung | Investition, Erlöse, laufende Kosten, Steuern und Restwert abbilden | `src/wirtschaft.py`, `src/kosten_dh.py`, `src/firma.py` |
 | Annahmen | Alle Modellannahmen an einem Ort, jede mit Quelle | `src/scheduler/annahmen.py` |
+| Echter Pharma-Auftrag | Virtuelles Screening: Moleküle (Schlüssel) in die Bindetasche eines Proteins (Schloss) docken | `src/jobs/docking_job.py` |
 | Echter KI-Auftrag | Öffentliche Nachrichtentexte auf der CPU in Suchvektoren umwandeln | `src/jobs/embedding_job.py` |
 | Live-Steuerung | Prozesspause, Weiterlauf und Checkpoint-Neustart aus dem Wärme-Router steuern | `src/scheduler/live.py`, `live_flotte.py` |
 | Analyse-Dashboard | Jahresresultate, Tagesverläufe, Flotte und Serverbetrieb untersuchen | `dashboard/` |
@@ -169,6 +171,6 @@ Die gemeinsame Aufgabenliste steht in [docs/TODO.md](docs/TODO.md). Die wichtigs
 | | [CONFIDENTIAL_COMPUTING.md](docs/technik/CONFIDENTIAL_COMPUTING.md) | Verschlüsselte Aufträge, externer Schlüsseldienst, Hardwarevoraussetzungen, Mehrkosten und offene Hardware-Abnahme |
 | | [WEITERE_BAUSTEINE.md](docs/technik/WEITERE_BAUSTEINE.md) | L4-Angebot, Confidential Computing, Auftragsvergabe, Serviceplanung und Strategievergleich in Kürze |
 
-Weitere Hintergründe liegen bei den Daten: [HALLENBAD.md](daten/HALLENBAD.md) (Wärmebedarf Sportbad), [PREISE.md](daten/PREISE.md), [QUELLEN.md](daten/QUELLEN.md), [ALIBABA_AUSWERTUNG.md](daten/ALIBABA_AUSWERTUNG.md), [MESSUNG.md](messungen/MESSUNG.md).
+Weitere Hintergründe liegen bei den Daten: [HALLENBAD.md](daten/HALLENBAD.md) (Wärmebedarf Sportbad), [PREISE.md](daten/PREISE.md), [QUELLEN.md](daten/QUELLEN.md), [ALIBABA_AUSWERTUNG.md](daten/ALIBABA_AUSWERTUNG.md), [MESSUNG.md](messungen/MESSUNG.md), [docking/README.md](daten/docking/README.md) (Docking: Daten, Quellen, Ergebnis).
 
 Code, Analysen und Texte wurden mit Claude Code und Codex erarbeitet. Der ursprüngliche Wärme-Router, die neue Serverbetriebssimulation und die Blister-Demo sind erhalten; Gesamtdemo, ML-Untersuchung und Messwerkzeug ergänzen diesen gemeinsamen Stand.

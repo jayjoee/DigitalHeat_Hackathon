@@ -32,3 +32,9 @@ messwerkzeug/.venv/
 daten/ergebnisse/ml/vergleich.json
 daten/ergebnisse/ml/stunden.csv
 daten/ergebnisse/service_ml/
+
+# Docking: lokales Vina-Programm und Läufe
+tools/
+messungen/docking_job/
+messungen/docking_test/
+messungen/live_*.log

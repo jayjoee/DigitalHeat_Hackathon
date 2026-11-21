@@ -19,6 +19,10 @@ Danach in einem Satz das Problem: Server machen aus Strom fast nur Wärme, und d
 - Der Scheduler rechnet nur, wenn das Haus oder der Speicher die Wärme brauchen kann.
 - **Kein Öl mehr:** Ölkessel und Tank kommen raus. Die restlichen Prozente liefert an den kältesten Tagen der Holzofen, den viele ältere Häuser schon haben. Beim Durchschnitts-EFH sind das rund 30 Tage mit höchstens 1,4 kW; ohne Ofen bliebe es über 18 °C.
 
+**2b. Was gerechnet wird: Docking (20 s)** (Kreativität und Machbarkeit)
+- Unser Auftrag für Pharma ist **virtuelles Screening**: Moleküle (Schlüssel) werden in die Tasche eines Proteins (Schloss) gedockt. Das läuft bei uns echt mit AutoDock Vina.
+- Solche Kampagnen haben **Fristen von Wochen statt Stunden**. Genau das braucht Abwärme-Rechnen: Bei knapper Nachfrage steigt die Deckung mit 90 Tagen Frist von 52 auf 69 %, die weggekühlte Wärme sinkt um 78 % (`ERGEBNISSE.md`).
+
 **3. Was neu ist: der Wärme-Router (60 s)** (Kreativität und Scheduling)
 - Das Problem ist der Sommer: Ohne zweiten Abnehmer laufen die Server in den Häusern nur zu 8 %.
 - Ein gemeinsamer Auftragspool für 20 Häuser und das **Sportbad St. Jakob**. Das Bad hat ein beheiztes 50-m-Becken und ist genau dann offen, wenn die Häuser keine Wärme brauchen (Ende April bis Anfang Oktober).
@@ -49,13 +53,16 @@ Danach in einem Satz das Problem: Server machen aus Strom fast nur Wärme, und d
 
 ## Live-Demo
 
-**Hauptdemo: die Gesamtdemo (60–90 s).** Sie zeigt genau, was der Case verlangt: einen Januartag, einen Julitag und einen echten Prozess, den der Scheduler auf das Wärmesignal hin pausiert und weiterlaufen lässt.
+**Hauptdemo: 3D-Modell mit echtem Docking (rund 90 s).** Erfüllt die Case-Vorgabe: Januartag, Julitag und ein echter Prozess, den der Scheduler auf das Wärmesignal hin pausiert und weiterlaufen lässt.
 ```sh
-.venv/bin/python start/demo_start.py --open     # oder start/Gesamtdemo_starten.command doppelklicken
+bash dashboard/starten.sh                                                            # Fenster 1, dann http://localhost:8765/3d/
+python3 src/scheduler/live.py --tag 2025-03-07 --server 8 --sekunden 3 --job docking  # Fenster 2, während der Demo
 ```
-- Vor dem Pitch einmal starten und **Live-Demo starten** testen. Oben steht die Jahresbilanz des Referenzhauses, dazu die Karte «Was heisst das für Ihr Haus?» für Hausbesitzer.
-- Während der Demo erzählen: Januar, alle Server rechnen. Juli, nur Warmwasser, der Prozess rechnet nur einen Teil jeder Stunde. 7. März, der Speicher ist voll, der Prozess wird angehalten und läuft später am Checkpoint weiter.
-- Falls etwas hängt: Die Seite zeigt die Jahresbilanz auch ohne Live-Lauf; als Rückfall die Aufzeichnung im Dashboard (unten).
+- Einmalig vorher auf dem Mac das Vina-Programm nach `tools/vina` laden (Befehl in `daten/docking/README.md`) und den Ablauf einmal komplett testen.
+- **Januartag** und **Julitag** mit den Knöpfen unten im 3D-Modell zeigen.
+- Dann `live.py` starten: Oben erscheint «LIVE · echter Job rechnet · … Moleküle», das 3D-Modell springt auf den 7. März. Erzählen: «Wir testen gerade echte Moleküle gegen die Abl-Kinase, ein Leukämie-Ziel. Nachts rechnen die Server, um 14 Uhr ist der Speicher voll – der Scheduler hält den Prozess an, der Zähler steht. Abends läuft er weiter.» Beim Pausieren aufs Terminal zeigen.
+- Zum Schluss die Rangliste: Nilotinib, Imatinib und Ponatinib binden am besten – echte Leukämie-Medikamente für genau dieses Protein.
+- Reserve, falls etwas hängt: die Gesamtdemo (`.venv/bin/python start/demo_start.py --open`) oder die Aufzeichnung im Dashboard (unten).
 
 **Zugabe, falls Zeit bleibt: Migration ins Sportbad.**
 
@@ -90,6 +97,7 @@ Browser öffnen und zum Abschnitt «Echter Job, live gesteuert» scrollen.
 
 | Frage | Antwort |
 |---|---|
+| Ist das echtes Docking? | Ja: AutoDock Vina dockt 28 Moleküle an die Abl-Kinase (PDB 1IEP). Die drei besten sind Nilotinib, Imatinib und Ponatinib, also Medikamente genau für dieses Protein. Docking-Werte sind Schätzungen und ersetzen keinen Laborversuch. Auf den Servern laufen nur öffentliche oder freigegebene Moleküle. |
 | Ist das wirklich verteilt? | Der echte Job speichert seinen Checkpoint und läuft in einem neuen Prozess auf dem Laptop weiter. Die 21 Standorte, der Netztransfer und der Stromzustand der Server sind simuliert. |
 | Warum nicht einfach Rückkühler im Sommer? | Wärme zuerst: Ein Rückkühler macht aus DigitalHeat ein normales Rechenzentrum mit Strom zum Haushaltstarif. |
 | Woher kommen die 60 % Festbuchung? | Das ist die Verkaufsannahme. Im Abschaltmodell mit Bad sind rund 91 % der simulierten Rechenkapazität am Vortag zusagbar. Die Abnahme müssen wir mit Kunden prüfen. |

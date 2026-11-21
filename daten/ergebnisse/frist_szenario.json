@@ -1,0 +1,86 @@
+{
+ "erzeugt": "python3 src/scheduler/frist_szenario.py",
+ "szenario": "alibaba, 8 Server, Case-Modell",
+ "ergebnisse": [
+  {
+   "deckungsgrad": 0.5172,
+   "waerme_abgefuehrt_kwh": 7506,
+   "abgegeben_server_h": 0.0,
+   "verpasste_fristen_anteil": 0.0,
+   "auslastung": 0.422,
+   "dh_ergebnis_pro_jahr_chf": 21118,
+   "frist_typ_a_h": 24,
+   "regel_ueberschuss": "rechnen"
+  },
+  {
+   "deckungsgrad": 0.5172,
+   "waerme_abgefuehrt_kwh": 316,
+   "abgegeben_server_h": 8990.3,
+   "verpasste_fristen_anteil": 0.0,
+   "auslastung": 0.2937,
+   "dh_ergebnis_pro_jahr_chf": -4991,
+   "frist_typ_a_h": 24,
+   "regel_ueberschuss": "abgeben"
+  },
+  {
+   "deckungsgrad": 0.5441,
+   "waerme_abgefuehrt_kwh": 6666,
+   "abgegeben_server_h": 0.0,
+   "verpasste_fristen_anteil": 0.0,
+   "auslastung": 0.422,
+   "dh_ergebnis_pro_jahr_chf": 21118,
+   "frist_typ_a_h": 168,
+   "regel_ueberschuss": "rechnen"
+  },
+  {
+   "deckungsgrad": 0.5441,
+   "waerme_abgefuehrt_kwh": 284,
+   "abgegeben_server_h": 7978.5,
+   "verpasste_fristen_anteil": 0.0,
+   "auslastung": 0.3082,
+   "dh_ergebnis_pro_jahr_chf": -1932,
+   "frist_typ_a_h": 168,
+   "regel_ueberschuss": "abgeben"
+  },
+  {
+   "deckungsgrad": 0.5891,
+   "waerme_abgefuehrt_kwh": 5262,
+   "abgegeben_server_h": 0.0,
+   "verpasste_fristen_anteil": 0.0,
+   "auslastung": 0.422,
+   "dh_ergebnis_pro_jahr_chf": 21118,
+   "frist_typ_a_h": 720,
+   "regel_ueberschuss": "rechnen"
+  },
+  {
+   "deckungsgrad": 0.5891,
+   "waerme_abgefuehrt_kwh": 221,
+   "abgegeben_server_h": 6302.6,
+   "verpasste_fristen_anteil": 0.0,
+   "auslastung": 0.3321,
+   "dh_ergebnis_pro_jahr_chf": 3010,
+   "frist_typ_a_h": 720,
+   "regel_ueberschuss": "abgeben"
+  },
+  {
+   "deckungsgrad": 0.6913,
+   "waerme_abgefuehrt_kwh": 1638,
+   "abgegeben_server_h": 0.0,
+   "verpasste_fristen_anteil": 0.0,
+   "auslastung": 0.4143,
+   "dh_ergebnis_pro_jahr_chf": 19567,
+   "frist_typ_a_h": 2160,
+   "regel_ueberschuss": "rechnen"
+  },
+  {
+   "deckungsgrad": 0.6913,
+   "waerme_abgefuehrt_kwh": 69,
+   "abgegeben_server_h": 1960.8,
+   "verpasste_fristen_anteil": 0.0,
+   "auslastung": 0.3863,
+   "dh_ergebnis_pro_jahr_chf": 13935,
+   "frist_typ_a_h": 2160,
+   "regel_ueberschuss": "abgeben"
+  }
+ ]
+}

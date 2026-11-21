@@ -28,6 +28,7 @@ SCHRITTE = [
     ("Serverzahl 1–13, beide Nachfrageszenarien", ["src/scheduler/jahr.py"], None),
     ("Leerlauf und Abschalten", ["-m", "src.scheduler.serverbetrieb", "--ausgabe", f"{ERG}/serverbetrieb.json"], None),
     ("Zusage am Vortag", ["src/scheduler/zusage.py"], None),
+    ("Lange Fristen (Docking-Kampagnen)", ["src/scheduler/frist_szenario.py"], None),
     ("Flotte im Abschaltmodell", ["src/scheduler/flotte.py", "--abschalten"], None),
     ("Flotte im Idealmodell", ["src/scheduler/flotte.py"], None),
     ("Zahlen für KOSTEN_DH.md", ["src/kosten_dh.py"], None),

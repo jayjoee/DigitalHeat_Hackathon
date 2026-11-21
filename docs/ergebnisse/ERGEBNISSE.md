@@ -119,6 +119,21 @@ Alle Annahmen mit Quelle stehen in `src/scheduler/annahmen.py` und in jeder Erge
 - Speicher ohne Verluste, Warmwasser gleichmässig über den Tag (0,5 kWh pro Stunde).
 - Ankünfte nach Alibaba-Tagesform in UTC+8, nicht auf Basel umgerechnet.
 
+## Docking: echter Pharma-Auftrag mit langer Frist
+
+Der Zielauftrag für Pharmakunden ist **virtuelles Screening (Docking)**: Moleküle (Schlüssel) werden in die Bindetasche eines Proteins (Schloss) gedockt und nach Bindungsenergie geordnet. Das läuft echt: `src/jobs/docking_job.py` testet 28 Moleküle gegen die Abl-Kinase (PDB 1IEP) mit AutoDock Vina. **Die drei besten Schlüssel sind Nilotinib (−13,4 kcal/mol), Imatinib (−12,8) und Ponatinib (−12,4), alles Leukämie-Medikamente für genau dieses Protein.** Alltagsmoleküle wie Koffein oder Glucose binden deutlich schwächer (Mittel −6,1). Der Scheduler pausiert und startet den Auftrag wie das Embedding (`live.py --job docking`, Protokoll `daten/ergebnisse/live_docking_2025-03-07.json`). Details: [daten/docking/README.md](../../daten/docking/README.md).
+
+**Lange Frist hilft der Wärme.** Eine Screening-Kampagne hat eine Frist von Wochen bis Monaten statt 24 Stunden. Referenzhaus, 8 Server, Nachfrage nach Alibaba-Trace, Case-Modell, nur die Frist von Typ A verändert (`src/scheduler/frist_szenario.py`, `daten/ergebnisse/frist_szenario.json`):
+
+| Frist Typ A | Deckung | Abgeführt («rechnen») | Abgegeben («abgeben») | Ergebnis DH («abgeben») |
+|---|---:|---:|---:|---:|
+| 24 h (Grundannahme) | 51,7 % | 7'506 kWh | 8'990 h | −4'991 CHF |
+| 7 Tage | 54,4 % | 6'666 kWh | 7'978 h | −1'932 CHF |
+| 30 Tage | 58,9 % | 5'262 kWh | 6'303 h | +3'010 CHF |
+| 90 Tage | **69,1 %** | **1'638 kWh** | **1'961 h** | **+13'935 CHF** |
+
+Keine Frist wird verpasst. Mit 90 Tagen Frist sinkt die weggekühlte Wärme um 78 %, und das Haus kommt bei knapper Nachfrage in die Gewinnzone. **Aufträge mit langer Frist sind darum die richtigen Kunden für Abwärme-Rechenzeit.** Die Grundannahme der übrigen Ergebnisse bleibt 24 Stunden.
+
 ## Nachfrage zwischen den Extremen
 Die beiden Szenarien oben sind Extreme: unbegrenzt flexible Aufträge oder nur Aufträge nach Alibaba-Trace. Weil die Server wärmegeführt laufen, fallen **82 % der Rechenstunden in die Heizsaison** Oktober–März. Roche (60 %) plus ein Kunde, der die übrigen Winterstunden kauft, ergibt im Abschaltmodell **+27'500 CHF pro Jahr**, auch wenn die übrigen Sommerstunden unverkauft bleiben. Nur Roche: −6'400 CHF. Herleitung, Grösse der Nachfrage im Vergleich zur GPU-Flotte von Roche und Schwellen für den Pilotentscheid: [KOSTEN_DH.md, Abschnitt 9](../wirtschaft/KOSTEN_DH.md#9-nachfrage-zwischen-den-extremen-und-schwellen-für-den-pilotentscheid), [PILOTPLAN.md](../wirtschaft/PILOTPLAN.md).
 
