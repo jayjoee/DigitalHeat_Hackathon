@@ -1,0 +1,13 @@
+{
+  "nodes": [{"id":"replace-with-real-l4-node","ram_gb":192,"cpu_cores":16,"slots":8,
+    "gpu_memory_gb":[24,24,24,24,24,24,24,24],"gpu_model":"L4","executor":"gpu",
+    "region":"CH","max_classification":"public",
+    "approved_customers":["public-customer","released-customer"]}],
+  "customers":[
+    {"id":"demo","max_running":1,"gpu_quota":0},
+    {"id":"public-customer","max_running":4,"gpu_quota":8,"token_env":"DIGITALHEAT_PUBLIC_TOKEN"},
+    {"id":"released-customer","max_running":4,"gpu_quota":8,"allow_customer_anonymized":true,
+     "token_env":"DIGITALHEAT_RELEASED_TOKEN"}
+  ],
+  "scheduler":{"public_only":true}
+}

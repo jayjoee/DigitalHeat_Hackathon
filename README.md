@@ -84,7 +84,14 @@ Die vollständige stündliche ML-Auswertung und neue Live-Vektoren werden lokal 
 
 ## Dokumente und Abgabe
 
-### Confidential-Computing-Integration
+### Gewähltes Angebot: öffentliche L4-Aufträge
+
+Das Team behält L4 und verarbeitet öffentliche/synthetische sowie beim Kunden bereits
+ausreichend anonymisierte und freigegebene Aufgaben. Die lokale Demo ist ausdrücklich
+auf öffentliche Verarbeitung begrenzt. Die geprüfte Hybridvariante wurde verworfen.
+[Angebot, Freigabemechanismus und Grenzen](docs/L4_ANGEBOT.md).
+
+### Confidential-Computing-Rechercheoption – nicht das gewählte Angebot
 
 `confidential_start.py` verschlüsselt Testaufträge auf dem Kundengerät, plant Kata/CoCo-Jobs
 und berechnet angenommene Mehrkosten. Ein separater Worker-Endpunkt nimmt nur verschlüsselte

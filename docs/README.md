@@ -4,6 +4,7 @@
 
 | Datei | In einem Satz |
 |---|---|
+| [L4_ANGEBOT.md](L4_ANGEBOT.md) | Gewählte Ausrichtung: L4 für öffentliche/synthetische oder kundenseitig anonymisierte und freigegebene Aufgaben |
 | [CONFIDENTIAL_COMPUTING.md](CONFIDENTIAL_COMPUTING.md) | Verschlüsselte Aufträge, externer Schlüsseldienst, Hardwarevoraussetzungen, Mehrkosten und noch offene Hardware-Abnahme |
 | [RESSOURCEN_SCHEDULER.md](RESSOURCEN_SCHEDULER.md) | Vergabecode, Wettbewerbsrecherche, Quellen, Annahmen und Grenzen der Ressourcenwarteschlange |
 | [PROJEKTUEBERSICHT.md](PROJEKTUEBERSICHT.md) | Alle Bausteine, Nachweise und offenen Punkte im gemeinsamen Stand |

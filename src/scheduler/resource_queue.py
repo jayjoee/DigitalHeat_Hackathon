@@ -6,6 +6,7 @@ Reservations are scheduler accounting, NOT operating-system or GPU memory isolat
 from dataclasses import dataclass, asdict, replace
 from src.confidential.costs import Overhead
 import math
+import re
 import threading
 import time
 
@@ -33,6 +34,8 @@ class Requirements:
     gpu_model: str = ''
     classification: str = 'public'
     region: str = ''
+    data_basis: str = 'public'
+    release_reference: str = ''
 
     def __post_init__(self):
         number(self.gpu_count,'gpu_count',0,64,True)
@@ -44,6 +47,11 @@ class Requirements:
             raise ValueError('Ungültige GPU-/Standortangabe.')
         if self.gpu_count==0 and (self.gpu_memory_gb or self.gpu_model):raise ValueError('GPU-Speicher/-Modell benötigt gpu_count > 0.')
         if self.gpu_count and not self.gpu_memory_gb:raise ValueError('GPU-Speicher je Karte fehlt.')
+        if self.data_basis not in ('public','synthetic','customer_anonymized'):raise ValueError('Unbekannte Datengrundlage.')
+        if not isinstance(self.release_reference,str) or (self.release_reference and not re.fullmatch(r'[A-Za-z0-9_-]{8,80}',self.release_reference)):
+            raise ValueError('Freigabereferenz muss eine technische ID sein.')
+        if self.data_basis=='customer_anonymized' and not self.release_reference:
+            raise ValueError('Kundenseitige Anonymisierung benötigt eine Freigabereferenz.')
 
     @classmethod
     def parse(cls, data):
@@ -61,6 +69,7 @@ class Customer:
     allowed_regions: tuple = ()
     gpu_quota: int = 64
     weight: float = 1.
+    allow_customer_anonymized: bool = False
 
     def __post_init__(self):
         if not isinstance(self.id,str) or not 1<=len(self.id)<=80 or not isinstance(self.max_classification,str) or self.max_classification not in CLASSES:raise ValueError('Ungültiger Kunde.')
@@ -69,6 +78,7 @@ class Customer:
         number(self.max_running,'max_running',1,128,True)
         number(self.gpu_quota,'gpu_quota',0,4096,True)
         number(self.weight,'weight',.1,100)
+        if type(self.allow_customer_anonymized) is not bool:raise ValueError('Ungültige Workflow-Freigabe.')
 
 
 @dataclass
@@ -146,7 +156,7 @@ class Ticket:
 
 
 class ResourceQueue:
-    def __init__(self,nodes,customers,*,clock=time.time,aging_seconds=900.,health_ttl=120.,idle_sleep_seconds=300.,placement='pack',queue_order='priority',backfill=True,risk_threshold=.2,confidential_overhead=None):
+    def __init__(self,nodes,customers,*,clock=time.time,aging_seconds=900.,health_ttl=120.,idle_sleep_seconds=300.,placement='pack',queue_order='priority',backfill=True,risk_threshold=.2,confidential_overhead=None,public_only=False):
         self.nodes={n.id:n for n in nodes};self.customers={c.id:c for c in customers}
         if len(self.nodes)!=len(nodes) or len(self.customers)!=len(customers):raise ValueError('Doppelte Server-/Kunden-ID.')
         self.clock=clock;self.aging_seconds=number(aging_seconds,'aging_seconds',1,86400)
@@ -156,6 +166,12 @@ class ResourceQueue:
         self.placement=placement;self.queue_order=queue_order;self.backfill=backfill
         self.risk_threshold=number(risk_threshold,'risk_threshold',0,1)
         self.confidential_overhead=Overhead(**(confidential_overhead or {}))
+        if type(public_only) is not bool:raise ValueError('Ungültiger öffentlicher Betriebsmodus.')
+        self.public_only=public_only
+        if public_only and any(n.executor=='confidential_coco' or n.max_classification!='public' for n in nodes):
+            raise ValueError('Öffentlicher Betriebsmodus erlaubt nur öffentliche Ausführungsknoten.')
+        if public_only and any(c.max_classification!='public' for c in customers):
+            raise ValueError('Öffentlicher Betriebsmodus erlaubt keine vertraulichen Kundenfreigaben.')
         self.lock=threading.RLock();self.jobs={};self.usage={c.id:0. for c in customers}
         self.last_usage=clock();self.idle_since={n.id:clock() for n in nodes}
 
@@ -164,6 +180,9 @@ class ResourceQueue:
             if jid in self.jobs or customer not in self.customers:raise ValueError('Unbekannter Kunde oder doppelte Auftrags-ID.')
             c=self.customers[customer];r=requirements
             if not isinstance(r,Requirements) or task_type not in TASKS:raise ValueError('Ungültiger Auftragstyp.')
+            if self.public_only and r.classification!='public':raise PermissionError('L4-Angebot akzeptiert keine vertraulichen oder internen Daten.')
+            if r.data_basis=='customer_anonymized' and not c.allow_customer_anonymized:
+                raise PermissionError('Kundenseitig anonymisierter Workflow ist vom Betreiber noch nicht freigegeben.')
             number(runtime_seconds,'runtime_seconds',.01,604800)
             if deadline_at is not None:number(deadline_at,'deadline_at',0,1e12)
             if CLASSES[r.classification]>CLASSES[c.max_classification]:raise PermissionError('Kunde ist für diese Datenklasse nicht freigegeben.')
@@ -193,6 +212,8 @@ class ResourceQueue:
         r=ticket.requirements;c=self.customers[ticket.customer]
         due=next_maintenance(node)
         if node.executor not in executors:return 'Kein angeschlossener passender Executor'
+        if r.data_basis=='customer_anonymized' and not c.allow_customer_anonymized:
+            return 'Freigabe des anonymisierten Workflows widerrufen'
         if r.classification!='public' and node.executor!='confidential_coco':return 'Vertrauliche Daten benötigen einen CoCo-Executor; keine CPU-/L4-Ausweichroute'
         if node.executor=='confidential_coco':
             if r.classification!='confidential':return 'Dedizierter vertraulicher Executor'
@@ -277,6 +298,8 @@ class ResourceQueue:
             j=self.jobs[jid];now=self.clock()
             if j.state!='running':return False,'Auftrag hat keine aktive Reservierung'
             n=self.nodes[j.node]
+            if j.requirements.data_basis=='customer_anonymized' and not self.customers[j.customer].allow_customer_anonymized:
+                return False,'Freigabe des anonymisierten Workflows widerrufen'
             if j.requirements.classification!='public' and (n.executor!='confidential_coco' or n.tee_type!='tdx'):
                 return False,'Geschützter Executor nicht mehr verfügbar'
             if j.finish_by is not None and now>=j.finish_by:return False,'Laufzeitlimit erreicht'

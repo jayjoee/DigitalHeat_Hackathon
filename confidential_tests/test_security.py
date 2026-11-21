@@ -150,7 +150,7 @@ class AdmissionTests(Fixture):
         store=app.Store();self.addCleanup(store.close)
         with self.assertRaises(app.APIError):store.submit({'text':'secret','requirements':{'classification':'confidential'}})
         with self.assertRaises(app.APIError) as cm:store.submit_confidential({},'pharma')
-        self.assertEqual(cm.exception.status,503)
+        self.assertEqual(cm.exception.status,403)
 
     def test_encrypted_api_keeps_only_ciphertext_and_binds_customer(self):
         store=app.Store(scheduler=self.queue,confidential_executor=object());self.addCleanup(store.close)

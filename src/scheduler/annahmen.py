@@ -28,9 +28,9 @@ ANNAHMEN = {
     "abschreibung_jahre": (5, "Amazon 5 Jahre, Microsoft/Alphabet 6 Jahre für Server; 5 Jahre, weil GPUs schneller veralten"),
     "restwert_anteil": (0.20, "Tesla T4 nach ≈ 7 Jahren 22–25 % des Neupreises (amcompute.com)"),
     "zins": (0.045, "Schätzung: SARON ≈ 0 % + Bankmarge; Unternehmenskredite Euroraum 3,8 % (Bundesbank)"),
-    "vertragspreis_chf_karte_h": (0.60, "Schweizer Cloud für Kunden mit Datenstandort Schweiz (Pharma, Banken, Spitäler): "
-                                        "rund 12 % unter Schweizer GPU-Clouds (Hikube ≈ 0,68 CHF, Everyware 2,13 CHF pro L4-h); "
-                                        "vorsichtiger Fall 0,50 CHF (PHARMA_SICHT.md, KOSTEN_DH.md)"),
+    "vertragspreis_chf_karte_h": (0.60, "Unbestätigter Zielpreis für öffentliche bzw. beim Kunden ausreichend anonymisierte und freigegebene L4-Aufträge; "
+                                        "kein Confidential-Computing- oder Forschungsgeheimnis-Aufschlag. Sensitivität 0,50 CHF; "
+                                        "Zahlungsbereitschaft und geeignete Nachfrage noch zu belegen (L4_ANGEBOT.md, PHARMA_SICHT.md)."),
     "anteil_fest_gebucht": (0.60, "Schätzung: Cloud-Kunden binden im Median 42 %, Ziel 70–80 % (FinOps-Vergleiche)"),
     "spotpreis_chf_karte_h": (0.294, "Füllaufträge zum L4-Spot-Preis (AWS g6 Spot 0,35–0,45 $ = 0,29–0,38 CHF)"),
     "spot_preisverfall": (0.10, "Annahme: Spot-Preis sinkt 10 % pro Jahr; H100-Index −23 % in einem Jahr (Silicon Data)"),

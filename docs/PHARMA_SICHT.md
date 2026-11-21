@@ -1,5 +1,7 @@
 # Sicht des Kunden: Pharmafirma (Stand 21.11.2026)
 
+**Aktualisierte Angebotsentscheidung:** Wir behalten L4 und verarbeiten nur öffentliche/synthetische oder bereits beim Kunden ausreichend anonymisierte und freigegebene Aufgaben. Vertrauliche Forschungsdaten sind ausgeschlossen. Die nachstehenden Marktgrössen und Preise sind Hintergrundszenarien; sie belegen keine zulässige oder zahlende öffentliche Nachfrage. Massgeblich ist [L4_ANGEBOT.md](L4_ANGEBOT.md).
+
 **Alle Preise in CHF** (0,84 CHF/$). Da die Gruppe Pharma keine eigenen Ergebnisse hat, ist hier ihre Arbeit übernommen: Wer ist der Kunde, welche Aufträge hat er, wie viel zahlt er heute, welche Verträge sind üblich und welche Sicherheitsnachweise verlangt er? Am Ende stehen die Werte, die ins Modell gehören.
 
 Grundlage: 8 Server pro Haus (64 L4-Karten), Jahressimulation Referenzhaus 2025, Kosten aus `KOSTEN_DH.md` (mittlerer Fall).
@@ -14,7 +16,7 @@ Grundlage: 8 Server pro Haus (64 L4-Karten), Jahressimulation Referenzhaus 2025,
 | **Mittelgrosse Pharma und Biotech** ohne eigenes Rechenzentrum | Mieten Rechenzeit in der Cloud | **Hauptkunde.** Sie zahlen heute Cloud-Preise und würden für einen tieferen, planbaren Preis wechseln |
 | **Hochschulen und Forschungsinstitute** (Life Sciences) | Eigene Cluster, oft ausgelastet | Ergänzung, vor allem für Batch-Rechnungen |
 
-**Folge:** Pharma ist ein guter **Ankerkunde**. Allein füllt diese Branche aber nicht viele Häuser, DH braucht weitere Branchen.
+**Folge:** Pharma ist ein möglicher Ankerkunde für ausdrücklich zulässige Workflows. Wie viel ihrer Nachfrage unter die öffentliche Freigabe fällt, ist noch unbekannt; die gesamte Pharma-Nachfrage darf nicht als L4-Hausnachfrage angesetzt werden.
 
 ## 2. Wann DH liefern kann
 
@@ -52,7 +54,7 @@ Keine Firma veröffentlicht, wie viele GPU-Stunden sie pro Jahr braucht. Die Men
 - In der Region Basel gibt es 700–800 Life-Sciences-Firmen (Kanton Basel-Stadt, Basel Area). Die meisten haben kein eigenes Rechenzentrum.
 - **Beispielrechnung (Annahme):** Eine mittelgrosse Firma, die in der Cloud dauerhaft 100 GPUs zur Hälfte auslastet, braucht rund 440'000 GPU-Stunden pro Jahr. Das sind **1,5 DH-Häuser**. Für 100 Häuser bräuchte DH also rund 65 solche Kunden, oder einige grosse plus viele kleine.
 
-**Folge:** Ein Pilot mit 5–10 Häusern lässt sich mit **einem einzigen mittelgrossen Pharma- oder Biotech-Kunden** füllen. Für den Ausbau braucht DH viele Kunden und mehrere Branchen.
+Diese Beispielmenge zeigt nur eine rechnerische Grössenordnung. Sie beweist weder die Eignung der Daten noch ein Kontingent für 5–10 Häuser. Für einen Pilot braucht es einen bezahlten, zulässigen Workflow; für den Ausbau weitere bestätigte Nachfrage.
 
 ## 4. Was Pharma heute für eine L4-Stunde zahlt
 
@@ -66,7 +68,7 @@ Keine Firma veröffentlicht, wie viele GPU-Stunden sie pro Jahr braucht. Die Men
 
 **Wichtig:** Bei GPU-Maschinen sind die Rabatte für feste Verträge klein (8–11 %). Die hohen Rabatte von 66–72 %, die man oft liest, gelten für normale Server, nicht für GPUs.
 
-**Folge für DH:** Bei US-Clouds kostet planbare Rechenzeit rund 0,53–0,55 CHF. Für Kunden, deren Daten in der Schweiz und unter Schweizer Recht bleiben müssen (Pharma mit Forschungsgeheimnissen, Banken unter FINMA-Aufsicht, Spitäler), fallen US-Anbieter aber weg. Sie vergleichen mit **Schweizer GPU-Clouds**:
+Historischer Preisvergleich mit Schweizer GPU-Clouds: Ein Schweizer Standort allein begründet weder den Schutz vertraulicher Forschungsdaten noch einen Preisaufschlag für unser gewähltes öffentliches Angebot. Die Vergleichskonfigurationen müssen auch CPU, RAM und weitere Leistungen berücksichtigen:
 
 | Schweizer Anbieter | Preis pro L4-Stunde |
 |---|---|
@@ -74,7 +76,7 @@ Keine Firma veröffentlicht, wie viele GPU-Stunden sie pro Jahr braucht. Die Men
 | Everyware (Sovereign Cloud) | 2,13 CHF |
 | Infomaniak | L4 im Angebot, Preis nicht öffentlich gefunden |
 
-**Vertragspreis DH: 0,60 CHF** (rund 12 % unter Hikube). Für Aufträge ohne Standortpflicht gilt der vorsichtige Fall **0,50 CHF**. DH verkauft dabei keine «Nicht-Cloud», sondern eine **Schweizer Cloud**: Schweizer Firma, Server in Schweizer Häusern, nur Schweizer Recht.
+**Zielpreis als Annahme: 0,60 CHF**, Sensitivität 0,50 CHF. Für öffentliche bzw. freigegebene anonymisierte Aufgaben müssen Zahlungsbereitschaft und Wettbewerbspreis neu bestätigt werden. Das Angebot verspricht keinen Schutz der laufenden L4-Verarbeitung vor dem Hostadministrator und keine pauschale rechtliche Sonderstellung.
 
 ## 5. Welche Verträge im GPU-Markt üblich sind
 
@@ -90,9 +92,9 @@ Keine Firma veröffentlicht, wie viele GPU-Stunden sie pro Jahr braucht. Die Men
 | **ISO 27001** und/oder **SOC 2 Type II** | Standard-Nachweis für Informationssicherheit bei Lieferanten (ISPE, ISACA) | Pflicht. ISO 27001 kostet 25'000–60'000 € im ersten Jahr (siehe `KOSTEN_DH.md`) |
 | Penetrationstests, Schwachstellen-Scans | gehören zur Lieferantenprüfung | jährlich einplanen |
 | Vertragsklauseln | Meldefristen bei Datenpannen, Haftung | im Vertrag regeln |
-| GxP / GAMP | nur für regulierte Daten (Klinik, Produktion) | **nicht nötig**, wenn DH nur Forschungsaufträge rechnet |
+| Regulierter Verwendungszweck | Anforderungen hängen am konkreten Workflow | Keine pauschale Freistellung durch das Wort Forschung; validierungspflichtige Anwendungen sind im aktuellen Angebot nicht zugesagt |
 | Physischer Schutz | Server stehen in Privatkellern | abgeschlossener Schrank, Lecksensor, keine Daten dauerhaft auf den Geräten |
-| Confidential Computing | Daten bleiben auch beim Rechnen verschlüsselt | nach meinem Wissen erst ab H100 verfügbar, für L4 bei NVIDIA prüfen |
+| Schutz während der Verarbeitung | L4 bietet im gewählten Betrieb keinen attestierten TEE-Schutz | Nur ausdrücklich zur nicht vertraulichen Verarbeitung freigegebene Inhalte; CC-Recherche ist nicht Teil dieses Angebots |
 
 ## 7. Was das für DH bedeutet
 
@@ -103,7 +105,7 @@ Mittlerer Kostenfall, 8 Server, 5 Jahre, nach Steuern. Direktvertrag mit festem 
 | 0,42 CHF | +8'800 CHF/Jahr | +17'300 CHF/Jahr |
 | **0,50 CHF (vorsichtig)** | **+20'300** | +32'500 |
 | 0,55 CHF | +27'400 | +42'000 |
-| **0,60 CHF (final)** | **+34'500** | +51'500 |
+| **0,60 CHF (Zielannahme)** | **+34'500** | +51'500 |
 
 **Break-even mit Direktvertrag: 0,36 CHF pro L4-Stunde** bei 60 % fest gebucht, 0,33 CHF bei 80 %. Über einen Marktplatz (20 % Gebühr, Preisverfall auf dem ganzen Preis) bräuchte es rund 0,50 CHF.
 
@@ -116,7 +118,7 @@ Gerechnet mit dem finalen Modell (`src/wirtschaft.py`, `KOSTEN_DH.md`): Referenz
 | Welche Aufträge, wie viele Stunden? | Screening (Docking) als grosser Winterauftrag, Mikroskopbilder als nächtlicher Batch. Die Menge hängt am Kunden; ein Haus liefert 290'000 L4-Stunden pro Jahr, davon 82 % im Winterhalbjahr |
 | Was zahlt Pharma heute? | US-Clouds: 0,60–0,67 CHF auf Abruf, 0,53–0,55 CHF mit festem Vertrag, 0,29–0,38 CHF Spot. Schweizer Clouds (Datenstandort Schweiz): ab ≈ 0,68 CHF bis 2,13 CHF |
 | Fester Preis über mehrere Jahre? | Im GPU-Markt Standard (2–5 Jahre, mit Abnahmepflicht). Für Pharma attraktiv, wenn DH unter dem Preis Schweizer Clouds liegt |
-| Welche Sicherheitsnachweise? | ISO 27001 oder SOC 2 Type II, Penetrationstests, Vertragsklauseln. Kein GxP, solange nur Forschungsdaten |
+| Welche Sicherheitsnachweise? | Zulässigkeit und Anforderungen je Workflow prüfen; keine pauschale GxP-Freistellung. Schutz vor Einsicht des Hostadministrators ist nicht zugesagt |
 
 ## 9. Werte für das Modell
 

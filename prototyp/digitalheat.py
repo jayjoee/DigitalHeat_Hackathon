@@ -87,6 +87,8 @@ def init_credentials(host, directory):
 
 class Store:
     def __init__(self, workers=1, scheduler=None, confidential_executor=None):
+        if confidential_executor is not None and (scheduler is None or scheduler.public_only):
+            raise ValueError('Der öffentliche L4-Betrieb verwendet keinen Confidential-Computing-Executor.')
         self.lock = threading.RLock()
         self.jobs = {}
         self.stopping = threading.Event()
@@ -98,7 +100,7 @@ class Store:
         self._last_health_poll=0.
         self.scheduler = scheduler or ResourceQueue(
             [Node('local-cpu-demo',ram_gb=4,cpu_cores=workers,slots=workers)],
-            [Customer('demo',max_running=workers)])
+            [Customer('demo',max_running=workers)],public_only=True)
         self.wakeup=threading.Event()
         self.dispatcher=threading.Thread(target=self._dispatch_loop,daemon=True)
         self.dispatcher.start()
@@ -158,7 +160,7 @@ class Store:
     def submit(self, data, customer='demo'):
         if not isinstance(data, dict):
             raise APIError(400, "Ein JSON-Objekt wird erwartet.")
-        if set(data)&{'customer_id','priority','security_approved','maintenance_state'}:
+        if set(data)&{'customer_id','priority','security_approved','maintenance_state','allow_customer_anonymized','public_only'}:
             raise APIError(403,'Kunde, Priorität und Freigaben werden aus dem Zugang und der Betreiberkonfiguration bestimmt.')
         try:
             requirements=Requirements.parse(data.get('requirements',{}))
@@ -209,6 +211,8 @@ class Store:
 
     def submit_confidential(self, data, customer):
         from src.confidential.envelope import validate
+        if self.scheduler.public_only:
+            raise APIError(403,'Das gewählte L4-Angebot nimmt keine vertraulichen Aufträge an.')
         if self.confidential_executor is None:
             raise APIError(503,'Kein geschützter Executor eingerichtet. Keine vertraulichen Daten an die CPU-Demo senden.')
         if not isinstance(data,dict) or set(data)!={'envelope','requirements','runtime_seconds','deadline_seconds'}:
