@@ -66,6 +66,7 @@
   .punkte i { width: 12px; height: 12px; border-radius: 3px; background: var(--standby); opacity: .45; }
   .punkte i.an { background: var(--idle); opacity: 1; } .punkte i.rechnet { background: var(--compute); opacity: 1; }
   .punkte i.echt { outline: 2px solid #fff; outline-offset: 1px; }
+  .punkte i.start { background: #fff; opacity: 1; }
   .legende { display: flex; gap: 10px; font-size: 11px; color: var(--muted); margin-top: 4px; flex-wrap: wrap; }
   .legende em { font-style: normal; display: inline-flex; align-items: center; gap: 4px; }
   .legende em::before { content: ""; width: 9px; height: 9px; border-radius: 3px; background: var(--c); }
@@ -210,7 +211,7 @@
   <div id="links-inhalt"></div>
 </aside>
 
-<div id="hinweis">Server, Ölkessel oder Bad anklicken · ziehen zum Drehen · scrollen zum Zoomen</div>
+<div id="hinweis">Server, Speicher, Ölkessel oder Bad anklicken · ziehen zum Drehen · scrollen zum Zoomen</div>
 
 <footer id="zeit" class="panel">
   <div id="zeitkopf">
@@ -278,8 +279,25 @@ const stromJetzt = (on, lauf, n) => lauf + (M.leerlauf_watt / 1000) * Math.max(0
 // Haus-Daten: Haus 01 = "h", Haus 02 = "h2"
 const HD = [1, 2].map(n => {
   const p = n === 1 ? 'h' : 'h2';
-  return { bed: S[p + '_bed'], gen: S[p + '_gen'], sp: S[p + '_sp'], on: S[p + '_on'], lauf: S[p + '_lauf'] };
+  return { bed: S[p + '_bed'], gen: S[p + '_gen'], sp: S[p + '_sp'], on: S[p + '_on'], lauf: S[p + '_lauf'],
+    srv: S[p + '_srv'], ns: n === 1 ? M.server_haus : M.server_haus2 };
 });
+const NS2 = M.server_haus2;
+// Zustand eines Servers aus dem Modell: Last pro Server stammt aus Entscheidung.server_belegt_kwh des Scheduler-Kerns.
+// «Pausieren» ist der Vergleichsfall: alle Server bleiben an, die Arbeit bleibt dieselbe.
+function srvZustand(hd, i, k) {
+  const on = modus === 'pausieren' ? hd.ns : hd.on[i];
+  if (k >= on) return 'standby';
+  if (modus !== 'pausieren' && i > 0 && k >= hd.on[i - 1]) return 'start';   // in dieser Stunde eingeschaltet
+  return hd.srv[i][k] > 0.02 ? 'rechnet' : 'bereit';
+}
+const srvLast = (hd, i, k) => hd.srv[i][k] || 0;
+function srvWatt(hd, i, k) {
+  const z = srvZustand(hd, i, k), l = srvLast(hd, i, k);
+  if (z === 'standby') return M.standby_watt;
+  const start = z === 'start' ? M.start_minuten / 60 : 0;
+  return 1000 * (l + start) + M.leerlauf_watt * Math.max(0, 1 - l - start);
+}
 const kessel = (hd, i) => Math.max(0, hd.bed[i] - hd.gen[i]);
 // Heizöl gespart (kumuliert): genutzte Serverwärme ersetzt Ölwärme
 const oelSpar = HD.map(hd => { const a = new Float32Array(N); for (let i = 0, s = 0; i < N; i++) { s += hd.gen[i] / (W.heizoel_kwh_l * W.kessel_wirkungsgrad); a[i] = s; } return a; });
@@ -316,7 +334,7 @@ function jahrServer(haus, k) {
   if (jahrCache[key]) return jahrCache[key];
   const hd = HD[haus - 1];
   let anH = 0, rechenH = 0;
-  for (let i = 0; i < N; i++) { if (hd.on[i] > k) anH++; rechenH += serverLast(hd.lauf[i], hd.on[i], k); }
+  for (let i = 0; i < N; i++) { if (hd.on[i] > k) anH++; rechenH += srvLast(hd, i, k); }
   return (jahrCache[key] = { anH, rechenH });
 }
 
@@ -385,7 +403,7 @@ const SOCKEL = { x0: -18, x1: 38, z0: -14, tiefe: 3.6 };
 const KZ0 = 5, KZ1 = 12, KBODEN = -3.2;
 const HAEUSER = [
   { n: 1, x0: -4.6, x1: 4.6, name: 'Haus 01', unter: 'Öl-Pilot Basel', dach: '#6b3b2f' },
-  { n: 2, x0: 7.4, x1: 15.0, name: 'Haus 02', unter: 'Nachbarhaus der Flotte', dach: '#4c5466' },
+  { n: 2, x0: 7.4, x1: 15.0, name: 'Haus 02', unter: `Durchschnitts-EFH · ${fmt(M.haus2_jahr_kwh)} kWh · ${M.server_haus2} Server`, dach: '#4c5466' },
 ];
 function sockelBlock(x0, x1, z0, z1) {
   mesh(new THREE.BoxGeometry(x1 - x0, SOCKEL.tiefe, z1 - z0), erdeMat, (x0 + x1) / 2, -SOCKEL.tiefe / 2, (z0 + z1) / 2, scene, false);
@@ -442,9 +460,16 @@ function baueHaus(h) {
   o.kellerLicht.position.set(mx, -0.8, 9.5); scene.add(o.kellerLicht);
   // Server
   const abstand = Math.min(0.8, (breite - 3) / 7.6);
-  for (let k = 0; k < NH; k++) o.racks.push(baueRack(h.x0 + 0.55 + k * abstand, KBODEN + 0.08, 5.7, 6, { art: 'server', haus: h.n, k }));
-  // Verteilpunkt der Leitungen (kein Speichertank im Modell)
-  o.tank = { x: h.x1 - 0.4, z: 7.0 };
+  for (let k = 0; k < (h.n === 1 ? NH : NS2); k++) o.racks.push(baueRack(h.x0 + 0.55 + k * abstand, KBODEN + 0.08, 5.7, 6, { art: 'server', haus: h.n, k }));
+  // Speicher (Case-Vorgabe: 1'000 l, 30 K, rund 35 kWh nutzbar)
+  o.tank = { x: h.x1 - 1.0, z: 9.6 };
+  const glas = mesh(new THREE.CylinderGeometry(0.7, 0.7, 2.6, 40, 1, true),
+    new THREE.MeshPhysicalMaterial({ color: '#cfe6ff', transparent: true, opacity: 0.22, roughness: 0.05, side: THREE.DoubleSide, depthWrite: false }),
+    o.tank.x, KBODEN + 1.4, o.tank.z, scene, false);
+  o.tankMat = new THREE.MeshStandardMaterial({ color: '#5aa8ff', emissive: new THREE.Color('#5aa8ff'), emissiveIntensity: 0.6, transparent: true, opacity: 0.9 });
+  o.tankFuell = mesh(new THREE.CylinderGeometry(0.63, 0.63, 1, 40), o.tankMat, o.tank.x, KBODEN + 0.1, o.tank.z, scene, false);
+  for (const y of [2.75, 0.12]) mesh(new THREE.CylinderGeometry(0.75, 0.75, 0.12, 40), mat('#6b7487', { metalness: 0.5 }), o.tank.x, KBODEN + y, o.tank.z);
+  for (const m of [glas, o.tankFuell]) { m.userData = { art: 'speicher', haus: h.n }; klickbar.push(m); }
   // Ölkessel mit Flamme
   o.kessel = { x: h.x1 - 1.05, z: 7.1 };
   const kk = mesh(new THREE.BoxGeometry(0.95, 1.5, 0.85), mat('#b9402f', { roughness: 0.5, metalness: 0.3 }), o.kessel.x, KBODEN + 0.83, o.kessel.z);
@@ -479,7 +504,7 @@ function baueHaus(h) {
   o.hausLicht = new THREE.PointLight('#ffb070', 0, 14, 1.5);
   o.hausLicht.position.set(mx, 3.2, 9); scene.add(o.hausLicht);
   label(`${h.name} <small>· ${h.unter}</small>`, mx, GESCHOSS * 2 + 3.1, 8.5);
-  // Leitungen: Server → Heizkörper
+  // Leitungen: Server → Speicher → Heizkörper
   const Y0 = KBODEN, rx0 = h.x0 + 0.55;
   o.leitungen.push(leitung([[rx0, Y0 + 2.15, 6.1], [mx - 1, Y0 + 2.4, 6.4], [o.tank.x - 1.2, Y0 + 2.4, 7.8], [o.tank.x, Y0 + 2.8, o.tank.z]], '#ff9a52'));
   o.leitungen.push(leitung([[o.tank.x, Y0 + 2.8, o.tank.z], [o.tank.x + 0.3, 0.2, 7], [mx + breite / 4, 0.4, 5.6], [mx + breite / 4, 0.65, 5.35]], '#ff7a2a'));
@@ -641,28 +666,32 @@ function flug(von, nach, farbe = '#7dfbe0') {
 // ---------- Thermostat-Simulation (Haus 01) ----------
 // Raum: C · dT/dt = Q_raum − UA · (T_innen − T_aussen). Ein Server gibt 0,8 kW Wärme ins Wasser,
 // Warmwasser 0,5 kW läuft immer mit. Regler: Halteleistung + Aufheizen zur Wunschtemperatur in ~2 h.
-const UA = W.ua_kw_k, CAP = W.zeitkonstante_h * UA, WW = 0.5, KESSEL_KW = 12;
+const UA = W.ua_kw_k, WW = 0.5, KESSEL_KW = 12;
 const thermo = { soll: 22, kessel: true, sim: null, abspielen: null, offen: false };
-function simuliereThermostat(start, soll, mitKessel) {
-  const dt = 1 / 6, schritte = 24 * 6, out = [];
-  let tin = 20, erreicht = null;
+function simuliereThermostat(start, soll, mitKessel, tau = W.zeitkonstante_h) {
+  // Raum mit Wärmekapazität C = τ · UA; der Speicher im Keller gibt seinen Inhalt beim Aufheizen zuerst ab.
+  const CAP = tau * UA, dt = 1 / 6, schritte = 24 * 6, out = [];
+  let tin = 20, erreicht = null, speicher = HD[0].sp[start];
   for (let s = 0; s <= schritte; s++) {
     const tout = S.temp[Math.min(N - 1, start + Math.floor(s * dt))];
     const halten = Math.max(0, UA * (soll - tout));
     const wunsch = Math.max(0, halten + CAP * (soll - tin) / 2);
     const nServer = Math.min(NH, (wunsch + WW) / ETA);
     const qServer = Math.max(0, nServer * ETA - WW);
-    const qKessel = mitKessel && wunsch > qServer + 0.05 ? Math.min(KESSEL_KW, wunsch - qServer) : 0;
-    out.push({ h: s * dt, tin, tout, nServer, qKessel });
+    const qSpeicher = Math.min(Math.max(0, wunsch - qServer), speicher / dt);
+    speicher -= qSpeicher * dt;
+    const rest = wunsch - qServer - qSpeicher;
+    const qKessel = mitKessel && rest > 0.05 ? Math.min(KESSEL_KW, rest) : 0;
+    out.push({ h: s * dt, tin, tout, nServer, qKessel, qSpeicher, speicher });
     if (erreicht === null && Math.abs(tin - soll) < 0.15) erreicht = s * dt;
-    tin += (qServer + qKessel - UA * (tin - tout)) / CAP * dt;
+    tin += (qServer + qSpeicher + qKessel - UA * (tin - tout)) / CAP * dt;
   }
   const basis = out.map(p => Math.min(NH, (Math.max(0, UA * (20 - p.tout)) + WW) / ETA));
   return { out, erreicht, basis };
 }
 function zielFuerFreieServer(i) {
   if (S.b_bed[i] > 0) return 'bad';
-  if (S.h2_on[i] < NH || S.h2_sp[i] < M.speicher_haus_kwh * 0.85) return 'haus2';
+  if (S.h2_on[i] < NS2 || S.h2_sp[i] < M.speicher_haus_kwh * 0.85) return 'haus2';
   return 'andere';
 }
 const dauerText = h => h === null ? 'nicht innert 24 h' : h < 0.2 ? 'sofort' : `nach ${Math.floor(h)} h ${String(Math.round((h % 1) * 60)).padStart(2, '0')} min`;
@@ -670,6 +699,10 @@ function zeigeThermostat() {
   thermo.offen = true; auswahl = null;
   const i = zeitH | 0;
   const sim = simuliereThermostat(i, thermo.soll, thermo.kessel), sim0 = simuliereThermostat(i, thermo.soll, false);
+  const [tauLeicht, tauSchwer] = W.zeitkonstante_bandbreite_h;
+  const simL = simuliereThermostat(i, thermo.soll, thermo.kessel, tauLeicht), simS = simuliereThermostat(i, thermo.soll, thermo.kessel, tauSchwer);
+  const band = (a, b) => a.erreicht === null || b.erreicht === null ? '' : ` <small class="hinweis-klein">(${fmt(a.erreicht, 1)}–${fmt(b.erreicht, 1)} h)</small>`;
+  const speicherGenutzt = HD[0].sp[i] - sim.out[sim.out.length - 1].speicher;
   thermo.sim = sim;
   const endN = sim.out[sim.out.length - 1].nServer, basisN = sim.basis[sim.basis.length - 1];
   const diff = endN - basisN, ziel = zielFuerFreieServer(i);
@@ -690,12 +723,14 @@ function zeigeThermostat() {
     </div>
     <div class="optionen"><label><input type="checkbox" id="t-kessel" ${thermo.kessel ? 'checked' : ''}> Ölkessel darf helfen</label>
       <button class="knopf" id="t-play">▶ 24 h abspielen</button></div>
-    <div class="zeile"><span>${fmt(thermo.soll, 1)} °C erreicht</span><span>${dauerText(sim.erreicht)}</span></div>
+    <div class="zeile"><span>${fmt(thermo.soll, 1)} °C erreicht</span><span>${dauerText(sim.erreicht)}${band(simL, simS)}</span></div>
+    <div class="zeile"><span>Speicher gibt ab</span><span>${fmt(speicherGenutzt, 1)} von ${fmt(HD[0].sp[i], 1)} kWh</span></div>
     <div class="zeile"><span>Nur mit Servern</span><span>${dauerText(sim0.erreicht)}</span></div>
     <canvas id="t-chart" height="120"></canvas>
     <p>${wirkung}</p>
     <p>Raummodell: Wärmeverlust ${fmt(UA, 2)} kW pro Kelvin (${W.ua_quelle}), Zeitkonstante ${W.zeitkonstante_h} h (${W.zeitkonstante_quelle}).
-      Ein Server gibt ${fmt(ETA * 1000)} W Wärme ins Wasser. Das ist die Logik der geplanten iOS-App: Wunschtemperatur rein, Rechenleistung raus.</p>`;
+      Klammer: Bandbreite für leichte bis schwere Bauweise (${W.zeitkonstante_bandbreite_h.join('–')} h). Der Speicher im Keller gibt beim Aufheizen zuerst seinen Inhalt ab.
+      Ein Server gibt ${fmt(ETA * 1000)} W Wärme ins Wasser. Nicht im Modell: Heizkörperleistung und Vorlauftemperatur. Das ist die Logik der geplanten iOS-App: Wunschtemperatur rein, Rechenleistung raus.</p>`;
   el('links').classList.add('offen');
   el('t-minus').onclick = () => { thermo.soll = Math.max(16, thermo.soll - 0.5); zeigeThermostat(); };
   el('t-plus').onclick = () => { thermo.soll = Math.min(25, thermo.soll + 0.5); zeigeThermostat(); };
@@ -728,12 +763,13 @@ let spielt = false, tempo = 3, auswahl = null, liveJob = null;
 function farbeLed(zustand, last) {
   if (zustand === 'standby') return [C.standby, 0.6];
   if (zustand === 'bereit') return [C.idle, 1.3];
+  if (zustand === 'start') return [new THREE.Color('#ffffff'), 1.6];
   return [C.compute, 0.8 + 1.3 * last];
 }
-function wendeHaus(o, on, lauf, sp, bed, gen, kesselKw, tRaum, weg = false) {
+function wendeHaus(o, zk, on, lauf, sp, bed, gen, kesselKw, tRaum, weg = false) {
   const hn = o.h.n, now = performance.now();
   o.racks.forEach((r, k) => {
-    const z = serverZustand(lauf, on, k), l = serverLast(lauf, on, k), [c, inten] = farbeLed(z, l);
+    const { z, l } = zk(k), [c, inten] = farbeLed(z, l);
     r.leds.forEach((led, u) => {
       const flacker = z === 'rechnet' ? 0.78 + 0.22 * Math.sin(now / (90 + u * 17) + k) : 1;
       led.material.emissive.copy(c); led.material.emissiveIntensity = inten * flacker;
@@ -743,6 +779,10 @@ function wendeHaus(o, on, lauf, sp, bed, gen, kesselKw, tRaum, weg = false) {
     r.koerper.material.emissiveIntensity = sel ? 0.1 : echt ? 0.2 + 0.1 * Math.sin(now / 250) : 0;
     r.luefter.rotation.z += z === 'standby' ? 0 : 0.05 + 0.3 * l;
   });
+  const fuell = clamp(sp / M.speicher_haus_kwh, 0.02, 1);
+  o.tankFuell.scale.y = fuell * 2.45; o.tankFuell.position.y = KBODEN + 0.18 + fuell * 2.45 / 2;
+  const tf = C.cold.clone().lerp(C.heat, fuell);
+  o.tankMat.color.copy(tf); o.tankMat.emissive.copy(tf); o.tankMat.emissiveIntensity = 0.35 + 0.5 * fuell;
   const deck = bed > 0.01 ? clamp(gen / bed) : 1, heizung = clamp(bed / 9);
   const warm = clamp(0.25 + 0.5 * heizung + (tRaum - 20) / 3, 0, 1) * (tRaum < 19.5 ? 0.4 : 1);
   o.raumMats.forEach(m => { m.color.copy(new THREE.Color('#4a5470').lerp(C.heat, 0.35 * warm)); m.emissiveIntensity = 0.16 * warm; });
@@ -768,14 +808,16 @@ function wende(i, frac) {
   const stunde = parseInt(S.zeit[i].slice(6, 8)) + frac, monat = parseInt(S.zeit[i].slice(0, 2)), temp = L(S.temp);
   HAUS.forEach((o, n) => {
     const hd = HD[n];
-    let on = hd.on[i], lauf = hd.lauf[i], tRaum = 20, kw = kessel(hd, i);
+    let on = modus === 'pausieren' ? hd.ns : hd.on[i], lauf = hd.lauf[i], tRaum = 20, kw = kessel(hd, i);
+    let zk = k => ({ z: srvZustand(hd, i, k), l: srvLast(hd, i, k) });
     if (n === 0 && thermo.abspielen && thermo.sim) {
+      // Thermostat-Wiedergabe: Serverzahl aus der Raumsimulation, nicht aus dem Jahresmodell
       const p = thermo.sim.out[thermo.abspielen.idx];
       lauf = p.nServer; on = Math.ceil(p.nServer - 0.01); tRaum = p.tin; kw = p.qKessel;
+      zk = k => ({ z: serverZustand(lauf, on, k), l: serverLast(lauf, on, k) });
     }
-    if (modus === 'pausieren') on = NH;
     const weg = modus === 'pausieren' && hd.sp[i] >= 0.85 * M.speicher_haus_kwh && on - lauf > 0.2;
-    wendeHaus(o, on, lauf, L(hd.sp), L(hd.bed), L(hd.gen), kw, tRaum, weg);
+    wendeHaus(o, zk, on, lauf, L(hd.sp), L(hd.bed), L(hd.gen), kw, tRaum, weg);
   });
   const bOn = modus === 'pausieren' ? NB : S.b_on[i], bLauf = S.b_lauf[i];
   badRacks.forEach((r, ri) => r.leds.forEach((led, u) => {
@@ -840,10 +882,10 @@ function satz(i) {
 }
 
 // ---------- Rechtes Panel ----------
-function punkte(on, lauf, n, echtK = -1) {
-  return Array.from({ length: n }, (_, k) => {
-    const s = serverZustand(lauf, on, k);
-    return `<i class="${s === 'rechnet' ? 'rechnet' : s === 'bereit' ? 'an' : ''}${k === echtK ? ' echt' : ''}" title="Server ${k + 1}"></i>`;
+function punkte(hd, i, echtK = -1) {
+  return Array.from({ length: hd.ns }, (_, k) => {
+    const s = srvZustand(hd, i, k);
+    return `<i class="${s === 'rechnet' ? 'rechnet' : s === 'bereit' ? 'an' : s === 'start' ? 'start' : ''}${k === echtK ? ' echt' : ''}" title="Server ${k + 1}"></i>`;
   }).join('');
 }
 function panelJetzt(i) {
@@ -858,9 +900,9 @@ function panelJetzt(i) {
   el('j-sp').textContent = `${fmt(hd.sp[i], 1)} / ${fmt(M.speicher_haus_kwh)} kWh`;
   el('j-sp-b').style.width = 100 * hd.sp[i] / M.speicher_haus_kwh + '%';
   el('j-on').textContent = `${hd.on[i]} an · ${fmt(hd.lauf[i], 1)} rechnen`;
-  el('j-punkte').innerHTML = punkte(hd.on[i], hd.lauf[i], NH, liveJob && liveJob.ort === 'haus' ? NH - 1 : -1);
+  el('j-punkte').innerHTML = punkte(hd, i, liveJob && liveJob.ort === 'haus' ? NH - 1 : -1);
   el('j2-on').textContent = `${S.h2_on[i]} an · ${fmt(S.h2_lauf[i], 1)} rechnen`;
-  el('j2-punkte').innerHTML = punkte(S.h2_on[i], S.h2_lauf[i], NH);
+  el('j2-punkte').innerHTML = punkte(HD[1], i);
   el('j-bad-z').textContent = S.b_bed[i] > 0 ? `offen · ${fmt(S.b_bed[i])} kWh Bedarf` : 'Saisonpause';
   el('j-bad-on').textContent = `${S.b_on[i]} / ${NB} an`;
   el('j-bad-b').style.width = 100 * S.b_lauf[i] / NB + '%';
@@ -896,9 +938,10 @@ const wk = id => Object.values(KNOTEN).map(k => k.div.querySelector('#' + id)).f
 function wolkenKarten(i) {
   const z = (a, b) => `<div class="z"><span>${a}</span><span>${b}</span></div>`;
   const pause = modus === 'pausieren';
-  const flotteAn = pause ? NH * 20 + NB : S.h_on[i] + S.h2_on[i] + S.b_on[i] + Math.round(S.rest_on[i] * 18);
+  const flotteGesamt = NH * 19 + NS2 + NB;
+  const flotteAn = pause ? flotteGesamt : S.h_on[i] + S.h2_on[i] + S.b_on[i] + Math.round(S.rest_on[i] * 18);
   wk('w-pool').innerHTML = z('Aufträge jetzt', `${fmt(S.flotte_lauf[i])} Server-h`) + z('Preis', `${fmt(VERTRAG, 2)} CHF/Server-h`);
-  wk('w-router').innerHTML = z('Server an', `${fmt(flotteAn)} von ${NH * 20 + NB}`)
+  wk('w-router').innerHTML = z('Server an', `${fmt(flotteAn)} von ${flotteGesamt}`)
     + z('Sportbad', S.b_bed[i] > 0 ? `${fmt(S.b_lauf[i], 1)} Server` : 'Pause') + z('Wechsel/Stunde', fmt(S.mig[i]));
   if (CL.ml) {
     const naechste = ML_PUNKTE.filter(p => p.i >= i && p.i <= i + 24);
@@ -918,7 +961,7 @@ function wolkenKarten(i) {
 }
 
 // ---------- Detail beim Anklicken ----------
-const STATUS = { rechnet: ['rechnet', 'var(--compute)'], bereit: ['bereit, Leerlauf', 'var(--idle)'], standby: ['Standby', '#8ea0c2'] };
+const STATUS = { rechnet: ['rechnet', 'var(--compute)'], bereit: ['bereit, Leerlauf', 'var(--idle)'], standby: ['Standby', '#8ea0c2'], start: ['startet (5 min)', '#ffffff'] };
 const zeilen = paare => paare.map(([a, b]) => `<div class="zeile"><span>${a}</span><span>${b}</span></div>`).join('');
 function miniChart(werte, max, farbe) {
   const cv = el('d-chart'), dpr = devicePixelRatio || 1, w = cv.clientWidth, h = 70;
@@ -938,9 +981,7 @@ function detailHtml(art, titel, status, farbe, paare, text, extra = '') {
     ${zeilen(paare)}<canvas id="d-chart" height="70"></canvas><p>${text}</p>${extra}`;
 }
 function ablaufHtml(hd, i, k) {
-  const vorher = i > 0 ? hd.on[i - 1] : hd.on[i];
-  let jetzt = { rechnet: 'Rechnet', bereit: 'Leerlauf', standby: 'Standby' }[serverZustand(hd.lauf[i], modus === 'pausieren' ? NH : hd.on[i], k)];
-  if (modus !== 'pausieren' && k >= vorher && k < hd.on[i]) jetzt = 'Start';
+  const jetzt = { rechnet: 'Rechnet', bereit: 'Leerlauf', standby: 'Standby', start: 'Start' }[srvZustand(hd, i, k)];
   const farbe = { Standby: '#8ea0c2', Start: '#ffffff', Rechnet: 'var(--compute)', Leerlauf: 'var(--idle)' };
   const chips = ['Standby', 'Start', 'Rechnet', 'Leerlauf'].map(s => `<span class="${s === jetzt ? 'jetzt' : ''}" style="${s === jetzt ? 'background:' + farbe[s] : ''}">${s}</span>`).join('<i>→</i>');
   return `<h2 class="k" style="margin-top:12px">Ablauf beim ${modus === 'pausieren' ? 'Pausieren' : 'Abschalten'}</h2><div class="ablauf">${chips}</div>
@@ -961,18 +1002,18 @@ function zeigeDetail(info, fliegen = true) {
   auswahl = info; thermo.offen = false; thermo.abspielen = null; el('links').classList.add('offen');
   const i = zeitH | 0, box = el('links-inhalt');
   if (info.art === 'server') {
-    const hd = HD[info.haus - 1], k = info.k, z = serverZustand(hd.lauf[i], hd.on[i], k), l = serverLast(hd.lauf[i], hd.on[i], k);
-    const watt = serverWatt(hd.lauf[i], hd.on[i], k), J = jahrServer(info.haus, k);
+    const hd = HD[info.haus - 1], k = info.k, z = srvZustand(hd, i, k), l = srvLast(hd, i, k);
+    const watt = srvWatt(hd, i, k), J = jahrServer(info.haus, k);
     const echt = liveJob && info.haus === 1 && k === NH - 1 && liveJob.ort === 'haus';
-    box.innerHTML = detailHtml(`Server im Keller · Haus 0${info.haus}`, `Server ${k + 1} von ${NH}`, echt ? 'echter Job' : STATUS[z][0],
+    box.innerHTML = detailHtml(`Server im Keller · Haus 0${info.haus}`, `Server ${k + 1} von ${hd.ns}`, echt ? 'echter Job' : STATUS[z][0],
       echt ? '#ffffff' : STATUS[z][1], [
         ['Hardware', '8 × NVIDIA L4'], ['Leistung jetzt', fmt(watt) + ' W'], ['Davon Rechnen', fmt(l * 100) + ' % der Stunde'],
         ['Wärme an den Speicher', fmt(watt * ETA / 1000, 2) + ' kW'], ['Eingeschaltet 2025', fmt(J.anH) + ' h'],
         ['Gerechnet 2025', fmt(J.rechenH) + ' Server-h'], ['Erlös 2025 (Vertragspreis)', fmt(J.rechenH * VERTRAG) + ' CHF'],
       ], (info.haus === 1 && k === NH - 1 ? (echt ? `Live: ${liveJob.text}. ` : 'In der Live-Demo steht dieser Server für den echten Embedding-Job auf dem Laptop. ') : '')
-        + 'Server werden der Reihe nach zugeschaltet: Server 1 läuft am längsten, die letzten nur an kalten Tagen.',
+        + 'Zustand und Last dieses Servers stammen direkt aus dem Scheduler (Last pro Server je Stunde). Server werden der Reihe nach zugeschaltet: Server 1 läuft am längsten, die letzten nur an kalten Tagen.',
       ablaufHtml(hd, i, k) + (info.haus === 1 ? serviceHtml(k) : ''));
-    miniChart(fenster(n => serverLast(hd.lauf[n], hd.on[n], k)), 1, '#3ee0c0');
+    miniChart(fenster(n => srvLast(hd, n, k)), 1, '#3ee0c0');
     if (fliegen) fliegeZu(HAUS[info.haus - 1].racks[k].g.position.clone().add(V(0, 1, 0)), V(1.4, 0.25, 3.6));
   } else if (info.art === 'speicher') {
     const o = HAUS[info.haus - 1], hd = HD[info.haus - 1], f = hd.sp[i] / M.speicher_haus_kwh;

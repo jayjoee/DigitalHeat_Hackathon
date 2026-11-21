@@ -14,12 +14,25 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from src.scheduler.flotte import baue, bad_profil  # noqa: E402
+from src.scheduler.flotte import bad_profil  # noqa: E402
+from src.scheduler.router import Flotte  # noqa: E402
+from src.scheduler.serverbetrieb import HausMitServerbetrieb  # noqa: E402
 from src.scheduler.jahr import profil_laden  # noqa: E402
 from src.scheduler.serverbetrieb import Leistungsprofil  # noqa: E402
 from src.scheduler import annahmen as A  # noqa: E402
 
 N_HAEUSER, N_HAUS, N_BAD = 20, 8, 50
+# Haus 02 ist kein Klon des Referenzhauses, sondern ein Durchschnitts-Einfamilienhaus (Kundensicht von Joël)
+HAUS2 = {"jahr_kwh": 17000, "server": 5,
+         "quelle": "docs/CustomerView_Joel.md: Durchschnitts-EFH 17'000 kWh Wärme pro Jahr, 5-kW-Einheit"}
+
+
+def profil_haus2(profil):
+    """Referenzprofil mit gleichem Warmwasser, Heizung so skaliert, dass das Jahr 17'000 kWh ergibt."""
+    heiz = sum(p["heizung"] for p in profil)
+    ww = sum(p["ww"] for p in profil)
+    f = (HAUS2["jahr_kwh"] - ww) / heiz
+    return [{**p, "heizung": p["heizung"] * f} for p in profil], f
 LEISTUNG = Leistungsprofil(230, 10, 5)
 ERG = ROOT / "daten" / "ergebnisse"
 
@@ -89,9 +102,30 @@ def cloud_daten():
 
 def main():
     profil = profil_laden()
-    f, _ = baue(N_HAEUSER, N_HAUS, "spot", "abgeben", profil, bad_profil(profil), N_BAD, leistung=LEISTUNG)
+    p2, faktor2 = profil_haus2(profil)
+
+    def standort(n, p, **optionen):
+        return HausMitServerbetrieb(n, "spot", p, LEISTUNG, abschalten=True, bei_ueberschuss="abgeben",
+                                    mit_ankuenften=False, **optionen)
+    st = ([standort(N_HAUS, profil, name="Haus 01"), standort(HAUS2["server"], p2, name="Haus 02")]
+          + [standort(N_HAUS, profil, name=f"Haus {n:02d}") for n in range(3, N_HAEUSER + 1)]
+          + [standort(N_BAD, bad_profil(profil), speicher_kwh=A.wert("bad_speicher_kwh"),
+                      name="Sportbad St. Jakob", typ="bad")])
+    f = Flotte(st, "spot", "abgeben", nachfrage_server=sum(s.n for s in st if s.typ == "haus"))
+
+    # Echte Last pro Server aus dem Scheduler-Kern (Entscheidung.server_belegt_kwh) mitschreiben
+    last = {}
+    for idx in (0, 1):
+        original = st[idx].betrieb_verbuchen
+
+        def mitschreiben(h, e, betrieb, _original=original, _idx=idx):
+            kap = betrieb.lage.server_kapazitaeten_kwh
+            werte = [round(b / c, 2) if c > 0 else 0.0 for b, c in zip(e.server_belegt_kwh, kap)]
+            last[_idx] = werte + [0.0] * (st[_idx].n - len(werte))
+            return _original(h, e, betrieb)
+        st[idx].betrieb_verbuchen = mitschreiben
     s = {k: [] for k in ("zeit", "temp", "h_bed", "h_gen", "h_sp", "h_on", "h_lauf", "h_backup", "h_abg",
-                         "h2_bed", "h2_gen", "h2_sp", "h2_on", "h2_lauf",
+                         "h2_bed", "h2_gen", "h2_sp", "h2_on", "h2_lauf", "h_srv", "h2_srv",
                          "b_bed", "b_gen", "b_sp", "b_on", "b_lauf", "mig", "flotte_lauf", "rest_on")}
     mig_vorher = 0
     for h in range(len(profil)):
@@ -107,11 +141,13 @@ def main():
             s[f"{p}_lauf"].append(round(z["server_laufend"], 2))
         s["h_backup"].append(round(haus["backup_kwh"], 2))
         s["h_abg"].append(round(haus["abgefuehrt_kwh"], 2))
+        s["h_srv"].append(last.get(0, [0.0] * N_HAUS))
+        s["h2_srv"].append(last.get(1, [0.0] * HAUS2["server"]))
         s["mig"].append(f.pool.z["migrationen"] - mig_vorher)
         mig_vorher = f.pool.z["migrationen"]
         s["flotte_lauf"].append(round(r["server_laufend"], 1))
         # die übrigen 18 Häuser: eingeschaltete Server im Mittel (für die leuchtenden Nachbarkeller)
-        rest = r["standorte"][2:-1]
+        rest = r["standorte"][2:-1]  # Häuser 03–20
         s["rest_on"].append(round(sum(z["server_eingeschaltet"] for z in rest) / len(rest), 2))
 
     # Day-ahead-Zusage der Flotte mit Bad (aus flotte_abschalten.json) und Prognose-Temperatur pro Tag
@@ -133,6 +169,8 @@ def main():
     daten = {
         "erzeugt": "python3 src/dashboard3d_daten.py",
         "modell": {"haeuser": N_HAEUSER, "server_haus": N_HAUS, "server_bad": N_BAD,
+                   "server_haus2": HAUS2["server"], "haus2_jahr_kwh": HAUS2["jahr_kwh"], "haus2_quelle": HAUS2["quelle"],
+                   "haus2_heizfaktor": round(faktor2, 3),
                    "leerlauf_watt": LEISTUNG.leerlauf_watt, "standby_watt": LEISTUNG.standby_watt,
                    "start_minuten": LEISTUNG.start_minuten, "szenario": "spot",
                    "speicher_haus_kwh": A.wert("speicher_kwh"), "speicher_bad_kwh": A.wert("bad_speicher_kwh"),
@@ -143,8 +181,12 @@ def main():
         "waerme": {  # Raummodell für Anzeige und Thermostat-Simulation
             "ua_kw_k": round(10 / 25.6, 4),
             "ua_quelle": "Case-Formel: 10 kW bei 20 °C innen und −5,6 °C aussen (src/referenzprofil.py)",
-            "zeitkonstante_h": 40,
-            "zeitkonstante_quelle": "Schätzung: Einfamilienhaus mittelschwerer Bauweise, 30–60 h",
+            # τ = C / UA mit C = C/AE × AE. C/AE ≥ 0,40 MJ/(m²K) für Wohnbauten (Klima Zürich, bauRUNDSCHAU 2017/04,
+            # Th. Frank), AE ≈ 175 m² geschätzt aus 26'851 kWh Heizwärme bei ≈ 150 kWh/m²a (älteres Öl-EFH).
+            "zeitkonstante_h": round(0.40e6 * 175 / 3.6e6 / (10 / 25.6)),
+            "zeitkonstante_bandbreite_h": [30, 70],
+            "zeitkonstante_quelle": "C/AE 0,40 MJ/(m²K) für Wohnbauten (bauRUNDSCHAU 2017/04) × geschätzte 175 m² Energiebezugsfläche; "
+                                    "Bandbreite 30–70 h für leichte bis schwere Bauweise",
             "waermerueckgewinnung": A.wert("waermerueckgewinnung"),
             "heizoel_kwh_l": 10.0, "kessel_wirkungsgrad": 0.9, "co2_kg_l": 2.65,
             "oel_quelle": "Heizöl EL ≈ 10 kWh/l (Heizwert), Kessel 90 %, 2,65 kg CO₂/l (BAFU-Emissionsfaktor)",
