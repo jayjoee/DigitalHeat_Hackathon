@@ -36,7 +36,7 @@ ANNAHMEN = {
     "spot_preisverfall": (0.10, "Annahme: Spot-Preis sinkt 10 % pro Jahr; H100-Index −23 % in einem Jahr (Silicon Data)"),
     "plattform_anteil": (0.05, "Direktvertrag mit eigener Plattform statt Marktplatz (15–30 %)"),
     "verfuegbarkeit": (0.993, "A100/H100-Knoten 99,3–99,4 % verfügbar (arXiv 2503.11901)"),
-    "waermepreis_haushalt_chf_kwh": (0.0, "Gratiswärme im Öl-Pilot (CustomerView_Joel.md)"),
+    "waermepreis_haushalt_chf_kwh": (0.0, "Gratiswärme im Pilot (ehemalige Öl-Häuser, Holzofen als Reserve; CustomerView_Joel.md)"),
     "gpu_preis_chf": (2100, "L4 einzeln 2'000–3'000 $ = 1'680–2'520 CHF (jarvislabs.ai), für Ersatzteile"),
     "gpu_ausfall": (0.045, "Meta Llama 3: 6,1 %/Jahr bei 24/7-Training; bei halber Laufzeit 3–6,1 %; L4 3 Jahre Garantie"),
     "host_reparatur": (0.035, "Schätzung 2–5 % pro Jahr auf den Host-Anteil (35 % der Hardware), ab Jahr 2"),

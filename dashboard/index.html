@@ -145,7 +145,7 @@ details summary { cursor: pointer; font-weight: 600; }
       <h2>Wärme übers Jahr</h2>
       <div class="note">kWh pro Monat, Heizung und Warmwasser</div>
       <div class="legend"><span><i style="background:var(--s1)"></i>Serverwärme genutzt</span>
-        <span><i style="background:var(--s2)"></i>Backup-Heizung</span>
+        <span><i style="background:var(--s2)"></i>Holzofen (Reserve)</span>
         <span><i style="background:var(--s3)"></i>abgeführt</span></div>
       <div id="chMonate"></div>
       <button class="toggle" data-table="tblMonate">Tabelle zeigen</button><div id="tblMonate" hidden></div>
@@ -328,7 +328,7 @@ function kacheln() {
   const L = lauf(), b = L.bilanz, o = oekonomie(b, S.n);
   const t = [
     ["Server pro Haus", fmt(S.n), "1 kW Strom → 0,8 kW Wärme pro Server"],
-    ["Wärmebedarf gedeckt", pct(b.deckungsgrad), `${fmt(b.waerme_genutzt_kwh)} von ${fmt(b.waermebedarf_kwh)} kWh, Rest Backup`],
+    ["Wärmebedarf gedeckt", pct(b.deckungsgrad), `${fmt(b.waerme_genutzt_kwh)} von ${fmt(b.waermebedarf_kwh)} kWh, Rest Holzofen`],
     ["Wärme abgeführt", fmt(b.waerme_abgefuehrt_kwh) + " kWh", "Case-Modell: 0 W im Leerlauf"],
     ["Auslastung", pct(b.auslastung), `${fmt(b.server_h)} Server-h von ${fmt(S.n * 8760)}`],
     ["Verpasste Fristen", pct(b.verpasste_fristen_anteil, 2), (S.sz === "spot"
@@ -374,11 +374,11 @@ function monate() {
     const hit = el("rect", { x: x0 + i * bw, y: y1, width: bw, height: y0 - y1, fill: "transparent" }, svg);
     hover(hit, `<b>${MON[i]} 2025</b><br><span class="k">Bedarf</span> ${fmt(m.bedarf_kwh)} kWh<br>
       <span class="k">Serverwärme genutzt</span> ${fmt(m.genutzt_kwh)} kWh (${pct(m.genutzt_kwh / m.bedarf_kwh, 0)})<br>
-      <span class="k">Backup</span> ${fmt(m.backup_kwh)} kWh<br><span class="k">abgeführt</span> ${fmt(m.abgefuehrt_kwh)} kWh`);
+      <span class="k">Holzofen</span> ${fmt(m.backup_kwh)} kWh<br><span class="k">abgeführt</span> ${fmt(m.abgefuehrt_kwh)} kWh`);
     const t = el("text", { x: x + w / 2, y: H - 6, "text-anchor": "middle" }, svg); t.textContent = MON[i];
   });
   $("tblMonate").innerHTML = `<table><tr><th>Monat</th><th class="num">Bedarf</th><th class="num">Server genutzt</th>
-    <th class="num">Backup</th><th class="num">abgeführt</th><th class="num">Auslastung</th></tr>` +
+    <th class="num">Holzofen</th><th class="num">abgeführt</th><th class="num">Auslastung</th></tr>` +
     M.map((m, i) => `<tr><td>${MON[i]}</td><td class="num">${fmt(m.bedarf_kwh)}</td><td class="num">${fmt(m.genutzt_kwh)}</td>
       <td class="num">${fmt(m.backup_kwh)}</td><td class="num">${fmt(m.abgefuehrt_kwh)}</td>
       <td class="num">${pct(m.strom_kwh / (S.n * m.stunden), 0)}</td></tr>`).join("") + "</table>";
@@ -495,7 +495,7 @@ function tag(name, box, sp, titel, notiz) {
     fill: "transparent" }, svg);
     hover(hit, `<b>${z.zeit.slice(11, 16)} Uhr, ${fmt(z.temp_c, 1)} °C</b><br><span class="k">Bedarf</span> ${fmt(z.bedarf_kwh, 2)} kWh
       <br><span class="k">Serverwärme</span> ${fmt(z.waerme_kwh, 2)} kWh<br><span class="k">Server an</span> ${fmt(z.server_laufend, 2)}
-      <br><span class="k">Speicher</span> ${fmt(z.speicher_kwh, 1)} kWh<br><span class="k">Backup</span> ${fmt(z.backup_kwh, 2)} kWh`); });
+      <br><span class="k">Speicher</span> ${fmt(z.speicher_kwh, 1)} kWh<br><span class="k">Holzofen</span> ${fmt(z.backup_kwh, 2)} kWh`); });
   // Speicherstreifen
   const s2 = svgNeu($(sp), W, 46), w = (x1 - x0) / 24;
   T.forEach((z, h) => { const a = z.speicher_kwh / 35;
@@ -695,7 +695,7 @@ function annahmenKurz() {
       `Heizung ${s("max(0, 10 kW × (20 − T) ÷ 25,6), nur an 206 Heiztagen")} = 26'851 kWh/Jahr`,
       `Warmwasser 12 kWh pro Tag, gleichmässig über den Tag = 4'380 kWh/Jahr`,
       `Wassertank ${fmt(a("speicher_kwh"))} kWh, <b>ohne Verluste</b>`,
-      `Was die Server nicht decken, liefert eine Backup-Heizung ausserhalb des Modells`]],
+      `Was die Server nicht decken, liefert ein Holzofen ausserhalb des Modells (keine Ölheizung mehr)`]],
     ["Server", [
       `1 Server = ${fmt(a("server_kw"))} kW Strom, ${pct(a("waermerueckgewinnung"), 0)} davon als nutzbare Wärme`,
       `Wärme ohne Wärmepumpe direkt für Heizung und Warmwasser ${s("Case")}`,
@@ -707,7 +707,7 @@ function annahmenKurz() {
       `Wärmetauscher trennt Kühlkreis und Heizwasser: Das Heizwasser kommt nie an die Server`,
       `50–70 °C Vorlauf: reicht für Heizung und Warmwasser ohne Wärmepumpe`,
       `5–20 kW pro Einheit: <b>unsere 8 Server = eine Einheit von 8 kW</b>`,
-      `DigitalHeat besitzt und bezahlt alles, der Haushalt bekommt die Wärme <b>gratis</b> ${s("Öl-Pilot, CustomerView_Joel.md")}`,
+      `DigitalHeat besitzt und bezahlt alles, der Haushalt bekommt die Wärme <b>gratis</b> ${s("Pilot in ehemaligen Öl-Häusern, CustomerView_Joel.md")}`,
       `Nicht angegeben: Kühlmittel, Anteil zurückgewonnener Wärme, Preise`]],
     ["Geld (alles in CHF)", [
       `Strom ${fmt(a("strompreis_chf_kwh") * 100, 2)} Rp./kWh ${s("ElCom 2026, IWB Basel, H4")}`,

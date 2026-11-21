@@ -16,6 +16,7 @@ Danach in einem Satz das Problem: Server machen aus Strom fast nur Wärme, und d
 - Pro Referenzhaus 8 Server mit Flüssigkühlung. Im Case-Modell decken sie **93 %** der Wärme. Der Haushalt erhält die Wärme **gratis**.
 - Beim blossen Pausieren der Jobs verbrauchen die Server weiter Strom. Bei angenommenen 230 W Leerlauf spart das Abschalten ungenutzter Server in der Simulation rund 5'200 kWh Strom pro Jahr. Die Wärmedeckung sinkt dabei von 91,3 % auf 90,5 %, alle Fristen werden eingehalten.
 - Der Scheduler rechnet nur, wenn das Haus oder der Speicher die Wärme brauchen kann.
+- **Kein Öl mehr:** Ölkessel und Tank kommen raus. Die restlichen 7 % liefert an den kältesten Tagen ein wasserführender Holzofen, der in den Speicher heizt (rund 1,9 Ster Holz pro Jahr).
 
 **3. Was neu ist: der Wärme-Router (60 s)** (Kreativität und Scheduling)
 - Das Problem ist der Sommer: Ohne zweiten Abnehmer laufen die Server in den Häusern nur zu 8 %.
@@ -33,10 +34,11 @@ Danach in einem Satz das Problem: Server machen aus Strom fast nur Wärme, und d
 - **Zusage am Vortag um 12 Uhr** aus der ECMWF-Wetterprognose. Im Abschaltmodell mit Bad sind rund 91 % der Stunden zusagbar. Knapp 60 % gehen in der Rechnung als Festbuchung ein.
 - Das Einzelhaus mit Abschalten erreicht rund **+29'400 CHF pro Jahr** vor möglichen Gutschriften, bei rund 290'000 CHF Investition.
 - Der Vollkosten-Break-even des Einzelhauses mit Abschalten liegt bei **3,07 CHF pro Server-h**, sofern 60 % fest gebucht und die übrigen Stunden zum angenommenen Spot-Preis verkauft werden.
+- **Firma** (`docs/FIRMA.md`): Ab **7 Häusern** trägt DigitalHeat ihre Fixkosten. Ausbau auf 170 Häuser bis 2031: Projekt-IRR **33,7 %**, Eigenkapitalbedarf **4,5 Mio. CHF**, Payback 2032. Der Förderbeitrag wie für eine Wärmepumpe (rund 7'200 CHF pro Haus) hilft wenig, Skaleneffekte vor allem bei den Fixkosten.
 
 **6. Ehrlich: wo es nicht trägt (30 s)** (Transparenz)
 - Bei der knappen Nachfrage aus dem Alibaba-Trace bleibt die Flotte mit Bad bei rund **−172’000 CHF pro Jahr**. Der feste Absatz von Rechenzeit entscheidet, ob sich die Investition trägt.
-- Die 60 % Festbuchung und der Spot-Absatz sind Annahmen, die wir mit Kunden prüfen müssen.
+- Die 60 % Festbuchung und der Spot-Absatz sind Annahmen, die wir mit Kunden prüfen müssen. Mit knapper Nachfrage fällt die Projekt-IRR der Firma auf −1,5 %.
 - Der Wärmebedarf des Bads ist eine Schätzung (±30 %). Ein Messwert vom Sportamt würde sie ersetzen.
 
 **7. Schluss (15 s)**

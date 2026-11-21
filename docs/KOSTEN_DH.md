@@ -182,7 +182,7 @@ Für diese Posten gibt es keine öffentliche Zahl, weil sie pro Firma oder pro O
 | Einheitengrösse? | Referenzhaus 8 kW, Durchschnitts-EFH **4 kW** (93,6 %) |
 | Genug flexible Aufträge? | Ja im Winter, mit Pharma-Winterkontingent (`PHARMA_SICHT.md`) |
 | Anteil am Rechenerlös? | Im Pilot nicht nötig |
-| Vertrag, Konkurs? | Mindestens 5 Jahre (Abschreibung), Backup-Heizung bleibt |
+| Vertrag, Konkurs? | Mindestens 5 Jahre (Abschreibung), Holzofen bleibt im Haus |
 
 **Hardwarekosten:** Abgeglichen. `CustomerView_Joel.md` rechnet jetzt ebenfalls mit **258'000 CHF Hardware** und **290'000 CHF** gesamt für 8 kW (vorher 142'000 + 20'000 CHF ohne Quelle).
 

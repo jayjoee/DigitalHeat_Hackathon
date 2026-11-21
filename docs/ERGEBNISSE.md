@@ -17,6 +17,8 @@ Das Dashboard zeigt alle Kennzahlen für 1–13 Server und beide Nachfrageszenar
 
 **Alle Beträge in CHF.** Die Wirtschaftlichkeit von DigitalHeat rechnet `src/wirtschaft.py`; Herleitung aller Annahmen in `KOSTEN_DH.md`, Kundensicht Pharma in `PHARMA_SICHT.md`.
 
+Firmenrechnung mit Ausbau, Skaleneffekten, Förderbeitrag und Holzofen: `docs/FIRMA.md`.
+
 ## Kennzahlen für 8 Server pro Haus
 
 Szenario **Genug Aufträge**: Ein Pharma-Vertrag bucht 60 % der Stunden fest (Winterkontingent), der Rest läuft als Füllauftrag zum Spot-Preis. Typ B kommt begrenzt nach Alibaba-Trace (40 Jobs pro Tag, Frist 2 h).
@@ -24,7 +26,7 @@ Szenario **Genug Aufträge**: Ein Pharma-Vertrag bucht 60 % der Stunden fest (Wi
 | Kennzahl | Wert |
 |---|---|
 | Server pro Haus | **8** |
-| Deckung des Wärmebedarfs (Heizung + Warmwasser, 31'231 kWh) | **93,0 %** (29'027 kWh, Rest 2'203 kWh vom Backup) |
+| Deckung des Wärmebedarfs (Heizung + Warmwasser, 31'231 kWh) | **93,0 %** (29'027 kWh, Rest 2'203 kWh vom Holzofen, keine Ölheizung mehr) |
 | Abgeführte Wärme | **5 kWh** (Case-Idealwert bei 0 W Leerlauf, 0,02 % der Serverwärme) |
 | Auslastung | **51,8 %** (36'290 Server-h ÷ 8 × 8'760) |
 | Verpasste Fristen | **0,0 %** von 14'390 Jobs mit Frist |
@@ -33,7 +35,7 @@ Szenario **Genug Aufträge**: Ein Pharma-Vertrag bucht 60 % der Stunden fest (Wi
 | **Break-even-Rechenpreis (Case-Definition)** | **0,226 CHF pro Server-h** = (12'066 − 3'861) ÷ 36'290, ohne Hardware |
 | Investition DigitalHeat | 290'100 CHF (8 Server mit 64 L4, Kühlung, Einbau, Speicher, Netzwerk) |
 | Rechenerlös im 1. Jahr | 130'800 CHF (Vertragspreis 0,60 CHF pro L4-Stunde, 60 % fest gebucht; Schweizer Clouds ab ≈ 0,68 CHF) |
-| Wärme an den Haushalt | gratis (Öl-Pilot) |
+| Wärme an den Haushalt | gratis (Pilot in ehemaligen Öl-Häusern, Holzofen als Reserve) |
 | **Ergebnis DigitalHeat** | **+34'500 CHF pro Jahr** nach allen Kosten, Steuern und Zins (ohne Zins: +43'000 CHF), Rendite ≈ 21 %, Investition nach 3,0 Jahren zurück |
 | Vorsichtiger Fall (0,50 CHF) | +20'300 CHF pro Jahr, Investition nach 3,6 Jahren zurück |
 | **Nötiger Vertragspreis mit allen Kosten** | **0,36 CHF pro L4-Stunde** = 2,87 CHF pro Server-h |

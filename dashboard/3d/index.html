@@ -170,7 +170,7 @@
   <div class="zeile"><span>Wärmebedarf</span><span id="j-bed">–</span></div>
   <div class="zeile"><span>Von Servern gedeckt</span><span id="j-deck">–</span></div>
   <div class="balken"><i id="j-deck-b" style="background:var(--heat)"></i></div>
-  <div class="zeile"><span>Ölkessel</span><span id="j-oel">–</span></div>
+  <div class="zeile"><span>Holzofen (Reserve)</span><span id="j-oel">–</span></div>
   <div class="zeile"><span>Speicher</span><span id="j-sp">–</span></div>
   <div class="balken"><i id="j-sp-b" style="background:linear-gradient(90deg,var(--cold),var(--heat))"></i></div>
   <div class="zeile"><span>Server</span><span id="j-on">–</span></div>
@@ -192,7 +192,7 @@
   <div class="zeile"><span>Strom pro Jahr</span><span id="b-jahr">–</span></div>
   <div class="zeile"><span>Weggekühlt pro Jahr</span><span id="b-weg">–</span></div>
   <div class="trenn"></div>
-  <h2 class="k">Heizöl gespart seit 1. Januar · Haus 01</h2>
+  <h2 class="k">Heizöl ersetzt seit 1. Januar · Haus 01</h2>
   <div class="gross" id="j-oelspar">–</div>
   <div class="zeile"><span>CO₂ vermieden</span><span id="j-co2">–</span></div>
   <div class="trenn"></div>
@@ -211,7 +211,7 @@
   <div id="links-inhalt"></div>
 </aside>
 
-<div id="hinweis">Server, Speicher, Ölkessel oder Bad anklicken · ziehen zum Drehen · scrollen zum Zoomen</div>
+<div id="hinweis">Server, Speicher, Holzofen oder Bad anklicken · ziehen zum Drehen · scrollen zum Zoomen</div>
 
 <footer id="zeit" class="panel">
   <div id="zeitkopf">
@@ -299,8 +299,10 @@ function srvWatt(hd, i, k) {
   return 1000 * (l + start) + M.leerlauf_watt * Math.max(0, 1 - l - start);
 }
 const kessel = (hd, i) => Math.max(0, hd.bed[i] - hd.gen[i]);
-// Heizöl gespart (kumuliert): genutzte Serverwärme ersetzt Ölwärme
-const oelSpar = HD.map(hd => { const a = new Float32Array(N); for (let i = 0, s = 0; i < N; i++) { s += hd.gen[i] / (W.heizoel_kwh_l * W.kessel_wirkungsgrad); a[i] = s; } return a; });
+// Keine Ölheizung mehr: Server decken den Grossteil, den Rest liefert ein wasserführender Holzofen.
+// Ersetztes Heizöl = gesamter Wärmebedarf, den früher der Ölkessel lieferte (kumuliert).
+const oelSpar = HD.map(hd => { const a = new Float32Array(N); for (let i = 0, s = 0; i < N; i++) { s += hd.bed[i] / (W.heizoel_kwh_l * W.kessel_wirkungsgrad); a[i] = s; } return a; });
+const HOLZ_KWH_STER = 2100, HOLZ_ETA = 0.75;   // Buche ≈ 500 kg/Ster × 4,2 kWh/kg, Ofen 75 % (src/firma.py)
 
 // ---------- Kennzahlen oben (Case-Regel) ----------
 const kc = K.case;
@@ -315,7 +317,7 @@ el('kpis').innerHTML = '<span class="gruppe">Jahr 2025 · Case-Regel</span>' + [
 el('modell').textContent =
   `Szene: Flotte aus ${M.haeuser} Häusern und Sportbad (${NB} Server). Server werden bei Bedarf ein- und `
   + `ausgeschaltet (${M.leerlauf_watt} W Leerlauf, ${M.standby_watt} W Standby). Die Werte «diese Stunde» stammen aus diesem `
-  + `Betriebsmodell, die Kennzahlen oben aus der Case-Regel. Heizöl: ${W.oel_quelle}.`;
+  + `Betriebsmodell, die Kennzahlen oben aus der Case-Regel. Kein Öl mehr: Reserve ist ein wasserführender Holzofen (src/firma.py). Ersetztes Heizöl: ${W.oel_quelle}.`;
 
 // ---------- Server pro Haus ----------
 function serverLast(lauf, an, k) { return k < an ? clamp(lauf - k) : 0; }
@@ -402,7 +404,7 @@ const rasenMat = mat('#2f4a2a', { roughness: 1 });
 const SOCKEL = { x0: -18, x1: 38, z0: -14, tiefe: 3.6 };
 const KZ0 = 5, KZ1 = 12, KBODEN = -3.2;
 const HAEUSER = [
-  { n: 1, x0: -4.6, x1: 4.6, name: 'Haus 01', unter: 'Öl-Pilot Basel', dach: '#6b3b2f' },
+  { n: 1, x0: -4.6, x1: 4.6, name: 'Haus 01', unter: 'früher Ölheizung, jetzt ölfrei', dach: '#6b3b2f' },
   { n: 2, x0: 7.4, x1: 15.0, name: 'Haus 02', unter: `Durchschnitts-EFH · ${fmt(M.haus2_jahr_kwh)} kWh · ${M.server_haus2} Server`, dach: '#4c5466' },
 ];
 function sockelBlock(x0, x1, z0, z1) {
@@ -419,7 +421,7 @@ for (const [y, farbe] of [[-0.45, '#4a3826'], [-1.5, '#3b2c1f'], [-2.7, '#2f231a
     mesh(new THREE.BoxGeometry(x1 - x0, 0.95, 0.03), mat(farbe, { roughness: 1 }), (x0 + x1) / 2, y, KZ1 + 0.02, scene, false);
 }
 
-// ---------- Ein Haus bauen: Keller mit Servern, Speicher, Ölkessel, zwei Etagen ----------
+// ---------- Ein Haus bauen: Keller mit Servern, Speicher, Holzofen, zwei Etagen ----------
 const wandMat = mat('#d9d4c9', { roughness: 0.9 });
 const glasMat = new THREE.MeshPhysicalMaterial({ color: '#a8c8ff', transparent: true, opacity: 0.16, roughness: 0.1,
   metalness: 0, depthWrite: false });
@@ -470,13 +472,18 @@ function baueHaus(h) {
   o.tankFuell = mesh(new THREE.CylinderGeometry(0.63, 0.63, 1, 40), o.tankMat, o.tank.x, KBODEN + 0.1, o.tank.z, scene, false);
   for (const y of [2.75, 0.12]) mesh(new THREE.CylinderGeometry(0.75, 0.75, 0.12, 40), mat('#6b7487', { metalness: 0.5 }), o.tank.x, KBODEN + y, o.tank.z);
   for (const m of [glas, o.tankFuell]) { m.userData = { art: 'speicher', haus: h.n }; klickbar.push(m); }
-  // Ölkessel mit Flamme
+  // Holzofen (wasserführend, heizt in den Speicher) mit Holzstapel; ersetzt den Ölkessel
   o.kessel = { x: h.x1 - 1.05, z: 7.1 };
-  const kk = mesh(new THREE.BoxGeometry(0.95, 1.5, 0.85), mat('#b9402f', { roughness: 0.5, metalness: 0.3 }), o.kessel.x, KBODEN + 0.83, o.kessel.z);
-  mesh(new THREE.BoxGeometry(0.35, 0.25, 0.02), new THREE.MeshBasicMaterial({ color: '#0b0d14' }), o.kessel.x, KBODEN + 0.7, o.kessel.z + 0.43, scene, false);
+  const kk = mesh(new THREE.BoxGeometry(0.85, 1.35, 0.75), mat('#2a2c33', { roughness: 0.45, metalness: 0.5 }), o.kessel.x, KBODEN + 0.76, o.kessel.z);
+  mesh(new THREE.BoxGeometry(0.5, 0.45, 0.02), new THREE.MeshBasicMaterial({ color: '#120c0a' }), o.kessel.x, KBODEN + 0.7, o.kessel.z + 0.385, scene, false);
+  for (let n = 0; n < 6; n++) {
+    const log = mesh(new THREE.CylinderGeometry(0.07, 0.07, 0.5, 8), mat(n % 2 ? '#7a5634' : '#8b6440'),
+      o.kessel.x - 0.75 + (n % 3) * 0.15, KBODEN + 0.16 + Math.floor(n / 3) * 0.14, o.kessel.z + 0.1);
+    log.rotation.x = Math.PI / 2;
+  }
   mesh(new THREE.CylinderGeometry(0.09, 0.09, 1.5, 10), mat('#6b7487', { metalness: 0.6 }), o.kessel.x, KBODEN + 2.3, o.kessel.z - 0.1);
   o.flamme = mesh(new THREE.ConeGeometry(0.12, 0.32, 12), new THREE.MeshBasicMaterial({ color: '#ff7a1a', transparent: true, opacity: 0.95 }),
-    o.kessel.x, KBODEN + 0.72, o.kessel.z + 0.45, scene, false);
+    o.kessel.x, KBODEN + 0.62, o.kessel.z + 0.36, scene, false);
   o.kesselLicht = new THREE.PointLight('#ff6a1a', 0, 6, 1.6);
   o.kesselLicht.position.set(o.kessel.x, KBODEN + 1, o.kessel.z + 0.9); scene.add(o.kesselLicht);
   kk.userData = { art: 'kessel', haus: h.n }; klickbar.push(kk);
@@ -712,7 +719,7 @@ function zeigeThermostat() {
   if (Math.abs(diff) < 0.3) wirkung = 'Kaum Änderung bei der Rechenleistung.';
   else if (diff > 0) wirkung = `Dauerhaft <b>${fmt(diff, 1)} Server mehr</b> im Haus. Die Aufträge dafür kommen ${quelleText}.`;
   else wirkung = `Dauerhaft <b>${fmt(-diff, 1)} Server weniger</b> im Haus. Ihre Aufträge springen ${zielText}.`;
-  if (endN >= NH - 0.01 && diff >= 0) wirkung += ' Alle 8 Server laufen schon voll, mehr Wärme kommt nur vom Ölkessel.';
+  if (endN >= NH - 0.01 && diff >= 0) wirkung += ' Alle 8 Server laufen schon voll, mehr Wärme kommt nur vom Holzofen.';
   el('links-inhalt').innerHTML = `
     <h2 class="k">Hausbesitzer-App (Vorschau) · Haus 01</h2>
     <div class="app">
@@ -721,7 +728,7 @@ function zeigeThermostat() {
       <div class="knoepfe"><button id="t-minus">−</button><button id="t-plus">+</button></div>
       <div class="rechnen">Dafür rechnen im Haus <b>${fmt(endN, 1)} von ${NH} Servern</b></div>
     </div>
-    <div class="optionen"><label><input type="checkbox" id="t-kessel" ${thermo.kessel ? 'checked' : ''}> Ölkessel darf helfen</label>
+    <div class="optionen"><label><input type="checkbox" id="t-kessel" ${thermo.kessel ? 'checked' : ''}> Holzofen darf helfen</label>
       <button class="knopf" id="t-play">▶ 24 h abspielen</button></div>
     <div class="zeile"><span>${fmt(thermo.soll, 1)} °C erreicht</span><span>${dauerText(sim.erreicht)}${band(simL, simS)}</span></div>
     <div class="zeile"><span>Speicher gibt ab</span><span>${fmt(speicherGenutzt, 1)} von ${fmt(HD[0].sp[i], 1)} kWh</span></div>
@@ -753,7 +760,7 @@ function zeichneThermo(sim, markerH = null) {
   sim.out.forEach((p, n) => n ? g.lineTo(X(p.h), YT(p.tin)) : g.moveTo(X(p.h), YT(p.tin))); g.stroke();
   g.fillStyle = '#93a2c0'; g.font = '10px sans-serif';
   g.fillText(`${fmt(thermo.soll, 1)} °C`, w - 40, YT(thermo.soll) - 3); g.fillText('Raumtemperatur', 6, 16);
-  g.fillText('Server im Haus · rot: Ölkessel', 6, 80); g.fillText('jetzt', 4, 120); g.fillText('+24 h', w - 30, 120);
+  g.fillText('Server im Haus · rot: Holzofen', 6, 80); g.fillText('jetzt', 4, 120); g.fillText('+24 h', w - 30, 120);
   if (markerH !== null) { g.fillStyle = '#fff'; g.fillRect(X(markerH) - 1, 4, 2, 108); }
 }
 
@@ -861,7 +868,7 @@ function satz(i) {
   if (thermo.abspielen && thermo.sim) {
     const p = thermo.sim.out[thermo.abspielen.idx];
     return `Thermostat auf <em>${fmt(thermo.soll, 1)} °C</em>: Nach ${fmt(p.h, 1)} h hat der Raum <em>${fmt(p.tin, 1)} °C</em>, `
-      + `dafür rechnen <b>${fmt(p.nServer, 1)} Server</b>` + (p.qKessel > 0.05 ? `, der <span class="oel">Ölkessel hilft mit ${fmt(p.qKessel, 1)} kW</span>.` : '.');
+      + `dafür rechnen <b>${fmt(p.nServer, 1)} Server</b>` + (p.qKessel > 0.05 ? `, der <span class="oel">Holzofen hilft mit ${fmt(p.qKessel, 1)} kW</span>.` : '.');
   }
   const hd = HD[0], on = hd.on[i], bed = hd.bed[i], gen = hd.gen[i], k = kessel(hd, i);
   const sp = hd.sp[i] / M.speicher_haus_kwh, badOffen = S.b_bed[i] > 0;
@@ -873,7 +880,7 @@ function satz(i) {
   if (bed > 2) {
     const deck = Math.round(100 * Math.min(1, gen / bed));
     return `${d}: <b>${on} von ${NH} Servern</b> rechnen und decken <em>${deck} %</em> der Wärme`
-      + (k > 0.05 ? `, den Rest liefert der <span class="oel">Ölkessel</span>.` : '.') + (sp > 0.85 ? ' Der Speicher ist voll.' : '');
+      + (k > 0.05 ? `, den Rest liefert der <span class="oel">Holzofen</span>.` : '.') + (sp > 0.85 ? ' Der Speicher ist voll.' : '');
   }
   if (badOffen) return `${d}: Das Haus braucht fast nur Warmwasser, <b>${on} Server</b> ${on === 1 ? 'reicht' : 'reichen'}. `
     + `Die übrige Arbeit rechnen <b>${S.b_on[i]} Server im Sportbad</b> und heizen das Becken.`;
@@ -909,7 +916,8 @@ function panelJetzt(i) {
   el('j-flotte').textContent = `${fmt(S.flotte_lauf[i])} Server`;
   el('j-mig').textContent = `${S.mig[i]} in dieser Stunde`;
   el('j-oelspar').textContent = `${fmt(oelSpar[0][i])} Liter`;
-  el('j-co2').textContent = `${fmt(oelSpar[0][i] * W.co2_kg_l / 1000, 2)} t`;
+  { let holz = 0; for (let n = 0; n <= i; n++) holz += kessel(HD[0], n); el('j-co2').dataset.holz = holz; }
+  el('j-co2').textContent = `${fmt(oelSpar[0][i] * W.co2_kg_l / 1000, 1)} t · Holz ${fmt(el('j-co2').dataset.holz / HOLZ_KWH_STER / HOLZ_ETA, 1)} Ster`;
   // Zusage: heute 12 Uhr für morgen
   const morgen = Math.min(Z.tag.length - 1, Math.floor(i / 24) + 1), zt = Z.tag[morgen];
   el('z-titel').textContent = `Zusage für morgen, ${parseInt(zt.slice(3))}. ${MONATE[parseInt(zt.slice(0, 2)) - 1].slice(0, 3)}`;
@@ -1043,13 +1051,12 @@ function zeigeDetail(info, fliegen = true) {
   } else if (info.art === 'kessel') {
     const o = HAUS[info.haus - 1], hd = HD[info.haus - 1], kw = kessel(hd, i);
     let jahr = 0; for (let n = 0; n < N; n++) jahr += kessel(hd, n);
-    const liter = kwh => kwh / (W.heizoel_kwh_l * W.kessel_wirkungsgrad);
-    box.innerHTML = detailHtml(`Ölkessel · Haus 0${info.haus}`, kw > 0.05 ? `${fmt(kw, 1)} kWh in dieser Stunde` : 'aus',
+    const ster = kwh => kwh / HOLZ_KWH_STER / HOLZ_ETA;
+    box.innerHTML = detailHtml(`Holzofen · Haus 0${info.haus}`, kw > 0.05 ? `${fmt(kw, 1)} kWh in dieser Stunde` : 'aus',
       kw > 0.05 ? 'brennt' : 'aus', kw > 0.05 ? 'var(--oil)' : '#8ea0c2', [
-        ['Ölwärme 2025', fmt(jahr) + ' kWh'], ['Heizöl 2025 mit Servern', fmt(liter(jahr)) + ' l'],
-        ['Heizöl ohne Server', fmt(liter(jahr) + oelSpar[info.haus - 1][N - 1]) + ' l'],
-        ['Gespart durch Server', fmt(oelSpar[info.haus - 1][N - 1]) + ' l'],
-      ], 'Der bestehende Kessel bleibt als Reserve. Er springt nur ein, wenn Serverwärme und Speicher in sehr kalten Stunden nicht reichen.');
+        ['Holzwärme 2025', fmt(jahr) + ' kWh'], ['Brennholz 2025', fmt(ster(jahr), 1) + ' Ster Buche'],
+        ['Kosten Holz (≈ 250 CHF/Ster)', fmt(ster(jahr) * 250) + ' CHF'], ['Heizöl ersetzt', fmt(oelSpar[info.haus - 1][N - 1]) + ' l'],
+      ], 'Ölkessel und Tank werden zurückgebaut. Ein wasserführender Holzofen (6–8 kW) heizt in den Speicher, nur an den kältesten Tagen. Damit ist das Haus ganz ohne fossile Energie. Holzpreis und Heizwert sind Schätzungen (src/firma.py).');
     miniChart(fenster(n => kessel(hd, n)), 4, '#ff5d4a');
     if (fliegen) fliegeZu(V(o.kessel.x - 0.8, KBODEN + 1, o.kessel.z + 0.5), V(-3.2, 1.4, 7.5));
   } else {
@@ -1080,7 +1087,7 @@ const TOUR = [
   { tag: '01-15T08', kam: [HOME.target, null], text: 'Ein kalter Januartag in Basel. Zwei Häuser der Flotte im Schnitt, rechts das Sportbad, hinten 18 weitere Häuser.', s: 7 },
   { tag: '01-15T08', play: true, tempo: 1, kam: [V(CLOUD.x - 7, CLOUD.y - 1, CLOUD.z), V(1, 0, 25)], text: 'Ein Pharma-Kunde schickt Rechenaufträge in die DigitalHeat-Cloud. Der Wärme-Router verteilt sie auf die Häuser, die gerade Wärme brauchen.', s: 8 },
   { tag: '01-15T08', kam: [V(-1.2, -2, 5.8), V(1.6, 0.6, 5.2)], text: 'Im Keller rechnen 8 Server KI-Aufträge. 80 % ihrer Abwärme gehen über den Speicher in die Heizkörper.', s: 7 },
-  { tag: '01-15T03', kam: [V(2.6, -2.0, 7.6), V(-3.2, 1.4, 7.5)], text: 'In den kältesten Stunden, hier −5 °C in der Nacht, reicht das nicht ganz. Dann springt der bestehende Ölkessel ein.', s: 7 },
+  { tag: '01-15T03', kam: [V(2.6, -2.0, 7.6), V(-3.2, 1.4, 7.5)], text: 'In den kältesten Stunden, hier −5 °C in der Nacht, reicht das nicht ganz. Dann heizt ein Holzofen mit, Öl braucht es keines mehr.', s: 7 },
   { tag: '03-07T13', tempo: 1, play: true, kam: [V(2.5, -1.8, 8.5), V(2.6, 0.8, 6)], text: '7. März: Am Nachmittag ist der Speicher voll. Server gehen in den Standby, Aufträge warten oder wandern weiter.', s: 8 },
   { tag: '07-15T10', tempo: 3, play: true, kam: [V(14, 1, 2), V(-2, 10, 34)], text: 'Im Sommer braucht das Haus nur Warmwasser, 1 Server reicht. Die übrige Arbeit fliegt ins Sportbad.', s: 9 },
   { tag: '07-15T13', tempo: 3, play: true, kam: [V(TR.x, 1.2, TR.z), V(3, 2, 8)], text: 'Im Sportbad rechnen 50 Server und heizen das 50-m-Becken, von Ende April bis Anfang Oktober.', s: 7 },
@@ -1151,7 +1158,7 @@ function zeichneJahr() {
   MONATE.forEach((m, n) => g.fillText(m.slice(0, 3), (n / 12) * w + 3, h - 1));
   g.textAlign = 'right';
   let x = w - 4;
-  [['Bad rechnet', '#3ee0c0'], ['Ölkessel', '#ff5d4a'], ['Server decken', '#ff8a3d'], ['Wärmebedarf Haus 01', 'rgba(120,180,255,.95)']]
+  [['Bad rechnet', '#3ee0c0'], ['Holzofen', '#ff5d4a'], ['Server decken', '#ff8a3d'], ['Wärmebedarf Haus 01', 'rgba(120,180,255,.95)']]
     .forEach(([t, c]) => { g.fillStyle = c; g.fillText(t, x, 11); x -= g.measureText(t).width + 22; });
 }
 el('jahr').addEventListener('pointerdown', e => {

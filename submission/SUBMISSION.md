@@ -44,7 +44,7 @@ Reproducible: simulation and costs can be rerun from code. Automated tests cover
 NEXT FOUR WEEKS
 1. Replace the pool estimate with measured district-heating data from the Sportamt Basel-Stadt.
 2. Talk to 2–3 Basel pharma/biotech companies: would they buy day-ahead committed Swiss compute at 4.80 CHF per server-hour, and for how many hours?
-3. Pilot one real server with liquid cooling in an oil-heated house: measure supply temperature, heat recovery, idle and standby power, and time from power-on to job readiness.
+3. Pilot one real server with liquid cooling in a former oil-heated house (oil boiler removed, wood stove as backup): measure supply temperature, heat recovery, idle and standby power, and time from power-on to job readiness.
 4. Different houses (heat load, tank size) and a second summer sink (hotel with spa), plus the network cost of migrating jobs.
 ```
 

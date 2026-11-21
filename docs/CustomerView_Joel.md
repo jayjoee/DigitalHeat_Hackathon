@@ -3,7 +3,7 @@
 Kundenperspektive Nordwestschweiz und technische Ergebnisse des Hackathons  
 Stand der Ausgangsunterlagen 20 und 21 November 2026
 
-Die Unterlagen beschreiben eine Serverheizung, deren Abwärme für Heizung und Warmwasser genutzt wird. Im vorgeschlagenen Pilot stellt DigitalHeat die Anlage neben eine bestehende Ölheizung und übernimmt nach der Arbeitsannahme Anlage, Einbau, Serverstrom und Unterhalt. Der Haushalt erhält kostenlose oder vergünstigte Wärme; die bestehende Heizung bleibt als Backup.
+Die Unterlagen beschreiben eine Serverheizung, deren Abwärme für Heizung und Warmwasser genutzt wird. Im Pilot ersetzt DigitalHeat die Ölheizung: Ölkessel und Tank werden zurückgebaut, ein wasserführender Holzofen deckt an den kältesten Tagen die letzten Prozente (Team-Entscheid 21.11.2026). DigitalHeat übernimmt nach der Arbeitsannahme Anlage, Einbau, Rückbau, Holzofen, Serverstrom und Unterhalt. Der Haushalt erhält die Wärme gratis und heizt ohne Öl.
 
 Das untersuchte Referenzhaus hat einen jährlichen Wärmebedarf von 31'231 kWh. Die Unterlagen weisen für acht Server im Szenario mit ausreichend flexiblen Rechenaufträgen rund 93 Prozent Wärmedeckung aus. Für ein angenommenes Durchschnitts-Einfamilienhaus mit 17'000 kWh und einer kleineren Einheit werden 99,6 Prozent genannt. Die hohe Deckung hängt entscheidend von der Verfügbarkeit flexibler Aufträge ab. Kostenübernahme, Wärmepreis, Vertrag und Sicherheitsanforderungen sind mit den Säulen Firma und Pharma abzustimmen; die kantonale Anerkennung und die Zulässigkeit des vorgesehenen Backups sind offene Punkte der Unterlagen.
 
@@ -41,7 +41,7 @@ Stand 21.11.2026 · Säule «Kunde» des DigitalHeat-Case (Hackathon) · Die Sä
 
 ### 0. Kurzfassung
 
-**Das Angebot:** DigitalHeat stellt eine Serverheizung kostenlos neben die bestehende Öl- oder Gasheizung. DigitalHeat zahlt Anlage, Einbau, Server-Strom und Unterhalt. Der Haushalt bekommt 93–100 % seiner Wärme von den Servern und braucht kaum noch Heizöl oder Gas.
+**Das Angebot:** DigitalHeat ersetzt die Öl- oder Gasheizung kostenlos durch eine Serverheizung mit einem wasserführenden Holzofen als Reserve. DigitalHeat zahlt Anlage, Einbau, Rückbau der alten Heizung, Holzofen, Server-Strom und Unterhalt. Der Haushalt bekommt 93–100 % seiner Wärme von den Servern, den Rest aus etwas Brennholz, und braucht kein Heizöl und kein Gas mehr.
 
 **Was der Haushalt gewinnt (Gratiswärme, Durchschnitts-Einfamilienhaus mit 17'000 kWh Wärme pro Jahr):**
 
@@ -122,14 +122,14 @@ Warum der Haushalt die Anlage nicht selbst kauft: Eine 8-kW-Einheit kostet rund 
 
 **Wohin der Ertrag der Rechenleistung fliesst:** Der Pharmakunde zahlt DigitalHeat für die Rechenzeit. DigitalHeat zahlt davon Strom, Hardware, Einbau und Unterhalt. Der Haushalt bekommt keinen Anteil am Rechenerlös, sondern die Wärme gratis und trägt kein Risiko. Ob er zusätzlich einen Bonus oder eine Platzmiete erhält, entscheidet die Säule Firma (Abschnitt 11).
 
-#### 3.2 Die bestehende Heizung bleibt als Backup
-Die Serverheizung kommt **neben** die bestehende Heizung. Für die kältesten Stunden und bei Ausfällen springt das Backup ein.
+#### 3.2 Reserve: Holzofen statt Öl- oder Gaskessel
+Die Serverheizung **ersetzt** die bestehende Heizung. Ölkessel und Tank werden zurückgebaut (≈ 4'000 CHF, Schätzung). Für die kältesten Stunden heizt ein wasserführender Holzofen (6–8 kW, ≈ 7'000 CHF, Schätzung) in den Speicher. Beides bezahlt DigitalHeat (docs/FIRMA.md).
 
-| Heute | Backup | Bemerkung |
+| Heute | Reserve neu | Bemerkung |
 |---|---|---|
-| Öl | bestehender Ölkessel | kostet nichts, Tank bleibt; in BS spätestens 2037 durch erneuerbares Backup ersetzen |
-| Gas (ausserhalb BS) | bestehender Gaskessel | Grundgebühr ≈ 195 CHF/Jahr bleibt |
-| Gas (Basel-Stadt) | **Heizstab im Speicher** (≈ 2'000 CHF, Annahme) | nötig, weil das Gasnetz bis 2037 abgestellt wird; Erlaubnis als Notheizung offen |
+| Öl | wasserführender Holzofen | Ölkessel und Tank werden zurückgebaut; Referenzhaus ≈ 1,4 Ster Buche pro Jahr (≈ 350 CHF) |
+| Gas (ausserhalb BS) | wasserführender Holzofen | Gasanschluss kann aufgegeben werden, Grundgebühr entfällt |
+| Gas (Basel-Stadt) | wasserführender Holzofen | Gasnetz wird bis 2037 abgestellt; ein Heizstab im Speicher wäre die Alternative, Erlaubnis als Notheizung offen |
 
 #### 3.3 Pilot-Aufbau (Vorschlag)
 | | |
@@ -246,9 +246,9 @@ Nordwestschweiz = Grossregion des BFS: Basel-Stadt, Basel-Landschaft, Aargau.
 | Bund | Impulsprogramm (2025–2034, 200 Mio. CHF/Jahr): Ersatz von Elektroheizungen, Einbau einer Wärmeverteilung | gleich | gleich |
 | Druck zum Wechsel | sehr hoch (Gasnetz zu bis 2037, fossile Neuanlagen verboten) | nicht im Detail geprüft | nicht im Detail geprüft |
 
-- Für die Serverheizung gibt es **in keinem Kanton eine eigene Förderkategorie**.
+- Für die Serverheizung gibt es **keine eigene Förderkategorie**. Laut DigitalHeat wird sie wahrscheinlich **wie eine Wärmepumpe** gefördert: in Basel-Stadt Fr. 8'000 + Fr. 250 pro kW thermisch, im Fernwärmegebiet die Hälfte, höchstens 40 % der Investition ([bs.ch/en/node/39393](https://www.bs.ch/en/node/39393)). Für unser Haus 4'800–9'600 CHF; der Eigentümer tritt den Beitrag an DigitalHeat ab.
 - Ob sie als **erneuerbarer Heizungsersatz** zählt und ob ein **Heizstab als Notheizung** erlaubt ist, muss jeder Kanton beantworten. In Basel-Stadt ist das Amt für Umwelt und Energie, Abteilung Energie, zuständig.
-- Im Pilot wird der Ölkessel nicht ersetzt, sondern ergänzt. Die Ersatzpflicht greift deshalb vermutlich noch nicht (Annahme).
+- Im Pilot wird der Ölkessel ersetzt. Damit gilt die Ersatzpflicht, und Server mit Holzofen müssen als erneuerbarer Heizungsersatz anerkannt werden (laut DigitalHeat wahrscheinlich; beim Amt für Umwelt und Energie schriftlich klären, Gesuch vor Baubeginn).
 
 ---
 
@@ -257,7 +257,7 @@ Nordwestschweiz = Grossregion des BFS: Basel-Stadt, Basel-Landschaft, Aargau.
 | Partner | Was der Kunde davon hat |
 |---|---|
 | **IWB** bzw. **EBL / AEW** | bekannter regionaler Absender, Strom und Glasfaser aus einer Hand, Vertrauen |
-| **Lokaler Heizungsinstallateur** | Einbau, Service und Backup aus der Region |
+| **Lokaler Heizungsinstallateur** | Einbau, Service und Holzofen aus der Region |
 | **Smart-Home-Anbieter** (Loxone, Home Assistant, Homey, Matter) | Steuerung in der App, die er schon hat |
 | **Versicherung** (z. B. Baloise) | Schäden an der Anlage sind nicht sein Risiko |
 | **Bank** (grüne Hypothek, z. B. BKB) | günstigere Hypothek für ein Haus mit erneuerbarer Wärme |
@@ -268,13 +268,13 @@ Nordwestschweiz = Grossregion des BFS: Basel-Stadt, Basel-Landschaft, Aargau.
 
 | Einwand | Antwort |
 |---|---|
-| «Was, wenn der Server ausfällt?» | Das Backup springt automatisch ein, der Speicher überbrückt Stunden. |
+| «Was, wenn der Server ausfällt?» | Der Speicher überbrückt Stunden, danach heizt der Holzofen; er muss von Hand angefeuert werden. Ein Heizstab im Speicher als Notheizung ist zu prüfen. |
 | «Ist das laut?» | Flüssigkeitskühlung ohne grosse Lüfter, im Keller hinter einer Tür (Annahme, im Pilot messen). |
 | «Wer haftet bei Schäden?» | DigitalHeat, über eine Versicherung. |
 | «Kommt jemand an meine Daten oder ich an fremde?» | Getrennte Netze, verplombtes Gehäuse, der Haushalt hat keinen Zugang. |
 | «Was, wenn ich umziehe?» | Der Vertrag geht auf den neuen Eigentümer über, oder die Anlage wird kostenlos zurückgebaut. |
-| «Brauche ich trotzdem eine neue Wärmepumpe?» | Offen, hängt vom Kanton ab. Im Pilot bleibt die bestehende Heizung. |
-| «Was, wenn DigitalHeat Konkurs geht?» | Die bisherige Heizung bleibt immer funktionsfähig. |
+| «Brauche ich trotzdem eine neue Wärmepumpe?» | Nein. Server und Holzofen ersetzen die Ölheizung, sofern der Kanton das als erneuerbaren Ersatz anerkennt. |
+| «Was, wenn DigitalHeat Konkurs geht?» | Holzofen und Speicher bleiben im Haus. Der Vertrag muss regeln, wer dann für eine vollwertige Heizung sorgt. |
 
 ---
 
@@ -306,7 +306,7 @@ Nordwestschweiz = Grossregion des BFS: Basel-Stadt, Basel-Landschaft, Aargau.
 | Gibt es das ganze Jahr genug flexible Aufträge? | Pharma | Deckung 93–100 % statt 52–63 % | ja |
 | Einheitengrösse pro Haus | Firma | Platz, Lärm, Anschluss | 8 kW / 5 kW |
 | Sicherheitsauflagen im Haus | Pharma | was der Haushalt dulden muss | kein Zugang, verplombt |
-| Vertrag, Kündigung, Konkurs | Firma | Vertrauen | Backup bleibt immer |
+| Vertrag, Kündigung, Konkurs | Firma | Vertrauen | Holzofen bleibt im Haus |
 | Bekommt der Haushalt einen Anteil am Rechenerlös (Bonus, Platzmiete)? | Firma | Der Rechenerlös fliesst heute ganz an DigitalHeat; ein Anteil macht das Angebot stärker, besonders für Wärmepumpen-Haushalte | kein Anteil, nur Gratiswärme |
 
 ---
@@ -388,7 +388,7 @@ Rechnung: `src/kunde/wirtschaftlichkeit.py` (alle Werte stehen dort in `P` mit Q
 | Annahme | Wert | Status | Quelle |
 |---|---|---|---|
 | Wärmepumpe Jahresarbeitszahl | 2,5 | Case | Case («Wärme ersetzt Wärmepumpe, JAZ 2,5») |
-| Ölkessel Wirkungsgrad | 85 % | Annahme | älterer Kessel |
+| Ölkessel Wirkungsgrad (nur für «heute») | 85 % | Annahme | älterer Kessel |
 | Gaskessel Wirkungsgrad | 90 % | Annahme | |
 | CO2 Heizöl | 2,65 kg/l | Annahme | gängiger Emissionsfaktor Heizöl EL |
 | CO2 Erdgas | 0,198 kg/kWh | Annahme | gängiger Emissionsfaktor Erdgas |
@@ -642,35 +642,35 @@ Grundlagen: Strom 33,25 Rp./kWh (ElCom 2026, IWB), Wärmepumpe JAZ 2,5 (Case) �
 **Wichtigster Vorbehalt:** Ob die Serverheizung in Basel als erneuerbarer Heizungsersatz gilt (Energiegesetz BS), ist offen. Nur dann entfällt die neue Wärmepumpe. Klärung beim Amt für Umwelt und Energie, Abteilung Energie.
 
 ### 3b. Pilot: Umstieg für Ölheizungs-Besitzer
-**Idee:** Die Serverheizung ersetzt keine Wärmepumpe. Sie wird **neben die bestehende Ölheizung** gebaut. Die Ölheizung bleibt als Backup für die kältesten Stunden. So steigt der Haushalt ohne eigene Investition sofort fast ganz aus dem Öl aus und kann später in Ruhe entscheiden, was nach dem Ende des Ölkessels kommt.
+**Idee:** Die Serverheizung **ersetzt die Ölheizung**. Ölkessel und Tank kommen raus, ein wasserführender Holzofen übernimmt die kältesten Stunden. So steigt der Haushalt ohne eigene Investition ganz aus dem Öl aus.
 
 **Was sich für den Haushalt ändert** (Gratiswärme, flexible Aufträge vorausgesetzt):
 
 | | Referenzhaus (31'231 kWh) | Durchschnitts-EFH (17'000 kWh) |
 |---|---|---|
 | Heizöl heute | 3'674 l/Jahr | 2'000 l/Jahr |
-| Heizöl mit Serverheizung | **259 l/Jahr (−93 %)** | **8 l/Jahr (−100 %)** |
+| Heizöl mit Serverheizung | **0 l (−100 %)**, dafür ≈ 1,4 Ster Holz | **0 l (−100 %)**, ≈ 0,04 Ster Holz |
 | Heizkosten heute | 6'118 CHF/Jahr | 3'330 CHF/Jahr |
-| Heizkosten mit Serverheizung | **432 CHF/Jahr** | **13 CHF/Jahr** |
-| **Ersparnis** | **5'686 CHF/Jahr** | **3'317 CHF/Jahr** |
-| CO2 heute → nachher | 9,7 t → **0,7 t** | 5,3 t → **0,0 t** |
+| Heizkosten mit Serverheizung (nur Holz, 250 CHF/Ster) | **≈ 350 CHF/Jahr** | **≈ 10 CHF/Jahr** |
+| **Ersparnis** | **≈ 5'770 CHF/Jahr** | **≈ 3'320 CHF/Jahr** |
+| CO2 heute → nachher | 9,7 t → **≈ 0 t** (Holz CO₂-neutral) | 5,3 t → **≈ 0 t** |
 | Eigene Investition | **0 CHF** | **0 CHF** |
 
-Gibt es zu wenig flexible Aufträge (Szenario «Nur Jobs mit Frist»), sinkt der Ölverbrauch nur um 52 % bzw. 63 % (Ersparnis 3'164 bzw. 2'104 CHF/Jahr). Die Antwort der Säule Pharma dazu ist deshalb für den Pilot entscheidend.
+Gibt es zu wenig flexible Aufträge (Szenario «Nur Jobs mit Frist»), decken die Server nur 52 % bzw. 63 %. Den Rest müsste der Holzofen liefern; das wären mehrere Ster Holz pro Jahr und viel Anfeuern, für den Haushalt kaum zumutbar. Die Antwort der Säule Pharma dazu ist deshalb für den Pilot entscheidend.
 
 Grundlagen: Heizöl 1,665 CHF/l (Anfang Nov. 2026), 10 kWh/l, Ölkessel 85 % (ANNAHME), 2,65 kg CO2 pro Liter Heizöl EL. Die CO2-Abgabe steckt im Ölpreis.
 
 **Warum das gerade für Ölheizungs-Häuser passt**
 - **Keine Sanierung nötig:** Alte Häuser mit Ölheizung haben oft Radiatoren, die 55–70 °C brauchen. Eine Wärmepumpe arbeitet dort schlecht oder braucht zuerst Dämmung und neue Heizkörper. Die Serverheizung liefert laut DigitalHeat 50–70 °C Vorlauf und passt an die bestehenden Radiatoren.
-- **Keine Investition, kein Zeitdruck:** Der Ölkessel läuft weiter als Backup. Der Heizungsersatz wird um Jahre verschoben, und bis dahin sind kaum noch Öl und CO2 im Spiel.
-- **Sofort sichtbar:** Der Öltank leert sich kaum noch. Das sieht der Kunde direkt, auch ohne App.
-- **Rechtlich einfacher (ANNAHME, zu prüfen):** Weil der Ölkessel nicht ersetzt, sondern ergänzt wird, greift die Ersatzpflicht für erneuerbare Heizungen in Basel-Stadt im Pilot vermutlich noch nicht. Beim späteren Ersatz des Kessels stellt sich die Frage wieder.
+- **Keine Investition:** DigitalHeat zahlt Rückbau und Holzofen (≈ 11'000 CHF). Der Förderbeitrag wie für eine Wärmepumpe geht an DigitalHeat.
+- **Sofort sichtbar:** Der Öltank ist weg, der Kellerraum wird frei.
+- **Rechtlich (ANNAHME, zu prüfen):** Der Ölkessel wird ersetzt, darum gilt die Ersatzpflicht. Server mit Holzofen müssen als erneuerbarer Ersatz anerkannt werden; laut DigitalHeat wahrscheinlich. Offen sind auch Bewilligung und Feinstaub-Vorgaben für Holzöfen.
 
 **Markt in Basel-Stadt**
 - **1'677 Ölfeuerungen (Juni 2026)**, nach 1'729 (Dez. 2025), 1'847 (Ende 2024) und 2'631 (Ende 2018). Quelle: Open Data des Amts für Umwelt und Energie BS, gemeldete Anlagen, alle Gebäudetypen, nicht nur Einfamilienhäuser.
 - Öl heizt in BS nur noch 8 % der Wohngebäude (BFS). In den meisten anderen Kantonen sind es 25–40 %.
 - Neue Öl- und Gasheizungen sind in BS seit 2017 grundsätzlich verboten. Ziel des Kantons: fossilfreie Wärme bis 2037.
-- **Folge für den Pilot:** Basel-Stadt eignet sich als Testgebiet, der grosse Markt liegt aber in den Nachbarkantonen (z. B. Basel-Landschaft) und in der übrigen Schweiz. Spätestens 2037 muss der Öl-Backup in BS durch ein erneuerbares Backup ersetzt werden.
+- **Folge für den Pilot:** Basel-Stadt eignet sich als Testgebiet, der grosse Markt liegt aber in den Nachbarkantonen (z. B. Basel-Landschaft) und in der übrigen Schweiz.
 
 **Gas in Basel-Stadt**
 - IWB liefert Gas an **knapp 11'000 Liegenschaften** in Basel, Riehen und Bettingen (Bericht 2024, Liegenschaften, nicht Heizungen). Das sind rund sechsmal mehr als Ölfeuerungen.
@@ -682,7 +682,7 @@ Grundlagen: Heizöl 1,665 CHF/l (Anfang Nov. 2026), 10 kWh/l, Ölkessel 85 % (AN
 - **Gas-Haushalte müssen wechseln, ob sie wollen oder nicht**, mit festem Datum. Das ist ein grösserer und dringenderer Markt als Öl.
 - **Aber:** Der Gas-Backup läuft mit der Stilllegung aus. Ein Gas-Haushalt braucht beim Umstieg auf die Serverheizung ein anderes Backup (z. B. eine kleine Wärmepumpe oder einen Elektroeinsatz im Speicher).
 - **Konkurrenz Fernwärme:** Im Fernwärmegebiet ist der Anschluss an die Fernwärme die naheliegende Lösung, und kantonale Förderung für dezentrale Heizungen ist dort halbiert. Die Serverheizung zielt deshalb auf **Gas-Haushalte ausserhalb des Fernwärmegebiets** (z. B. in Riehen und Bettingen).
-- **Folge für die Reihenfolge:** Öl bleibt der beste Einstieg für den Pilot (Backup bleibt, höchste Ersparnis). Gas ist danach der grösste Markt in Basel-Stadt, mit klarem Termindruck bis 2037.
+- **Folge für die Reihenfolge:** Öl bleibt der beste Einstieg für den Pilot (höchste Ersparnis, Holzofen ersetzt den Kessel). Gas ist danach der grösste Markt in Basel-Stadt, mit klarem Termindruck bis 2037.
 
 **Backup für Gas-Haushalte: Heizstab statt Gas**
 Wird der Gasanschluss aufgegeben, übernimmt ein Heizstab im Wärmespeicher die letzten Prozente (einmalig ≈ 2'000 CHF, ANNAHME).
@@ -775,7 +775,7 @@ Diese Werte rechnet nicht die Kundenperspektive. Sie sind nur so weit drin, wie 
 | Wie viele flexible Aufträge gibt es das ganze Jahr? | Säule Pharma | Davon hängt ab, ob im Winter genug Wärme kommt (93 % vs. 52 % Deckung) | genug flexible Aufträge |
 | Welche Einheitengrösse (kW) pro Haus? | Säule Firma | Lärm, Platz, Anschluss | 8 kW Referenzhaus, 5 kW Durchschnitt |
 | Sicherheitsauflagen der Pharmakunden im Haus (Zugang, Plombe, Kamera?) | Säule Pharma | Was der Haushalt dulden muss | kein Zugang, verplombtes Gehäuse |
-| Vertragslaufzeit, Kündigung, was bei Konkurs | Säule Firma | Vertrauen des Kunden | Backup-Heizung bleibt immer |
+| Vertragslaufzeit, Kündigung, was bei Konkurs | Säule Firma | Vertrauen des Kunden | Holzofen bleibt im Haus |
 
 Eine erste Rechnung der Firmenseite (zur Kontrolle, nicht mein Teil) liegt in `daten/ergebnisse/win_win_win.json`.
 
@@ -793,18 +793,18 @@ Hinweis für die Säule Firma (nicht Teil der Kundenperspektive): BFE-Pilot- und
 | Partner | Was der Kunde davon hat |
 |---|---|
 | **IWB** | bekannter Absender, Strom und Glasfaser aus einer Hand, Vertrauen |
-| **Lokaler Heizungsinstallateur** | Einbau, Service und Backup-Heizung von jemandem aus der Region |
+| **Lokaler Heizungsinstallateur** | Einbau, Service und Holzofen von jemandem aus der Region |
 | **Smart-Home-Anbieter** (Loxone, Home Assistant, Homey, Matter) | Steuerung in der App, die er schon hat |
 | **Versicherung** (z. B. Baloise) | Schäden an der Anlage sind nicht sein Risiko |
 | **Bank** (grüne Hypothek, z. B. BKB) | günstigere Hypothek für ein Haus mit erneuerbarer Wärme |
 
 ### 7. Das Angebot an den Kunden in einem Satz
-**DigitalHeat stellt eine Serverheizung kostenlos neben die Ölheizung, zahlt deren Strom und Unterhalt, und der Haushalt braucht über 90 % weniger Heizöl. Das spart 3'300–5'700 CHF pro Jahr, ohne eigene Investition und ohne Sanierung.**
+**DigitalHeat ersetzt die Ölheizung kostenlos durch eine Serverheizung mit Holzofen als Reserve, zahlt Strom und Unterhalt, und der Haushalt braucht kein Heizöl mehr. Das spart 3'300–5'700 CHF pro Jahr, ohne eigene Investition und ohne Sanierung.**
 
 Einwände und Antworten:
 | Einwand | Antwort |
 |---|---|
-| «Was, wenn der Server ausfällt?» | Die Backup-Heizung bleibt und springt automatisch ein, der Speicher überbrückt Stunden |
+| «Was, wenn der Server ausfällt?» | Der Speicher überbrückt Stunden, danach heizt der Holzofen (von Hand angefeuert) |
 | «Ist das laut?» | ANNAHME: Flüssigkeitskühlung ohne grosse Lüfter, im Keller hinter einer Tür; vor dem Pilot messen |
 | «Wer haftet bei Schäden?» | DigitalHeat, über eine Versicherung |
 | «Kommt jemand an meine Daten oder ich an fremde?» | Getrennte Netze, verplombtes Gehäuse, der Haushalt hat keinen Zugang |
@@ -829,7 +829,7 @@ Einwände und Antworten:
 ### 9. Offene Punkte
 - Gilt die Serverheizung im Kanton Basel-Stadt als erneuerbarer Heizungsersatz?
 - Lärm und Platzbedarf von 8 kW Servern im Keller
-- Vertragslaufzeit, Umzug, was passiert bei Konkurs von DigitalHeat (Backup-Heizung muss bleiben)
+- Vertragslaufzeit, Umzug, was passiert bei Konkurs von DigitalHeat (Holzofen bleibt, Ersatzlösung vertraglich regeln)
 - Antworten der anderen Säulen auf die Schnittstellen in Abschnitt 4
 
 
@@ -957,7 +957,7 @@ Rechnung: `src/kunde/wirtschaftlichkeit.py` (alle Werte stehen dort in `P` mit Q
 | Annahme | Wert | Status | Quelle |
 |---|---|---|---|
 | Wärmepumpe Jahresarbeitszahl | 2,5 | Case | Case («Wärme ersetzt Wärmepumpe, JAZ 2,5») |
-| Ölkessel Wirkungsgrad | 85 % | Annahme | älterer Kessel |
+| Ölkessel Wirkungsgrad (nur für «heute») | 85 % | Annahme | älterer Kessel |
 | Gaskessel Wirkungsgrad | 90 % | Annahme | |
 | CO2 Heizöl | 2,65 kg/l | Annahme | gängiger Emissionsfaktor Heizöl EL |
 | CO2 Erdgas | 0,198 kg/kWh | Annahme | gängiger Emissionsfaktor Erdgas |
