@@ -63,6 +63,33 @@ ANNAHMEN = {
     "ankunft_stundenprofil": ("Alibaba UTC+8, unverändert als Tagesform übernommen",
                               "daten/alibaba_auswertung.json, ankunft_stunde_utc8_anteil"),
     "zufallssaat": (2025, "fest, damit jeder Lauf dieselben Ankünfte erzeugt"),
+    # --- Day-ahead-Zusage (src/scheduler/zusage.py) ---
+    "prognose_modell": ("ecmwf_ifs025", "Open-Meteo Previous Runs API, ECMWF IFS 0,25°, Lauf alle 6 h "
+                                        "(open-meteo.com/en/docs/ecmwf-api); 2025: previous_day1 MAE 0,84 °C, "
+                                        "previous_day2 0,95 °C gegen Ist (daten/roh/openmeteo_prognose)"),
+    "prognose_verzug_h": (8, "Schätzung, konservativ: ECMWF-Echtzeitverteilung einige Stunden nach Laufbeginn "
+                             "+ 2 h Open-Data-Verzug (open-meteo.com/en/docs/ecmwf-api); Lauf spätestens "
+                             "Zielstunde − N × 24 h angenommen"),
+    "entscheid_uhr_lokal": (12, "Design-Doc: Zusage um 12 Uhr Ortszeit Basel am Vortag (wie Day-ahead-Strommarkt)"),
+    "zusage_max_fehltage": (0.05, "Design-Doc: höchstens 5 % der Tage mit Fehlmenge"),
+    "migration_min": (0.03, "Gemessen 21.11.2026 am Embedding-Job (M1 Pro): Neustart aus Checkpoint bis rechenbereit "
+                            "0,28 s (5 Läufe) + laufenden Block (128 Texte) fertig rechnen bis 1,42 s = 1,7 s mit 6 Threads; "
+                            "mit 1 Thread SIGTERM bis Checkpoint 6,4 s (messungen/vektorvergleich.json). "
+                            "Ohne Übertragung von Checkpoint und Modell über das Netz zwischen Standorten"),
+    # --- Flotte und Senke (src/scheduler/flotte.py, daten/HALLENBAD.md) ---
+    "flotte_haeuser": (20, "Arbeitsannahme Design-Doc; vorerst 20 × Referenzhaus (TODOS.md, D3)"),
+    "bad_jahresbedarf_kwh": (650000, "Schätzung ±30 %: VHF/EnergieSchweiz-Leitfaden 2018, 430–480 kWh/m² pro "
+                                     "120-Tage-Saison (S. 156) × 1'050 m² (Annahme 50 m × 21 m, 8 Bahnen) "
+                                     "× 163/123 Betriebstage; Sportbad St. Jakob (daten/HALLENBAD.md)"),
+    "bad_monatsanteile": ([0, 0, 0, 0.040, 0.238, 0.138, 0.162, 0.156, 0.218, 0.048, 0, 0],
+                          "Schätzung: Mittel aus Betriebstagen und (24 °C − Tagesmittel), Basel 2025 "
+                          "(daten/HALLENBAD.md)"),
+    "bad_betrieb_2025": (("2025-04-26", "2025-10-05"), "bs.ch, Medienmitteilung ED 3.10.2025 (daten/HALLENBAD.md, Q2)"),
+    "bad_speicher_kwh": (1200, "Schätzung: Becken als Speicher, 1'050 m² × 2 m (Annahme Mindesttiefe "
+                               "Wettkampfbecken) × 1,163 kWh/(m³·K) × 0,5 K zulässige Schwankung"),
+    "sla_gutschrift_anteil": (0.50, "Schätzung: fehlende Stunde unbezahlt + 50 % des Vertragspreises gutgeschrieben; "
+                                    "AWS EC2 SLA schreibt 10/30/100 % der Monatsrechnung gut "
+                                    "(aws.amazon.com/compute/sla)"),
 }
 
 

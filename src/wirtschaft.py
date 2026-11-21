@@ -8,10 +8,12 @@ Formel pro Jahr t = 1..J:
               × [fest gebucht × Vertragspreis + Rest × Spot-Preis × (1 − Preisverfall)^(t−1)]
   Wärme     = genutzte Wärme × Wärmepreis an den Haushalt
   Strom     = Server-h × Strompreis
+  Fehlmenge = Fehlmenge Server-h × Karten × Vertragspreis × SLA-Gutschrift × (1 + Kostensteigerung)^(t−1)
+              (Day-ahead-Zusage nicht geliefert, src/scheduler/zusage.py; Standard 0)
   Laufend   = (Ersatzteile + Einsätze + Service + Monitoring + Internet + Versicherung + Lizenz
                + Firmenanteil) × (1 + Kostensteigerung)^(t−1)
-  Steuer    = max(0, Erlös + Wärme − Strom − Laufend − Abschreibung) × Steuersatz
-  Cashflow  = Erlös + Wärme − Strom − Laufend − Steuer (+ Restwert im letzten Jahr)
+  Steuer    = max(0, Erlös + Wärme − Strom − Laufend − Fehlmenge − Abschreibung) × Steuersatz
+  Cashflow  = Erlös + Wärme − Strom − Laufend − Fehlmenge − Steuer (+ Restwert im letzten Jahr)
 Ergebnis pro Jahr = (−Investition + Barwert der Cashflows) × Annuitätenfaktor (Zins, J)
 
 Aufruf: python3 src/wirtschaft.py            # Referenzhaus 8 Server, Break-even
@@ -32,13 +34,16 @@ def parameter(**ueberschreiben):
         "einsaetze_chf_pro_8_server", "service_hydraulik_chf", "kuehlservice_chf_pro_kw",
         "monitoring_chf_pro_server_monat", "internet_chf", "versicherung_anteil", "lizenz_chf",
         "firmenanteil_chf", "kostensteigerung", "gewinnsteuer", "strompreis_chf_kwh",
-        "server_kw")}
+        "server_kw", "sla_gutschrift_anteil")}
     p.update(ueberschreiben)
     return p
 
 
-def rechne(n_server, server_h, waerme_kwh, **ueberschreiben):
-    """Gibt Kennzahlen und die Jahre einzeln zurück (alles in CHF)."""
+def rechne(n_server, server_h, waerme_kwh, fehlmenge_server_h=0.0, **ueberschreiben):
+    """Gibt Kennzahlen und die Jahre einzeln zurück (alles in CHF).
+
+    `fehlmenge_server_h`: zugesagte, aber nicht gelieferte Server-h pro Jahr (Day-ahead-Zusage).
+    """
     p = parameter(**ueberschreiben)
     J, i = p["abschreibung_jahre"], p["zins"]
     hardware = n_server * p["server_preis_chf"]
@@ -67,12 +72,14 @@ def rechne(n_server, server_h, waerme_kwh, **ueberschreiben):
             "firmenanteil": p["firmenanteil_chf"],
         }
         laufend = sum(teile.values()) * e
-        vor_steuer = erloes + waerme - strom - laufend - abschreibung
+        fehlmenge = (fehlmenge_server_h * p["karten_pro_server"] * p["vertragspreis_chf_karte_h"]
+                     * p["sla_gutschrift_anteil"] * e)
+        vor_steuer = erloes + waerme - strom - laufend - fehlmenge - abschreibung
         steuer = max(0.0, vor_steuer) * p["gewinnsteuer"]
-        cashflow = erloes + waerme - strom - laufend - steuer + (restwert if t == J else 0)
+        cashflow = erloes + waerme - strom - laufend - fehlmenge - steuer + (restwert if t == J else 0)
         barwert += cashflow / (1 + i) ** t
         jahre.append({"jahr": t, "erloes": round(erloes), "waerme": round(waerme), "strom": round(strom),
-                      "laufend": round(laufend), "abschreibung": round(abschreibung),
+                      "laufend": round(laufend), "fehlmenge": round(fehlmenge), "abschreibung": round(abschreibung),
                       "gewinn_vor_steuer": round(vor_steuer), "steuer": round(steuer),
                       "gewinn_nach_steuer": round(vor_steuer - steuer), "cashflow": round(cashflow)})
     annuitaet = i / (1 - (1 + i) ** -J)
@@ -85,12 +92,13 @@ def rechne(n_server, server_h, waerme_kwh, **ueberschreiben):
     }
 
 
-def break_even(n_server, server_h, waerme_kwh, **ueberschreiben):
+def break_even(n_server, server_h, waerme_kwh, fehlmenge_server_h=0.0, **ueberschreiben):
     """Vertragspreis (CHF pro Karten-Stunde), bei dem das Ergebnis genau 0 ist."""
     lo, hi = 0.0, 5.0
     for _ in range(60):
         m = (lo + hi) / 2
-        if rechne(n_server, server_h, waerme_kwh, vertragspreis_chf_karte_h=m, **ueberschreiben)["ergebnis_pro_jahr_chf"] < 0:
+        if rechne(n_server, server_h, waerme_kwh, fehlmenge_server_h, vertragspreis_chf_karte_h=m,
+                  **ueberschreiben)["ergebnis_pro_jahr_chf"] < 0:
             lo = m
         else:
             hi = m

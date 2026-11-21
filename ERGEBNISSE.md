@@ -92,3 +92,42 @@ Alle Annahmen mit Quelle stehen in `src/scheduler/annahmen.py` und in jeder Erge
 - Stündliche Auflösung, perfekte Kenntnis des Bedarfs der laufenden Stunde, keine Prognose über die Stunde hinaus.
 - Speicher ohne Verluste, Warmwasser gleichmässig über den Tag (0,5 kWh pro Stunde).
 - Ankünfte nach Alibaba-Tagesform in UTC+8, nicht auf Basel umgerechnet.
+
+## Day-ahead-Zusage (Stand 21.11.2026, `src/scheduler/zusage.py`)
+Frage: Wie viele Server-Stunden kann DigitalHeat einen Tag im Voraus verbindlich zu 0,60 CHF pro L4-h (= 4,80 CHF pro Server-h) verkaufen?
+- Entscheid um 12 Uhr Ortszeit am Vortag. Prognose: Open-Meteo «Previous Runs», ECMWF IFS 0,25°. Genutzt werden nur Läufe, die zum Entscheid schon veröffentlicht waren (konservativ 8 h Verzug, Test für jede Stunde). Der Vortagslauf ist genauer als der Lauf zwei Tage vorher: mittlerer Fehler 0,84 °C gegenüber 0,95 °C.
+- Für 2024 gibt es keine Previous Runs. Darum: kalibriert auf Januar–Juni 2025, ausgewertet auf Juli–Dezember 2025.
+- **Referenzhaus, 8 Server:** Sicherheitsfaktor 0,95. **93 % der Server-h sind zusagbar**, die angenommenen 60 % fest gebucht sind also gedeckt. Fehlmenge an 2,2 % der Tage ausserhalb der Kalibrierung, 57 Server-h im Jahr. Gutschrift: 50 % des Vertragspreises (Schätzung). **Ergebnis 34'276 CHF pro Jahr statt 34'543 CHF.**
+- Damit ist die Preisprämisse belegt und nicht nur angenommen. Offen bleibt die Nachfrage: Zusagbar heisst noch nicht verkauft.
+- Daten: `daten/ergebnisse/zusage_8_spot.json`.
+
+## Wärme-Router: Flotte mit Sommer-Senke (Stand 21.11.2026, `src/scheduler/router.py`, `flotte.py`)
+Flotte: 20 × Referenzhaus mit je 8 Servern (Serverregel, Test). Ein gemeinsamer Auftragspool, der Router verteilt die Aufträge auf die Standorte. Der Kern `entscheide()` ist unverändert. Regel bei Überschuss: abgeben (Wärme zuerst).
+**Vorrang (Team-Entscheid 21.11.2026): Wohnhäuser haben bei der Zuteilung immer Vorrang. Das Bad nimmt nur Rechenlast auf, die kein Haus als Wärme brauchen kann.** Ein Haus darf dafür auch einen angefangenen Job vom Bad zurückholen.
+Senke: **Sportbad St. Jakob**, offen 26.4.–5.10.2025, ca. 650 MWh pro Jahr (Schätzung ±30 %, `daten/HALLENBAD.md`). Ein Hallenbad scheidet aus, weil das Rialto Sommerpause hat und das Hallenbad Eglisee nur im Winter steht.
+
+| Szenario «Nur Jobs mit Frist» | 0 Senken | Sportbad 50 Server (nach Nachfrage) | Sportbad 170 Server (Senkenregel) |
+|---|---|---|---|
+| Wärme der Häuser gedeckt | 51,5 % | 50,9 % | 50,7 % |
+| Auslastung Haus-Server | 29,2 % | 28,7 % | 28,3 % |
+| Auslastung Bad-Server (übers Jahr) | – | 39,6 % | 12,6 % |
+| An andere Cloud abgegebene Arbeit | 179'870 Server-h | **12'507 Server-h** | 5'249 Server-h |
+| Migrationen | 0 | 3'457 | 2 |
+| Verpasste Fristen | 0 % | 0 % | 0 % |
+| Ergebnis DigitalHeat | −176'618 CHF/J | **−101'372 CHF/J** | −1'066'667 CHF/J |
+
+| Szenario «Genug Aufträge» (Spot) | 0 Senken | Sportbad 50 | Sportbad 170 |
+|---|---|---|---|
+| Ergebnis DigitalHeat | 690'540 CHF/J | 851'590 CHF/J | 1'203'657 CHF/J |
+| mit Day-ahead-Zusage (60 % fest, Fehlmenge) | 685'220 CHF/J | 846'393 CHF/J | – |
+
+**Befunde**
+1. **Der Router schliesst das Sommerloch nur, wenn es genug Aufträge gibt.** Ohne Senke gibt die Flotte 179'870 Server-h an andere Clouds ab, weil die Häuser im Sommer keine Wärme brauchen. Ein Sportbad mit 50 Servern nimmt 93 % davon auf. Das verbessert das Ergebnis um rund **75'000 CHF pro Jahr**. Bei Nachfrage nach Alibaba bleibt die Flotte trotzdem im Minus: Der Engpass ist die Nachfrage, nicht die Wärme.
+2. **Die Senkenregel aus dem Design-Doc ist falsch dimensioniert.** Sie richtet die Serverzahl nach dem Wärmebedarf (170 Server) statt nach den Aufträgen. Die richtige Grösse ergibt sich aus der Nachfrage: bestes Ergebnis bei 50 Servern (gesucht von 10 bis 80, `suche_senkengroesse_alibaba`). Nur wenn es unbegrenzt Aufträge gibt (Spot), lohnt jeder zusätzliche Server.
+3. **Die Häuser behalten ihre Wärme.** Weil sie Vorrang haben, sinkt ihre Deckung mit Bad nur von 51,5 % auf 50,9 %. Die Häuser haben in jeder Stunde Vorrang. Was das Bad zu einer Zeit rechnet, in der kein Haus Wärme braucht, fehlt einem Haus manchmal ein paar Stunden später. Ohne die Vorrang-Regel lag die Deckung bei 47,5 %, und das Bad holte sich im Mai und September die Arbeit der Häuser.
+4. **Gleiche Häuser gleichen sich nicht aus.** 20 gleiche Häuser mit gleichem Wetter rechnen so viel wie 20 einzelne Häuser (Test, Abweichung < 0,1 %). Der Nutzen der Verteilung entsteht erst mit einem Standort, der zu anderen Zeiten Wärme braucht.
+5. **Migration ist echt und verlustfrei.** Der echte Job wurde nach 2'688 von 5'000 Texten mit SIGTERM angehalten und als neuer Prozess fortgesetzt. Die Vektoren sind identisch, Abweichung 0,0 (`tests/vektorvergleich.py`, `messungen/vektorvergleich.json`). Neustart bis rechenbereit: 0,28 s. Bis der laufende Block fertig ist: 1,4 s mit 6 Threads, 6,4 s mit 1 Thread. Die 3'457 Migrationen pro Jahr kosten damit zusammen rund 2 kWh.
+
+**Grenzen:** Der Wärmebedarf des Bads ist eine Schätzung, ohne Lehrschwimmbecken und Duschen. Ins Becken als Speicher passen 1'200 kWh (Schätzung). Das Bad hat in der Zusage keinen Prognosefehler (Monatsprofil). Die Migration rechnet ohne Übertragung über das Netz. Die Typ-B-Ankünfte im Pool sind anders gezogen als in 20 einzelnen Häusern.
+
+**Reproduzieren:** `python3 src/scheduler/zusage.py`, `python3 src/scheduler/flotte.py` (≈ 5 min), Tests `python3 -m unittest discover -s tests` (22 Tests), Vektorvergleich `.venv/bin/python tests/vektorvergleich.py` (≈ 8 min).

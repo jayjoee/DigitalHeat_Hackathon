@@ -10,6 +10,7 @@ Aufruf:
   python3 src/scheduler/jahr.py --server 4 --stunden daten/ergebnisse/stunden_4.csv
 """
 import argparse
+import copy
 import csv
 import json
 import math
@@ -66,14 +67,24 @@ def _poisson(rnd, lam):
 class Haus:
     """Zustand eines Hauses über das Jahr. `schritt(h)` rechnet eine Stunde mit dem Scheduler-Kern.
 
-    Die Jahresbilanz (simuliere) und die Live-Steuerung (live.py) benutzen beide diese Klasse.
+    Die Jahresbilanz (simuliere), die Live-Steuerung (live.py), die Day-ahead-Zusage (zusage.py) und
+    der Wärme-Router (router.py) benutzen alle diese Klasse.
+
+    `schritt(h)` besteht aus vier Teilen, die der Router einzeln aufruft:
+      vorbereiten(h)          Ankünfte und Spot-Nachschub (nur Einzelhaus; in der Flotte macht das der Pool)
+      lage(h)                 Eingang für den Kern
+      fristen(h, e)           Jobs fortschreiben, Fristprüfung, Job-Zähler (in der Flotte: der Pool)
+      verbuchen(h, e)         Wärmebilanz, Speicher, Strom, Backup – nur Physik dieses Standorts
     """
 
-    def __init__(self, n_server, szenario="spot", bei_ueberschuss="rechnen", profil=None):
+    def __init__(self, n_server, szenario="spot", bei_ueberschuss="rechnen", profil=None,
+                 speicher_kwh=None, name="Referenzhaus", typ="haus", mit_ankuenften=True):
         self.n, self.szenario, self.regel = n_server, szenario, bei_ueberschuss
+        self.name, self.typ = name, typ
         self.profil = profil or profil_laden()
-        self.plan, self.raten = ankuenfte(n_server, szenario, A.wert("zufallssaat"))
-        self.eta, self.smax = A.wert("waermerueckgewinnung"), A.wert("speicher_kwh")
+        self.plan, self.raten = ankuenfte(n_server, szenario, A.wert("zufallssaat")) if mit_ankuenften else ({}, {})
+        self.eta = A.wert("waermerueckgewinnung")
+        self.smax = A.wert("speicher_kwh") if speicher_kwh is None else speicher_kwh
         self.s = 0.0
         self.q, self.nid = [], 0
         self.z = dict(strom=0.0, waerme=0.0, genutzt=0.0, aus_speicher=0.0, abgefuehrt=0.0, backup=0.0,
@@ -87,40 +98,31 @@ class Haus:
         self.z["jobs"] += 1
         return j
 
-    def schritt(self, h):
-        p, z, q = self.profil[h], self.z, self.q
+    def vorbereiten(self, h):
         for typ in self.plan.get(h, []):
             self._neuer_job(typ, h, h + A.wert(f"job_{typ.lower()}_frist_h"))
-            z["mit_frist"] += 1
+            self.z["mit_frist"] += 1
         if self.szenario == "spot":
             # unbegrenzt A: immer so viel Spot-Arbeit bereithalten, dass alle Server eine Stunde voll sind
             kw = A.wert("server_kw")
-            while sum(min(j.rest_kwh, kw) for j in q if j.typ == "A") < self.n * kw - 1e-9:
+            while sum(min(j.rest_kwh, kw) for j in self.q if j.typ == "A") < self.n * kw - 1e-9:
                 self._neuer_job("A", h, math.inf)
 
-        bedarf = p["heizung"] + p["ww"]
+    def bedarf(self, h):
+        p = self.profil[h]
+        return p["heizung"] + p["ww"]
+
+    def lage(self, h):
+        return Lage(h, self.bedarf(h), self.s, self.smax, self.n, A.wert("server_kw"), self.eta)
+
+    def fristen(self, h, e):
+        """Jobs fortschreiben und Fristen prüfen. Gilt für Einzelhaus und Pool (router.Pool erbt die Logik)."""
+        fristen_buchen(self.q, self.z, h, e.abgegeben, e.laeufe)
+
+    def verbuchen(self, h, e):
+        p, z = self.profil[h], self.z
+        bedarf = self.bedarf(h)
         speicher_vorher = self.s
-        e = entscheide(Lage(h, bedarf, self.s, self.smax, self.n, A.wert("server_kw"), self.eta), q, self.regel)
-
-        for j in e.abgegeben:
-            q.remove(j)
-            z["abgegeben"] += 1
-            z["abgegeben_kwh"] += j.rest_kwh
-        for j, m in e.laeufe:
-            j.rest_kwh -= m
-            j.gelaufen_kwh += m
-            z[f"server_h_{j.typ.lower()}"] += m / A.wert("server_kw")
-            if j.rest_kwh <= 1e-9:
-                q.remove(j)
-                if not math.isinf(j.frist_h):
-                    z["fertig"] += 1
-        # Fristen prüfen: Job kann nicht mehr fertig werden
-        for j in [j for j in q if not math.isinf(j.frist_h) and h + 1 >= j.frist_h]:
-            q.remove(j)
-            z["verpasst"] += 1
-            z["verpasst_kwh"] += j.rest_kwh
-
-        # Wärmebilanz der Stunde
         waerme = e.strom_kwh * self.eta
         direkt = min(waerme, bedarf)
         rest = bedarf - direkt
@@ -140,10 +142,46 @@ class Haus:
                 "genutzt_kwh": round(direkt + aus_sp, 3), "speicher_vorher_kwh": round(speicher_vorher, 3),
                 "speicher_kwh": round(self.s, 3), "abgefuehrt_kwh": round(abgef, 3),
                 "backup_kwh": round(backup, 3), "server_laufend": round(e.strom_kwh / A.wert("server_kw"), 3),
-                "warteschlange": len(q), "abgegeben": len(e.abgegeben)}
+                "warteschlange": len(self.q), "abgegeben": len(e.abgegeben)}
+
+    def schritt(self, h):
+        self.vorbereiten(h)
+        e = entscheide(self.lage(h), self.q, self.regel)
+        self.fristen(h, e)
+        return self.verbuchen(h, e)
+
+    def kopie(self, profil=None):
+        """Unabhängige Kopie des Zustands (Jobs, Speicher, Zähler), optional mit anderem Profil (Prognose)."""
+        k = copy.copy(self)
+        k.q = [copy.copy(j) for j in self.q]
+        k.z = dict(self.z)
+        if profil is not None:
+            k.profil = profil
+        return k
 
     def bilanz(self):
         return bilanz(self.n, self.szenario, self.regel, self.z, self.raten)
+
+
+def fristen_buchen(q, z, h, abgegeben, laeufe):
+    """Abgaben, Fortschritt, fertige Jobs und verpasste Fristen buchen – genau einmal pro Stunde."""
+    for j in abgegeben:
+        q.remove(j)
+        z["abgegeben"] += 1
+        z["abgegeben_kwh"] += j.rest_kwh
+    for j, m in laeufe:
+        j.rest_kwh -= m
+        j.gelaufen_kwh += m
+        z[f"server_h_{j.typ.lower()}"] += m / A.wert("server_kw")
+        if j.rest_kwh <= 1e-9:
+            q.remove(j)
+            if not math.isinf(j.frist_h):
+                z["fertig"] += 1
+    # Fristen prüfen: Job kann nicht mehr fertig werden
+    for j in [j for j in q if not math.isinf(j.frist_h) and h + 1 >= j.frist_h]:
+        q.remove(j)
+        z["verpasst"] += 1
+        z["verpasst_kwh"] += j.rest_kwh
 
 
 def simuliere(n_server, szenario="spot", bei_ueberschuss="rechnen", stunden_csv=None, profil=None):

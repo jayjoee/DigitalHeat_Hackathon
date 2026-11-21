@@ -1,0 +1,6703 @@
+{
+ "erzeugt": "python3 src/scheduler/flotte.py",
+ "regel_ueberschuss": "abgeben",
+ "server_pro_haus": 8,
+ "server_bad_regel": 170,
+ "server_bad_nach_nachfrage": 50,
+ "suche_senkengroesse_alibaba": [
+  {
+   "server_bad": 10,
+   "ergebnis_chf": -157202,
+   "abgegeben_server_h": 143671.9
+  },
+  {
+   "server_bad": 20,
+   "ergebnis_chf": -142275,
+   "abgegeben_server_h": 110512.9
+  },
+  {
+   "server_bad": 30,
+   "ergebnis_chf": -128088,
+   "abgegeben_server_h": 77639.1
+  },
+  {
+   "server_bad": 40,
+   "ergebnis_chf": -111729,
+   "abgegeben_server_h": 44022.8
+  },
+  {
+   "server_bad": 50,
+   "ergebnis_chf": -101372,
+   "abgegeben_server_h": 12506.8
+  },
+  {
+   "server_bad": 60,
+   "ergebnis_chf": -157723,
+   "abgegeben_server_h": 5249.8
+  },
+  {
+   "server_bad": 70,
+   "ergebnis_chf": -232848,
+   "abgegeben_server_h": 5249.8
+  },
+  {
+   "server_bad": 80,
+   "ergebnis_chf": -311427,
+   "abgegeben_server_h": 5248.9
+  }
+ ],
+ "zusage_spot": {
+  "0 Senken": {
+   "methode": "Kalibrierung Jan–Jun 2025, Auswertung Jul–Dez 2025 (keine Previous Runs 2024)",
+   "sicherheitsfaktor": 0.95,
+   "fehltage_kalibrierung": 0.05,
+   "fehltage_auswertung": 0.0217,
+   "jahr": {
+    "sicherheitsfaktor": 0.95,
+    "geliefert_server_h": 725684.1,
+    "zugesagt_server_h": 675242.5,
+    "zusagbarer_anteil": 0.9305,
+    "nachfrage_annahme": 0.6,
+    "verkaufsanteil_der_zusage": 0.6448,
+    "fest_gebucht_server_h": 434263.9,
+    "anteil_fest_gebucht": 0.5984,
+    "fehlmenge_server_h": 1146.6,
+    "tage_mit_fehlmenge": 1,
+    "tage_mit_zusage": 364
+   },
+   "kalibrierung": {
+    "sicherheitsfaktor": 0.95,
+    "geliefert_server_h": 410029.1,
+    "zugesagt_server_h": 386059.3,
+    "zusagbarer_anteil": 0.9415,
+    "nachfrage_annahme": 0.6,
+    "verkaufsanteil_der_zusage": 0.6373,
+    "fest_gebucht_server_h": 246017.4,
+    "anteil_fest_gebucht": 0.6,
+    "fehlmenge_server_h": 0.0,
+    "tage_mit_fehlmenge": 0,
+    "tage_mit_zusage": 180
+   },
+   "auswertung": {
+    "sicherheitsfaktor": 0.95,
+    "geliefert_server_h": 315655.1,
+    "zugesagt_server_h": 289183.2,
+    "zusagbarer_anteil": 0.9161,
+    "nachfrage_annahme": 0.6,
+    "verkaufsanteil_der_zusage": 0.6549,
+    "fest_gebucht_server_h": 188223.8,
+    "anteil_fest_gebucht": 0.5963,
+    "fehlmenge_server_h": 1169.26,
+    "tage_mit_fehlmenge": 1,
+    "tage_mit_zusage": 184
+   },
+   "tage": [
+    {
+     "tag": "2025-01-01",
+     "prognose_server_h": 0.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": false
+    },
+    {
+     "tag": "2025-01-02",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-03",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-04",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-05",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-06",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-07",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-08",
+     "prognose_server_h": 3312.12,
+     "geliefert_server_h": 3834.56,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-09",
+     "prognose_server_h": 2897.84,
+     "geliefert_server_h": 2951.54,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-10",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-11",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-12",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-13",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-14",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-15",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-16",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-17",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-18",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-19",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-20",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-21",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-22",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-23",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-24",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-25",
+     "prognose_server_h": 3378.62,
+     "geliefert_server_h": 3390.28,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-26",
+     "prognose_server_h": 3282.58,
+     "geliefert_server_h": 3199.38,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-27",
+     "prognose_server_h": 3056.72,
+     "geliefert_server_h": 3116.4,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-28",
+     "prognose_server_h": 3274.6,
+     "geliefert_server_h": 3298.06,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-29",
+     "prognose_server_h": 3368.56,
+     "geliefert_server_h": 3292.36,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-30",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-31",
+     "prognose_server_h": 3823.28,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-01",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-02",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-03",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-04",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-05",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-06",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-07",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-08",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-09",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-10",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-11",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-12",
+     "prognose_server_h": 3610.02,
+     "geliefert_server_h": 3709.6,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-13",
+     "prognose_server_h": 3727.34,
+     "geliefert_server_h": 3725.28,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-14",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-15",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-16",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-17",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-18",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-19",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-20",
+     "prognose_server_h": 3827.86,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-21",
+     "prognose_server_h": 3121.7,
+     "geliefert_server_h": 3460.54,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-22",
+     "prognose_server_h": 2797.02,
+     "geliefert_server_h": 2836.1,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-23",
+     "prognose_server_h": 3038.34,
+     "geliefert_server_h": 3009.02,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-24",
+     "prognose_server_h": 3091.98,
+     "geliefert_server_h": 3024.54,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-25",
+     "prognose_server_h": 3105.7,
+     "geliefert_server_h": 2996.3,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-26",
+     "prognose_server_h": 3691.78,
+     "geliefert_server_h": 3653.7,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-27",
+     "prognose_server_h": 3644.74,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-28",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-01",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-02",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-03",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-04",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-05",
+     "prognose_server_h": 3740.9,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-06",
+     "prognose_server_h": 3455.78,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-07",
+     "prognose_server_h": 3178.46,
+     "geliefert_server_h": 3359.12,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-08",
+     "prognose_server_h": 3153.42,
+     "geliefert_server_h": 3241.4,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-09",
+     "prognose_server_h": 2963.1,
+     "geliefert_server_h": 3058.76,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-10",
+     "prognose_server_h": 2790.32,
+     "geliefert_server_h": 3081.32,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-11",
+     "prognose_server_h": 3116.32,
+     "geliefert_server_h": 3397.56,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-12",
+     "prognose_server_h": 3334.22,
+     "geliefert_server_h": 3449.42,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-13",
+     "prognose_server_h": 3656.64,
+     "geliefert_server_h": 3604.88,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-14",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-15",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-16",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-17",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-18",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-19",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-20",
+     "prognose_server_h": 2965.44,
+     "geliefert_server_h": 2932.24,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-21",
+     "prognose_server_h": 2392.76,
+     "geliefert_server_h": 2299.06,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-22",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-23",
+     "prognose_server_h": 2653.5,
+     "geliefert_server_h": 2632.02,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-24",
+     "prognose_server_h": 2766.8,
+     "geliefert_server_h": 2787.34,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-25",
+     "prognose_server_h": 2578.28,
+     "geliefert_server_h": 2526.5,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-26",
+     "prognose_server_h": 2878.12,
+     "geliefert_server_h": 2859.54,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-27",
+     "prognose_server_h": 3018.78,
+     "geliefert_server_h": 2964.06,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-28",
+     "prognose_server_h": 2953.3,
+     "geliefert_server_h": 2947.46,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-29",
+     "prognose_server_h": 2965.98,
+     "geliefert_server_h": 2910.3,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-30",
+     "prognose_server_h": 3025.56,
+     "geliefert_server_h": 2921.04,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-31",
+     "prognose_server_h": 3271.68,
+     "geliefert_server_h": 3144.7,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-01",
+     "prognose_server_h": 3354.7,
+     "geliefert_server_h": 3216.02,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-02",
+     "prognose_server_h": 2791.22,
+     "geliefert_server_h": 2541.22,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-03",
+     "prognose_server_h": 2462.1,
+     "geliefert_server_h": 2191.56,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-04",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-05",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-06",
+     "prognose_server_h": 3070.52,
+     "geliefert_server_h": 2811.7,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-07",
+     "prognose_server_h": 3555.78,
+     "geliefert_server_h": 3260.96,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-08",
+     "prognose_server_h": 3079.28,
+     "geliefert_server_h": 2912.28,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-09",
+     "prognose_server_h": 2860.52,
+     "geliefert_server_h": 2651.5,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-10",
+     "prognose_server_h": 2680.9,
+     "geliefert_server_h": 2569.54,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-11",
+     "prognose_server_h": 2414.2,
+     "geliefert_server_h": 2327.32,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-12",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-13",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-14",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-15",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-16",
+     "prognose_server_h": 2690.6,
+     "geliefert_server_h": 2494.3,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-17",
+     "prognose_server_h": 3106.64,
+     "geliefert_server_h": 3086.08,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-18",
+     "prognose_server_h": 3144.76,
+     "geliefert_server_h": 3057.76,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-19",
+     "prognose_server_h": 2262.9,
+     "geliefert_server_h": 2421.101,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-20",
+     "prognose_server_h": 2452.38,
+     "geliefert_server_h": 2531.4,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-21",
+     "prognose_server_h": 2461.16,
+     "geliefert_server_h": 2604.66,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-22",
+     "prognose_server_h": 2187.72,
+     "geliefert_server_h": 2176.94,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-23",
+     "prognose_server_h": 2394.74,
+     "geliefert_server_h": 2401.56,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-24",
+     "prognose_server_h": 2523.6,
+     "geliefert_server_h": 2501.18,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-25",
+     "prognose_server_h": 2454.32,
+     "geliefert_server_h": 2411.26,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-26",
+     "prognose_server_h": 2317.54,
+     "geliefert_server_h": 2278.42,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-27",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-28",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-29",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-30",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-01",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-02",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-03",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-04",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-05",
+     "prognose_server_h": 2819.5,
+     "geliefert_server_h": 2937.66,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-06",
+     "prognose_server_h": 2829.26,
+     "geliefert_server_h": 2662.26,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-07",
+     "prognose_server_h": 2700.38,
+     "geliefert_server_h": 2705.24,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-08",
+     "prognose_server_h": 2571.48,
+     "geliefert_server_h": 2395.66,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-09",
+     "prognose_server_h": 2434.82,
+     "geliefert_server_h": 2364.42,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-10",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-11",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-12",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-13",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-14",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-15",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-16",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-17",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-18",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-19",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-20",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-21",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-22",
+     "prognose_server_h": 2175.96,
+     "geliefert_server_h": 2228.7,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-23",
+     "prognose_server_h": 2257.02,
+     "geliefert_server_h": 2237.52,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-24",
+     "prognose_server_h": 2214.08,
+     "geliefert_server_h": 2196.46,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-25",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-26",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-27",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-28",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-29",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-30",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-31",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-01",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-02",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-03",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-04",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-05",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-06",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-07",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-08",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-09",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-10",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-11",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-12",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-13",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-14",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-15",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-16",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-17",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-18",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-19",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-20",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-21",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-22",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-23",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-24",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-25",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-26",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-27",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-28",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-29",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-30",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-01",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-02",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-03",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-04",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-05",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-06",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-07",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-08",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-09",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-10",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-11",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-12",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-13",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-14",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-15",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-16",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-17",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-18",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-19",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-20",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-21",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-22",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-23",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-24",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-25",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-26",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-27",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-28",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-29",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-30",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-31",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-01",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-02",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-03",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-04",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-05",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-06",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-07",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-08",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-09",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-10",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-11",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-12",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-13",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-14",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-15",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-16",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-17",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-18",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-19",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-20",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-21",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-22",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-23",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-24",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-25",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-26",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-27",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-28",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-29",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-30",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-31",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-01",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-02",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-03",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-04",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-05",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-06",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-07",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-08",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-09",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-10",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-11",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-12",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-13",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-14",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-15",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-16",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-17",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-18",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-19",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-20",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-21",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-22",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 2203.3,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-23",
+     "prognose_server_h": 2622.32,
+     "geliefert_server_h": 2553.84,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-24",
+     "prognose_server_h": 2524.58,
+     "geliefert_server_h": 2481.62,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-25",
+     "prognose_server_h": 2453.32,
+     "geliefert_server_h": 2299.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-26",
+     "prognose_server_h": 2439.66,
+     "geliefert_server_h": 2528.48,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-27",
+     "prognose_server_h": 2367.42,
+     "geliefert_server_h": 2289.3,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-28",
+     "prognose_server_h": 2208.22,
+     "geliefert_server_h": 2240.38,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-29",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-30",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-01",
+     "prognose_server_h": 2453.28,
+     "geliefert_server_h": 2448.44,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-02",
+     "prognose_server_h": 2884.94,
+     "geliefert_server_h": 2923.04,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-03",
+     "prognose_server_h": 2632.02,
+     "geliefert_server_h": 2852.74,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-04",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-05",
+     "prognose_server_h": 2653.48,
+     "geliefert_server_h": 2725.74,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-06",
+     "prognose_server_h": 2482.62,
+     "geliefert_server_h": 2356.58,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-07",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-08",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-09",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-10",
+     "prognose_server_h": 2239.44,
+     "geliefert_server_h": 2280.44,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-11",
+     "prognose_server_h": 2267.76,
+     "geliefert_server_h": 2183.76,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-12",
+     "prognose_server_h": 2416.2,
+     "geliefert_server_h": 2495.26,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-13",
+     "prognose_server_h": 2514.86,
+     "geliefert_server_h": 2437.64,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-14",
+     "prognose_server_h": 2361.48,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-15",
+     "prognose_server_h": 2583.16,
+     "geliefert_server_h": 2648.64,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-16",
+     "prognose_server_h": 2705.26,
+     "geliefert_server_h": 2763.84,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-17",
+     "prognose_server_h": 2842.92,
+     "geliefert_server_h": 2748.22,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-18",
+     "prognose_server_h": 2890.8,
+     "geliefert_server_h": 2900.56,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-19",
+     "prognose_server_h": 2439.66,
+     "geliefert_server_h": 2627.14,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-20",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 2278.5,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-21",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-22",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-23",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-24",
+     "prognose_server_h": 3030.48,
+     "geliefert_server_h": 3069.56,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-25",
+     "prognose_server_h": 2620.28,
+     "geliefert_server_h": 2780.42,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-26",
+     "prognose_server_h": 3241.42,
+     "geliefert_server_h": 3135.94,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-27",
+     "prognose_server_h": 3013.9,
+     "geliefert_server_h": 3008.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-28",
+     "prognose_server_h": 2424.96,
+     "geliefert_server_h": 2431.74,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-29",
+     "prognose_server_h": 2440.6,
+     "geliefert_server_h": 2656.4,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-30",
+     "prognose_server_h": 2327.36,
+     "geliefert_server_h": 2337.06,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-31",
+     "prognose_server_h": 2439.64,
+     "geliefert_server_h": 2557.84,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-01",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-02",
+     "prognose_server_h": 2276.6,
+     "geliefert_server_h": 2390.76,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-03",
+     "prognose_server_h": 2879.08,
+     "geliefert_server_h": 2891.78,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-04",
+     "prognose_server_h": 3056.86,
+     "geliefert_server_h": 3252.12,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-05",
+     "prognose_server_h": 2842.96,
+     "geliefert_server_h": 3216.02,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-06",
+     "prognose_server_h": 3177.9,
+     "geliefert_server_h": 3483.62,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-07",
+     "prognose_server_h": 2926.96,
+     "geliefert_server_h": 3557.92,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-08",
+     "prognose_server_h": 3287.34,
+     "geliefert_server_h": 3670.94,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-09",
+     "prognose_server_h": 2926.0,
+     "geliefert_server_h": 3177.88,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-10",
+     "prognose_server_h": 3156.4,
+     "geliefert_server_h": 3246.24,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-11",
+     "prognose_server_h": 2854.68,
+     "geliefert_server_h": 2784.3,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-12",
+     "prognose_server_h": 2703.32,
+     "geliefert_server_h": 2969.92,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-13",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 2332.2,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-14",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 2483.58,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-15",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-16",
+     "prognose_server_h": 2861.56,
+     "geliefert_server_h": 2907.36,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-17",
+     "prognose_server_h": 3459.74,
+     "geliefert_server_h": 3421.28,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-18",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-19",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-20",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-21",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-22",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-23",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-24",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-25",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-26",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-27",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-28",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-29",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-30",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-01",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-02",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-03",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-04",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-05",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-06",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-07",
+     "prognose_server_h": 2914.62,
+     "geliefert_server_h": 3379.48,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-08",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 2177.9,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-09",
+     "prognose_server_h": 3065.66,
+     "geliefert_server_h": 3037.32,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-10",
+     "prognose_server_h": 3323.4,
+     "geliefert_server_h": 3088.1,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-11",
+     "prognose_server_h": 3082.26,
+     "geliefert_server_h": 3081.22,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-12",
+     "prognose_server_h": 3554.1,
+     "geliefert_server_h": 3441.72,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-13",
+     "prognose_server_h": 3798.04,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-14",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-15",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-16",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-17",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-18",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-19",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-20",
+     "prognose_server_h": 3793.84,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-21",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-22",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-23",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-24",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-25",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-26",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-27",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-28",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-29",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-30",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-31",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    }
+   ],
+   "ergebnis_mit_zusage_chf": 685220
+  },
+  "Sportbad 50 (nach Nachfrage)": {
+   "methode": "Kalibrierung Jan–Jun 2025, Auswertung Jul–Dez 2025 (keine Previous Runs 2024)",
+   "sicherheitsfaktor": 0.95,
+   "fehltage_kalibrierung": 0.0389,
+   "fehltage_auswertung": 0.0109,
+   "jahr": {
+    "sicherheitsfaktor": 0.95,
+    "geliefert_server_h": 924284.1,
+    "zugesagt_server_h": 862772.5,
+    "zusagbarer_anteil": 0.9334,
+    "nachfrage_annahme": 0.6,
+    "verkaufsanteil_der_zusage": 0.6428,
+    "fest_gebucht_server_h": 553428.5,
+    "anteil_fest_gebucht": 0.5988,
+    "fehlmenge_server_h": 1142.01,
+    "tage_mit_fehlmenge": 1,
+    "tage_mit_zusage": 364
+   },
+   "kalibrierung": {
+    "sicherheitsfaktor": 0.95,
+    "geliefert_server_h": 490729.1,
+    "zugesagt_server_h": 461584.3,
+    "zusagbarer_anteil": 0.9406,
+    "nachfrage_annahme": 0.6,
+    "verkaufsanteil_der_zusage": 0.6379,
+    "fest_gebucht_server_h": 294437.4,
+    "anteil_fest_gebucht": 0.6,
+    "fehlmenge_server_h": 0.0,
+    "tage_mit_fehlmenge": 0,
+    "tage_mit_zusage": 180
+   },
+   "auswertung": {
+    "sicherheitsfaktor": 0.95,
+    "geliefert_server_h": 433555.1,
+    "zugesagt_server_h": 401188.2,
+    "zusagbarer_anteil": 0.9253,
+    "nachfrage_annahme": 0.6,
+    "verkaufsanteil_der_zusage": 0.6484,
+    "fest_gebucht_server_h": 258978.4,
+    "anteil_fest_gebucht": 0.5973,
+    "fehlmenge_server_h": 1154.64,
+    "tage_mit_fehlmenge": 1,
+    "tage_mit_zusage": 184
+   },
+   "tage": [
+    {
+     "tag": "2025-01-01",
+     "prognose_server_h": 0.0,
+     "geliefert_server_h": 5040.0,
+     "mit_zusage": false
+    },
+    {
+     "tag": "2025-01-02",
+     "prognose_server_h": 4140.0,
+     "geliefert_server_h": 4140.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-03",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-04",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-05",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-06",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-07",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-08",
+     "prognose_server_h": 3312.12,
+     "geliefert_server_h": 3834.56,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-09",
+     "prognose_server_h": 2897.84,
+     "geliefert_server_h": 2951.54,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-10",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-11",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-12",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-13",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-14",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-15",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-16",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-17",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-18",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-19",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-20",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-21",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-22",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-23",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-24",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-25",
+     "prognose_server_h": 3378.62,
+     "geliefert_server_h": 3390.28,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-26",
+     "prognose_server_h": 3282.58,
+     "geliefert_server_h": 3199.38,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-27",
+     "prognose_server_h": 3056.72,
+     "geliefert_server_h": 3116.4,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-28",
+     "prognose_server_h": 3274.6,
+     "geliefert_server_h": 3298.06,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-29",
+     "prognose_server_h": 3368.56,
+     "geliefert_server_h": 3292.36,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-30",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-01-31",
+     "prognose_server_h": 3823.28,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-01",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-02",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-03",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-04",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-05",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-06",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-07",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-08",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-09",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-10",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-11",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-12",
+     "prognose_server_h": 3610.02,
+     "geliefert_server_h": 3709.6,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-13",
+     "prognose_server_h": 3727.34,
+     "geliefert_server_h": 3725.28,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-14",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-15",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-16",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-17",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-18",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-19",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-20",
+     "prognose_server_h": 3827.86,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-21",
+     "prognose_server_h": 3121.7,
+     "geliefert_server_h": 3460.54,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-22",
+     "prognose_server_h": 2797.02,
+     "geliefert_server_h": 2836.1,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-23",
+     "prognose_server_h": 3038.34,
+     "geliefert_server_h": 3009.02,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-24",
+     "prognose_server_h": 3091.98,
+     "geliefert_server_h": 3024.54,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-25",
+     "prognose_server_h": 3105.7,
+     "geliefert_server_h": 2996.3,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-26",
+     "prognose_server_h": 3691.78,
+     "geliefert_server_h": 3653.7,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-27",
+     "prognose_server_h": 3644.74,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-02-28",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-01",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-02",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-03",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-04",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-05",
+     "prognose_server_h": 3740.9,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-06",
+     "prognose_server_h": 3455.78,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-07",
+     "prognose_server_h": 3178.46,
+     "geliefert_server_h": 3359.12,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-08",
+     "prognose_server_h": 3153.42,
+     "geliefert_server_h": 3241.4,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-09",
+     "prognose_server_h": 2963.1,
+     "geliefert_server_h": 3058.76,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-10",
+     "prognose_server_h": 2790.32,
+     "geliefert_server_h": 3081.32,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-11",
+     "prognose_server_h": 3116.32,
+     "geliefert_server_h": 3397.56,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-12",
+     "prognose_server_h": 3334.22,
+     "geliefert_server_h": 3449.42,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-13",
+     "prognose_server_h": 3656.64,
+     "geliefert_server_h": 3604.88,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-14",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-15",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-16",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-17",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-18",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-19",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-20",
+     "prognose_server_h": 2965.44,
+     "geliefert_server_h": 2932.24,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-21",
+     "prognose_server_h": 2392.76,
+     "geliefert_server_h": 2299.06,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-22",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-23",
+     "prognose_server_h": 2653.5,
+     "geliefert_server_h": 2632.02,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-24",
+     "prognose_server_h": 2766.8,
+     "geliefert_server_h": 2787.34,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-25",
+     "prognose_server_h": 2578.28,
+     "geliefert_server_h": 2526.5,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-26",
+     "prognose_server_h": 2878.12,
+     "geliefert_server_h": 2859.54,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-27",
+     "prognose_server_h": 3018.78,
+     "geliefert_server_h": 2964.06,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-28",
+     "prognose_server_h": 2953.3,
+     "geliefert_server_h": 2947.46,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-29",
+     "prognose_server_h": 2965.98,
+     "geliefert_server_h": 2910.3,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-30",
+     "prognose_server_h": 3025.56,
+     "geliefert_server_h": 2921.04,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-03-31",
+     "prognose_server_h": 3271.68,
+     "geliefert_server_h": 3144.7,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-01",
+     "prognose_server_h": 3354.7,
+     "geliefert_server_h": 3216.02,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-02",
+     "prognose_server_h": 2791.22,
+     "geliefert_server_h": 2541.22,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-03",
+     "prognose_server_h": 2462.1,
+     "geliefert_server_h": 2191.56,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-04",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-05",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-06",
+     "prognose_server_h": 3070.52,
+     "geliefert_server_h": 2811.7,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-07",
+     "prognose_server_h": 3555.78,
+     "geliefert_server_h": 3260.96,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-08",
+     "prognose_server_h": 3079.28,
+     "geliefert_server_h": 2912.28,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-09",
+     "prognose_server_h": 2860.52,
+     "geliefert_server_h": 2651.5,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-10",
+     "prognose_server_h": 2680.9,
+     "geliefert_server_h": 2569.54,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-11",
+     "prognose_server_h": 2414.2,
+     "geliefert_server_h": 2327.32,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-12",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-13",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-14",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-15",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-16",
+     "prognose_server_h": 2690.6,
+     "geliefert_server_h": 2494.3,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-17",
+     "prognose_server_h": 3106.64,
+     "geliefert_server_h": 3086.08,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-18",
+     "prognose_server_h": 3144.76,
+     "geliefert_server_h": 3057.76,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-19",
+     "prognose_server_h": 2262.9,
+     "geliefert_server_h": 2421.1,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-20",
+     "prognose_server_h": 2452.38,
+     "geliefert_server_h": 2531.4,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-21",
+     "prognose_server_h": 2461.16,
+     "geliefert_server_h": 2604.66,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-22",
+     "prognose_server_h": 2187.72,
+     "geliefert_server_h": 2176.94,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-23",
+     "prognose_server_h": 2394.74,
+     "geliefert_server_h": 2401.56,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-24",
+     "prognose_server_h": 2523.6,
+     "geliefert_server_h": 2501.18,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-25",
+     "prognose_server_h": 2454.32,
+     "geliefert_server_h": 2411.26,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-26",
+     "prognose_server_h": 3517.54,
+     "geliefert_server_h": 3478.42,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-27",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-28",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-29",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-04-30",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-01",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-02",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-03",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-04",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-05",
+     "prognose_server_h": 4019.5,
+     "geliefert_server_h": 4137.66,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-06",
+     "prognose_server_h": 4029.26,
+     "geliefert_server_h": 3862.26,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-07",
+     "prognose_server_h": 3900.38,
+     "geliefert_server_h": 3905.24,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-08",
+     "prognose_server_h": 3771.48,
+     "geliefert_server_h": 3595.66,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-09",
+     "prognose_server_h": 3634.82,
+     "geliefert_server_h": 3564.42,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-10",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-11",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-12",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-13",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-14",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-15",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-16",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-17",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-18",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-19",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-20",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-21",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-22",
+     "prognose_server_h": 3375.96,
+     "geliefert_server_h": 3428.7,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-23",
+     "prognose_server_h": 3457.02,
+     "geliefert_server_h": 3437.52,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-24",
+     "prognose_server_h": 3414.08,
+     "geliefert_server_h": 3396.46,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-25",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-26",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-27",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-28",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-29",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-30",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-05-31",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-01",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-02",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-03",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-04",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-05",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-06",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-07",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-08",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-09",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-10",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-11",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-12",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-13",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-14",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-15",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-16",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-17",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-18",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-19",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-20",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-21",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-22",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-23",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-24",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-25",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-26",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-27",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-28",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-29",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-06-30",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-01",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-02",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-03",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-04",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-05",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-06",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-07",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-08",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-09",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-10",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-11",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-12",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-13",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-14",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-15",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-16",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-17",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-18",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-19",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-20",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-21",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-22",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-23",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-24",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-25",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-26",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-27",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-28",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-29",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-30",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-07-31",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-01",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-02",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-03",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-04",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-05",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-06",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-07",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-08",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-09",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-10",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-11",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-12",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-13",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-14",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-15",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-16",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-17",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-18",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-19",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-20",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-21",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-22",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-23",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-24",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-25",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-26",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-27",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-28",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-29",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-30",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-08-31",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-01",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-02",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-03",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-04",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-05",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-06",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-07",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-08",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-09",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-10",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-11",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-12",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-13",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-14",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-15",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-16",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-17",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-18",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-19",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-20",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-21",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-22",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 3403.3,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-23",
+     "prognose_server_h": 3822.32,
+     "geliefert_server_h": 3753.84,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-24",
+     "prognose_server_h": 3724.58,
+     "geliefert_server_h": 3681.62,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-25",
+     "prognose_server_h": 3653.32,
+     "geliefert_server_h": 3499.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-26",
+     "prognose_server_h": 3639.66,
+     "geliefert_server_h": 3728.48,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-27",
+     "prognose_server_h": 3567.42,
+     "geliefert_server_h": 3489.3,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-28",
+     "prognose_server_h": 3408.22,
+     "geliefert_server_h": 3440.38,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-29",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-09-30",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-01",
+     "prognose_server_h": 3653.28,
+     "geliefert_server_h": 3648.44,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-02",
+     "prognose_server_h": 4084.94,
+     "geliefert_server_h": 4123.04,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-03",
+     "prognose_server_h": 3832.02,
+     "geliefert_server_h": 4052.74,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-04",
+     "prognose_server_h": 1500.0,
+     "geliefert_server_h": 1500.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-05",
+     "prognose_server_h": 3853.48,
+     "geliefert_server_h": 3925.74,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-06",
+     "prognose_server_h": 3682.62,
+     "geliefert_server_h": 3556.58,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-07",
+     "prognose_server_h": 600.0,
+     "geliefert_server_h": 600.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-08",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-09",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-10",
+     "prognose_server_h": 2239.44,
+     "geliefert_server_h": 2280.44,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-11",
+     "prognose_server_h": 2267.76,
+     "geliefert_server_h": 2183.76,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-12",
+     "prognose_server_h": 2416.2,
+     "geliefert_server_h": 2495.26,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-13",
+     "prognose_server_h": 2514.86,
+     "geliefert_server_h": 2437.64,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-14",
+     "prognose_server_h": 2361.48,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-15",
+     "prognose_server_h": 2583.16,
+     "geliefert_server_h": 2648.64,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-16",
+     "prognose_server_h": 2705.26,
+     "geliefert_server_h": 2763.84,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-17",
+     "prognose_server_h": 2842.92,
+     "geliefert_server_h": 2748.22,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-18",
+     "prognose_server_h": 2890.8,
+     "geliefert_server_h": 2900.56,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-19",
+     "prognose_server_h": 2439.66,
+     "geliefert_server_h": 2627.14,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-20",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 2278.5,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-21",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-22",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-23",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-24",
+     "prognose_server_h": 3030.48,
+     "geliefert_server_h": 3069.56,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-25",
+     "prognose_server_h": 2620.28,
+     "geliefert_server_h": 2780.42,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-26",
+     "prognose_server_h": 3241.42,
+     "geliefert_server_h": 3135.94,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-27",
+     "prognose_server_h": 3013.9,
+     "geliefert_server_h": 3008.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-28",
+     "prognose_server_h": 2424.96,
+     "geliefert_server_h": 2431.74,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-29",
+     "prognose_server_h": 2440.6,
+     "geliefert_server_h": 2656.4,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-30",
+     "prognose_server_h": 2327.36,
+     "geliefert_server_h": 2337.06,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-10-31",
+     "prognose_server_h": 2439.64,
+     "geliefert_server_h": 2557.84,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-01",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-02",
+     "prognose_server_h": 2276.6,
+     "geliefert_server_h": 2390.76,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-03",
+     "prognose_server_h": 2879.08,
+     "geliefert_server_h": 2891.78,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-04",
+     "prognose_server_h": 3056.86,
+     "geliefert_server_h": 3252.12,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-05",
+     "prognose_server_h": 2842.96,
+     "geliefert_server_h": 3216.02,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-06",
+     "prognose_server_h": 3177.9,
+     "geliefert_server_h": 3483.62,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-07",
+     "prognose_server_h": 2926.96,
+     "geliefert_server_h": 3557.92,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-08",
+     "prognose_server_h": 3287.34,
+     "geliefert_server_h": 3670.94,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-09",
+     "prognose_server_h": 2926.0,
+     "geliefert_server_h": 3177.88,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-10",
+     "prognose_server_h": 3156.4,
+     "geliefert_server_h": 3246.24,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-11",
+     "prognose_server_h": 2854.68,
+     "geliefert_server_h": 2784.3,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-12",
+     "prognose_server_h": 2703.32,
+     "geliefert_server_h": 2969.92,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-13",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 2332.2,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-14",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 2483.58,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-15",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 300.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-16",
+     "prognose_server_h": 2861.56,
+     "geliefert_server_h": 2907.36,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-17",
+     "prognose_server_h": 3459.74,
+     "geliefert_server_h": 3421.28,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-18",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-19",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-20",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-21",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-22",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-23",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-24",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-25",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-26",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-27",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-28",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-29",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-11-30",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-01",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-02",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-03",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-04",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-05",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-06",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-07",
+     "prognose_server_h": 2914.62,
+     "geliefert_server_h": 3379.48,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-08",
+     "prognose_server_h": 300.0,
+     "geliefert_server_h": 2177.9,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-09",
+     "prognose_server_h": 3065.66,
+     "geliefert_server_h": 3037.32,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-10",
+     "prognose_server_h": 3323.4,
+     "geliefert_server_h": 3088.1,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-11",
+     "prognose_server_h": 3082.26,
+     "geliefert_server_h": 3081.22,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-12",
+     "prognose_server_h": 3554.1,
+     "geliefert_server_h": 3441.72,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-13",
+     "prognose_server_h": 3798.04,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-14",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-15",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-16",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-17",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-18",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-19",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-20",
+     "prognose_server_h": 3793.84,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-21",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-22",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-23",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-24",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-25",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-26",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-27",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-28",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-29",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-30",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    },
+    {
+     "tag": "2025-12-31",
+     "prognose_server_h": 3840.0,
+     "geliefert_server_h": 3840.0,
+     "mit_zusage": true
+    }
+   ],
+   "ergebnis_mit_zusage_chf": 846393
+  }
+ },
+ "annahmen": {
+  "flotte_haeuser": {
+   "wert": 20,
+   "quelle": "Arbeitsannahme Design-Doc; vorerst 20 × Referenzhaus (TODOS.md, D3)"
+  },
+  "bad_jahresbedarf_kwh": {
+   "wert": 650000,
+   "quelle": "Schätzung ±30 %: VHF/EnergieSchweiz-Leitfaden 2018, 430–480 kWh/m² pro 120-Tage-Saison (S. 156) × 1'050 m² (Annahme 50 m × 21 m, 8 Bahnen) × 163/123 Betriebstage; Sportbad St. Jakob (daten/HALLENBAD.md)"
+  },
+  "bad_monatsanteile": {
+   "wert": [
+    0,
+    0,
+    0,
+    0.04,
+    0.238,
+    0.138,
+    0.162,
+    0.156,
+    0.218,
+    0.048,
+    0,
+    0
+   ],
+   "quelle": "Schätzung: Mittel aus Betriebstagen und (24 °C − Tagesmittel), Basel 2025 (daten/HALLENBAD.md)"
+  },
+  "bad_betrieb_2025": {
+   "wert": [
+    "2025-04-26",
+    "2025-10-05"
+   ],
+   "quelle": "bs.ch, Medienmitteilung ED 3.10.2025 (daten/HALLENBAD.md, Q2)"
+  },
+  "bad_speicher_kwh": {
+   "wert": 1200,
+   "quelle": "Schätzung: Becken als Speicher, 1'050 m² × 2 m (Annahme Mindesttiefe Wettkampfbecken) × 1,163 kWh/(m³·K) × 0,5 K zulässige Schwankung"
+  },
+  "migration_min": {
+   "wert": 0.03,
+   "quelle": "Gemessen 21.11.2026 am Embedding-Job (M1 Pro): Neustart aus Checkpoint bis rechenbereit 0,28 s (5 Läufe) + laufenden Block (128 Texte) fertig rechnen bis 1,42 s = 1,7 s mit 6 Threads; mit 1 Thread SIGTERM bis Checkpoint 6,4 s (messungen/vektorvergleich.json). Ohne Übertragung von Checkpoint und Modell über das Netz zwischen Standorten"
+  }
+ },
+ "ergebnisse": [
+  {
+   "szenario": "alibaba",
+   "regel_ueberschuss": "abgeben",
+   "standorte_anzahl": 20,
+   "server": 160,
+   "gruppen": {
+    "haus": {
+     "standorte": 20,
+     "server": 160,
+     "deckungsgrad": 0.5153,
+     "auslastung": 0.2916,
+     "server_h": 408755,
+     "waerme_genutzt_kwh": 321854,
+     "waerme_abgefuehrt_kwh": 5150,
+     "backup_kwh": 302757,
+     "ergebnis_pro_jahr_chf": -176618
+    }
+   },
+   "auslastung": 0.2916,
+   "server_h_verkauft": 408755,
+   "waerme_abgefuehrt_kwh": 5150,
+   "jobs_mit_frist": 880220,
+   "jobs_fertig": 689067,
+   "verpasste_fristen_anteil": 0.0,
+   "jobs_abgegeben": 191148,
+   "abgegeben_server_h": 179870.3,
+   "migrationen": 0,
+   "migration_kwh": 0.0,
+   "dh_investition_chf": 5802400,
+   "dh_ergebnis_pro_jahr_chf": -176618,
+   "ergebnis_pro_investiertem_franken": -0.0304,
+   "ankuenfte": {
+    "jobs_a_pro_tag": 1614.28,
+    "jobs_b_pro_tag": 799.34
+   },
+   "standorte": [
+    {
+     "name": "Haus 01",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.4928,
+     "auslastung": 0.2798,
+     "abgefuehrt_kwh": 294,
+     "ergebnis_pro_jahr_chf": -11207
+    },
+    {
+     "name": "Haus 02",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.4844,
+     "auslastung": 0.2749,
+     "abgefuehrt_kwh": 284,
+     "ergebnis_pro_jahr_chf": -12210
+    },
+    {
+     "name": "Haus 03",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.4833,
+     "auslastung": 0.2741,
+     "abgefuehrt_kwh": 271,
+     "ergebnis_pro_jahr_chf": -12385
+    },
+    {
+     "name": "Haus 04",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.4872,
+     "auslastung": 0.2759,
+     "abgefuehrt_kwh": 256,
+     "ergebnis_pro_jahr_chf": -11997
+    },
+    {
+     "name": "Haus 05",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.491,
+     "auslastung": 0.2779,
+     "abgefuehrt_kwh": 246,
+     "ergebnis_pro_jahr_chf": -11597
+    },
+    {
+     "name": "Haus 06",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.502,
+     "auslastung": 0.2839,
+     "abgefuehrt_kwh": 236,
+     "ergebnis_pro_jahr_chf": -10376
+    },
+    {
+     "name": "Haus 07",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.514,
+     "auslastung": 0.2905,
+     "abgefuehrt_kwh": 232,
+     "ergebnis_pro_jahr_chf": -9051
+    },
+    {
+     "name": "Haus 08",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.5183,
+     "auslastung": 0.2929,
+     "abgefuehrt_kwh": 236,
+     "ergebnis_pro_jahr_chf": -8561
+    },
+    {
+     "name": "Haus 09",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.5293,
+     "auslastung": 0.2989,
+     "abgefuehrt_kwh": 231,
+     "ergebnis_pro_jahr_chf": -7358
+    },
+    {
+     "name": "Haus 10",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.5387,
+     "auslastung": 0.3042,
+     "abgefuehrt_kwh": 233,
+     "ergebnis_pro_jahr_chf": -6301
+    },
+    {
+     "name": "Haus 11",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.5431,
+     "auslastung": 0.3068,
+     "abgefuehrt_kwh": 241,
+     "ergebnis_pro_jahr_chf": -5783
+    },
+    {
+     "name": "Haus 12",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.5507,
+     "auslastung": 0.3111,
+     "abgefuehrt_kwh": 241,
+     "ergebnis_pro_jahr_chf": -4927
+    },
+    {
+     "name": "Haus 13",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.552,
+     "auslastung": 0.3119,
+     "abgefuehrt_kwh": 248,
+     "ergebnis_pro_jahr_chf": -4757
+    },
+    {
+     "name": "Haus 14",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.5455,
+     "auslastung": 0.3085,
+     "abgefuehrt_kwh": 259,
+     "ergebnis_pro_jahr_chf": -5448
+    },
+    {
+     "name": "Haus 15",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.5352,
+     "auslastung": 0.3028,
+     "abgefuehrt_kwh": 261,
+     "ergebnis_pro_jahr_chf": -6586
+    },
+    {
+     "name": "Haus 16",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.5255,
+     "auslastung": 0.2974,
+     "abgefuehrt_kwh": 262,
+     "ergebnis_pro_jahr_chf": -7662
+    },
+    {
+     "name": "Haus 17",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.5163,
+     "auslastung": 0.2924,
+     "abgefuehrt_kwh": 270,
+     "ergebnis_pro_jahr_chf": -8669
+    },
+    {
+     "name": "Haus 18",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.5087,
+     "auslastung": 0.2883,
+     "abgefuehrt_kwh": 279,
+     "ergebnis_pro_jahr_chf": -9481
+    },
+    {
+     "name": "Haus 19",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.5,
+     "auslastung": 0.2836,
+     "abgefuehrt_kwh": 284,
+     "ergebnis_pro_jahr_chf": -10436
+    },
+    {
+     "name": "Haus 20",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.4877,
+     "auslastung": 0.2768,
+     "abgefuehrt_kwh": 285,
+     "ergebnis_pro_jahr_chf": -11826
+    }
+   ],
+   "variante": "0 Senken",
+   "server_bad": 0,
+   "monate": [
+    {
+     "monat": "2025-01",
+     "stunden": 744,
+     "haus_server_h": 49886.2,
+     "senke_server_h": 0.0,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 107082.7,
+     "haus_genutzt_kwh": 39907.4
+    },
+    {
+     "monat": "2025-02",
+     "stunden": 672,
+     "haus_server_h": 45199.0,
+     "senke_server_h": 0.0,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 92327.1,
+     "haus_genutzt_kwh": 36157.8
+    },
+    {
+     "monat": "2025-03",
+     "stunden": 744,
+     "haus_server_h": 50415.7,
+     "senke_server_h": 0.0,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 81361.8,
+     "haus_genutzt_kwh": 40330.7
+    },
+    {
+     "monat": "2025-04",
+     "stunden": 720,
+     "haus_server_h": 39825.2,
+     "senke_server_h": 0.0,
+     "abgegeben_server_h": 7037.7,
+     "abgefuehrt_kwh": 202.1,
+     "haus_bedarf_kwh": 44358.0,
+     "haus_genutzt_kwh": 30958.3
+    },
+    {
+     "monat": "2025-05",
+     "stunden": 744,
+     "haus_server_h": 24701.5,
+     "senke_server_h": 0.0,
+     "abgegeben_server_h": 25459.7,
+     "abgefuehrt_kwh": 726.4,
+     "haus_bedarf_kwh": 21302.5,
+     "haus_genutzt_kwh": 19035.4
+    },
+    {
+     "monat": "2025-06",
+     "stunden": 720,
+     "haus_server_h": 10361.4,
+     "senke_server_h": 0.0,
+     "abgegeben_server_h": 38498.2,
+     "abgefuehrt_kwh": 1090.3,
+     "haus_bedarf_kwh": 7200.0,
+     "haus_genutzt_kwh": 7200.0
+    },
+    {
+     "monat": "2025-07",
+     "stunden": 744,
+     "haus_server_h": 10705.5,
+     "senke_server_h": 0.0,
+     "abgegeben_server_h": 39166.3,
+     "abgefuehrt_kwh": 1125.6,
+     "haus_bedarf_kwh": 7440.0,
+     "haus_genutzt_kwh": 7440.0
+    },
+    {
+     "monat": "2025-08",
+     "stunden": 744,
+     "haus_server_h": 10706.0,
+     "senke_server_h": 0.0,
+     "abgegeben_server_h": 38733.4,
+     "abgefuehrt_kwh": 1126.0,
+     "haus_bedarf_kwh": 7440.0,
+     "haus_genutzt_kwh": 7440.0
+    },
+    {
+     "monat": "2025-09",
+     "stunden": 720,
+     "haus_server_h": 20986.7,
+     "senke_server_h": 0.0,
+     "abgegeben_server_h": 27453.7,
+     "abgefuehrt_kwh": 774.2,
+     "haus_bedarf_kwh": 18796.8,
+     "haus_genutzt_kwh": 16015.7
+    },
+    {
+     "monat": "2025-10",
+     "stunden": 744,
+     "haus_server_h": 47819.6,
+     "senke_server_h": 0.0,
+     "abgegeben_server_h": 3521.2,
+     "abgefuehrt_kwh": 108.5,
+     "haus_bedarf_kwh": 50438.5,
+     "haus_genutzt_kwh": 38719.5
+    },
+    {
+     "monat": "2025-11",
+     "stunden": 720,
+     "haus_server_h": 48240.9,
+     "senke_server_h": 0.0,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 84417.4,
+     "haus_genutzt_kwh": 38718.8
+    },
+    {
+     "monat": "2025-12",
+     "stunden": 744,
+     "haus_server_h": 49910.1,
+     "senke_server_h": 0.0,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 102446.2,
+     "haus_genutzt_kwh": 39926.5
+    }
+   ]
+  },
+  {
+   "szenario": "alibaba",
+   "regel_ueberschuss": "abgeben",
+   "standorte_anzahl": 21,
+   "server": 210,
+   "gruppen": {
+    "haus": {
+     "standorte": 20,
+     "server": 160,
+     "deckungsgrad": 0.5088,
+     "auslastung": 0.2872,
+     "server_h": 402526,
+     "waerme_genutzt_kwh": 317811,
+     "waerme_abgefuehrt_kwh": 4210,
+     "backup_kwh": 306800,
+     "ergebnis_pro_jahr_chf": -194622
+    },
+    "bad": {
+     "standorte": 1,
+     "server": 50,
+     "deckungsgrad": 0.2118,
+     "auslastung": 0.3963,
+     "server_h": 173594,
+     "waerme_genutzt_kwh": 137675,
+     "waerme_abgefuehrt_kwh": 0,
+     "backup_kwh": 512325,
+     "ergebnis_pro_jahr_chf": 93250
+    }
+   },
+   "auslastung": 0.3132,
+   "server_h_verkauft": 576118,
+   "waerme_abgefuehrt_kwh": 4210,
+   "jobs_mit_frist": 880220,
+   "jobs_fertig": 866924,
+   "verpasste_fristen_anteil": 0.0,
+   "jobs_abgegeben": 13291,
+   "abgegeben_server_h": 12506.8,
+   "migrationen": 3457,
+   "migration_kwh": 1.7,
+   "dh_investition_chf": 7598100,
+   "dh_ergebnis_pro_jahr_chf": -101372,
+   "ergebnis_pro_investiertem_franken": -0.0133,
+   "ankuenfte": {
+    "jobs_a_pro_tag": 1614.28,
+    "jobs_b_pro_tag": 799.34
+   },
+   "standorte": [
+    {
+     "name": "Haus 01",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.4862,
+     "auslastung": 0.2752,
+     "abgefuehrt_kwh": 242,
+     "ergebnis_pro_jahr_chf": -12158
+    },
+    {
+     "name": "Haus 02",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.4782,
+     "auslastung": 0.2705,
+     "abgefuehrt_kwh": 232,
+     "ergebnis_pro_jahr_chf": -13118
+    },
+    {
+     "name": "Haus 03",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.4774,
+     "auslastung": 0.27,
+     "abgefuehrt_kwh": 227,
+     "ergebnis_pro_jahr_chf": -13230
+    },
+    {
+     "name": "Haus 04",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.4812,
+     "auslastung": 0.2719,
+     "abgefuehrt_kwh": 218,
+     "ergebnis_pro_jahr_chf": -12824
+    },
+    {
+     "name": "Haus 05",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.4847,
+     "auslastung": 0.2737,
+     "abgefuehrt_kwh": 209,
+     "ergebnis_pro_jahr_chf": -12450
+    },
+    {
+     "name": "Haus 06",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.4957,
+     "auslastung": 0.2798,
+     "abgefuehrt_kwh": 205,
+     "ergebnis_pro_jahr_chf": -11209
+    },
+    {
+     "name": "Haus 07",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.5088,
+     "auslastung": 0.287,
+     "abgefuehrt_kwh": 198,
+     "ergebnis_pro_jahr_chf": -9758
+    },
+    {
+     "name": "Haus 08",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.512,
+     "auslastung": 0.2887,
+     "abgefuehrt_kwh": 197,
+     "ergebnis_pro_jahr_chf": -9406
+    },
+    {
+     "name": "Haus 09",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.5231,
+     "auslastung": 0.2949,
+     "abgefuehrt_kwh": 196,
+     "ergebnis_pro_jahr_chf": -8172
+    },
+    {
+     "name": "Haus 10",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.5335,
+     "auslastung": 0.3007,
+     "abgefuehrt_kwh": 199,
+     "ergebnis_pro_jahr_chf": -7006
+    },
+    {
+     "name": "Haus 11",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.5369,
+     "auslastung": 0.3028,
+     "abgefuehrt_kwh": 207,
+     "ergebnis_pro_jahr_chf": -6586
+    },
+    {
+     "name": "Haus 12",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.545,
+     "auslastung": 0.3072,
+     "abgefuehrt_kwh": 204,
+     "ergebnis_pro_jahr_chf": -5705
+    },
+    {
+     "name": "Haus 13",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.545,
+     "auslastung": 0.3072,
+     "abgefuehrt_kwh": 202,
+     "ergebnis_pro_jahr_chf": -5702
+    },
+    {
+     "name": "Haus 14",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.5385,
+     "auslastung": 0.3036,
+     "abgefuehrt_kwh": 201,
+     "ergebnis_pro_jahr_chf": -6430
+    },
+    {
+     "name": "Haus 15",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.5282,
+     "auslastung": 0.298,
+     "abgefuehrt_kwh": 208,
+     "ergebnis_pro_jahr_chf": -7555
+    },
+    {
+     "name": "Haus 16",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.5186,
+     "auslastung": 0.2926,
+     "abgefuehrt_kwh": 210,
+     "ergebnis_pro_jahr_chf": -8622
+    },
+    {
+     "name": "Haus 17",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.5091,
+     "auslastung": 0.2873,
+     "abgefuehrt_kwh": 208,
+     "ergebnis_pro_jahr_chf": -9696
+    },
+    {
+     "name": "Haus 18",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.5012,
+     "auslastung": 0.283,
+     "abgefuehrt_kwh": 213,
+     "ergebnis_pro_jahr_chf": -10555
+    },
+    {
+     "name": "Haus 19",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.4927,
+     "auslastung": 0.2783,
+     "abgefuehrt_kwh": 219,
+     "ergebnis_pro_jahr_chf": -11502
+    },
+    {
+     "name": "Haus 20",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.4802,
+     "auslastung": 0.2714,
+     "abgefuehrt_kwh": 217,
+     "ergebnis_pro_jahr_chf": -12938
+    },
+    {
+     "name": "Sportbad St. Jakob",
+     "typ": "bad",
+     "server": 50,
+     "deckungsgrad": 0.2118,
+     "auslastung": 0.3963,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 93250
+    }
+   ],
+   "variante": "Sportbad 50 (nach Nachfrage)",
+   "server_bad": 50,
+   "monate": [
+    {
+     "monat": "2025-01",
+     "stunden": 744,
+     "haus_server_h": 49886.2,
+     "senke_server_h": 0.0,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 107082.7,
+     "haus_genutzt_kwh": 39907.4
+    },
+    {
+     "monat": "2025-02",
+     "stunden": 672,
+     "haus_server_h": 45199.0,
+     "senke_server_h": 0.0,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 92327.1,
+     "haus_genutzt_kwh": 36157.8
+    },
+    {
+     "monat": "2025-03",
+     "stunden": 744,
+     "haus_server_h": 49753.8,
+     "senke_server_h": 661.9,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 81361.8,
+     "haus_genutzt_kwh": 39801.2
+    },
+    {
+     "monat": "2025-04",
+     "stunden": 720,
+     "haus_server_h": 39626.3,
+     "senke_server_h": 5034.0,
+     "abgegeben_server_h": 3174.0,
+     "abgefuehrt_kwh": 93.9,
+     "haus_bedarf_kwh": 44358.0,
+     "haus_genutzt_kwh": 30907.3
+    },
+    {
+     "monat": "2025-05",
+     "stunden": 744,
+     "haus_server_h": 22131.8,
+     "senke_server_h": 27509.0,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 5.9,
+     "haus_bedarf_kwh": 21302.5,
+     "haus_genutzt_kwh": 17699.3
+    },
+    {
+     "monat": "2025-06",
+     "stunden": 720,
+     "haus_server_h": 10243.1,
+     "senke_server_h": 36000.0,
+     "abgegeben_server_h": 2209.5,
+     "abgefuehrt_kwh": 995.3,
+     "haus_bedarf_kwh": 7200.0,
+     "haus_genutzt_kwh": 7200.0
+    },
+    {
+     "monat": "2025-07",
+     "stunden": 744,
+     "haus_server_h": 10726.9,
+     "senke_server_h": 37200.0,
+     "abgegeben_server_h": 1990.2,
+     "abgefuehrt_kwh": 1142.6,
+     "haus_bedarf_kwh": 7440.0,
+     "haus_genutzt_kwh": 7440.0
+    },
+    {
+     "monat": "2025-08",
+     "stunden": 744,
+     "haus_server_h": 10703.9,
+     "senke_server_h": 37200.0,
+     "abgegeben_server_h": 1500.0,
+     "abgefuehrt_kwh": 1124.2,
+     "haus_bedarf_kwh": 7440.0,
+     "haus_genutzt_kwh": 7440.0
+    },
+    {
+     "monat": "2025-09",
+     "stunden": 720,
+     "haus_server_h": 20067.3,
+     "senke_server_h": 27878.9,
+     "abgegeben_server_h": 1557.4,
+     "abgefuehrt_kwh": 786.4,
+     "haus_bedarf_kwh": 18796.8,
+     "haus_genutzt_kwh": 15267.9
+    },
+    {
+     "monat": "2025-10",
+     "stunden": 744,
+     "haus_server_h": 46040.3,
+     "senke_server_h": 2110.4,
+     "abgegeben_server_h": 2075.8,
+     "abgefuehrt_kwh": 63.8,
+     "haus_bedarf_kwh": 50438.5,
+     "haus_genutzt_kwh": 37340.6
+    },
+    {
+     "monat": "2025-11",
+     "stunden": 720,
+     "haus_server_h": 48240.9,
+     "senke_server_h": 0.0,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 84417.4,
+     "haus_genutzt_kwh": 38718.8
+    },
+    {
+     "monat": "2025-12",
+     "stunden": 744,
+     "haus_server_h": 49910.1,
+     "senke_server_h": 0.0,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 102446.2,
+     "haus_genutzt_kwh": 39926.5
+    }
+   ]
+  },
+  {
+   "szenario": "alibaba",
+   "regel_ueberschuss": "abgeben",
+   "standorte_anzahl": 21,
+   "server": 330,
+   "gruppen": {
+    "haus": {
+     "standorte": 20,
+     "server": 160,
+     "deckungsgrad": 0.5071,
+     "auslastung": 0.2826,
+     "server_h": 396159,
+     "waerme_genutzt_kwh": 316770,
+     "waerme_abgefuehrt_kwh": 158,
+     "backup_kwh": 307841,
+     "ergebnis_pro_jahr_chf": -213168
+    },
+    "bad": {
+     "standorte": 1,
+     "server": 170,
+     "deckungsgrad": 0.2286,
+     "auslastung": 0.1257,
+     "server_h": 187217,
+     "waerme_genutzt_kwh": 148573,
+     "waerme_abgefuehrt_kwh": 0,
+     "backup_kwh": 501427,
+     "ergebnis_pro_jahr_chf": -853499
+    }
+   },
+   "auslastung": 0.2018,
+   "server_h_verkauft": 583376,
+   "waerme_abgefuehrt_kwh": 158,
+   "jobs_mit_frist": 880220,
+   "jobs_fertig": 874637,
+   "verpasste_fristen_anteil": 0.0,
+   "jobs_abgegeben": 5578,
+   "abgegeben_server_h": 5248.9,
+   "migrationen": 2,
+   "migration_kwh": 0.0,
+   "dh_investition_chf": 11904900,
+   "dh_ergebnis_pro_jahr_chf": -1066667,
+   "ergebnis_pro_investiertem_franken": -0.0896,
+   "ankuenfte": {
+    "jobs_a_pro_tag": 1614.28,
+    "jobs_b_pro_tag": 799.34
+   },
+   "standorte": [
+    {
+     "name": "Haus 01",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.4853,
+     "auslastung": 0.2705,
+     "abgefuehrt_kwh": 8,
+     "ergebnis_pro_jahr_chf": -13132
+    },
+    {
+     "name": "Haus 02",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.4772,
+     "auslastung": 0.266,
+     "abgefuehrt_kwh": 8,
+     "ergebnis_pro_jahr_chf": -14088
+    },
+    {
+     "name": "Haus 03",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.4762,
+     "auslastung": 0.2654,
+     "abgefuehrt_kwh": 8,
+     "ergebnis_pro_jahr_chf": -14200
+    },
+    {
+     "name": "Haus 04",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.4791,
+     "auslastung": 0.267,
+     "abgefuehrt_kwh": 8,
+     "ergebnis_pro_jahr_chf": -13860
+    },
+    {
+     "name": "Haus 05",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.4832,
+     "auslastung": 0.2693,
+     "abgefuehrt_kwh": 7,
+     "ergebnis_pro_jahr_chf": -13384
+    },
+    {
+     "name": "Haus 06",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.4935,
+     "auslastung": 0.2751,
+     "abgefuehrt_kwh": 8,
+     "ergebnis_pro_jahr_chf": -12177
+    },
+    {
+     "name": "Haus 07",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.5064,
+     "auslastung": 0.2822,
+     "abgefuehrt_kwh": 6,
+     "ergebnis_pro_jahr_chf": -10706
+    },
+    {
+     "name": "Haus 08",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.5101,
+     "auslastung": 0.2843,
+     "abgefuehrt_kwh": 7,
+     "ergebnis_pro_jahr_chf": -10296
+    },
+    {
+     "name": "Haus 09",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.5205,
+     "auslastung": 0.2901,
+     "abgefuehrt_kwh": 8,
+     "ergebnis_pro_jahr_chf": -9136
+    },
+    {
+     "name": "Haus 10",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.5311,
+     "auslastung": 0.296,
+     "abgefuehrt_kwh": 7,
+     "ergebnis_pro_jahr_chf": -7958
+    },
+    {
+     "name": "Haus 11",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.5346,
+     "auslastung": 0.2979,
+     "abgefuehrt_kwh": 8,
+     "ergebnis_pro_jahr_chf": -7559
+    },
+    {
+     "name": "Haus 12",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.5431,
+     "auslastung": 0.3027,
+     "abgefuehrt_kwh": 7,
+     "ergebnis_pro_jahr_chf": -6613
+    },
+    {
+     "name": "Haus 13",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.5432,
+     "auslastung": 0.3027,
+     "abgefuehrt_kwh": 7,
+     "ergebnis_pro_jahr_chf": -6607
+    },
+    {
+     "name": "Haus 14",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.5371,
+     "auslastung": 0.2993,
+     "abgefuehrt_kwh": 8,
+     "ergebnis_pro_jahr_chf": -7284
+    },
+    {
+     "name": "Haus 15",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.5267,
+     "auslastung": 0.2935,
+     "abgefuehrt_kwh": 8,
+     "ergebnis_pro_jahr_chf": -8440
+    },
+    {
+     "name": "Haus 16",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.5179,
+     "auslastung": 0.2886,
+     "abgefuehrt_kwh": 9,
+     "ergebnis_pro_jahr_chf": -9421
+    },
+    {
+     "name": "Haus 17",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.5077,
+     "auslastung": 0.283,
+     "abgefuehrt_kwh": 8,
+     "ergebnis_pro_jahr_chf": -10561
+    },
+    {
+     "name": "Haus 18",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.4996,
+     "auslastung": 0.2785,
+     "abgefuehrt_kwh": 9,
+     "ergebnis_pro_jahr_chf": -11475
+    },
+    {
+     "name": "Haus 19",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.491,
+     "auslastung": 0.2737,
+     "abgefuehrt_kwh": 8,
+     "ergebnis_pro_jahr_chf": -12466
+    },
+    {
+     "name": "Haus 20",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.4796,
+     "auslastung": 0.2673,
+     "abgefuehrt_kwh": 8,
+     "ergebnis_pro_jahr_chf": -13805
+    },
+    {
+     "name": "Sportbad St. Jakob",
+     "typ": "bad",
+     "server": 170,
+     "deckungsgrad": 0.2286,
+     "auslastung": 0.1257,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": -853499
+    }
+   ],
+   "variante": "Sportbad 170 (Senkenregel)",
+   "server_bad": 170,
+   "monate": [
+    {
+     "monat": "2025-01",
+     "stunden": 744,
+     "haus_server_h": 49886.2,
+     "senke_server_h": 0.0,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 107082.7,
+     "haus_genutzt_kwh": 39907.4
+    },
+    {
+     "monat": "2025-02",
+     "stunden": 672,
+     "haus_server_h": 45199.0,
+     "senke_server_h": 0.0,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 92327.1,
+     "haus_genutzt_kwh": 36157.8
+    },
+    {
+     "monat": "2025-03",
+     "stunden": 744,
+     "haus_server_h": 49753.2,
+     "senke_server_h": 662.5,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 81361.8,
+     "haus_genutzt_kwh": 39800.7
+    },
+    {
+     "monat": "2025-04",
+     "stunden": 720,
+     "haus_server_h": 39626.9,
+     "senke_server_h": 5305.4,
+     "abgegeben_server_h": 3174.0,
+     "abgefuehrt_kwh": 93.9,
+     "haus_bedarf_kwh": 44358.0,
+     "haus_genutzt_kwh": 30907.8
+    },
+    {
+     "monat": "2025-05",
+     "stunden": 744,
+     "haus_server_h": 21291.2,
+     "senke_server_h": 28867.1,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 21302.5,
+     "haus_genutzt_kwh": 17032.6
+    },
+    {
+     "monat": "2025-06",
+     "stunden": 720,
+     "haus_server_h": 9000.0,
+     "senke_server_h": 39881.5,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 7200.0,
+     "haus_genutzt_kwh": 7200.0
+    },
+    {
+     "monat": "2025-07",
+     "stunden": 744,
+     "haus_server_h": 9300.0,
+     "senke_server_h": 40555.2,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 7440.0,
+     "haus_genutzt_kwh": 7440.0
+    },
+    {
+     "monat": "2025-08",
+     "stunden": 744,
+     "haus_server_h": 9300.0,
+     "senke_server_h": 40154.4,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 7440.0,
+     "haus_genutzt_kwh": 7440.0
+    },
+    {
+     "monat": "2025-09",
+     "stunden": 720,
+     "haus_server_h": 18689.1,
+     "senke_server_h": 29779.8,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 18796.8,
+     "haus_genutzt_kwh": 14950.9
+    },
+    {
+     "monat": "2025-10",
+     "stunden": 744,
+     "haus_server_h": 45968.9,
+     "senke_server_h": 2011.0,
+     "abgegeben_server_h": 2074.9,
+     "abgefuehrt_kwh": 64.2,
+     "haus_bedarf_kwh": 50438.5,
+     "haus_genutzt_kwh": 37283.1
+    },
+    {
+     "monat": "2025-11",
+     "stunden": 720,
+     "haus_server_h": 48240.9,
+     "senke_server_h": 0.0,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 84417.4,
+     "haus_genutzt_kwh": 38718.8
+    },
+    {
+     "monat": "2025-12",
+     "stunden": 744,
+     "haus_server_h": 49910.1,
+     "senke_server_h": 0.0,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 102446.2,
+     "haus_genutzt_kwh": 39926.5
+    }
+   ]
+  },
+  {
+   "szenario": "spot",
+   "regel_ueberschuss": "abgeben",
+   "standorte_anzahl": 20,
+   "server": 160,
+   "gruppen": {
+    "haus": {
+     "standorte": 20,
+     "server": 160,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "server_h": 725686,
+     "waerme_genutzt_kwh": 580549,
+     "waerme_abgefuehrt_kwh": 0,
+     "backup_kwh": 44062,
+     "ergebnis_pro_jahr_chf": 690540
+    }
+   },
+   "auslastung": 0.5178,
+   "server_h_verkauft": 725686,
+   "waerme_abgefuehrt_kwh": 0,
+   "jobs_mit_frist": 291657,
+   "jobs_fertig": 291657,
+   "verpasste_fristen_anteil": 0.0,
+   "jobs_abgegeben": 0,
+   "abgegeben_server_h": 0.0,
+   "migrationen": 0,
+   "migration_kwh": 0.0,
+   "dh_investition_chf": 5802400,
+   "dh_ergebnis_pro_jahr_chf": 690540,
+   "ergebnis_pro_investiertem_franken": 0.119,
+   "ankuenfte": {
+    "jobs_a_pro_tag": null,
+    "jobs_b_pro_tag": 799.34
+   },
+   "standorte": [
+    {
+     "name": "Haus 01",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 02",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 03",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 04",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 05",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 06",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 07",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 08",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 09",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 10",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 11",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 12",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 13",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 14",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 15",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 16",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 17",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 18",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 19",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 20",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    }
+   ],
+   "variante": "0 Senken",
+   "server_bad": 0,
+   "monate": [
+    {
+     "monat": "2025-01",
+     "stunden": 744,
+     "haus_server_h": 115242.6,
+     "senke_server_h": 0.0,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 107082.7,
+     "haus_genutzt_kwh": 91729.0
+    },
+    {
+     "monat": "2025-02",
+     "stunden": 672,
+     "haus_server_h": 103215.1,
+     "senke_server_h": 0.0,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 92327.1,
+     "haus_genutzt_kwh": 82683.7
+    },
+    {
+     "monat": "2025-03",
+     "stunden": 744,
+     "haus_server_h": 100496.7,
+     "senke_server_h": 0.0,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 81361.8,
+     "haus_genutzt_kwh": 80050.7
+    },
+    {
+     "monat": "2025-04",
+     "stunden": 720,
+     "haus_server_h": 55446.8,
+     "senke_server_h": 0.0,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 44358.0,
+     "haus_genutzt_kwh": 44358.0
+    },
+    {
+     "monat": "2025-05",
+     "stunden": 744,
+     "haus_server_h": 26627.9,
+     "senke_server_h": 0.0,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 21302.5,
+     "haus_genutzt_kwh": 21302.5
+    },
+    {
+     "monat": "2025-06",
+     "stunden": 720,
+     "haus_server_h": 9000.0,
+     "senke_server_h": 0.0,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 7200.0,
+     "haus_genutzt_kwh": 7200.0
+    },
+    {
+     "monat": "2025-07",
+     "stunden": 744,
+     "haus_server_h": 9300.0,
+     "senke_server_h": 0.0,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 7440.0,
+     "haus_genutzt_kwh": 7440.0
+    },
+    {
+     "monat": "2025-08",
+     "stunden": 744,
+     "haus_server_h": 9300.0,
+     "senke_server_h": 0.0,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 7440.0,
+     "haus_genutzt_kwh": 7440.0
+    },
+    {
+     "monat": "2025-09",
+     "stunden": 720,
+     "haus_server_h": 23495.9,
+     "senke_server_h": 0.0,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 18796.8,
+     "haus_genutzt_kwh": 18796.8
+    },
+    {
+     "monat": "2025-10",
+     "stunden": 744,
+     "haus_server_h": 63047.5,
+     "senke_server_h": 0.0,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 50438.5,
+     "haus_genutzt_kwh": 50438.5
+    },
+    {
+     "monat": "2025-11",
+     "stunden": 720,
+     "haus_server_h": 96305.9,
+     "senke_server_h": 0.0,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 84417.4,
+     "haus_genutzt_kwh": 77490.8
+    },
+    {
+     "monat": "2025-12",
+     "stunden": 744,
+     "haus_server_h": 114205.7,
+     "senke_server_h": 0.0,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 102446.2,
+     "haus_genutzt_kwh": 91618.9
+    }
+   ]
+  },
+  {
+   "szenario": "spot",
+   "regel_ueberschuss": "abgeben",
+   "standorte_anzahl": 21,
+   "server": 210,
+   "gruppen": {
+    "haus": {
+     "standorte": 20,
+     "server": 160,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "server_h": 725686,
+     "waerme_genutzt_kwh": 580549,
+     "waerme_abgefuehrt_kwh": 0,
+     "backup_kwh": 44062,
+     "ergebnis_pro_jahr_chf": 690540
+    },
+    "bad": {
+     "standorte": 1,
+     "server": 50,
+     "deckungsgrad": 0.2426,
+     "auslastung": 0.4534,
+     "server_h": 198600,
+     "waerme_genutzt_kwh": 157680,
+     "waerme_abgefuehrt_kwh": 0,
+     "backup_kwh": 492320,
+     "ergebnis_pro_jahr_chf": 161050
+    }
+   },
+   "auslastung": 0.5024,
+   "server_h_verkauft": 924284,
+   "waerme_abgefuehrt_kwh": 0,
+   "jobs_mit_frist": 291657,
+   "jobs_fertig": 291657,
+   "verpasste_fristen_anteil": 0.0,
+   "jobs_abgegeben": 0,
+   "abgegeben_server_h": 0.0,
+   "migrationen": 3972,
+   "migration_kwh": 2.0,
+   "dh_investition_chf": 7598100,
+   "dh_ergebnis_pro_jahr_chf": 851590,
+   "ergebnis_pro_investiertem_franken": 0.1121,
+   "ankuenfte": {
+    "jobs_a_pro_tag": null,
+    "jobs_b_pro_tag": 799.34
+   },
+   "standorte": [
+    {
+     "name": "Haus 01",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 02",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 03",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 04",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 05",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 06",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 07",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 08",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 09",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 10",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 11",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 12",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 13",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 14",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 15",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 16",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 17",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 18",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 19",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 20",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Sportbad St. Jakob",
+     "typ": "bad",
+     "server": 50,
+     "deckungsgrad": 0.2426,
+     "auslastung": 0.4534,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 161050
+    }
+   ],
+   "variante": "Sportbad 50 (nach Nachfrage)",
+   "server_bad": 50,
+   "monate": [
+    {
+     "monat": "2025-01",
+     "stunden": 744,
+     "haus_server_h": 115242.6,
+     "senke_server_h": 1500.0,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 107082.7,
+     "haus_genutzt_kwh": 91729.0
+    },
+    {
+     "monat": "2025-02",
+     "stunden": 672,
+     "haus_server_h": 103215.1,
+     "senke_server_h": 0.0,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 92327.1,
+     "haus_genutzt_kwh": 82683.7
+    },
+    {
+     "monat": "2025-03",
+     "stunden": 744,
+     "haus_server_h": 100496.7,
+     "senke_server_h": 0.0,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 81361.8,
+     "haus_genutzt_kwh": 80050.7
+    },
+    {
+     "monat": "2025-04",
+     "stunden": 720,
+     "haus_server_h": 55446.8,
+     "senke_server_h": 6000.0,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 44358.0,
+     "haus_genutzt_kwh": 44358.0
+    },
+    {
+     "monat": "2025-05",
+     "stunden": 744,
+     "haus_server_h": 26627.9,
+     "senke_server_h": 37200.0,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 21302.5,
+     "haus_genutzt_kwh": 21302.5
+    },
+    {
+     "monat": "2025-06",
+     "stunden": 720,
+     "haus_server_h": 9000.0,
+     "senke_server_h": 36000.0,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 7200.0,
+     "haus_genutzt_kwh": 7200.0
+    },
+    {
+     "monat": "2025-07",
+     "stunden": 744,
+     "haus_server_h": 9300.0,
+     "senke_server_h": 37200.0,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 7440.0,
+     "haus_genutzt_kwh": 7440.0
+    },
+    {
+     "monat": "2025-08",
+     "stunden": 744,
+     "haus_server_h": 9300.0,
+     "senke_server_h": 37200.0,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 7440.0,
+     "haus_genutzt_kwh": 7440.0
+    },
+    {
+     "monat": "2025-09",
+     "stunden": 720,
+     "haus_server_h": 23495.9,
+     "senke_server_h": 36000.0,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 18796.8,
+     "haus_genutzt_kwh": 18796.8
+    },
+    {
+     "monat": "2025-10",
+     "stunden": 744,
+     "haus_server_h": 63047.5,
+     "senke_server_h": 7500.0,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 50438.5,
+     "haus_genutzt_kwh": 50438.5
+    },
+    {
+     "monat": "2025-11",
+     "stunden": 720,
+     "haus_server_h": 96305.9,
+     "senke_server_h": 0.0,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 84417.4,
+     "haus_genutzt_kwh": 77490.8
+    },
+    {
+     "monat": "2025-12",
+     "stunden": 744,
+     "haus_server_h": 114205.7,
+     "senke_server_h": 0.0,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 102446.2,
+     "haus_genutzt_kwh": 91618.9
+    }
+   ]
+  },
+  {
+   "szenario": "spot",
+   "regel_ueberschuss": "abgeben",
+   "standorte_anzahl": 21,
+   "server": 330,
+   "gruppen": {
+    "haus": {
+     "standorte": 20,
+     "server": 160,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "server_h": 725686,
+     "waerme_genutzt_kwh": 580549,
+     "waerme_abgefuehrt_kwh": 0,
+     "backup_kwh": 44062,
+     "ergebnis_pro_jahr_chf": 690540
+    },
+    "bad": {
+     "standorte": 1,
+     "server": 170,
+     "deckungsgrad": 0.8096,
+     "auslastung": 0.4427,
+     "server_h": 659265,
+     "waerme_genutzt_kwh": 526212,
+     "waerme_abgefuehrt_kwh": 0,
+     "backup_kwh": 123788,
+     "ergebnis_pro_jahr_chf": 513117
+    }
+   },
+   "auslastung": 0.4791,
+   "server_h_verkauft": 1384949,
+   "waerme_abgefuehrt_kwh": 0,
+   "jobs_mit_frist": 291657,
+   "jobs_fertig": 291657,
+   "verpasste_fristen_anteil": 0.0,
+   "jobs_abgegeben": 0,
+   "abgegeben_server_h": 0.0,
+   "migrationen": 3930,
+   "migration_kwh": 2.0,
+   "dh_investition_chf": 11904900,
+   "dh_ergebnis_pro_jahr_chf": 1203657,
+   "ergebnis_pro_investiertem_franken": 0.1011,
+   "ankuenfte": {
+    "jobs_a_pro_tag": null,
+    "jobs_b_pro_tag": 799.34
+   },
+   "standorte": [
+    {
+     "name": "Haus 01",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 02",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 03",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 04",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 05",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 06",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 07",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 08",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 09",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 10",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 11",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 12",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 13",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 14",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 15",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 16",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 17",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 18",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 19",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Haus 20",
+     "typ": "haus",
+     "server": 8,
+     "deckungsgrad": 0.9295,
+     "auslastung": 0.5178,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 34527
+    },
+    {
+     "name": "Sportbad St. Jakob",
+     "typ": "bad",
+     "server": 170,
+     "deckungsgrad": 0.8096,
+     "auslastung": 0.4427,
+     "abgefuehrt_kwh": 0,
+     "ergebnis_pro_jahr_chf": 513117
+    }
+   ],
+   "variante": "Sportbad 170 (Senkenregel)",
+   "server_bad": 170,
+   "monate": [
+    {
+     "monat": "2025-01",
+     "stunden": 744,
+     "haus_server_h": 115242.6,
+     "senke_server_h": 1500.0,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 107082.7,
+     "haus_genutzt_kwh": 91729.0
+    },
+    {
+     "monat": "2025-02",
+     "stunden": 672,
+     "haus_server_h": 103215.1,
+     "senke_server_h": 0.0,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 92327.1,
+     "haus_genutzt_kwh": 82683.7
+    },
+    {
+     "monat": "2025-03",
+     "stunden": 744,
+     "haus_server_h": 100496.7,
+     "senke_server_h": 0.0,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 81361.8,
+     "haus_genutzt_kwh": 80050.7
+    },
+    {
+     "monat": "2025-04",
+     "stunden": 720,
+     "haus_server_h": 55446.8,
+     "senke_server_h": 20400.0,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 44358.0,
+     "haus_genutzt_kwh": 44358.0
+    },
+    {
+     "monat": "2025-05",
+     "stunden": 744,
+     "haus_server_h": 26627.9,
+     "senke_server_h": 126480.0,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 21302.5,
+     "haus_genutzt_kwh": 21302.5
+    },
+    {
+     "monat": "2025-06",
+     "stunden": 720,
+     "haus_server_h": 9000.0,
+     "senke_server_h": 113624.9,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 7200.0,
+     "haus_genutzt_kwh": 7200.0
+    },
+    {
+     "monat": "2025-07",
+     "stunden": 744,
+     "haus_server_h": 9300.0,
+     "senke_server_h": 126480.0,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 7440.0,
+     "haus_genutzt_kwh": 7440.0
+    },
+    {
+     "monat": "2025-08",
+     "stunden": 744,
+     "haus_server_h": 9300.0,
+     "senke_server_h": 126480.0,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 7440.0,
+     "haus_genutzt_kwh": 7440.0
+    },
+    {
+     "monat": "2025-09",
+     "stunden": 720,
+     "haus_server_h": 23495.9,
+     "senke_server_h": 122400.0,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 18796.8,
+     "haus_genutzt_kwh": 18796.8
+    },
+    {
+     "monat": "2025-10",
+     "stunden": 744,
+     "haus_server_h": 63047.5,
+     "senke_server_h": 21900.0,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 50438.5,
+     "haus_genutzt_kwh": 50438.5
+    },
+    {
+     "monat": "2025-11",
+     "stunden": 720,
+     "haus_server_h": 96305.9,
+     "senke_server_h": 0.0,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 84417.4,
+     "haus_genutzt_kwh": 77490.8
+    },
+    {
+     "monat": "2025-12",
+     "stunden": 744,
+     "haus_server_h": 114205.7,
+     "senke_server_h": 0.0,
+     "abgegeben_server_h": 0.0,
+     "abgefuehrt_kwh": 0.0,
+     "haus_bedarf_kwh": 102446.2,
+     "haus_genutzt_kwh": 91618.9
+    }
+   ]
+  }
+ ]
+}

@@ -99,6 +99,26 @@ Zwei Laptops, echter Job wandert per Netzwerk. Verworfen wegen Demo-Risiko. Eine
 - `live.py` zeigt eine Migration, die aus der Router-Regel folgt, mit echtem Checkpoint-Neustart; die Vektoren stimmen auf 1e-6 mit einem Lauf ohne Unterbruch überein.
 - Pitch und Dashboard nennen Preise in CHF pro Server-Stunde.
 
+## Entscheide im Code (21.11.2026)
+
+Gebaut: `src/scheduler/zusage.py`, `router.py`, `flotte.py`, Aufteilung von `Haus.schritt` in `jahr.py`, Tests in `tests/`. Die offenen Punkte aus dem Review sind so entschieden:
+
+- **R3-10 Bindung:** Ein angefangener Job steht erst in der Liste eines anderen Standorts, wenn sein eigener Standort entschieden hat. Ein zweiter Durchgang (b2) bietet «verwaiste» angefangene Jobs allen Standorten mit freiem Wärmeziel an, mit dem Rest von Ziel und Kapazität. Erst dort wandert ein Job. Typ B wandert nie. Tests: `test_bindung_r3_10_angefangener_job_bleibt`, `test_migration_wenn_eigener_standort_voll`, `test_typ_b_wandert_nie`.
+- **R3-11 Pflichtjobs ohne freien Server:** Sie gehen trotzdem an den Standort mit dem grössten freien Wärmeziel. Der Kern entscheidet dort wie heute: Abbruch bei voller Kapazität oder `abgeben`. Der Pool zählt den Ausgang genau einmal. Mit einem Standort ist das identisch mit heute. Router-Prüfung: Kein Job darf in einer Stunde doppelt zugeteilt sein. Test: `test_pflicht_ohne_freien_server_r3_11_einmal_gezaehlt`.
+- **R3-15 Reihenfolge der Fristprüfung:** Fortschritt, Abgaben und Fristen bucht `jahr.fristen_buchen()`. `Haus.schritt` und der Router rufen sie an derselben Stelle auf, nach den Entscheiden. `verbuchen()` bucht in beiden Wegen nur die Physik. Regressionstest 1 und 2 sind grün.
+- **R3-2:** Speicherstand um 12 Uhr. Der Rest des Vortags und der Zieltag werden mit dem Prognoseprofil trocken gerechnet.
+- **R3-3:** Zusagbarer Anteil = Σ zugesagt ÷ Σ geliefert, Server-h im Szenario «spot». Fest gebucht = Σ min(verkauft, geliefert) ÷ Σ geliefert.
+- **R3-4 und R3-5:** Der fest gebuchte Anteil ist für alle Standorte gleich. Die Fehlmenge wird nach den verkauften Server-h verteilt.
+- **R3-6:** Code und `annahmen.py` rechnen in CHF pro L4-h, die Anzeige ×8: 0,60 CHF/L4-h = 4,80 CHF/Server-h.
+- **R3-8 und R3-13:** Pflicht ist nur der Vergleich mit 0 oder 1 Senke. Die zweite Senke ist in TODOS (D4).
+- **R3-12:** `zusage.py` rechnet mit `Haus` und mit `Flotte` über dieselbe Schnittstelle.
+- **R3-16:** Entscheid um 12 Uhr Ortszeit Basel, umgerechnet in UTC (11 bzw. 10 UTC). Test vorhanden.
+- **R3-17:** Modell ECMWF IFS 0,25°, Lauf alle 6 h. Konservativ wird angenommen: Lauf = Zielstunde − N × 24 h, plus 8 h Verzug. Ein Test prüft jede Zielstunde.
+- **R3-19:** Den Zähler `fertig` gibt es in `jahr.py`.
+- **D5 Kalibrierung:** Open-Meteo hat für 2024 keine Previous Runs (geprüft). Darum gilt der Rückfall: kalibriert auf Januar bis Juni 2025, ausgewertet auf Juli bis Dezember 2025.
+- **Vorrang (Team-Entscheid):** Wohnhäuser haben bei der Zuteilung immer Vorrang. Senken nehmen nur Rechenlast auf, die kein Haus als Wärme brauchen kann. Häuser entscheiden zuerst, Pflichtjobs gehen zuerst an Häuser, und ein Haus darf einen angefangenen Job von der Senke zurückholen. Tests: `test_vorrang_haus_vor_bad`, `test_haus_holt_job_vom_bad_zurueck`, `test_pflicht_zuerst_ans_haus`.
+- **Senke:** Ein Hallenbad scheidet aus, weil das Rialto Sommerpause hat und das Hallenbad Eglisee nur im Winter steht. Die Senke ist das **Sportbad St. Jakob** (`daten/HALLENBAD.md`, Schätzung ±30 %). **Befund:** Die Senkenregel ergibt 170 Server, viel mehr als Aufträge da sind. Darum wird zusätzlich die Grösse nach Nachfrage gesucht (`flotte.py`), und beide Varianten werden gezeigt.
+
 ## Distribution Plan
 Bestehender Weg: Repo jayjoee/DigitalHeat_Hackathon auf `main`, Dashboard lokal über `dashboard/starten.sh` und als Artifact über `src/artifact_bauen.py`. Kein neuer Build- oder Deploy-Schritt.
 
