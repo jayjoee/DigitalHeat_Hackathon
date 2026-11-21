@@ -1,178 +1,187 @@
-# ML-Serviceplanung pro physischem Server
+# ML Serviceplanung mit dem simulierten Case Betrieb
 
-Diese Ergänzung rechnet Serviceintervalle, geplante und ungeplante Eingriffe,
-Ausfallstunden und Kosten pro Server. Zielhardware: Server mit Kühlplatten,
-geschlossenem Kühlmittelkreislauf und Wärmetauscher zur Heizung.
+Die Serviceplanung verwendet einen trainierten Klassifikator für das tägliche Risiko
+ungeplanten Servicebedarfs. Sie berechnet individuelle Serverintervalle, erwartete
+Eingriffe, Ausfallstunden und Kosten. Die gemeinsame Kühlung hat einen eigenen Kalender.
 
-**Es gibt noch keine echten L4-/Kühlplatten-Servicehistorien im Projekt. Der
-Demo-Modus trainiert auf künstlichen Daten. Seine Zahlen sind Szenarien und dürfen
-nicht als reale Wartungsprognosen oder Einsparnachweise verkauft werden.**
+**Die Trainingsdaten, Serviceereignisse, Sensorwerte und Wartungswirkungen sind noch
+synthetisch. Die Simulation des Case-Betriebs macht daraus keinen realen L4-Wartungsnachweis.**
 
 ## Start
 
-Im Projektordner, mit Python 3.10 oder neuer und den ML-Abhängigkeiten:
+Mit Python 3.10 oder neuer und den Paketen aus `requirements-ml.txt`:
 
 ```sh
 python3 -m venv .venv-ml
 .venv-ml/bin/python -m pip install -r requirements-ml.txt
-.venv-ml/bin/python service_start.py --demo --open
+.venv-ml/bin/python service_start.py --demo --case --open
 ```
 
-Falls die Pakete bereits installiert sind: `python3 service_start.py --demo --open`.
-Auf macOS lässt sich die Demo auch mit `Service_Demo_starten.command` starten.
-Das Programm erzeugt eine lokal lesbare HTML-Auswertung, JSON und CSV unter
-`daten/ergebnisse/service_ml/`. Es startet keinen Netzwerkdienst und steuert keine
-Hardware. Eine Eingabe ohne `--demo` oder vollständige CSV-Dateien wird abgelehnt.
+Bei bereits installierten Paketen: `python3 service_start.py --demo --case --open`.
+Auf macOS startet `Service_Demo_starten.command` dieselbe gekoppelte Demo.
+HTML, CSV und JSON entstehen unter `daten/ergebnisse/service_ml/`.
+Es gibt keinen neuen Netzwerkdienst oder Zugriff auf die Hardware.
+Ohne `--case` bleibt die bisherige reine Szenario-Demo verfügbar.
 
-## Was das ML macht
+## Case Betrieb pro Server
 
-Ein `HistGradientBoostingClassifier` lernt für ein vollständig beobachtetes
-24-Stunden-Fenster die Wahrscheinlichkeit eines **ungeplanten Servicebedarfs**.
-Temperatur, Last, Durchfluss, Pumpenstrom, Gerätealter, Betriebsstunden,
-Servicealter, ECC-Signal und SSD-Verschleiss sind die Eingaben.
+Der vorhandene Jahres-Scheduler wird mit acht Servern, genug flexiblen Aufträgen,
+230 W Leerlauf, 10 W Standby und fünf Minuten Startzeit protokolliert. Die Steuerung
+wird nicht verändert. Feste Serverpositionen bekommen stabile IDs; es wird keine
+Verschleissrotation hinzugefügt. Pro Gerät und Tag entstehen getrennte Zähler für:
 
-60 % der historischen Server dienen zum Training, 20 % zur separaten
-Sigmoid-Kalibrierung und 20 % zum Test. Ein Server erscheint nur in einer Gruppe.
-ID und Datum sind keine Lernmerkmale. Ein Zufallssplit einzelner Tageszeilen würde
-denselben Server in Training und Test bringen und wird deshalb vermieden.
-Diese Gruppentrennung ersetzt keine spätere prospektive zeitliche Validierung.
+- Eingeschaltete Stunden einschliesslich Leerlauf und Startzeit.
+- Äquivalente Rechenstunden unter Vollauslastung.
+- Standby-Stunden, Startvorgänge und Serverstrom.
 
-Das Testprotokoll vergleicht Brier-Fehler und Log-Loss mit einem konstanten
-Ereignisrisiko aus der Trainingsgruppe. Weniger Fehler ist besser. Average Precision
-und Ereignishäufigkeit werden ebenfalls gespeichert. Eine Verbesserung auf
-künstlichen Daten ist kein Hardware-Nachweis und keine garantierte Erkennung.
+Die Summen stimmen mit der bestehenden Jahresrechnung überein: 717 Starts,
+rund 34’511,6 Rechenstunden und 35’662,1 kWh Serverstrom für alle acht Server.
+Die Geräte haben unterschiedliche Belastungen. Der Export ersetzt diese nicht
+mit einem Flottenmittelwert. `case_betrieb_2025.csv` enthält die Tageswerte.
 
-Die ML-API und Kalibrierung folgen den verwendeten scikit-learn-1.6-Schnittstellen:
-[Klassifikator](https://scikit-learn.org/1.6/modules/generated/sklearn.ensemble.HistGradientBoostingClassifier.html),
-[Kalibrierung und FrozenEstimator](https://scikit-learn.org/1.6/modules/generated/sklearn.calibration.CalibratedClassifierCV.html).
+Das Referenzjahr wird für den Planungszeitraum nach Monat und Tag wiederholt.
+Ein 29. Februar verwendet den 28. Februar. Das ist ein saisonales Szenario,
+keine echte Wetter- oder Auftragsprognose. `geplanter_betrieb.csv` dokumentiert
+jede Zuordnung. `--as-of YYYY-MM-DD` ändert den Beginn der Case-Demo.
 
-## Von Risiko zu Serviceeinsätzen
+Die Anfangszähler nehmen zwei Wiederholungen des Referenzjahrs und 730 Tage
+Gerätealter an. Sensorwerte und bisheriges Servicealter bleiben Demowerte.
+Die Profile wirken einseitig auf die Wartungsplanung. Erwartete Wartungsausfälle
+werden noch nicht in Wärmebilanz oder Jobfristen zurückgerechnet.
 
-Das ML liefert tägliche Risiken. Ein diskretes Erneuerungsmodell führt danach für
-jeden möglichen Serviceabstand die Wahrscheinlichkeitsverteilung des Servicealters
-über den Planungszeitraum fort. Es berechnet Erwartungswerte ohne Monte-Carlo-Rauschen.
+## ML und Validierung
 
-- Ein geplanter Vollservice erfolgt, sobald das Servicealter das Intervall erreicht.
-- Ein ungeplanter Eingriff setzt den Servicezähler zurück und ersetzt damit den
-  anstehenden Routineeingriff. Dafür wird vorausgesetzt, dass er den vollständigen
-  vorgesehenen Service beinhaltet. Reine Teilreparaturen dürfen real nicht einfach
-  den gesamten Servicezähler zurücksetzen.
-- Pro Server und Tag wird höchstens ein Eingriff gezählt. An einem Tag mit geplantem
-  Service wird kein weiterer ungeplanter Eingriff modelliert.
-- Gerätealter, ECC-Signal und SSD-Verschleiss werden durch einen Kühlungsservice
-  nicht auf Neuzustand gesetzt.
-- Der Planungszeitraum beginnt am aktuellen Serverdatum und schliesst den Tag nach
-  `--days` aus. Ein genau am Enddatum fälliger Eingriff zählt erst im nächsten Zeitraum.
-- Der nächste Routinetermin gilt nur, solange kein ungeplanter Vollservice dazwischenkommt.
+Ein HistGradientBoostingClassifier lernt die Wahrscheinlichkeit eines ungeplanten
+Server-Servicebedarfs im nächsten vollständig beobachteten 24-Stunden-Fenster.
+Eingaben sind Sensoren sowie getrennte Alters-, Betriebs-, Rechen- und Startzähler.
+Die ID und das Datum sind keine Lernmerkmale.
 
-Der Vorschlag minimiert unter den zulässigen Kandidaten:
+60 % der historischen Server dienen zum Training, 20 % zur separaten Sigmoid-
+Kalibrierung und 20 % zum Test. Ein Gerät erscheint in genau einer Gruppe.
+Brier-Fehler und Log-Loss werden mit einem konstanten Trainingsgruppenrisiko
+verglichen; kleiner ist besser. Average Precision und Ereignishäufigkeit werden
+mitgespeichert. Diese Gruppentrennung ersetzt keine prospektive Validierung.
 
-```
-geplante Eingriffe × geplanter Preis
-+ ungeplante Eingriffe × ungeplanter Preis
-+ erwartete Ausfallstunden × entgangener Deckungsbeitrag je Stunde
-```
+Das Training verwendet im Demo-Modus 120 künstliche Server mit je 540 Tageswerten.
+Auch die Beziehungen zwischen Alter, Sensoren, Startvorgängen und Ereignissen sind
+frei gesetzte Generatorannahmen. Das Modell lernt damit keine empirische L4-Ausfallrate.
 
-Alle Preise sind frei veränderbare Testannahmen. Standard: 400 CHF geplant,
-900 CHF ungeplant, zwei bzw. zwölf Stunden Ausfall, keine automatisch angenommene
-entgangene Marge. Nicht enthalten sind pauschal GPU-Ersatz, gemeinsame Hydraulik,
-Monitoring-/ML-Betrieb oder Finanzierung. Kostenobergrenzen sind keine Herstellervorgabe.
+Technische Grundlage: [Klassifikator](https://scikit-learn.org/1.6/modules/generated/sklearn.ensemble.HistGradientBoostingClassifier.html)
+und [separate Kalibrierung](https://scikit-learn.org/1.6/modules/generated/sklearn.calibration.CalibratedClassifierCV.html).
+
+## Von Risiken zu Intervallen und Einsätzen
+
+Ein diskretes Erneuerungsmodell führt die Verteilung des individuellen Servicealters
+über den Planungszeitraum fort. So entstehen Erwartungswerte ohne Monte-Carlo-Rauschen.
+Ein geplanter Eingriff erfolgt beim Erreichen des Intervalls. Ein ungeplanter
+vollständiger Server-Service setzt nur den individuellen Server-Servicezähler zurück
+und kann damit eine anstehende individuelle Routine ersetzen. Teilreparaturen erfüllen
+diese Annahme nicht. Höchstens ein Servereingriff wird je Gerät und Tag gezählt.
+
+Gerätealter, Betriebsstunden, Rechenstunden, Startzähler, ECC, SSD-Verschleiss,
+Durchfluss, Pumpenstrom und gemeinsamer Kühlungskalender werden dadurch nicht
+zurückgesetzt. Ein GPU-Tausch erledigt insbesondere keine Standortwartung.
+
+Das Modell minimiert je Intervall die erwarteten Servicekosten und optional den
+entgangenen Deckungsbeitrag während der Ausfallstunden. Bei numerisch gleichen
+Kosten wird das längere erlaubte Intervall gewählt. Optimiert wird nur der
+angegebene Zeitraum; ein Eingriff genau am exklusiven Enddatum zählt erst später.
 
 ```sh
-python3 service_start.py --demo --intervals 60,90,180,365 \
-  --max-interval 365 --planned-cost 400 --unplanned-cost 900 \
-  --planned-hours 2 --unplanned-hours 12 --lost-margin 0
+python3 service_start.py --demo --case --intervals 60,90,180,365   --max-interval 365 --planned-cost 400 --unplanned-cost 900   --planned-hours 2 --unplanned-hours 12 --lost-margin 0
 ```
 
-Die maximale Zeit zwischen Services ist eine vom Betreiber einzutragende Grenze.
-Herstellerauflagen können kürzere Intervalle verlangen. Das Modell darf sie nicht
-verlängern. Kein Service ohne zwingenden Anlass und kein Kalenderintervall allein
-werden als erwiesen optimal vorausgesetzt.
-Bei numerisch gleichen Kosten wird das längere zulässige Intervall gewählt.
-Optimiert wird der eingegebene endliche Zeitraum, nicht eine unbegrenzte Lebensdauer.
+400/900 CHF, zwei/zwölf Stunden und die maximale Intervallgrenze sind Testannahmen.
+Die Intervallgrenze muss den Vorgaben der gewählten Serverhardware entsprechen.
+Nächste Routinetermine gelten, solange kein ungeplanter vollständiger Service
+stattfindet. Bruchteile von Eingriffen sind Erwartungswerte, keine halben Besuche.
 
-## Zentrale ungemessene Annahme: Wirkung der Wartung
+## Gemeinsame Kühlung
 
-Die Fortschreibung verändert gegenüber dem aktuellen Messpunkt je zusätzlichem
-Tag seit dem Service die Chiptemperatur um +0,033 °C, den Durchfluss um −0,004 l/min
-und den Pumpenstrom um +0,001 A. Ein Vollservice setzt diesen angenommenen Anteil
-zurück. Last und Kühlmitteleintrittstemperatur bleiben im Szenario konstant;
-SSD-Verschleiss steigt um 1/70 Prozentpunkt pro Tag. Werte werden an den Modellgrenzen
-begrenzt. Diese Koeffizienten stehen auch im JSON.
+Der Standortkalender ist unabhängig von Servereingriffen. Standard sind 180 Tage,
+600 CHF und zwei Stunden pro Kühlungsbesuch. Bei frisch gewarteter Kühlung entstehen
+in 365 Tagen zwei feste Besuche und 1’200 CHF Standortbudget. Bei acht Servern sind
+das rechnerisch 150 CHF Anteil je Server, keine zusätzlichen physischen Besuche.
 
-**Diese Wirkungen sind nicht aus Daten gelernt und nicht durch die bisherigen
-Wärme- oder Laptopmessungen belegt.** Das ML lernt das bedingte Ereignisrisiko;
-die Wirkung eines geänderten Wartungsplans ist eine zusätzliche Szenarioannahme.
-Reale Nutzung benötigt validierte Zustandsübergänge, Wartungsbefunde und passende
-Fehlerklassen. Die Prognoseintervalle im Bericht sind keine Konfidenzintervalle.
+CoolIT nennt typischerweise Wartungsbesuche alle sechs Monate. 180 Tage sind eine
+Vergleichsnäherung, kein ausgewählter Herstellerplan; Preis und Dauer bleiben
+unbelegt. [CoolIT Servicebeschreibung](https://www.coolitsystems.com/products-services/global-professional-services/)
 
-## Echte Daten importieren
+```sh
+python3 service_start.py --demo --case --cooling-interval 180   --cooling-age 0 --cooling-cost 600 --cooling-hours 2
+```
+
+`kuehlungskalender.json` enthält Termine und Kosten. Server-Reparaturen können diese
+Termine nicht verlängern. Gemeinsame Ausfälle, Notfallfahrten, Reiseaufteilung und
+Terminbündelung sind noch nicht modelliert. Die Summe individueller Servereingriffe
+ist keine Zahl von Technikerfahrten. Bestehende Kostenpauschalen werden nicht verändert.
+
+## Verbleibende Sensorannahmen
+
+Die unbelegten täglichen Durchflussverluste, Pumpenstromsteigerungen und die
+pauschale SSD-Alterung wurden aus der Fortschreibung entfernt. Ohne Messdaten
+bleiben diese Werte konstant. Im Case-Szenario wird Chiptemperatur vereinfacht um
+17 °C je Änderung des Lastanteils angepasst; bei ausgeschalteten Geräten gelten
+Eintrittstemperatur plus 2 °C. Das ist keine gemessene Kühlplattenkennlinie.
+
+Die Merkmale einer künftigen Entscheidung beschreiben jeweils die vorangegangene
+Tagesexposition. Kumulierte Zähler steigen anhand der simulierten eingeschalteten
+Stunden, Rechenstunden und Starts. Im ungekoppelten Szenario wird der bisherige
+Einschaltanteil konstant fortgeschrieben, getrennt vom Rechenlastanteil.
+
+Das zurückgesetzte Servicealter kann im ML das Risiko verändern. Dieser Zusammenhang
+bleibt auf synthetischen Daten eine Szenarioannahme, keine gelernte kausale Wirkung
+realer Wartung. Abweichungen vom Trainingsbereich werden im Bericht markiert.
+Alle Ergebnisse bleiben manuell zu prüfen; es gibt keine automatische Sicherheitssteuerung.
+
+## Daten importieren
 
 ```sh
 python3 service_start.py --history historie.csv --fleet server.csv --open
 ```
 
-Die Demo exportiert `beispiel_historie.csv` und `beispiel_server.csv` als Vorlagen.
-Die Historie enthält eine Zeile pro Server und Tag, jeweils aus vor dem Zielereignis
-bekannten Messwerten. Für die aktuelle Flotte gilt genau eine Zeile pro physischem
-Server; ein geteilter 16-GPU-Host darf nicht als zwei unabhängig wartbare Server zählen.
+Die Demo exportiert Beispiel-CSV-Dateien. Die Historie enthält eine Zeile pro Gerät
+und Datum; die aktuelle Flotte genau eine Zeile je physischem Server.
+Datenschema 2 erfordert ausdrücklich die getrennten Expositionsspalten.
+Alte CSV-Dateien müssen mit echten beziehungsweise ausdrücklich simulierten Werten
+ergänzt werden. Fehlende Messwerte werden nicht durch erfundene Normalwerte ersetzt.
 
-| Spalte | Bedeutung / Einheit |
+| Spalte | Bedeutung |
 |---|---|
-| `server_id` | Stabile physische Geräte-ID |
-| `date` | Datum des Messpunkts, YYYY-MM-DD |
-| `server_age_days` | Alter des Geräts in Tagen |
-| `operating_hours` | Kumulierte Betriebsstunden |
-| `days_since_service` | Ganze Tage seit letztem vollständigem Service |
-| `load_fraction` | Rechenlast 0 bis 1 |
-| `gpu_temp_c` | Definierte GPU-Temperaturstatistik in °C, z. B. Tagesmaximum |
-| `coolant_inlet_c` | Kühlmitteleintrittstemperatur in °C |
-| `flow_lpm` | Kühlmitteldurchfluss in l/min |
-| `pump_current_a` | Zugeordneter Pumpenstrom in Ampere |
-| `ecc_errors_24h` | Neu beobachtete ECC-Ereignisse der vorangegangenen 24 h |
-| `ssd_wear_percent` | Verbrauchte SSD-Lebensdauer in Prozent |
-| `unplanned_service_next_24h` | Nur Historie: 1 bei ungeplantem Servicebedarf im folgenden Tag, sonst 0 |
-| `observed_24h` | Nur Historie: 1 bei vollständig beobachtetem Ergebnisfenster, sonst 0 |
+| server_id | Stabile physische Geräte-ID |
+| date | Datum YYYY-MM-DD |
+| server_age_days | Kalenderalter in Tagen |
+| operating_hours | Kumulierte eingeschaltete Stunden, nicht Last × Alter |
+| compute_hours | Kumulierte äquivalente Rechenstunden, höchstens operating_hours |
+| power_on_fraction | Eingeschalteter Zeitanteil der vorangegangenen 24 h, 0 bis 1 |
+| load_fraction | Rechenlast während eingeschalteter Zeit, 0 bis 1 |
+| starts_24h | Startvorgänge der vorangegangenen 24 h |
+| starts_total | Kumulierte Startvorgänge |
+| days_since_service | Ganze Tage seit individuellem vollständigem Server-Service |
+| gpu_temp_c | Konsistente GPU-Temperaturstatistik, z. B. vorheriges Tagesmaximum, in °C |
+| coolant_inlet_c | Kühlmitteleintrittstemperatur in °C |
+| flow_lpm | Durchfluss in l/min |
+| pump_current_a | Zugeordneter Pumpenstrom in A |
+| ecc_errors_24h | Neue ECC-Ereignisse der vorangegangenen 24 h |
+| ssd_wear_percent | Verbrauchte SSD-Lebensdauer in Prozent |
+| unplanned_service_next_24h | Nur Historie: ungeplanter Server-Servicebedarf im Folgetag, 0 oder 1 |
+| observed_24h | Nur Historie: vollständiges Ergebnisfenster, 0 oder 1 |
 
-Unvollständige Ergebnisfenster werden ausgeschlossen, nicht als ereignisfrei
-gezählt. Auch bei einem geplanten Service innerhalb des Ergebnisfensters ist
-`observed_24h=0` zu setzen, da der unveränderte Betrieb nicht beobachtet wurde.
-Die Definition des Ereignisses und die Aggregation der Sensoren müssen konsistent
-sein. Nur zuvor bekannte Messwerte verwenden; keine nach dem Ausfall gemessenen
-Temperaturen in die Eingabe desselben Zielereignisses schreiben.
+Unvollständige Zielfenster werden ausgeschlossen. Bei geplanter Intervention im
+Zielfenster ebenfalls observed_24h=0 setzen, da unveränderter Betrieb nicht beobachtet
+wurde. Keine erst nach einem Ereignis bekannten Messwerte als Eingaben verwenden.
+Historische Zielfenster müssen vor dem aktuellen Flottenzustand enden.
 
-Mindestens zwölf historische Server und in jeder der drei Gruppen mindestens fünf
-Ereignisse sowie fünf ereignisfreie Tage sind technisch erforderlich. Das ist eine
-Mindestprüfung, keine Aussage über ausreichende Datenqualität. Unbekannte Werte
-werden nicht still durch erfundene Normalwerte ersetzt. Historische Zielfenster
-müssen vor dem aktuellen Flottenzustand enden.
-
-## Betriebsgrenzen und Anschluss an DigitalHeat
-
-Der Bericht zählt **Servereingriffe, nicht Technikerfahrten**. Mehrere Server können
-bei einer gemeinsamen Fahrt gewartet werden. Gemeinsame Pumpe, Wärmetauscher und
-Standortwartung benötigen ein zusätzliches Standortmodell; ihre Ausfälle dürfen
-nicht achtmal als unabhängige Serverfehler gezählt werden.
-
-Eine aktuelle Eingabe ausserhalb des Trainingsbereichs wird markiert. Eine
-Chiptemperatur ab 90 °C oder fehlender Durchfluss erzeugt zusätzlich einen
-Szenario-Prüfhinweis. Diese Testschwelle ist keine L4-Herstellergrenze und kein
-Schutzsystem. Zukünftige Sensorzustände können ebenfalls ausserhalb der bislang
-beobachteten Verteilung liegen. Jede Empfehlung bleibt manuell zu prüfen.
-
-Die bestehende Unternehmensrechnung wird absichtlich nicht automatisch verändert.
-Nach Validierung können erwartete Services deren bisherige Servicepauschale
-ersetzen. Sie dürfen nicht zusätzlich zu denselben bestehenden Wartungskosten
-aufgeschlagen werden. Eine spätere Scheduler-Anbindung könnte vor einer Wartung
-neue Aufträge sperren und laufende Arbeit kontrolliert verlagern; das ist hier
-noch nicht implementiert.
+Mindestens zwölf historische Server und je Gruppe fünf Ereignisse sowie fünf
+ereignisfreie Tage sind technische Mindestprüfungen, keine Garantie ausreichender
+Datengrundlage. Der Case-Modus ist explizit auf die synthetische Demo begrenzt.
 
 ## Prüfen
 
 ```sh
-python3 -m unittest discover -s tests -p test_service_ml.py -v
+python3 -m unittest discover -s tests -p 'test_service*.py' -v
 ```
 
-Die Tests prüfen analytisch bekannte Einsatzmengen, Service-Reset, Kosten,
-Wahrscheinlichkeitsgrenzen, fehlende Messwerte, unvollständige Beobachtung,
-getrennte Servergruppen und den tatsächlichen Einfluss des ML-Risikos auf die Planung.
+Geprüft werden bekannte Einsatzmengen, getrennte Zähler, identische Case-Bilanzen,
+Kalenderzuordnung, Service-Reset, unabhängige Kühlungstermine, Kosten, unvollständige
+Beobachtung und der tatsächliche Einfluss der Betriebsexposition auf die Risikoauswertung.

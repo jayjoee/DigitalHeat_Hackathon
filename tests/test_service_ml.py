@@ -80,8 +80,10 @@ class InputsTests(unittest.TestCase):
     def test_service_does_not_rejuvenate_hardware_or_ssd(self):
         s=self.fleet[0];x=trajectory(s,np.array([0,30]),np.array([0,0]))
         self.assertEqual(x[1,FEATURES.index('server_age_days')],s['server_age_days']+30)
-        self.assertGreater(x[1,FEATURES.index('ssd_wear_percent')],x[0,FEATURES.index('ssd_wear_percent')])
+        self.assertEqual(x[1,FEATURES.index('ssd_wear_percent')],x[0,FEATURES.index('ssd_wear_percent')])
         self.assertEqual(x[0,FEATURES.index('ecc_errors_24h')],s['ecc_errors_24h'])
+        for name in ('flow_lpm','pump_current_a'):
+            self.assertEqual(x[0,FEATURES.index(name)],s[name])
 
 
 class MLIntegrationTests(unittest.TestCase):

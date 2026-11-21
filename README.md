@@ -85,11 +85,13 @@ Die vollständige stündliche ML-Auswertung und neue Live-Vektoren werden lokal 
 
 ### ML-Serviceplanung
 
-`python3 service_start.py --demo --open` trainiert ein ML-Risikomodell und berechnet
+`python3 service_start.py --demo --case --open` trainiert ein ML-Risikomodell und berechnet
 Serviceintervalle, erwartete geplante/ungeplante Eingriffe und Kosten pro physischem
 Server. Voraussetzung: `requirements-ml.txt`. HTML, CSV und JSON entstehen unter
 `daten/ergebnisse/service_ml/`. Eigene CSV-Dateien sind über `--history` und `--fleet`
-anschliessbar. **Die Demo nutzt künstliche Daten und angenommene Servicewirkungen;
+anschliessbar. Der Case-Modus übernimmt getrennte Betriebsstunden, Rechenstunden und
+Starts je Server aus dem bestehenden Jahres-Scheduler. Die gemeinsame Kühlung hat
+einen unabhängigen Wartungskalender. **Die Demo nutzt künstliche Trainingsdaten und angenommene Servicewirkungen;
 sie ist kein realer L4-Wartungsnachweis.** [Methode und Datenschema](docs/SERVICE_ML.md)
 
 ### Kontrollierter Vergleich der Betriebsstrategien
