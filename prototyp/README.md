@@ -9,17 +9,29 @@ Der Prototyp trennt die Serverhalter von den Nutzern der Rechenleistung. Die Ges
 
 Es gibt keinen Rollenumschalter und keine vermischte Navigation. Die Serverhalter-Schnittstelle liefert keine Projekttitel, Eingabetexte, Target-Namen, Auftrags-IDs oder Ergebnisse. Der Pharma-Arbeitsbereich bietet keine globale Heizungssteuerung. Das ist eine Trennung der Anwendungsoberflächen und ihrer Schnittstellen, keine Absicherung des Arbeitsspeichers gegen den Besitzer des Empfängergeräts.
 
-## Schnell ausprobieren
+## Animierte Tablettenprüfung
+
+Im Ordner `prototyp` starten:
+
+```sh
+python3 digitalheat.py demo --port 8081 --host-port 8091 --worker-port 8444 --open
+```
+
+Auf [Haus · Laptop A](http://127.0.0.1:8081) **Batch starten** und nach einigen Bildern
+**Zum Sportbad wechseln** drücken. Auf [Sportbad · Laptop B](http://127.0.0.1:8091)
+läuft die Prüfung beim nächsten Bild weiter. Für zwei physische Geräte siehe [Blister-Demo](blister/README.md).
+
+## Klassischen Pharma-Prototyp ausprobieren
 
 Voraussetzungen: Python 3.10 oder neuer mit TLS 1.3 sowie `openssl` für die erstmalige Zertifikaterstellung. Keine Python-Zusatzpakete. Unter Windows gegebenenfalls `python` statt `python3` verwenden und OpenSSL separat bereitstellen.
 
 Eine laufende ältere Version mit `Ctrl+C` beenden. Im entpackten Anwendungsordner starten:
 
 ```sh
-python3 digitalheat.py demo --open
+python3 digitalheat.py demo --pharma --open
 ```
 
-Auf macOS geht auch ein Doppelklick auf `Demo_starten.command`, wenn Python verfügbar ist.
+Auf macOS öffnet ein Doppelklick auf `Demo_starten.command` die animierte Blisterprüfung, wenn Python verfügbar ist.
 
 - Pharma: [http://127.0.0.1:8080](http://127.0.0.1:8080)
 - Serverhalter: [http://127.0.0.1:8090](http://127.0.0.1:8090)
@@ -42,7 +54,7 @@ Mit `Ctrl+C` beenden. Aufträge und Ergebnisse gehen beim Beenden des Empfänger
 Bei belegten Ports können alle drei Ports gewählt werden:
 
 ```sh
-python3 digitalheat.py demo --port 8081 --host-port 8091 --worker-port 8444
+python3 digitalheat.py demo --pharma --port 8081 --host-port 8091 --worker-port 8444
 ```
 
 ## Auf zwei Geräten im selben Netzwerk
