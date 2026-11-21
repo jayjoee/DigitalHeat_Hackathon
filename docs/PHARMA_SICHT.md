@@ -37,7 +37,7 @@ Grundlage: 8 Server pro Haus (64 L4-Karten), Jahressimulation Referenzhaus 2025,
 | **Proteinstrukturen** (AlphaFold) | ~ bedingt | 24 GB Speicher der L4 können bei grossen Proteinen knapp werden (eigene Einschätzung) |
 | **Klinische Daten, Produktion** | ✗ nein | GxP-Regeln (GCP, GMP) mit Validierungspflicht und Patientendaten. Nicht für Privatkeller |
 
-**Grössenordnung pro Haus:** 290'000 L4-Stunden pro Jahr. Mit dem Uni-Dock-Tempo wären das grob 9 Mrd. gedockte Moleküle, *falls* eine L4 ähnlich schnell ist wie eine V100 (nicht geprüft).
+**Grössenordnung pro Haus:** 276'000 L4-Stunden pro Jahr im Abschaltmodell (290'000 im Idealmodell). Mit dem Uni-Dock-Tempo wären das grob 9 Mrd. gedockte Moleküle, *falls* eine L4 ähnlich schnell ist wie eine V100 (nicht geprüft).
 
 ### Wie viele Aufträge pro Jahr? (Aufträge in GPU-Stunden)
 
@@ -98,24 +98,24 @@ Historischer Preisvergleich mit Schweizer GPU-Clouds: Ein Schweizer Standort all
 
 ## 7. Was das für DH bedeutet
 
-Mittlerer Kostenfall, 8 Server, 5 Jahre, nach Steuern. Direktvertrag mit festem Preis, 5 % eigene Plattformkosten statt Marktplatzgebühr. Der Rest der Stunden läuft als Füllauftrag zum Spot-Preis (sinkt 10 % pro Jahr).
+Mittlerer Kostenfall, 8 Server, 5 Jahre, nach Steuern, Abschaltmodell mit 230 W Leerlauf, alle Rechenstunden verkauft. Direktvertrag mit festem Preis, 5 % eigene Plattformkosten statt Marktplatzgebühr. Der Rest der Stunden läuft als Füllauftrag zum Spot-Preis (sinkt 10 % pro Jahr).
 
 | Vertragspreis pro L4-Stunde | 60 % fest gebucht | 80 % fest gebucht |
 |---|---|---|
-| 0,42 CHF | +8'800 CHF/Jahr | +17'300 CHF/Jahr |
-| **0,50 CHF (vorsichtig)** | **+20'300** | +32'500 |
-| 0,55 CHF | +27'400 | +42'000 |
-| **0,60 CHF (Zielannahme)** | **+34'500** | +51'500 |
+| 0,42 CHF | +4'900 CHF/Jahr | +12'900 CHF/Jahr |
+| **0,50 CHF (vorsichtig)** | **+15'800** | +27'400 |
+| 0,55 CHF | +22'600 | +36'500 |
+| **0,60 CHF (Zielannahme)** | **+29'400** | +45'600 |
 
-**Break-even mit Direktvertrag: 0,36 CHF pro L4-Stunde** bei 60 % fest gebucht, 0,33 CHF bei 80 %. Über einen Marktplatz (20 % Gebühr, Preisverfall auf dem ganzen Preis) bräuchte es rund 0,50 CHF.
+**Break-even mit Direktvertrag: 0,38 CHF pro L4-Stunde** bei 60 % fest gebucht, 0,35 CHF bei 80 %. Über einen Marktplatz (20 % Gebühr, Preisverfall auf dem ganzen Preis) bräuchte es rund 0,47 CHF. Im Idealmodell ohne Leerlauf lagen die Werte höher (+34'500 CHF bei 0,60 CHF und 60 %, Break-even 0,36 CHF).
 
-Gerechnet mit dem finalen Modell (`src/wirtschaft.py`, `KOSTEN_DH.md`): Referenzhaus, 8 Server, alle Kosten, Steuern, Zins und Restwert, Gratiswärme.
+Gerechnet mit `src/wirtschaft.py` wie in `KOSTEN_DH.md`: Referenzhaus, 8 Server, alle Kosten, Steuern, Zins und Restwert, Gratiswärme.
 
 ## 8. Antworten auf die offenen Fragen
 
 | Frage | Antwort |
 |---|---|
-| Welche Aufträge, wie viele Stunden? | Screening (Docking) als grosser Winterauftrag, Mikroskopbilder als nächtlicher Batch. Die Menge hängt am Kunden; ein Haus liefert 290'000 L4-Stunden pro Jahr, davon 82 % im Winterhalbjahr |
+| Welche Aufträge, wie viele Stunden? | Screening (Docking) als grosser Winterauftrag, Mikroskopbilder als nächtlicher Batch. Die Menge hängt am Kunden; ein Haus liefert 276'000 L4-Stunden pro Jahr (Idealmodell 290'000, davon 82 % im Winterhalbjahr) |
 | Was zahlt Pharma heute? | US-Clouds: 0,60–0,67 CHF auf Abruf, 0,53–0,55 CHF mit festem Vertrag, 0,29–0,38 CHF Spot. Schweizer Clouds (Datenstandort Schweiz): ab ≈ 0,68 CHF bis 2,13 CHF |
 | Fester Preis über mehrere Jahre? | Im GPU-Markt Standard (2–5 Jahre, mit Abnahmepflicht). Für Pharma attraktiv, wenn DH unter dem Preis Schweizer Clouds liegt |
 | Welche Sicherheitsnachweise? | Zulässigkeit und Anforderungen je Workflow prüfen; keine pauschale GxP-Freistellung. Schutz vor Einsicht des Hostadministrators ist nicht zugesagt |

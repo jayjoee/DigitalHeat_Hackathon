@@ -36,9 +36,9 @@ Szenario **Genug Aufträge**: Ein Pharma-Vertrag bucht 60 % der Stunden fest (Wi
 | Investition DigitalHeat | 290'100 CHF (8 Server mit 64 L4, Kühlung, Einbau, Speicher, Netzwerk) |
 | Rechenerlös im 1. Jahr | 130'800 CHF (Vertragspreis 0,60 CHF pro L4-Stunde, 60 % fest gebucht; Schweizer Clouds ab ≈ 0,68 CHF) |
 | Wärme an den Haushalt | gratis (Pilot in ehemaligen Öl-Häusern, vorhandener Holzofen als Reserve) |
-| **Ergebnis DigitalHeat** | **+34'500 CHF pro Jahr** nach allen Kosten, Steuern und Zins (ohne Zins: +43'000 CHF), Rendite ≈ 21 %, Investition nach 3,0 Jahren zurück |
-| Vorsichtiger Fall (0,50 CHF) | +20'300 CHF pro Jahr, Investition nach 3,6 Jahren zurück |
-| **Nötiger Vertragspreis mit allen Kosten** | **0,36 CHF pro L4-Stunde** = 2,87 CHF pro Server-h |
+| **Ergebnis DigitalHeat** | **+29'400 CHF pro Jahr** im Abschaltmodell (230 W Leerlauf, 90,5 % Deckung, 34'512 verkaufte Server-h) nach allen Kosten, Steuern und Zins; interner Zinsfuss 18,8 %, Investition nach 3,2 Jahren zurück. Im Idealmodell dieser Tabelle (0 W Leerlauf): +34'500 CHF. Voraussetzung in beiden Fällen: jede Rechenstunde ist verkauft (`KOSTEN_DH.md`) |
+| Vorsichtiger Fall (0,50 CHF) | +15'800 CHF pro Jahr, Investition nach 3,9 Jahren zurück (Idealmodell: +20'300 CHF, 3,6 Jahre) |
+| **Nötiger Vertragspreis mit allen Kosten** | **0,38 CHF pro L4-Stunde** = 3,07 CHF pro Server-h (Idealmodell: 0,36 CHF = 2,87 CHF) |
 
 ## Leerlauf und Abschalten im Referenzhaus
 
@@ -82,7 +82,7 @@ Was jeder weitere Server zum Ergebnis von DigitalHeat beiträgt (alle Kosten, St
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | Beitrag CHF/Jahr | 7'573 | 6'734 | 6'284 | 5'991 | 5'262 | 3'045 | 708 | **−1'054** | −3'018 | −4'765 | −6'418 |
 
-Server 1 trägt zusätzlich die Fixkosten des Hauses (Einbau, Internet, Firmenanteil). Regel: **Ein Server mehr lohnt sich, solange sein Beitrag positiv ist.** Am meisten verdient DigitalHeat mit 7 Servern (+35'600 CHF, 87,1 % Deckung). Die 8 Server für das Team-Ziel von 93 % Deckung kosten nur rund 1'000 CHF Gewinn pro Jahr und sind damit praktisch optimal. Das Dashboard zeigt diese Rechnung im Abschnitt «Lohnt sich ein Server mehr?» für jeden Preis.
+Server 1 trägt zusätzlich die Fixkosten des Hauses (Einbau, Internet, Firmenanteil). Regel: **Ein Server mehr lohnt sich, solange sein Beitrag positiv ist.** Am meisten verdient DigitalHeat mit 7 Servern (+35'600 CHF, 87,1 % Deckung). Die 8 Server für das Team-Ziel von 93 % Deckung kosten nur rund 1'000 CHF Gewinn pro Jahr und sind damit praktisch optimal. Beide Tabellen stammen aus dem Idealmodell. Im Abschaltmodell bleibt die Reihenfolge gleich: 7 Server +30'500 CHF (84,5 % Deckung), 8 Server +29'400 CHF (90,5 %), 9 Server +27'100 CHF (95,2 %); siehe `KOSTEN_DH.md`, Abschnitt 3. Das Dashboard zeigt diese Rechnung im Abschnitt «Lohnt sich ein Server mehr?» für jeden Preis.
 
 ## Jahresverlauf (8 Server, Spot)
 | Monat | Jan | Feb | Mär | Apr | Mai | Jun | Jul | Aug | Sep | Okt | Nov | Dez |
@@ -94,7 +94,7 @@ Von Juni bis August laufen die Server nur noch für das Warmwasser (0,6 Server).
 
 ## Wann es sich nicht lohnt
 1. **Rechenpreis unter 0,226 CHF pro Server-h:** Dann deckt der Erlös nicht einmal den Strom abzüglich Wärmewert. Das gilt unabhängig von der Serverzahl, solange keine Wärme abgeführt wird.
-2. **Mit allen Kosten** (Hardware, Kühlung, Einbau, Wartung, Versicherung, Steuern, Zins): Vertragspreis unter **0,36 CHF pro L4-Stunde** (= 2,87 CHF pro Server-h; Spanne 0,26–0,55 CHF) oder weniger als rund **40 % der Stunden fest gebucht**. Über einen Marktplatz statt Direktvertrag bräuchte es rund 0,50 CHF. Mit neuen H100 statt L4 verliert DigitalHeat selbst im günstigen Fall Geld.
+2. **Mit allen Kosten** (Hardware, Kühlung, Einbau, Wartung, Versicherung, Steuern, Zins): Vertragspreis unter **0,38 CHF pro L4-Stunde** (= 3,07 CHF pro Server-h im Abschaltmodell; Spanne 0,28–0,59 CHF), weniger als rund **ein Viertel der Stunden fest gebucht** oder weniger als **72 % der Rechenstunden verkauft**. Über einen Marktplatz statt Direktvertrag bräuchte es rund 0,47 CHF. Mit neuen H100 statt L4 verliert DigitalHeat selbst im günstigen Fall Geld.
 3. **Ohne flexible Nachfrage (Szenario Alibaba):** Kommen alle Jobs mit Frist nach Alibaba-Trace, sinkt die Deckung bei 8 Servern auf 51,7 %. Im Sommer müssen 7'506 kWh Wärme abgeführt werden, weil die Jobs vor ihrer Frist laufen müssen. Der Break-even steigt auf 0,260 CHF.
    Mit der Regel «abgeben» gehen 9'608 Jobs (8'990 Server-h) an andere Standorte. Abgeführt werden nur noch 316 kWh. **Genau diese 9'000 Server-h im Sommer bräuchten einen Abnehmer mit Sommerwärmebedarf** (Hotel mit Spa, Maistrockner).
 
@@ -111,8 +111,8 @@ Von Juni bis August laufen die Server nur noch für das Warmwasser (0,6 Server).
 ## Annahmen und Grenzen
 Alle Annahmen mit Quelle stehen in `src/scheduler/annahmen.py` und in jeder Ergebnisdatei (`daten/ergebnisse/serverzahl.json`, Feld `annahmen`). Die wichtigsten:
 - **Genug Aufträge** (Szenario Standard): Ein Pharma-Vertrag bucht 60 % der Stunden fest, der Rest findet als Füllauftrag zum Spot-Preis Abnehmer. Das ist die stärkste Annahme. Das Szenario Alibaba zeigt, was ohne sie passiert.
-- Vertragspreis 0,60 CHF pro L4-Stunde für Kunden mit Datenstandort Schweiz (rund 12 % unter Schweizer GPU-Clouds; vorsichtig 0,50 CHF), Server mit 8 L4 für 32'245 CHF (belegter Komplettpreis), 5 Jahre, Zins 4,5 %, Restwert 20 %. Alle Werte mit Quelle in `src/scheduler/annahmen.py` und `KOSTEN_DH.md`.
-- Die Case-Kennzahl «Break-even» bleibt ohne Hardware (0,226 CHF pro Server-h); daneben steht der nötige Preis mit allen Kosten (2,87 CHF pro Server-h).
+- Vertragspreis 0,60 CHF pro L4-Stunde als unbestätigter Zielpreis für öffentliche und freigegebene, nicht vertrauliche Aufgaben (`L4_ANGEBOT.md`; Schweizer GPU-Clouds ab ≈ 0,68 CHF, vorsichtig 0,50 CHF), Server mit 8 L4 für 32'245 CHF (belegter Komplettpreis), 5 Jahre, Zins 4,5 %, Restwert 20 %. Alle Werte mit Quelle in `src/scheduler/annahmen.py` und `KOSTEN_DH.md`.
+- Die Case-Kennzahl «Break-even» bleibt ohne Hardware (0,226 CHF pro Server-h); daneben steht der nötige Preis mit allen Kosten (3,07 CHF pro Server-h im Abschaltmodell, 2,87 CHF im Idealmodell).
 - Keine Wetterprognose: Bei verlustfreiem Speicher und unbegrenzten Aufträgen A ist «Speicher immer füllen» schon die beste Deckung. Eine Prognose bringt erst etwas, wenn Aufträge knapp sind oder der Speicher Verluste hat.
 - Wärmeabgabe = Strom × 0,8, unabhängig von der Auslastung der GPU im Server. Läuft ein Server, läuft er voll (Alibaba zeigt im Median 4 % GPU-Nutzung: Jobs müssen dicht gepackt werden).
 - Stündliche Auflösung, perfekte Kenntnis des Bedarfs der laufenden Stunde, keine Prognose über die Stunde hinaus.
@@ -123,8 +123,8 @@ Alle Annahmen mit Quelle stehen in `src/scheduler/annahmen.py` und in jeder Erge
 Frage: Wie viele Server-Stunden kann DigitalHeat einen Tag im Voraus verbindlich zu 0,60 CHF pro L4-h (= 4,80 CHF pro Server-h) verkaufen?
 - Entscheid um 12 Uhr Ortszeit am Vortag. Prognose: Open-Meteo «Previous Runs», ECMWF IFS 0,25°. Genutzt werden nur Läufe, die zum Entscheid schon veröffentlicht waren (konservativ 8 h Verzug, Test für jede Stunde). Der Vortagslauf ist genauer als der Lauf zwei Tage vorher: mittlerer Fehler 0,84 °C gegenüber 0,95 °C.
 - Für 2024 gibt es keine Previous Runs. Darum: kalibriert auf Januar–Juni 2025, ausgewertet auf Juli–Dezember 2025.
-- **Referenzhaus, 8 Server:** Sicherheitsfaktor 0,95. **93 % der Server-h sind zusagbar**, die angenommenen 60 % fest gebucht sind also gedeckt. Fehlmenge an 2,2 % der Tage ausserhalb der Kalibrierung, 57 Server-h im Jahr. Gutschrift: 50 % des Vertragspreises (Schätzung). **Ergebnis 34'276 CHF pro Jahr statt 34'543 CHF.**
-- Damit ist die Preisprämisse belegt und nicht nur angenommen. Offen bleibt die Nachfrage: Zusagbar heisst noch nicht verkauft.
+- **Referenzhaus, 8 Server:** Sicherheitsfaktor 0,95. **93 % der Server-h sind zusagbar** (im Auswertungshalbjahr Juli–Dezember 92 %), die angenommenen 60 % fest gebucht sind also gedeckt. Fehlmenge an 2,2 % der Tage ausserhalb der Kalibrierung, 57 Server-h im Jahr. Gutschrift: 50 % des Vertragspreises (Schätzung). **Ergebnis im Idealmodell 34'276 CHF pro Jahr statt 34'543 CHF.** Die Fehlmenge ist so klein, weil im Modell nur 64 % der zugesagten Menge abgenommen werden.
+- Damit ist gezeigt, dass die Liefermenge für eine Zusage am Vortag reicht. Preis und Nachfrage bleiben Annahmen: Zusagbar heisst noch nicht verkauft.
 - Daten: `daten/ergebnisse/zusage_8_spot.json`.
 
 ## Wärme-Router im Case-Idealmodell
