@@ -26,3 +26,4 @@ messwerkzeug/laeufe/
 messwerkzeug/.venv/
 daten/ergebnisse/ml/vergleich.json
 daten/ergebnisse/ml/stunden.csv
+daten/ergebnisse/service_ml/

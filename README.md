@@ -83,6 +83,15 @@ Die vollständige stündliche ML-Auswertung und neue Live-Vektoren werden lokal 
 
 ## Dokumente und Abgabe
 
+### ML-Serviceplanung
+
+`python3 service_start.py --demo --open` trainiert ein ML-Risikomodell und berechnet
+Serviceintervalle, erwartete geplante/ungeplante Eingriffe und Kosten pro physischem
+Server. Voraussetzung: `requirements-ml.txt`. HTML, CSV und JSON entstehen unter
+`daten/ergebnisse/service_ml/`. Eigene CSV-Dateien sind über `--history` und `--fleet`
+anschliessbar. **Die Demo nutzt künstliche Daten und angenommene Servicewirkungen;
+sie ist kein realer L4-Wartungsnachweis.** [Methode und Datenschema](docs/SERVICE_ML.md)
+
 ### Kontrollierter Vergleich der Betriebsstrategien
 
 `python3 vergleich_start.py --days 184` berechnet vier Varianten mit identischen
