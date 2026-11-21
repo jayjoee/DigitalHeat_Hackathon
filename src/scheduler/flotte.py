@@ -68,22 +68,33 @@ def kosten_bad(n):
     return {"speicher_chf": 0, "einbau_chf": A.wert("einbau_chf") * n / 8}
 
 
-def baue(n_haeuser, n_haus, szenario, regel, profil, bad=None, n_bad=0, *, leistung=None):
+def baue(n_haeuser, n_haus, szenario, regel, profil, bad=None, n_bad=0,
+         *, leistung=None, prognose=None):
+
     def standort(n, p, **optionen):
         if leistung is None:
-            return Haus(n, szenario, regel, p, mit_ankuenften=False, **optionen)
-        return HausMitServerbetrieb(n, szenario, p, leistung, abschalten=True, bei_ueberschuss=regel,
-                                    mit_ankuenften=False, **optionen)
+            return Haus(n, szenario, regel, p,
+                        mit_ankuenften=False, **optionen)
 
-    st = [standort(n_haus, profil, name=f"Haus {i + 1:02d}")
-          for i in range(n_haeuser)]
+        return HausMitServerbetrieb(
+            n, szenario, p, leistung,
+            abschalten=True,
+            bei_ueberschuss=regel,
+            mit_ankuenften=False,
+            **optionen
+        )
+
+    st = [
+        standort(n_haus, profil, name=f"Haus {i + 1:02d}")
+        for i in range(n_haeuser)
+    ]
     kosten = {}
     if n_bad:
         st.append(standort(n_bad, bad, speicher_kwh=A.wert("bad_speicher_kwh"),
                            name="Sportbad St. Jakob", typ="bad"))
         kosten["Sportbad St. Jakob"] = kosten_bad(n_bad)
     # derselbe Jobstrom in allen Varianten: Alibaba-Rate × Server der Häuser
-    return Flotte(st, szenario, regel, nachfrage_server=n_haeuser * n_haus), kosten
+    return Flotte(st, szenario, regel, nachfrage_server=n_haeuser * n_haus, prognose=prognose), kosten
 
 
 def lauf(n_h, n_haus, sz, regel, profil, bad, n_bad, name, monatlich=True, *, leistung=None):

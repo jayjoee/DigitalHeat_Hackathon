@@ -11,7 +11,7 @@
  "aktiv": false,
  "phase": "Checkpoint gespeichert",
  "prozess": "beendet",
- "pid": 4858,
+ "pid": 37324,
  "standort": "Sportbad St. Jakob",
  "texte_fertig": 4352,
  "stunden": [
@@ -29,7 +29,7 @@
    "haus_server_laufend": 6.889,
    "bad_bedarf_kwh": 207.93,
    "bad_server_laufend": 0.0,
-   "texte_fertig": 256
+   "texte_fertig": 4352
   },
   {
    "zeit": "2025-05-25T01:00",
@@ -45,7 +45,7 @@
    "haus_server_laufend": 3.125,
    "bad_bedarf_kwh": 207.93,
    "bad_server_laufend": 0.0,
-   "texte_fertig": 512
+   "texte_fertig": 4352
   },
   {
    "zeit": "2025-05-25T02:00",
@@ -61,7 +61,7 @@
    "haus_server_laufend": 3.003,
    "bad_bedarf_kwh": 207.93,
    "bad_server_laufend": 0.0,
-   "texte_fertig": 640
+   "texte_fertig": 4352
   },
   {
    "zeit": "2025-05-25T03:00",
@@ -77,7 +77,7 @@
    "haus_server_laufend": 4.187,
    "bad_bedarf_kwh": 207.93,
    "bad_server_laufend": 0.0,
-   "texte_fertig": 896
+   "texte_fertig": 4352
   },
   {
    "zeit": "2025-05-25T04:00",
@@ -93,7 +93,7 @@
    "haus_server_laufend": 2.062,
    "bad_bedarf_kwh": 207.93,
    "bad_server_laufend": 0.0,
-   "texte_fertig": 1152
+   "texte_fertig": 4352
   },
   {
    "zeit": "2025-05-25T05:00",
@@ -109,7 +109,7 @@
    "haus_server_laufend": 3.367,
    "bad_bedarf_kwh": 207.93,
    "bad_server_laufend": 0.0,
-   "texte_fertig": 1408
+   "texte_fertig": 4352
   },
   {
    "zeit": "2025-05-25T06:00",
@@ -125,7 +125,7 @@
    "haus_server_laufend": 5.007,
    "bad_bedarf_kwh": 207.93,
    "bad_server_laufend": 0.0,
-   "texte_fertig": 1664
+   "texte_fertig": 4352
   },
   {
    "zeit": "2025-05-25T07:00",
@@ -141,7 +141,7 @@
    "haus_server_laufend": 4.308,
    "bad_bedarf_kwh": 207.93,
    "bad_server_laufend": 0.0,
-   "texte_fertig": 1920
+   "texte_fertig": 4352
   },
   {
    "zeit": "2025-05-25T08:00",
@@ -157,7 +157,7 @@
    "haus_server_laufend": 2.882,
    "bad_bedarf_kwh": 207.93,
    "bad_server_laufend": 0.0,
-   "texte_fertig": 2176
+   "texte_fertig": 4352
   },
   {
    "zeit": "2025-05-25T09:00",
@@ -173,7 +173,7 @@
    "haus_server_laufend": 1.121,
    "bad_bedarf_kwh": 207.93,
    "bad_server_laufend": 0.0,
-   "texte_fertig": 2432
+   "texte_fertig": 4352
   },
   {
    "zeit": "2025-05-25T10:00",
@@ -189,7 +189,7 @@
    "haus_server_laufend": 1.194,
    "bad_bedarf_kwh": 207.93,
    "bad_server_laufend": 1.941,
-   "texte_fertig": 2688
+   "texte_fertig": 4352
   },
   {
    "zeit": "2025-05-25T11:00",
@@ -205,7 +205,7 @@
    "haus_server_laufend": 0.625,
    "bad_bedarf_kwh": 207.93,
    "bad_server_laufend": 3.0,
-   "texte_fertig": 2688
+   "texte_fertig": 4352
   },
   {
    "zeit": "2025-05-25T12:00",
@@ -221,7 +221,7 @@
    "haus_server_laufend": 0.625,
    "bad_bedarf_kwh": 207.93,
    "bad_server_laufend": 3.0,
-   "texte_fertig": 2816
+   "texte_fertig": 4352
   },
   {
    "zeit": "2025-05-25T13:00",
@@ -237,7 +237,7 @@
    "haus_server_laufend": 0.625,
    "bad_bedarf_kwh": 207.93,
    "bad_server_laufend": 3.0,
-   "texte_fertig": 2816
+   "texte_fertig": 4352
   },
   {
    "zeit": "2025-05-25T14:00",
@@ -253,7 +253,7 @@
    "haus_server_laufend": 0.625,
    "bad_bedarf_kwh": 207.93,
    "bad_server_laufend": 2.882,
-   "texte_fertig": 3072
+   "texte_fertig": 4352
   },
   {
    "zeit": "2025-05-25T15:00",
@@ -269,7 +269,7 @@
    "haus_server_laufend": 0.625,
    "bad_bedarf_kwh": 207.93,
    "bad_server_laufend": 1.941,
-   "texte_fertig": 3328
+   "texte_fertig": 4352
   },
   {
    "zeit": "2025-05-25T16:00",
@@ -285,7 +285,7 @@
    "haus_server_laufend": 0.625,
    "bad_bedarf_kwh": 207.93,
    "bad_server_laufend": 3.0,
-   "texte_fertig": 3328
+   "texte_fertig": 4352
   },
   {
    "zeit": "2025-05-25T17:00",
@@ -301,7 +301,7 @@
    "haus_server_laufend": 0.625,
    "bad_bedarf_kwh": 207.93,
    "bad_server_laufend": 3.0,
-   "texte_fertig": 3328
+   "texte_fertig": 4352
   },
   {
    "zeit": "2025-05-25T18:00",
@@ -317,7 +317,7 @@
    "haus_server_laufend": 0.625,
    "bad_bedarf_kwh": 207.93,
    "bad_server_laufend": 1.941,
-   "texte_fertig": 3584
+   "texte_fertig": 4352
   },
   {
    "zeit": "2025-05-25T19:00",
@@ -333,7 +333,7 @@
    "haus_server_laufend": 0.625,
    "bad_bedarf_kwh": 207.93,
    "bad_server_laufend": 3.0,
-   "texte_fertig": 3712
+   "texte_fertig": 4352
   },
   {
    "zeit": "2025-05-25T20:00",
@@ -349,7 +349,7 @@
    "haus_server_laufend": 0.625,
    "bad_bedarf_kwh": 207.93,
    "bad_server_laufend": 3.0,
-   "texte_fertig": 3712
+   "texte_fertig": 4352
   },
   {
    "zeit": "2025-05-25T21:00",
@@ -365,7 +365,7 @@
    "haus_server_laufend": 0.625,
    "bad_bedarf_kwh": 207.93,
    "bad_server_laufend": 3.0,
-   "texte_fertig": 3712
+   "texte_fertig": 4352
   },
   {
    "zeit": "2025-05-25T22:00",
@@ -381,7 +381,7 @@
    "haus_server_laufend": 0.625,
    "bad_bedarf_kwh": 207.93,
    "bad_server_laufend": 1.0,
-   "texte_fertig": 3968
+   "texte_fertig": 4352
   },
   {
    "zeit": "2025-05-25T23:00",
@@ -397,7 +397,7 @@
    "haus_server_laufend": 0.625,
    "bad_bedarf_kwh": 207.93,
    "bad_server_laufend": 1.941,
-   "texte_fertig": 4224
+   "texte_fertig": 4352
   }
  ],
  "migrationen": [
@@ -405,10 +405,10 @@
    "zeit": "2025-05-25T10:00",
    "von": "Haus 01",
    "nach": "Sportbad St. Jakob",
-   "checkpoint_texte": 2560,
-   "dauer_s": 1.62,
-   "neue_pid": 4858
+   "checkpoint_texte": 4352,
+   "dauer_s": 0.01,
+   "neue_pid": 37324
   }
  ],
- "aktualisiert": 1795252669.619338
+ "aktualisiert": 1795260253.273362
 }
