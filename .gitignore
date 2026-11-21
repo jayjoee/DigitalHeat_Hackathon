@@ -10,3 +10,6 @@ dashboard/live.tmp
 messungen/*.tmp
 daten/roh/mlperf/*.json
 messungen/live_job_flotte/
+prototyp/demo-credentials/
+prototyp/credentials/
+**/credentials/

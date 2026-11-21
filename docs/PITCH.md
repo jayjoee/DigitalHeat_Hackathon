@@ -8,8 +8,9 @@ Alle Zahlen stammen aus dem Code (`ERGEBNISSE.md`, `KOSTEN_DH.md`) und sind in C
 
 ## Ablauf (5 Minuten)
 
-**1. Problem (30 s)**
-Server machen aus Strom fast nur Wärme, und die wird heute weggekühlt. Ölheizungen in Basel verbrennen gleichzeitig Öl für dieselbe Wärme.
+**1. Einstieg mit den Kennzahlen (30 s)**, so verlangt es der Case
+«8 Server pro Haus. 93 % der Wärme gedeckt. 5 kWh im ganzen Jahr weggekühlt. 52 % Auslastung. 0 % verpasste Fristen. Break-even 0,23 CHF pro Server-Stunde.»
+Danach in einem Satz das Problem: Server machen aus Strom fast nur Wärme, und die wird heute weggekühlt, während Basler Ölheizungen Öl für dieselbe Wärme verbrennen.
 
 **2. Lösung im Haus (45 s)**
 - Pro Referenzhaus 8 Server mit Flüssigkühlung. Sie decken **93 %** der Wärme, der Haushalt bekommt sie **gratis**.
@@ -23,7 +24,7 @@ Server machen aus Strom fast nur Wärme, und die wird heute weggekühlt. Ölheiz
 - Wird eine Frist knapp und braucht niemand die Wärme, geht die Arbeit an eine andere Schweizer Cloud: ohne Bad **180'000 Server-h** im Jahr, mit Bad nur **12'500 Server-h**.
 - Ein Auftrag wandert per Checkpoint zwischen Standorten. Getestet: Das Ergebnis ist exakt dasselbe wie ohne Unterbruch.
 
-**4. Live-Demo (60 s)** (siehe unten)
+**4. Live-Demo (60 s)**, der Case verlangt einen Januartag, einen Julitag und einen unterbrochenen Job (siehe unten)
 
 **5. Geld (45 s)** (Machbarkeit)
 - Kunden: Pharma, Banken, Spitäler, deren Daten in der Schweiz und unter Schweizer Recht bleiben müssen.
@@ -48,7 +49,9 @@ bash dashboard/starten.sh                    # Dashboard auf http://localhost:87
 ```
 Browser öffnen und zum Abschnitt «Echter Job, live gesteuert» scrollen.
 
-**Demo A: Der Job wandert vom Haus ins Bad** (ca. 90 s, zweites Terminal):
+**Zuerst im Dashboard (20 s):** Januartag und Julitag zeigen, die Diagramme «Ein Januartag» und «Ein Julitag». Im Januar laufen alle 8 Server, im Juli im Mittel 0,6.
+
+**Demo A: Der Job wird unterbrochen und wandert vom Haus ins Bad** (ca. 90 s, zweites Terminal):
 ```sh
 rm -rf messungen/live_job_flotte             # frischer Arbeitsordner, damit die Textzahlen wie unten stimmen
 .venv/bin/python src/scheduler/live.py --flotte --sekunden 3
@@ -76,7 +79,7 @@ rm -rf messungen/live_job_flotte             # frischer Arbeitsordner, damit die
 | Woher wisst ihr, dass 60 % fest verkauft werden? | Wissen wir nicht. Zusagbar sind 93 %, belegt mit der Prognose. Ob Kunden 60 % kaufen, ist die Hauptannahme. Der Schieberegler im Dashboard zeigt die Folgen. |
 | Wieso 50 Server im Bad und nicht 170? | 170 Server würden die Wärme decken, aber so viele Aufträge gibt es nicht. 50 Server bringen das beste Ergebnis (Suche von 10 bis 80). |
 | Was kostet eine Migration? | Neustart bis rechenbereit 0,3 s, Checkpoint bis 6 s. Die 3'457 Migrationen im Jahr kosten zusammen rund 2 kWh. Nicht gerechnet: Übertragung über das Netz. |
-| Datensicherheit im Privatkeller? | Verplombtes Gehäuse, Verschlüsselung, ISO 27001 (Premise im Design-Doc). Der Prototyp trennt die Oberflächen für Serverhalter und Pharma (`DigitalHeat_Demo 3/`). |
+| Datensicherheit im Privatkeller? | Verplombtes Gehäuse, Verschlüsselung, ISO 27001 (Premise im Design-Doc). Der Prototyp trennt die Oberflächen für Serverhalter und Pharma (`prototyp/`). |
 | Warum kein Hallenbad? | Das Rialto macht im Sommer Pause, das Hallenbad Eglisee steht nur im Winter. Das Sportbad St. Jakob ist offen, wenn die Häuser keine Wärme brauchen. |
 | Ist 2025 repräsentativ? | 2025 war ein milder Winter. In den Jahren 2010–2025 schwankt die Deckung zwischen 84,5 % und 95,9 % (`ANNAHMEN_PRUEFUNG.md`). |
 
