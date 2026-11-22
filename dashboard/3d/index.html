@@ -166,7 +166,7 @@
 
 <button id="klapp" class="offen" title="Toggle panel (P)">⟩</button>
 <aside id="jetzt" class="panel">
-  <h2 class="k">House 01 · this hour</h2>
+  <h2 class="k" id="j-titel">House 01 · this hour</h2>
   <div class="zeile"><span>Heat demand</span><span id="j-bed">–</span></div>
   <div class="zeile"><span>Covered by servers</span><span id="j-deck">–</span></div>
   <div class="balken"><i id="j-deck-b" style="background:var(--heat)"></i></div>
@@ -283,9 +283,32 @@ const HD = [1, 2].map(n => {
     srv: S[p + '_srv'], ns: n === 1 ? M.server_haus : M.server_haus2 };
 });
 const NS2 = M.server_haus2;
+// While src/scheduler/live.py runs, House 01 shows that scheduler's values (case model, 0 W when paused) for the reported hour,
+// not those of the shutdown model. Otherwise the tank looks almost empty while the live job pauses because it is full.
+let liveStand = null;
+const istLive = (hd, i) => liveStand !== null && hd === HD[0] && i === liveStand.i;
+function liveLoesen() {
+  if (!liveStand) return;
+  for (const [feld, wert] of Object.entries(liveStand.vorher)) HD[0][feld][liveStand.i] = wert;
+  liveStand = null;
+}
+function liveUebernehmen(L, i) {
+  liveLoesen();
+  const z = L.jetzt || {};
+  if (i < 0 || L.standort || typeof z.speicher_kwh !== 'number' || typeof z.strom_kwh !== 'number') return; // --flotte reports different fields
+  const hd = HD[0], echter = (L.echter_server || hd.ns) - 1;
+  // Servers fill in order as in live.py anteil(); the real server follows the measured process state
+  const srv = Array.from({ length: hd.ns }, (_, k) =>
+    k === echter ? Number(L.prozess === 'läuft') : Math.min(1, Math.max(0, z.strom_kwh - k)));
+  const neu = { bed: z.bedarf_kwh, gen: z.genutzt_kwh, sp: z.speicher_kwh, lauf: z.server_laufend,
+    on: srv.filter(x => x > 0.02).length, srv };
+  liveStand = { i, strom: z.strom_kwh, vorher: {} };
+  for (const [feld, wert] of Object.entries(neu)) { liveStand.vorher[feld] = hd[feld][i]; hd[feld][i] = wert; }
+}
 // Zustand eines Servers aus dem Modell: Last pro Server stammt aus Entscheidung.server_belegt_kwh des Scheduler-Kerns.
 // «Pausieren» ist der Vergleichsfall: alle Server bleiben an, die Arbeit bleibt dieselbe.
 function srvZustand(hd, i, k) {
+  if (istLive(hd, i)) return hd.srv[i][k] > 0.02 ? 'rechnet' : 'standby';
   const on = modus === 'pausieren' ? hd.ns : hd.on[i];
   if (k >= on) return 'standby';
   if (modus !== 'pausieren' && i > 0 && k >= hd.on[i - 1]) return 'start';   // in dieser Stunde eingeschaltet
@@ -294,6 +317,7 @@ function srvZustand(hd, i, k) {
 const srvLast = (hd, i, k) => hd.srv[i][k] || 0;
 function srvWatt(hd, i, k) {
   const z = srvZustand(hd, i, k), l = srvLast(hd, i, k);
+  if (istLive(hd, i)) return 1000 * l;
   if (z === 'standby') return M.standby_watt;
   const start = z === 'start' ? M.start_minuten / 60 : 0;
   return 1000 * (l + start) + M.leerlauf_watt * Math.max(0, 1 - l - start);
@@ -785,7 +809,7 @@ function wendeHaus(o, zk, on, lauf, sp, bed, gen, kesselKw, tRaum, weg = false) 
     });
     const sel = auswahl && auswahl.art === 'server' && auswahl.haus === hn && auswahl.k === k;
     const echt = liveJob && hn === 1 && k === NH - 1 && liveJob.ort === 'haus';
-    r.koerper.material.emissiveIntensity = sel ? 0.1 : echt ? 0.2 + 0.1 * Math.sin(now / 250) : 0;
+    r.koerper.material.emissiveIntensity = sel ? 0.1 : echt && liveJob.laeuft ? 0.2 + 0.1 * Math.sin(now / 250) : 0;
     r.luefter.rotation.z += z === 'standby' ? 0 : 0.05 + 0.3 * l;
   });
   const fuell = clamp(sp / M.speicher_haus_kwh, 0.02, 1);
@@ -874,7 +898,7 @@ function satz(i) {
   }
   const hd = HD[0], on = hd.on[i], bed = hd.bed[i], gen = hd.gen[i], k = kessel(hd, i);
   const sp = hd.sp[i] / M.speicher_haus_kwh, badOffen = S.b_bed[i] > 0;
-  if (modus === 'pausieren' && NH - hd.lauf[i] > 0.5) {
+  if (modus === 'pausieren' && !istLive(hd, i) && NH - hd.lauf[i] > 0.5) {
     const leer = NH - hd.lauf[i], weg = sp >= 0.85;
     return `${d}: <span class="oel">Pause mode</span>: all ${NH} servers stay on, with ${fmt(leer, 1)} idle `
       + `(${M.leerlauf_watt} W each).` + (weg ? ' The tank is full, so idle heat is <span class="oel">rejected</span>.' : '');
@@ -882,7 +906,7 @@ function satz(i) {
   if (bed > 2) {
     const deck = Math.round(100 * Math.min(1, gen / bed));
     return `${d}: <b>${on} of ${NH} servers</b> compute and cover <em>${deck} %</em> of heat demand`
-      + (k > 0.05 ? `. The <span class="oel">wood stove</span> supplies the rest.` : '.') + (sp > 0.85 ? ' The tank is full.' : '');
+      + (k > 0.05 ? `. The <span class="oel">wood stove</span> supplies the rest.` : '.') + (sp > (istLive(hd, i) ? 0.999 : 0.85) ? ' The tank is full.' : '');
   }
   if (badOffen) return `${d}: The house mainly needs hot water. <b>${on} server${on === 1 ? '' : 's'}</b> can cover it. `
     + `<b>${S.b_on[i]} servers at the sports pool</b> run other jobs and heat the pool.`;
@@ -938,6 +962,16 @@ function panelJetzt(i) {
     const J = CL[modus], diff = CL.pausieren.strom_kwh - CL.abschalten.strom_kwh;
     el('b-jahr').innerHTML = `${fmt(J.strom_kwh)} kWh <span class="${pause ? 'nein' : 'ok'}">${pause ? '+' : '−'}${fmt(diff)}</span>`;
     el('b-weg').innerHTML = `<span class="${J.abgefuehrt_kwh > 50 ? 'nein' : 'ok'}">${fmt(J.abgefuehrt_kwh)} kWh</span>`;
+  }
+  const live = istLive(hd, i);
+  el('j-titel').textContent = live ? 'House 01 · live scheduler' : 'House 01 · this hour';
+  for (const id of ['b-jahr', 'b-weg']) el(id).parentElement.style.display = live ? 'none' : '';
+  if (live) {
+    el('j-on').textContent = `${hd.on[i]} on now · ${fmt(hd.lauf[i], 1)} avg`;   // measured state now, scheduler average for the hour
+    el('b-titel').textContent = 'Live scheduler · case model';
+    el('b-jetzt').textContent = `${fmt(liveStand.strom, 2)} kWh`;
+    el('b-andere-t').textContent = 'Power when paused';
+    el('b-pause').textContent = '0 W (case assumption)';
   }
   wolkenKarten(i);
   if (!tour) el('satz').innerHTML = satz(i);
@@ -1222,16 +1256,20 @@ async function pruefeLive() {
     const ort = (L.standort || '').toLowerCase().includes('bad') ? 'bad' : 'haus', laeuft = L.prozess === 'läuft';
     const art = L.auftrag === 'docking' ? 'docking process (Abl kinase)' : 'embedding process';
     const einheit = L.auftrag === 'docking' ? 'molecules' : 'texts';
-    liveJob = { ort, text: `real ${art} ${laeuft ? 'running' : 'paused'}, ${fmt(L.texte_fertig || 0)} ${einheit}` };
+    liveJob = { ort, laeuft, text: `real ${art} ${laeuft ? 'running' : 'paused'}, ${fmt(L.texte_fertig || 0)} ${einheit}` };
     el('live').classList.add('an');
     el('live-text').textContent = `LIVE · job ${laeuft ? 'running' : 'paused'} · ${ort === 'bad' ? 'at the sports pool' : 'House 01, server ' + (L.echter_server || 8)} · ${fmt(L.texte_fertig || 0)} ${einheit}`;
-    if (L.jetzt && L.jetzt.zeit && !tour && !thermo.abspielen) {
-      const idx = S.zeit.indexOf(L.jetzt.zeit.slice(5, 13));
+    const idx = L.jetzt && L.jetzt.zeit ? S.zeit.indexOf(L.jetzt.zeit.slice(5, 13)) : -1;
+    liveUebernehmen(L, idx); letzteStunde = -1;
+    if (!tour && !thermo.abspielen) {
       if (idx >= 0) { zeitH = idx; spielt = false; el('play').textContent = '▶'; }
     }
-  } catch { liveJob = null; el('live').classList.remove('an'); }
+  } catch {
+    if (liveStand) { liveLoesen(); letzteStunde = -1; }
+    liveJob = null; el('live').classList.remove('an');
+  }
 }
-setInterval(pruefeLive, 1500); pruefeLive();
+setInterval(pruefeLive, 500); pruefeLive();
 
 // ---------- Schleife ----------
 const uhr = new THREE.Clock();
