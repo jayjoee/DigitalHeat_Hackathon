@@ -1,0 +1,14 @@
+
+  #kpis, #klapp, #hinweis, #kopf h1, #zeitkopf .knopf, #zeitkopf .segment, #zeitkopf select, #jetzt .off, .v-hide { display: none !important }
+  #kopf { top: 0; left: 0; right: 0; height: 104px; border: 0; border-radius: 0; background: #051c2c; padding: 0 64px; justify-content: space-between }
+  #v-title { font: 400 44px Georgia, serif; color: #fff; white-space: nowrap }
+  #live { order: 2; font-size: 24px; padding: 12px 22px; gap: 12px }
+  #live i { width: 15px; height: 15px }
+  #v-evidence { position: fixed; z-index: 5; left: 24px; top: 124px; padding: 10px 18px; border-radius: 8px; font-size: 20px; color: #dbe4f0; background: rgba(5,28,44,.86); border-left: 5px solid #2251ff }
+  #satz { top: auto; bottom: 150px; max-width: 1340px; left: 730px; font-size: 25px; padding: 12px 26px; border-radius: 18px }
+  #jetzt { top: 124px; right: 24px; width: 430px; max-height: none; padding: 20px 24px; overflow: hidden }
+  #jetzt h2.k { font-size: 18px } #jetzt .zeile { font-size: 23px; padding: 5px 0 } #jetzt .balken { height: 9px }
+  #jetzt .punkte { gap: 8px; margin-top: 10px } #jetzt .punkte i { width: 28px; height: 28px }
+  #zeit { left: 24px; right: 24px; bottom: 20px } #datum { font-size: 25px; min-width: 360px } #wetter { font-size: 22px }
+  .label { font-size: 18px } .label.temp { font-size: 18px }
+  .wolke { width: 264px; font-size: 16px } .wolke b.t { font-size: 14px } .wolke small { font-size: 13px }

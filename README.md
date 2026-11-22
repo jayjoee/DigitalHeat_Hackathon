@@ -103,6 +103,21 @@ Open [the guided demo](http://127.0.0.1:18200/) and click **Start live demo**. I
 | Winter customer scenario | About CHF 27'500 if an additional customer buys the remaining winter hours. 82 % of compute hours fall in the heating season |
 | Proposed pilot | One house, two servers, one winter, CHF 81'500 |
 
+### What each break-even means
+
+| Question | Threshold | What it includes |
+|---|---|---|
+| Case definition | CHF 0.226 per server-hour | Electricity less the value of useful heat. DigitalHeat does not receive that value, because the household gets the heat for free |
+| Electricity alone, without a heat credit | CHF 0.33 per server-hour (0.34 with power-down) | Electricity only |
+| All costs, one constant price for every hour | CHF 2.62 per server-hour (0.33 per L4-hour) | Power-down model with hardware, installation, operations, platform fee, tax, 4.5% interest and resale, all hours sold |
+| All costs, anchor price if the rest pays CHF 0.55 per L4-hour | CHF 1.95 per server-hour (0.24 per L4-hour) | The other customers carry part of the cost |
+| All costs, anchor price if the rest pays spot | CHF 3.07 per server-hour (0.38 per L4-hour) | The cautious threshold used for the pilot |
+| Share of hours that must sell at target prices | 66% | Unsold hours still consume electricity to heat the home |
+
+At the target prices the investment is repaid after **3.3 years including interest** (2.9 years without), if all hours sell. The result depends on the assumed 20% resale value of the servers after five years: without resale it falls from about CHF 35'000 to CHF 26'900 a year and the required share of sold hours rises to 74%. If every hour earns only the spot price, the house loses about CHF 12'900 a year.
+
+In the oil reference home, replacing the boiler avoids about **3'700 litres of heating oil a year**. This is the whole heat demand at 85% boiler efficiency, with the wood stove supplying what the servers do not. The servers' own share is about 3'300 litres.
+
 The hardware, heat demand, operating states and commercial assumptions are modelled. The figures rely on enough suitable work and unconfirmed customer prices and volumes. See [plain-English results and assumptions](docs/ergebnisse/RESULTATE_EINFACH.md), [workloads and measurements](daten/JOBTYPEN.md) and [the case brief](docs/CASE.md).
 
 The prototype runs actual text embeddings and molecular docking on a CPU. The two-laptop screens exchange checkpoint state. The optional ML forecast is trained on modelled heat demand. The project has yet to validate physical L4 electricity consumption, recovered water temperature or the protection of confidential customer workloads. The proposed service is for public, synthetic or appropriately anonymised and customer-approved tasks.
@@ -135,6 +150,14 @@ Individual entry points include `python3 src/scheduler/jahr.py --server 8` for t
 | `daten/` | Inputs, workload sources and reproducible results |
 | `docs/`, `messungen/` | Case, technical and financial notes, and measurement reports |
 | `tests/` | Regression tests |
+| `presentation/` | Pitch video, slides, script and the code that produced them |
+
+## Pitch material
+
+- [Pitch video (720p, 5:17)](presentation/DigitalHeat_Pitch.mp4)
+- [Slides](presentation/DigitalHeat_slides.pdf)
+- [Narration script](presentation/SCRIPT.md)
+- [Code behind video and stage presentation](presentation/README.md)
 
 ## AI tools, templates and third-party components
 

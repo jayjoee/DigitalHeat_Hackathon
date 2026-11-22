@@ -146,7 +146,7 @@
   },
   "job_a_kwh": {
    "wert": 0.941,
-   "quelle": "eigene Messung, powermetrics CPU+GPU+ANE, Mittel über 89 s Job (28.9 W); Leerlauf 1.4 W über 61 s, Mehrleistung durch den Job 27.5 W"
+   "quelle": "Stellvertreter für Docking: eigene Embedding-Messung, powermetrics CPU+GPU+ANE, Mittel über 89 s Job (28.9 W); Leerlauf 1.4 W über 61 s, Mehrleistung durch den Job 27.5 W"
   },
   "job_a_frist_h": {
    "wert": 24,

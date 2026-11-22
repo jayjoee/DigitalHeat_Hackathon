@@ -1,0 +1,71 @@
+<div id="film">
+  <div class="fx" id="f-question"></div>
+  <div class="fx" id="f-brand"><b>DigitalHeat</b><i></i><span>Computing that heats · Basel</span></div>
+  <div class="fx f-tag" id="f-tag1">1 · Homes first</div>
+  <div class="fx f-tag" id="f-tag2">2 · Pool takes what homes can’t use</div>
+
+  <div class="fx f-panel" id="p-queue">
+    <h2>One shared job queue</h2>
+    <p class="sub">20 homes and a public sports pool draw from the same queue</p>
+    <div id="q-grid">
+      <div class="h">Job type</div><div class="h" data-col="1">Can pause?</div><div class="h" data-col="2">Due</div>
+      <div class="name" data-row="1">Molecular docking<small>main job · pharma research</small></div><div class="yes" data-row="1" data-col="1">Yes</div><div data-row="1" data-col="2">no deadline<br>(our assumption)</div>
+      <div class="name" data-row="2">Microscopy analysis<small>urgent</small></div><div class="no" data-row="2" data-col="1">No</div><div data-row="2" data-col="2">within 2 hours</div>
+    </div>
+    <p class="f-key" id="q-demo"><b>Docking is 95%</b> of all compute hours in our model</p>
+    <p class="q-note">Energy per batch: 0.94 kWh assumed for docking (not yet measured), public image-recognition benchmark for microscopy</p>
+  </div>
+
+  <div class="fx f-panel" id="p-sched">
+    <h2>The scheduler, every hour</h2>
+    <p class="sub">Illustration of our scheduling rule</p>
+    <div class="f-step"><em>1</em><span><b>Must start now</b> to meet its deadline: always runs</span></div>
+    <div class="f-step"><em>2</em><span><b>Docking work</b> fills up to heat demand plus free tank space</span></div>
+    <div class="f-step"><em>3</em><span><b>Everything else waits</b> in the queue</span></div>
+    <div id="s-stage">
+      <p style="top:0">Job queue</p>
+      <p style="top:134px">Runs this hour</p>
+      <p style="top:274px">Waits</p>
+      <div id="s-run"></div>
+      <div id="s-cap">Limit: heat demand + free tank space</div>
+    </div>
+  </div>
+
+  <div class="fx f-panel" id="p-ml">
+    <h2>Machine learning heat forecast</h2>
+    <p class="sub">Forecasts modelled heat demand up to 6 hours ahead</p>
+    <div id="m-in"><div>Weather forecast</div><div>Time of day</div><div>Season</div><div>Past demand</div></div>
+    <div id="m-model"><p><b>Gradient boosting</b>Each small tree corrects the error of the trees before it</p></div>
+    <div id="m-chart"></div>
+    <div class="m-err"><span>Copy yesterday</span><i class="base"></i><b>0.59 kWh error</b></div>
+    <div class="m-err"><span>ML, unseen months (Jul–Dec)</span><i></i><b>0.53 kWh error</b></div>
+    <div class="m-row"><span><b>Planning experiment:</b> forecast → target for the tank. Energy saved: under 0.01%</span></div>
+    <div class="m-row"><span class="x">✕</span><span><b>Not connected to the live router</b> yet</span></div>
+    <div class="m-row m-lever"><span><b>The big lever: switch idle servers off.</b> 230 W idle → 10 W standby</span></div>
+  </div>
+
+  <div class="fx f-panel" id="p-day">
+    <h2>Day-ahead commitment</h2>
+    <p class="sub">Customers learn today what they get tomorrow</p>
+    <div class="d-step"><em>12:00</em><span><b>Take the weather forecast</b>ECMWF forecast for Basel</span></div>
+    <div class="d-step"><em>Dry run</em><span><b>Run a copy of the scheduler</b>Simulate tomorrow hour by hour</span></div>
+    <div class="d-step"><em>× 0.93</em><span><b>Keep a safety margin</b>Calibrated January–June, tested July–December</span></div>
+    <div id="d-result"><b>91.4%</b><span>of fleet server-hours committed a day ahead, with unlimited docking work</span></div>
+  </div>
+
+  <div class="fx" id="f-hand">
+    <div id="h-board">
+      <div class="head">The work moves with the heat</div><div class="h-same">Two processes on the same laptop, playing house and pool</div>
+      <div class="date">25 May 2025</div>
+      <div class="h-who" style="left:56px">House</div><div class="h-who" style="left:988px">Sports pool</div>
+      <div class="h-screen" style="left:40px"><img id="h-house" alt=""></div>
+      <div class="h-screen" style="left:972px"><img id="h-pool" alt=""></div>
+      <div class="h-ring" id="h-ring-state"></div><div class="h-ring" id="h-ring-rank"></div>
+      <svg id="h-wire" width="1920" height="1080"><path d="M490 420 Q960 120 1430 420" fill="none" stroke="#00a9f4" stroke-width="7" stroke-dasharray="16 16"/></svg>
+      <div id="h-packet"><b>Checkpoint · molecule 8</b>encrypted with TLS</div>
+    </div>
+  </div>
+
+  <div class="fx" id="f-deck"></div>
+  <div class="fx" id="f-end"></div>
+</div>

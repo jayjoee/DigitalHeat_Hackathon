@@ -1,0 +1,4497 @@
+[
+{
+"text": "Can",
+"start": 0.0,
+"end": 0.159
+},
+{
+"text": "your",
+"start": 0.24,
+"end": 0.32
+},
+{
+"text": "computing",
+"start": 0.4,
+"end": 0.88
+},
+{
+"text": "power",
+"start": 0.96,
+"end": 1.28
+},
+{
+"text": "heat",
+"start": 1.44,
+"end": 1.6
+},
+{
+"text": "a",
+"start": 1.64,
+"end": 1.68
+},
+{
+"text": "home",
+"start": 1.76,
+"end": 2.08
+},
+{
+"text": "while",
+"start": 2.16,
+"end": 2.32
+},
+{
+"text": "doing",
+"start": 2.44,
+"end": 2.56
+},
+{
+"text": "useful",
+"start": 2.64,
+"end": 2.96
+},
+{
+"text": "work?",
+"start": 3.04,
+"end": 3.68
+},
+{
+"text": "We're",
+"start": 4.0,
+"end": 4.24
+},
+{
+"text": "DigitalHeat,",
+"start": 4.4,
+"end": 5.28
+},
+{
+"text": "and",
+"start": 5.36,
+"end": 5.44
+},
+{
+"text": "we",
+"start": 5.52,
+"end": 5.6
+},
+{
+"text": "put",
+"start": 5.68,
+"end": 5.76
+},
+{
+"text": "servers",
+"start": 5.84,
+"end": 6.24
+},
+{
+"text": "in",
+"start": 6.28,
+"end": 6.32
+},
+{
+"text": "the",
+"start": 6.4,
+"end": 6.48
+},
+{
+"text": "basements",
+"start": 6.56,
+"end": 6.88
+},
+{
+"text": "of",
+"start": 7.0,
+"end": 7.12
+},
+{
+"text": "older,",
+"start": 7.28,
+"end": 7.6
+},
+{
+"text": "poorly",
+"start": 7.68,
+"end": 8.0
+},
+{
+"text": "insulated",
+"start": 8.08,
+"end": 8.56
+},
+{
+"text": "houses",
+"start": 8.64,
+"end": 8.96
+},
+{
+"text": "in",
+"start": 9.04,
+"end": 9.2
+},
+{
+"text": "Basel",
+"start": 9.32,
+"end": 9.76
+},
+{
+"text": "that",
+"start": 9.88,
+"end": 10.0
+},
+{
+"text": "still",
+"start": 10.16,
+"end": 10.32
+},
+{
+"text": "heat",
+"start": 10.44,
+"end": 10.56
+},
+{
+"text": "with",
+"start": 10.68,
+"end": 10.8
+},
+{
+"text": "oil",
+"start": 10.96,
+"end": 11.12
+},
+{
+"text": "or",
+"start": 11.2,
+"end": 11.28
+},
+{
+"text": "gas.",
+"start": 11.36,
+"end": 12.24
+},
+{
+"text": "Our",
+"start": 12.32,
+"end": 12.56
+},
+{
+"text": "servers",
+"start": 12.76,
+"end": 12.96
+},
+{
+"text": "replace",
+"start": 13.24,
+"end": 13.52
+},
+{
+"text": "that",
+"start": 13.6,
+"end": 13.68
+},
+{
+"text": "boiler,",
+"start": 13.76,
+"end": 14.347
+},
+{
+"text": "with",
+"start": 14.373,
+"end": 14.4
+},
+{
+"text": "an",
+"start": 14.44,
+"end": 14.48
+},
+{
+"text": "existing",
+"start": 14.76,
+"end": 15.04
+},
+{
+"text": "wood",
+"start": 15.121,
+"end": 15.28
+},
+{
+"text": "stove",
+"start": 15.36,
+"end": 15.68
+},
+{
+"text": "as",
+"start": 15.761,
+"end": 15.84
+},
+{
+"text": "backup",
+"start": 16.04,
+"end": 16.24
+},
+{
+"text": "for",
+"start": 16.28,
+"end": 16.32
+},
+{
+"text": "the",
+"start": 16.399,
+"end": 16.48
+},
+{
+"text": "coldest",
+"start": 16.56,
+"end": 16.96
+},
+{
+"text": "weather.",
+"start": 17.12,
+"end": 17.84
+},
+{
+"text": "In",
+"start": 17.83,
+"end": 17.87
+},
+{
+"text": "an",
+"start": 17.91,
+"end": 18.07
+},
+{
+"text": "oil-heated",
+"start": 18.19,
+"end": 18.63
+},
+{
+"text": "reference",
+"start": 18.71,
+"end": 19.03
+},
+{
+"text": "home,",
+"start": 19.11,
+"end": 19.51
+},
+{
+"text": "that",
+"start": 19.59,
+"end": 19.67
+},
+{
+"text": "saves",
+"start": 19.75,
+"end": 19.91
+},
+{
+"text": "about",
+"start": 19.99,
+"end": 20.31
+},
+{
+"text": "three",
+"start": 20.39,
+"end": 20.55
+},
+{
+"text": "thousand",
+"start": 20.71,
+"end": 21.03
+},
+{
+"text": "seven",
+"start": 21.27,
+"end": 21.43
+},
+{
+"text": "hundred",
+"start": 21.51,
+"end": 21.75
+},
+{
+"text": "litres",
+"start": 21.83,
+"end": 22.07
+},
+{
+"text": "of",
+"start": 22.15,
+"end": 22.23
+},
+{
+"text": "heating",
+"start": 22.31,
+"end": 22.55
+},
+{
+"text": "oil",
+"start": 22.63,
+"end": 22.87
+},
+{
+"text": "a",
+"start": 22.95,
+"end": 23.03
+},
+{
+"text": "year.",
+"start": 23.19,
+"end": 23.75
+},
+{
+"text": "In",
+"start": 23.97,
+"end": 24.01
+},
+{
+"text": "the",
+"start": 24.09,
+"end": 24.17
+},
+{
+"text": "case",
+"start": 24.29,
+"end": 24.41
+},
+{
+"text": "model,",
+"start": 24.49,
+"end": 24.97
+},
+{
+"text": "eight",
+"start": 25.09,
+"end": 25.21
+},
+{
+"text": "servers",
+"start": 25.29,
+"end": 25.69
+},
+{
+"text": "cover",
+"start": 25.85,
+"end": 26.01
+},
+{
+"text": "ninety-three",
+"start": 26.09,
+"end": 26.49
+},
+{
+"text": "percent",
+"start": 26.65,
+"end": 27.05
+},
+{
+"text": "of",
+"start": 27.09,
+"end": 27.13
+},
+{
+"text": "a",
+"start": 27.21,
+"end": 27.29
+},
+{
+"text": "reference",
+"start": 27.49,
+"end": 27.69
+},
+{
+"text": "home's",
+"start": 27.81,
+"end": 28.01
+},
+{
+"text": "heat.",
+"start": 28.17,
+"end": 28.73
+},
+{
+"text": "Over",
+"start": 28.86,
+"end": 28.98
+},
+{
+"text": "a",
+"start": 29.06,
+"end": 29.14
+},
+{
+"text": "year,",
+"start": 29.22,
+"end": 29.62
+},
+{
+"text": "they",
+"start": 29.7,
+"end": 29.78
+},
+{
+"text": "dump",
+"start": 29.86,
+"end": 30.1
+},
+{
+"text": "just",
+"start": 30.18,
+"end": 30.26
+},
+{
+"text": "five",
+"start": 30.42,
+"end": 30.66
+},
+{
+"text": "kilowatt-hours,",
+"start": 30.82,
+"end": 31.78
+},
+{
+"text": "run",
+"start": 31.86,
+"end": 31.94
+},
+{
+"text": "at",
+"start": 32.02,
+"end": 32.1
+},
+{
+"text": "fifty-two",
+"start": 32.18,
+"end": 32.58
+},
+{
+"text": "percent",
+"start": 32.66,
+"end": 32.9
+},
+{
+"text": "utilisation,",
+"start": 32.98,
+"end": 33.94
+},
+{
+"text": "and",
+"start": 33.98,
+"end": 34.02
+},
+{
+"text": "finish",
+"start": 34.18,
+"end": 34.5
+},
+{
+"text": "every",
+"start": 34.66,
+"end": 34.9
+},
+{
+"text": "urgent",
+"start": 34.98,
+"end": 35.3
+},
+{
+"text": "job",
+"start": 35.38,
+"end": 35.62
+},
+{
+"text": "on",
+"start": 35.78,
+"end": 35.94
+},
+{
+"text": "time.",
+"start": 36.02,
+"end": 36.62
+},
+{
+"text": "On",
+"start": 36.9,
+"end": 37.06
+},
+{
+"text": "energy",
+"start": 37.22,
+"end": 37.38
+},
+{
+"text": "alone,",
+"start": 37.58,
+"end": 37.94
+},
+{
+"text": "they",
+"start": 38.02,
+"end": 38.1
+},
+{
+"text": "break",
+"start": 38.18,
+"end": 38.42
+},
+{
+"text": "even",
+"start": 38.58,
+"end": 38.74
+},
+{
+"text": "at",
+"start": 38.82,
+"end": 38.9
+},
+{
+"text": "twenty-three",
+"start": 39.06,
+"end": 39.38
+},
+{
+"text": "Swiss",
+"start": 39.54,
+"end": 39.78
+},
+{
+"text": "centimes",
+"start": 39.94,
+"end": 40.26
+},
+{
+"text": "per",
+"start": 40.34,
+"end": 40.5
+},
+{
+"text": "server-hour.",
+"start": 40.58,
+"end": 41.62
+},
+{
+"text": "That",
+"start": 41.675,
+"end": 41.835
+},
+{
+"text": "assumes",
+"start": 41.915,
+"end": 42.315
+},
+{
+"text": "unlimited",
+"start": 42.435,
+"end": 42.795
+},
+{
+"text": "docking",
+"start": 42.875,
+"end": 43.195
+},
+{
+"text": "work,",
+"start": 43.275,
+"end": 43.595
+},
+{
+"text": "and",
+"start": 43.635,
+"end": 43.675
+},
+{
+"text": "zero",
+"start": 43.915,
+"end": 44.155
+},
+{
+"text": "power",
+"start": 44.315,
+"end": 44.555
+},
+{
+"text": "while",
+"start": 44.635,
+"end": 44.875
+},
+{
+"text": "paused.",
+"start": 44.955,
+"end": 45.835
+},
+{
+"text": "When",
+"start": 45.815,
+"end": 45.856
+},
+{
+"text": "we",
+"start": 45.936,
+"end": 46.015
+},
+{
+"text": "include",
+"start": 46.216,
+"end": 46.415
+},
+{
+"text": "idle",
+"start": 46.576,
+"end": 46.816
+},
+{
+"text": "power",
+"start": 46.896,
+"end": 47.216
+},
+{
+"text": "and",
+"start": 47.256,
+"end": 47.295
+},
+{
+"text": "switch",
+"start": 47.375,
+"end": 47.615
+},
+{
+"text": "servers",
+"start": 47.695,
+"end": 48.015
+},
+{
+"text": "off,",
+"start": 48.176,
+"end": 48.655
+},
+{
+"text": "they",
+"start": 48.736,
+"end": 48.816
+},
+{
+"text": "still",
+"start": 48.895,
+"end": 49.136
+},
+{
+"text": "cover",
+"start": 49.215,
+"end": 49.535
+},
+{
+"text": "ninety",
+"start": 49.615,
+"end": 49.855
+},
+{
+"text": "point",
+"start": 50.016,
+"end": 50.255
+},
+{
+"text": "five",
+"start": 50.336,
+"end": 50.416
+},
+{
+"text": "percent.",
+"start": 50.575,
+"end": 51.535
+},
+{
+"text": "So",
+"start": 51.616,
+"end": 51.696
+},
+{
+"text": "how",
+"start": 51.735,
+"end": 51.775
+},
+{
+"text": "does",
+"start": 51.855,
+"end": 51.936
+},
+{
+"text": "it",
+"start": 51.976,
+"end": 52.016
+},
+{
+"text": "work?",
+"start": 52.095,
+"end": 52.576
+},
+{
+"text": "Our",
+"start": 52.815,
+"end": 53.055
+},
+{
+"text": "model",
+"start": 53.216,
+"end": 53.375
+},
+{
+"text": "connects",
+"start": 53.455,
+"end": 53.775
+},
+{
+"text": "twenty",
+"start": 53.856,
+"end": 54.095
+},
+{
+"text": "homes",
+"start": 54.176,
+"end": 54.496
+},
+{
+"text": "and",
+"start": 54.536,
+"end": 54.576
+},
+{
+"text": "a",
+"start": 54.655,
+"end": 54.736
+},
+{
+"text": "public",
+"start": 54.896,
+"end": 55.056
+},
+{
+"text": "sports",
+"start": 55.136,
+"end": 55.456
+},
+{
+"text": "pool",
+"start": 55.536,
+"end": 55.776
+},
+{
+"text": "through",
+"start": 55.855,
+"end": 56.096
+},
+{
+"text": "one",
+"start": 56.175,
+"end": 56.416
+},
+{
+"text": "shared",
+"start": 56.575,
+"end": 56.895
+},
+{
+"text": "job",
+"start": 56.976,
+"end": 57.215
+},
+{
+"text": "queue.",
+"start": 57.296,
+"end": 57.736
+},
+{
+"text": "Our",
+"start": 57.991,
+"end": 58.071
+},
+{
+"text": "main",
+"start": 58.151,
+"end": 58.311
+},
+{
+"text": "job",
+"start": 58.391,
+"end": 58.711
+},
+{
+"text": "is",
+"start": 58.751,
+"end": 58.791
+},
+{
+"text": "molecular",
+"start": 58.871,
+"end": 59.351
+},
+{
+"text": "docking",
+"start": 59.431,
+"end": 59.751
+},
+{
+"text": "for",
+"start": 59.831,
+"end": 59.911
+},
+{
+"text": "pharma",
+"start": 60.071,
+"end": 60.311
+},
+{
+"text": "research.",
+"start": 60.391,
+"end": 61.191
+},
+{
+"text": "It",
+"start": 61.231,
+"end": 61.271
+},
+{
+"text": "can",
+"start": 61.351,
+"end": 61.431
+},
+{
+"text": "pause",
+"start": 61.511,
+"end": 61.911
+},
+{
+"text": "and,",
+"start": 61.991,
+"end": 62.311
+},
+{
+"text": "in",
+"start": 62.351,
+"end": 62.391
+},
+{
+"text": "our",
+"start": 62.471,
+"end": 62.631
+},
+{
+"text": "model,",
+"start": 62.791,
+"end": 63.031
+},
+{
+"text": "has",
+"start": 63.151,
+"end": 63.271
+},
+{
+"text": "no",
+"start": 63.351,
+"end": 63.511
+},
+{
+"text": "deadline.",
+"start": 63.591,
+"end": 64.551
+},
+{
+"text": "Urgent",
+"start": 64.591,
+"end": 64.871
+},
+{
+"text": "microscopy",
+"start": 64.951,
+"end": 65.511
+},
+{
+"text": "analysis",
+"start": 65.591,
+"end": 66.151
+},
+{
+"text": "can't",
+"start": 66.231,
+"end": 66.551
+},
+{
+"text": "pause",
+"start": 66.631,
+"end": 66.951
+},
+{
+"text": "and",
+"start": 67.031,
+"end": 67.111
+},
+{
+"text": "is",
+"start": 67.191,
+"end": 67.271
+},
+{
+"text": "due",
+"start": 67.351,
+"end": 67.511
+},
+{
+"text": "within",
+"start": 67.671,
+"end": 67.831
+},
+{
+"text": "two",
+"start": 67.911,
+"end": 67.991
+},
+{
+"text": "hours.",
+"start": 68.071,
+"end": 68.871
+},
+{
+"text": "Every",
+"start": 68.905,
+"end": 69.145
+},
+{
+"text": "hour,",
+"start": 69.225,
+"end": 69.626
+},
+{
+"text": "the",
+"start": 69.665,
+"end": 69.705
+},
+{
+"text": "scheduler",
+"start": 69.785,
+"end": 70.185
+},
+{
+"text": "first",
+"start": 70.345,
+"end": 70.586
+},
+{
+"text": "runs",
+"start": 70.665,
+"end": 70.906
+},
+{
+"text": "whatever",
+"start": 71.065,
+"end": 71.226
+},
+{
+"text": "must",
+"start": 71.305,
+"end": 71.465
+},
+{
+"text": "start",
+"start": 71.625,
+"end": 71.785
+},
+{
+"text": "now",
+"start": 71.865,
+"end": 72.185
+},
+{
+"text": "to",
+"start": 72.265,
+"end": 72.345
+},
+{
+"text": "meet",
+"start": 72.425,
+"end": 72.505
+},
+{
+"text": "its",
+"start": 72.585,
+"end": 72.665
+},
+{
+"text": "deadline.",
+"start": 72.745,
+"end": 73.545
+},
+{
+"text": "Then",
+"start": 73.655,
+"end": 73.815
+},
+{
+"text": "it",
+"start": 73.895,
+"end": 74.055
+},
+{
+"text": "adds",
+"start": 74.135,
+"end": 74.375
+},
+{
+"text": "docking",
+"start": 74.415,
+"end": 74.775
+},
+{
+"text": "work,",
+"start": 74.895,
+"end": 75.095
+},
+{
+"text": "until",
+"start": 75.215,
+"end": 75.335
+},
+{
+"text": "it",
+"start": 75.415,
+"end": 75.455
+},
+{
+"text": "has",
+"start": 75.495,
+"end": 75.655
+},
+{
+"text": "covered",
+"start": 75.775,
+"end": 75.895
+},
+{
+"text": "the",
+"start": 75.975,
+"end": 76.055
+},
+{
+"text": "heat",
+"start": 76.135,
+"end": 76.215
+},
+{
+"text": "demand",
+"start": 76.295,
+"end": 76.695
+},
+{
+"text": "and",
+"start": 76.815,
+"end": 76.935
+},
+{
+"text": "the",
+"start": 76.975,
+"end": 77.015
+},
+{
+"text": "free",
+"start": 77.175,
+"end": 77.255
+},
+{
+"text": "space",
+"start": 77.335,
+"end": 77.655
+},
+{
+"text": "in",
+"start": 77.695,
+"end": 77.735
+},
+{
+"text": "the",
+"start": 77.775,
+"end": 77.815
+},
+{
+"text": "tank.",
+"start": 77.895,
+"end": 78.615
+},
+{
+"text": "Everything",
+"start": 78.625,
+"end": 78.945
+},
+{
+"text": "else",
+"start": 79.024,
+"end": 79.344
+},
+{
+"text": "waits.",
+"start": 79.425,
+"end": 80.145
+},
+{
+"text": "And",
+"start": 80.225,
+"end": 80.304
+},
+{
+"text": "our",
+"start": 80.385,
+"end": 80.465
+},
+{
+"text": "heat",
+"start": 80.584,
+"end": 80.705
+},
+{
+"text": "router",
+"start": 80.785,
+"end": 81.025
+},
+{
+"text": "decides",
+"start": 81.105,
+"end": 81.505
+},
+{
+"text": "where",
+"start": 81.665,
+"end": 81.904
+},
+{
+"text": "each",
+"start": 81.985,
+"end": 82.145
+},
+{
+"text": "job",
+"start": 82.224,
+"end": 82.465
+},
+{
+"text": "runs:",
+"start": 82.544,
+"end": 83.265
+},
+{
+"text": "homes",
+"start": 83.464,
+"end": 83.665
+},
+{
+"text": "come",
+"start": 83.745,
+"end": 83.905
+},
+{
+"text": "first,",
+"start": 83.985,
+"end": 84.464
+},
+{
+"text": "and",
+"start": 84.505,
+"end": 84.545
+},
+{
+"text": "the",
+"start": 84.625,
+"end": 84.705
+},
+{
+"text": "pool",
+"start": 84.784,
+"end": 85.104
+},
+{
+"text": "takes",
+"start": 85.225,
+"end": 85.345
+},
+{
+"text": "what",
+"start": 85.384,
+"end": 85.424
+},
+{
+"text": "they",
+"start": 85.505,
+"end": 85.585
+},
+{
+"text": "can't",
+"start": 85.665,
+"end": 85.905
+},
+{
+"text": "use.",
+"start": 85.984,
+"end": 86.785
+},
+{
+"text": "Let's",
+"start": 86.865,
+"end": 86.984
+},
+{
+"text": "go",
+"start": 87.025,
+"end": 87.105
+},
+{
+"text": "into",
+"start": 87.185,
+"end": 87.425
+},
+{
+"text": "one",
+"start": 87.465,
+"end": 87.505
+},
+{
+"text": "of",
+"start": 87.545,
+"end": 87.584
+},
+{
+"text": "those",
+"start": 87.665,
+"end": 87.825
+},
+{
+"text": "homes",
+"start": 87.985,
+"end": 88.145
+},
+{
+"text": "on",
+"start": 88.185,
+"end": 88.224
+},
+{
+"text": "the",
+"start": 88.305,
+"end": 88.385
+},
+{
+"text": "fifteenth",
+"start": 88.425,
+"end": 88.785
+},
+{
+"text": "of",
+"start": 88.864,
+"end": 88.945
+},
+{
+"text": "January.",
+"start": 89.025,
+"end": 89.905
+},
+{
+"text": "It's",
+"start": 89.945,
+"end": 90.065
+},
+{
+"text": "below",
+"start": 90.265,
+"end": 90.464
+},
+{
+"text": "minus",
+"start": 90.545,
+"end": 90.865
+},
+{
+"text": "five",
+"start": 90.945,
+"end": 91.104
+},
+{
+"text": "degrees",
+"start": 91.185,
+"end": 91.505
+},
+{
+"text": "outside,",
+"start": 91.585,
+"end": 92.225
+},
+{
+"text": "so",
+"start": 92.305,
+"end": 92.465
+},
+{
+"text": "all",
+"start": 92.545,
+"end": 92.785
+},
+{
+"text": "eight",
+"start": 92.865,
+"end": 93.024
+},
+{
+"text": "servers",
+"start": 93.105,
+"end": 93.425
+},
+{
+"text": "compute",
+"start": 93.505,
+"end": 93.984
+},
+{
+"text": "around",
+"start": 94.185,
+"end": 94.385
+},
+{
+"text": "the",
+"start": 94.425,
+"end": 94.465
+},
+{
+"text": "clock.",
+"start": 94.545,
+"end": 95.264
+},
+{
+"text": "We",
+"start": 95.305,
+"end": 95.345
+},
+{
+"text": "assume",
+"start": 95.425,
+"end": 95.825
+},
+{
+"text": "eighty",
+"start": 95.904,
+"end": 96.105
+},
+{
+"text": "percent",
+"start": 96.145,
+"end": 96.465
+},
+{
+"text": "of",
+"start": 96.504,
+"end": 96.544
+},
+{
+"text": "their",
+"start": 96.625,
+"end": 96.705
+},
+{
+"text": "power",
+"start": 96.785,
+"end": 97.025
+},
+{
+"text": "is",
+"start": 97.105,
+"end": 97.184
+},
+{
+"text": "recovered",
+"start": 97.265,
+"end": 97.665
+},
+{
+"text": "as",
+"start": 97.745,
+"end": 97.824
+},
+{
+"text": "heat",
+"start": 97.905,
+"end": 98.144
+},
+{
+"text": "in",
+"start": 98.185,
+"end": 98.225
+},
+{
+"text": "the",
+"start": 98.305,
+"end": 98.385
+},
+{
+"text": "water.",
+"start": 98.545,
+"end": 99.104
+},
+{
+"text": "That",
+"start": 99.185,
+"end": 99.345
+},
+{
+"text": "covers",
+"start": 99.465,
+"end": 99.585
+},
+{
+"text": "about",
+"start": 99.665,
+"end": 99.985
+},
+{
+"text": "seventy",
+"start": 100.024,
+"end": 100.305
+},
+{
+"text": "percent",
+"start": 100.384,
+"end": 100.704
+},
+{
+"text": "of",
+"start": 100.785,
+"end": 100.825
+},
+{
+"text": "the",
+"start": 100.865,
+"end": 100.945
+},
+{
+"text": "day's",
+"start": 101.024,
+"end": 101.185
+},
+{
+"text": "demand,",
+"start": 101.425,
+"end": 101.825
+},
+{
+"text": "and",
+"start": 101.904,
+"end": 101.984
+},
+{
+"text": "the",
+"start": 102.025,
+"end": 102.065
+},
+{
+"text": "existing",
+"start": 102.304,
+"end": 102.544
+},
+{
+"text": "wood",
+"start": 102.625,
+"end": 102.785
+},
+{
+"text": "stove",
+"start": 102.864,
+"end": 103.184
+},
+{
+"text": "supplies",
+"start": 103.265,
+"end": 103.585
+},
+{
+"text": "the",
+"start": 103.665,
+"end": 103.745
+},
+{
+"text": "rest.",
+"start": 103.905,
+"end": 104.625
+},
+{
+"text": "Now",
+"start": 104.705,
+"end": 104.865
+},
+{
+"text": "it's",
+"start": 104.945,
+"end": 105.104
+},
+{
+"text": "the",
+"start": 105.185,
+"end": 105.345
+},
+{
+"text": "seventh",
+"start": 105.424,
+"end": 105.665
+},
+{
+"text": "of",
+"start": 105.744,
+"end": 105.825
+},
+{
+"text": "March,",
+"start": 105.985,
+"end": 106.305
+},
+{
+"text": "and",
+"start": 106.424,
+"end": 106.545
+},
+{
+"text": "this",
+"start": 106.625,
+"end": 106.785
+},
+{
+"text": "job",
+"start": 106.865,
+"end": 107.105
+},
+{
+"text": "is",
+"start": 107.185,
+"end": 107.425
+},
+{
+"text": "real.",
+"start": 107.585,
+"end": 108.145
+},
+{
+"text": "It's",
+"start": 108.275,
+"end": 108.395
+},
+{
+"text": "molecular",
+"start": 108.435,
+"end": 108.875
+},
+{
+"text": "docking",
+"start": 108.955,
+"end": 109.355
+},
+{
+"text": "on",
+"start": 109.395,
+"end": 109.435
+},
+{
+"text": "our",
+"start": 109.515,
+"end": 109.595
+},
+{
+"text": "laptop,",
+"start": 109.675,
+"end": 110.315
+},
+{
+"text": "which",
+"start": 110.395,
+"end": 110.475
+},
+{
+"text": "plays",
+"start": 110.635,
+"end": 110.795
+},
+{
+"text": "server",
+"start": 110.995,
+"end": 111.195
+},
+{
+"text": "eight.",
+"start": 111.275,
+"end": 111.915
+},
+{
+"text": "The",
+"start": 111.995,
+"end": 112.075
+},
+{
+"text": "house",
+"start": 112.275,
+"end": 112.475
+},
+{
+"text": "and",
+"start": 112.555,
+"end": 112.635
+},
+{
+"text": "heat",
+"start": 112.715,
+"end": 113.035
+},
+{
+"text": "are",
+"start": 113.115,
+"end": 113.195
+},
+{
+"text": "simulated.",
+"start": 113.275,
+"end": 114.155
+},
+{
+"text": "The",
+"start": 114.1,
+"end": 114.18
+},
+{
+"text": "live",
+"start": 114.34,
+"end": 114.5
+},
+{
+"text": "ticker",
+"start": 114.66,
+"end": 114.82
+},
+{
+"text": "counts",
+"start": 114.9,
+"end": 115.22
+},
+{
+"text": "every",
+"start": 115.3,
+"end": 115.54
+},
+{
+"text": "result,",
+"start": 115.86,
+"end": 116.22
+},
+{
+"text": "and",
+"start": 116.26,
+"end": 116.3
+},
+{
+"text": "the",
+"start": 116.34,
+"end": 116.42
+},
+{
+"text": "process",
+"start": 116.62,
+"end": 116.82
+},
+{
+"text": "is",
+"start": 116.9,
+"end": 116.98
+},
+{
+"text": "controlled",
+"start": 117.22,
+"end": 117.46
+},
+{
+"text": "by",
+"start": 117.54,
+"end": 117.619
+},
+{
+"text": "the",
+"start": 117.7,
+"end": 117.78
+},
+{
+"text": "same",
+"start": 117.86,
+"end": 118.1
+},
+{
+"text": "scheduler",
+"start": 118.18,
+"end": 118.66
+},
+{
+"text": "code",
+"start": 118.78,
+"end": 118.899
+},
+{
+"text": "that",
+"start": 118.98,
+"end": 119.06
+},
+{
+"text": "calculates",
+"start": 119.14,
+"end": 119.62
+},
+{
+"text": "our",
+"start": 119.7,
+"end": 119.78
+},
+{
+"text": "yearly",
+"start": 119.859,
+"end": 120.1
+},
+{
+"text": "balance.",
+"start": 120.179,
+"end": 121.139
+},
+{
+"text": "Now",
+"start": 121.26,
+"end": 121.38
+},
+{
+"text": "watch",
+"start": 121.5,
+"end": 121.62
+},
+{
+"text": "the",
+"start": 121.7,
+"end": 121.779
+},
+{
+"text": "tank.",
+"start": 122.14,
+"end": 122.553
+},
+{
+"text": "As",
+"start": 122.607,
+"end": 122.66
+},
+{
+"text": "the",
+"start": 122.739,
+"end": 122.82
+},
+{
+"text": "day",
+"start": 122.94,
+"end": 123.059
+},
+{
+"text": "warms",
+"start": 123.14,
+"end": 123.379
+},
+{
+"text": "up,",
+"start": 123.46,
+"end": 123.833
+},
+{
+"text": "the",
+"start": 123.887,
+"end": 123.94
+},
+{
+"text": "house",
+"start": 124.06,
+"end": 124.18
+},
+{
+"text": "needs",
+"start": 124.26,
+"end": 124.5
+},
+{
+"text": "less",
+"start": 124.58,
+"end": 124.82
+},
+{
+"text": "heat,",
+"start": 125.06,
+"end": 125.327
+},
+{
+"text": "so",
+"start": 125.353,
+"end": 125.38
+},
+{
+"text": "the",
+"start": 125.46,
+"end": 125.54
+},
+{
+"text": "tank",
+"start": 125.62,
+"end": 125.94
+},
+{
+"text": "keeps",
+"start": 126.02,
+"end": 126.34
+},
+{
+"text": "charging.",
+"start": 126.74,
+"end": 127.179
+},
+{
+"text": "At",
+"start": 127.22,
+"end": 127.38
+},
+{
+"text": "two",
+"start": 127.46,
+"end": 127.54
+},
+{
+"text": "p.m.,",
+"start": 127.62,
+"end": 128.139
+},
+{
+"text": "it",
+"start": 128.18,
+"end": 128.26
+},
+{
+"text": "reaches",
+"start": 128.34,
+"end": 128.58
+},
+{
+"text": "its",
+"start": 128.66,
+"end": 128.82
+},
+{
+"text": "limit",
+"start": 128.94,
+"end": 129.06
+},
+{
+"text": "of",
+"start": 129.18,
+"end": 129.3
+},
+{
+"text": "thirty-five",
+"start": 129.34,
+"end": 129.78
+},
+{
+"text": "kilowatt-hours,",
+"start": 129.94,
+"end": 130.847
+},
+{
+"text": "and",
+"start": 130.873,
+"end": 130.9
+},
+{
+"text": "the",
+"start": 130.98,
+"end": 131.06
+},
+{
+"text": "scheduler",
+"start": 131.3,
+"end": 131.54
+},
+{
+"text": "immediately",
+"start": 131.62,
+"end": 132.34
+},
+{
+"text": "freezes",
+"start": 132.42,
+"end": 132.82
+},
+{
+"text": "the",
+"start": 132.9,
+"end": 133.06
+},
+{
+"text": "real",
+"start": 133.18,
+"end": 133.3
+},
+{
+"text": "process.",
+"start": 133.38,
+"end": 134.286
+},
+{
+"text": "The",
+"start": 134.313,
+"end": 134.34
+},
+{
+"text": "counter",
+"start": 134.42,
+"end": 134.74
+},
+{
+"text": "stops,",
+"start": 134.819,
+"end": 135.487
+},
+{
+"text": "but",
+"start": 135.513,
+"end": 135.54
+},
+{
+"text": "the",
+"start": 135.62,
+"end": 135.779
+},
+{
+"text": "job",
+"start": 135.98,
+"end": 136.18
+},
+{
+"text": "keeps",
+"start": 136.26,
+"end": 136.58
+},
+{
+"text": "all",
+"start": 136.66,
+"end": 136.739
+},
+{
+"text": "its",
+"start": 136.86,
+"end": 136.98
+},
+{
+"text": "progress.",
+"start": 137.46,
+"end": 137.98
+},
+{
+"text": "Then,",
+"start": 138.115,
+"end": 138.555
+},
+{
+"text": "as",
+"start": 138.595,
+"end": 138.675
+},
+{
+"text": "the",
+"start": 138.755,
+"end": 138.835
+},
+{
+"text": "evening",
+"start": 138.915,
+"end": 139.235
+},
+{
+"text": "cools",
+"start": 139.315,
+"end": 139.715
+},
+{
+"text": "and",
+"start": 139.755,
+"end": 139.795
+},
+{
+"text": "the",
+"start": 139.875,
+"end": 139.955
+},
+{
+"text": "house",
+"start": 140.075,
+"end": 140.195
+},
+{
+"text": "needs",
+"start": 140.355,
+"end": 140.515
+},
+{
+"text": "more",
+"start": 140.635,
+"end": 140.755
+},
+{
+"text": "heat,",
+"start": 141.035,
+"end": 141.368
+},
+{
+"text": "the",
+"start": 141.422,
+"end": 141.475
+},
+{
+"text": "very",
+"start": 141.555,
+"end": 141.795
+},
+{
+"text": "same",
+"start": 141.875,
+"end": 142.115
+},
+{
+"text": "process",
+"start": 142.395,
+"end": 142.675
+},
+{
+"text": "carries",
+"start": 142.755,
+"end": 143.075
+},
+{
+"text": "on.",
+"start": 143.155,
+"end": 143.848
+},
+{
+"text": "But",
+"start": 143.771,
+"end": 143.825
+},
+{
+"text": "pausing",
+"start": 143.905,
+"end": 144.385
+},
+{
+"text": "isn't",
+"start": 144.465,
+"end": 144.624
+},
+{
+"text": "our",
+"start": 144.705,
+"end": 144.785
+},
+{
+"text": "only",
+"start": 144.865,
+"end": 145.105
+},
+{
+"text": "option,",
+"start": 145.185,
+"end": 145.852
+},
+{
+"text": "because",
+"start": 145.958,
+"end": 146.065
+},
+{
+"text": "work",
+"start": 146.224,
+"end": 146.385
+},
+{
+"text": "can",
+"start": 146.465,
+"end": 146.544
+},
+{
+"text": "also",
+"start": 146.625,
+"end": 147.025
+},
+{
+"text": "move.",
+"start": 147.464,
+"end": 147.958
+},
+{
+"text": "Here's",
+"start": 148.012,
+"end": 148.145
+},
+{
+"text": "a",
+"start": 148.225,
+"end": 148.305
+},
+{
+"text": "day",
+"start": 148.385,
+"end": 148.465
+},
+{
+"text": "in",
+"start": 148.545,
+"end": 148.625
+},
+{
+"text": "late",
+"start": 148.705,
+"end": 148.945
+},
+{
+"text": "May,",
+"start": 149.025,
+"end": 149.478
+},
+{
+"text": "with",
+"start": 149.532,
+"end": 149.585
+},
+{
+"text": "replayed",
+"start": 149.664,
+"end": 150.065
+},
+{
+"text": "docking",
+"start": 150.145,
+"end": 150.465
+},
+{
+"text": "scores",
+"start": 150.545,
+"end": 150.865
+},
+{
+"text": "and",
+"start": 150.944,
+"end": 151.105
+},
+{
+"text": "simulated",
+"start": 151.185,
+"end": 151.665
+},
+{
+"text": "heat.",
+"start": 151.825,
+"end": 152.145
+},
+{
+"text": "The",
+"start": 152.224,
+"end": 152.385
+},
+{
+"text": "screening",
+"start": 152.544,
+"end": 152.785
+},
+{
+"text": "starts",
+"start": 152.864,
+"end": 153.184
+},
+{
+"text": "in",
+"start": 153.224,
+"end": 153.265
+},
+{
+"text": "the",
+"start": 153.305,
+"end": 153.345
+},
+{
+"text": "house.",
+"start": 153.425,
+"end": 154.025
+},
+{
+"text": "When",
+"start": 154.23,
+"end": 154.31
+},
+{
+"text": "the",
+"start": 154.39,
+"end": 154.43
+},
+{
+"text": "tank",
+"start": 154.47,
+"end": 154.71
+},
+{
+"text": "is",
+"start": 154.79,
+"end": 154.87
+},
+{
+"text": "full,",
+"start": 154.95,
+"end": 155.43
+},
+{
+"text": "the",
+"start": 155.47,
+"end": 155.51
+},
+{
+"text": "job",
+"start": 155.59,
+"end": 155.83
+},
+{
+"text": "saves",
+"start": 155.91,
+"end": 156.15
+},
+{
+"text": "a",
+"start": 156.23,
+"end": 156.31
+},
+{
+"text": "checkpoint",
+"start": 156.59,
+"end": 156.87
+},
+{
+"text": "and",
+"start": 156.95,
+"end": 157.03
+},
+{
+"text": "hands",
+"start": 157.15,
+"end": 157.27
+},
+{
+"text": "it",
+"start": 157.35,
+"end": 157.39
+},
+{
+"text": "over,",
+"start": 157.43,
+"end": 157.83
+},
+{
+"text": "encrypted,",
+"start": 158.15,
+"end": 158.63
+},
+{
+"text": "to",
+"start": 158.67,
+"end": 158.71
+},
+{
+"text": "the",
+"start": 158.79,
+"end": 158.87
+},
+{
+"text": "pool:",
+"start": 158.95,
+"end": 159.59
+},
+{
+"text": "a",
+"start": 159.67,
+"end": 159.75
+},
+{
+"text": "second",
+"start": 159.91,
+"end": 160.07
+},
+{
+"text": "process",
+"start": 160.15,
+"end": 160.63
+},
+{
+"text": "on",
+"start": 160.67,
+"end": 160.71
+},
+{
+"text": "the",
+"start": 160.79,
+"end": 160.87
+},
+{
+"text": "same",
+"start": 160.95,
+"end": 161.19
+},
+{
+"text": "laptop.",
+"start": 161.27,
+"end": 161.95
+},
+{
+"text": "It",
+"start": 162.15,
+"end": 162.23
+},
+{
+"text": "picks",
+"start": 162.31,
+"end": 162.55
+},
+{
+"text": "up",
+"start": 162.67,
+"end": 162.79
+},
+{
+"text": "at",
+"start": 162.87,
+"end": 162.95
+},
+{
+"text": "molecule",
+"start": 163.03,
+"end": 163.43
+},
+{
+"text": "nine.",
+"start": 163.59,
+"end": 164.39
+},
+{
+"text": "That",
+"start": 164.348,
+"end": 164.589
+},
+{
+"text": "flexibility",
+"start": 164.708,
+"end": 165.389
+},
+{
+"text": "matters",
+"start": 165.469,
+"end": 165.789
+},
+{
+"text": "most",
+"start": 165.869,
+"end": 166.189
+},
+{
+"text": "in",
+"start": 166.228,
+"end": 166.268
+},
+{
+"text": "summer.",
+"start": 166.429,
+"end": 167.149
+},
+{
+"text": "On",
+"start": 167.188,
+"end": 167.228
+},
+{
+"text": "the",
+"start": 167.309,
+"end": 167.389
+},
+{
+"text": "fifteenth",
+"start": 167.429,
+"end": 167.789
+},
+{
+"text": "of",
+"start": 167.828,
+"end": 167.868
+},
+{
+"text": "July,",
+"start": 167.949,
+"end": 168.508
+},
+{
+"text": "the",
+"start": 168.589,
+"end": 168.629
+},
+{
+"text": "home",
+"start": 168.669,
+"end": 168.828
+},
+{
+"text": "needs",
+"start": 168.909,
+"end": 169.148
+},
+{
+"text": "only",
+"start": 169.229,
+"end": 169.468
+},
+{
+"text": "twelve",
+"start": 169.589,
+"end": 169.788
+},
+{
+"text": "kilowatt-hours,",
+"start": 169.949,
+"end": 170.708
+},
+{
+"text": "for",
+"start": 170.748,
+"end": 170.829
+},
+{
+"text": "hot",
+"start": 170.909,
+"end": 171.068
+},
+{
+"text": "water.",
+"start": 171.149,
+"end": 171.869
+},
+{
+"text": "One",
+"start": 171.948,
+"end": 172.028
+},
+{
+"text": "server",
+"start": 172.109,
+"end": 172.348
+},
+{
+"text": "is",
+"start": 172.429,
+"end": 172.509
+},
+{
+"text": "enough,",
+"start": 172.588,
+"end": 173.069
+},
+{
+"text": "and",
+"start": 173.109,
+"end": 173.149
+},
+{
+"text": "seven",
+"start": 173.308,
+"end": 173.628
+},
+{
+"text": "stand",
+"start": 173.709,
+"end": 173.948
+},
+{
+"text": "by.",
+"start": 174.029,
+"end": 174.828
+},
+{
+"text": "The",
+"start": 174.883,
+"end": 174.963
+},
+{
+"text": "router",
+"start": 175.163,
+"end": 175.363
+},
+{
+"text": "sends",
+"start": 175.443,
+"end": 175.603
+},
+{
+"text": "docking",
+"start": 175.683,
+"end": 176.003
+},
+{
+"text": "work",
+"start": 176.083,
+"end": 176.243
+},
+{
+"text": "to",
+"start": 176.283,
+"end": 176.323
+},
+{
+"text": "the",
+"start": 176.403,
+"end": 176.483
+},
+{
+"text": "Saint",
+"start": 176.563,
+"end": 176.723
+},
+{
+"text": "Jakob",
+"start": 176.803,
+"end": 177.123
+},
+{
+"text": "sports",
+"start": 177.203,
+"end": 177.603
+},
+{
+"text": "pool,",
+"start": 177.723,
+"end": 178.003
+},
+{
+"text": "where",
+"start": 178.123,
+"end": 178.243
+},
+{
+"text": "fifty",
+"start": 178.323,
+"end": 178.563
+},
+{
+"text": "modelled",
+"start": 178.723,
+"end": 179.043
+},
+{
+"text": "servers",
+"start": 179.123,
+"end": 179.523
+},
+{
+"text": "help",
+"start": 179.643,
+"end": 179.763
+},
+{
+"text": "heat",
+"start": 179.883,
+"end": 180.003
+},
+{
+"text": "the",
+"start": 180.043,
+"end": 180.083
+},
+{
+"text": "water.",
+"start": 180.163,
+"end": 180.883
+},
+{
+"text": "But",
+"start": 180.952,
+"end": 181.033
+},
+{
+"text": "this",
+"start": 181.153,
+"end": 181.272
+},
+{
+"text": "needs",
+"start": 181.393,
+"end": 181.513
+},
+{
+"text": "enough",
+"start": 181.592,
+"end": 181.993
+},
+{
+"text": "jobs.",
+"start": 182.073,
+"end": 182.872
+},
+{
+"text": "With",
+"start": 182.953,
+"end": 183.033
+},
+{
+"text": "limited",
+"start": 183.192,
+"end": 183.353
+},
+{
+"text": "demand,",
+"start": 183.593,
+"end": 183.993
+},
+{
+"text": "our",
+"start": 184.112,
+"end": 184.233
+},
+{
+"text": "fleet",
+"start": 184.392,
+"end": 184.553
+},
+{
+"text": "loses",
+"start": 184.712,
+"end": 184.873
+},
+{
+"text": "money,",
+"start": 184.953,
+"end": 185.432
+},
+{
+"text": "even",
+"start": 185.553,
+"end": 185.672
+},
+{
+"text": "with",
+"start": 185.752,
+"end": 185.913
+},
+{
+"text": "the",
+"start": 185.992,
+"end": 186.072
+},
+{
+"text": "pool.",
+"start": 186.233,
+"end": 186.672
+},
+{
+"text": "To",
+"start": 187.013,
+"end": 187.093
+},
+{
+"text": "plan",
+"start": 187.213,
+"end": 187.333
+},
+{
+"text": "ahead,",
+"start": 187.493,
+"end": 187.893
+},
+{
+"text": "we",
+"start": 187.973,
+"end": 188.133
+},
+{
+"text": "trained",
+"start": 188.253,
+"end": 188.373
+},
+{
+"text": "a",
+"start": 188.413,
+"end": 188.453
+},
+{
+"text": "machine",
+"start": 188.653,
+"end": 188.853
+},
+{
+"text": "learning",
+"start": 188.933,
+"end": 189.253
+},
+{
+"text": "model",
+"start": 189.413,
+"end": 189.573
+},
+{
+"text": "to",
+"start": 189.693,
+"end": 189.813
+},
+{
+"text": "forecast",
+"start": 190.053,
+"end": 190.293
+},
+{
+"text": "our",
+"start": 190.373,
+"end": 190.533
+},
+{
+"text": "modelled",
+"start": 190.653,
+"end": 190.933
+},
+{
+"text": "heat",
+"start": 191.013,
+"end": 191.093
+},
+{
+"text": "demand",
+"start": 191.173,
+"end": 191.493
+},
+{
+"text": "up",
+"start": 191.573,
+"end": 191.653
+},
+{
+"text": "to",
+"start": 191.773,
+"end": 191.893
+},
+{
+"text": "six",
+"start": 192.013,
+"end": 192.133
+},
+{
+"text": "hours",
+"start": 192.293,
+"end": 192.453
+},
+{
+"text": "ahead.",
+"start": 192.533,
+"end": 193.253
+},
+{
+"text": "It",
+"start": 193.358,
+"end": 193.438
+},
+{
+"text": "uses",
+"start": 193.519,
+"end": 193.758
+},
+{
+"text": "gradient",
+"start": 193.839,
+"end": 194.238
+},
+{
+"text": "boosting,",
+"start": 194.318,
+"end": 194.878
+},
+{
+"text": "and",
+"start": 194.918,
+"end": 194.958
+},
+{
+"text": "learns",
+"start": 195.038,
+"end": 195.358
+},
+{
+"text": "from",
+"start": 195.439,
+"end": 195.518
+},
+{
+"text": "weather",
+"start": 195.638,
+"end": 195.759
+},
+{
+"text": "forecasts,",
+"start": 195.838,
+"end": 196.638
+},
+{
+"text": "time,",
+"start": 196.838,
+"end": 197.279
+},
+{
+"text": "season,",
+"start": 197.478,
+"end": 197.838
+},
+{
+"text": "and",
+"start": 197.959,
+"end": 198.078
+},
+{
+"text": "past",
+"start": 198.158,
+"end": 198.398
+},
+{
+"text": "demand.",
+"start": 198.478,
+"end": 199.279
+},
+{
+"text": "On",
+"start": 199.358,
+"end": 199.438
+},
+{
+"text": "months",
+"start": 199.559,
+"end": 199.678
+},
+{
+"text": "it",
+"start": 199.758,
+"end": 199.798
+},
+{
+"text": "had",
+"start": 199.839,
+"end": 199.919
+},
+{
+"text": "never",
+"start": 199.998,
+"end": 200.159
+},
+{
+"text": "seen,",
+"start": 200.318,
+"end": 200.799
+},
+{
+"text": "its",
+"start": 200.918,
+"end": 201.038
+},
+{
+"text": "error",
+"start": 201.119,
+"end": 201.358
+},
+{
+"text": "was",
+"start": 201.439,
+"end": 201.518
+},
+{
+"text": "about",
+"start": 201.678,
+"end": 201.838
+},
+{
+"text": "ten",
+"start": 201.918,
+"end": 201.998
+},
+{
+"text": "percent",
+"start": 202.079,
+"end": 202.478
+},
+{
+"text": "lower",
+"start": 202.558,
+"end": 202.798
+},
+{
+"text": "than",
+"start": 202.878,
+"end": 203.039
+},
+{
+"text": "simply",
+"start": 203.118,
+"end": 203.438
+},
+{
+"text": "copying",
+"start": 203.598,
+"end": 203.918
+},
+{
+"text": "yesterday.",
+"start": 204.078,
+"end": 204.798
+},
+{
+"text": "But",
+"start": 204.928,
+"end": 205.048
+},
+{
+"text": "in",
+"start": 205.128,
+"end": 205.208
+},
+{
+"text": "our",
+"start": 205.288,
+"end": 205.368
+},
+{
+"text": "planning",
+"start": 205.408,
+"end": 205.688
+},
+{
+"text": "experiment,",
+"start": 205.968,
+"end": 206.408
+},
+{
+"text": "it",
+"start": 206.488,
+"end": 206.568
+},
+{
+"text": "saved",
+"start": 206.728,
+"end": 206.888
+},
+{
+"text": "almost",
+"start": 207.048,
+"end": 207.208
+},
+{
+"text": "no",
+"start": 207.368,
+"end": 207.608
+},
+{
+"text": "extra",
+"start": 207.688,
+"end": 207.928
+},
+{
+"text": "energy,",
+"start": 208.008,
+"end": 208.648
+},
+{
+"text": "so",
+"start": 208.768,
+"end": 208.888
+},
+{
+"text": "it",
+"start": 208.968,
+"end": 209.128
+},
+{
+"text": "doesn't",
+"start": 209.208,
+"end": 209.448
+},
+{
+"text": "steer",
+"start": 209.528,
+"end": 209.848
+},
+{
+"text": "the",
+"start": 209.888,
+"end": 209.928
+},
+{
+"text": "live",
+"start": 210.008,
+"end": 210.168
+},
+{
+"text": "router",
+"start": 210.248,
+"end": 210.568
+},
+{
+"text": "yet.",
+"start": 210.688,
+"end": 211.088
+},
+{
+"text": "The",
+"start": 211.368,
+"end": 211.488
+},
+{
+"text": "big",
+"start": 211.609,
+"end": 211.728
+},
+{
+"text": "lever",
+"start": 211.808,
+"end": 212.128
+},
+{
+"text": "is",
+"start": 212.209,
+"end": 212.368
+},
+{
+"text": "switching",
+"start": 212.488,
+"end": 212.849
+},
+{
+"text": "idle",
+"start": 212.929,
+"end": 213.169
+},
+{
+"text": "servers",
+"start": 213.249,
+"end": 213.728
+},
+{
+"text": "off.",
+"start": 213.928,
+"end": 214.688
+},
+{
+"text": "For",
+"start": 214.769,
+"end": 214.848
+},
+{
+"text": "customers,",
+"start": 214.928,
+"end": 215.568
+},
+{
+"text": "what",
+"start": 215.648,
+"end": 215.808
+},
+{
+"text": "counts",
+"start": 215.888,
+"end": 216.208
+},
+{
+"text": "is",
+"start": 216.288,
+"end": 216.369
+},
+{
+"text": "predictability.",
+"start": 216.528,
+"end": 217.621
+},
+{
+"text": "So",
+"start": 217.675,
+"end": 217.728
+},
+{
+"text": "at",
+"start": 217.808,
+"end": 217.888
+},
+{
+"text": "noon,",
+"start": 218.048,
+"end": 218.368
+},
+{
+"text": "we",
+"start": 218.448,
+"end": 218.528
+},
+{
+"text": "take",
+"start": 218.609,
+"end": 218.688
+},
+{
+"text": "the",
+"start": 218.768,
+"end": 218.808
+},
+{
+"text": "weather",
+"start": 218.848,
+"end": 219.088
+},
+{
+"text": "forecast,",
+"start": 219.368,
+"end": 219.808
+},
+{
+"text": "run",
+"start": 219.889,
+"end": 219.968
+},
+{
+"text": "a",
+"start": 220.048,
+"end": 220.088
+},
+{
+"text": "copy",
+"start": 220.128,
+"end": 220.368
+},
+{
+"text": "of",
+"start": 220.448,
+"end": 220.489
+},
+{
+"text": "our",
+"start": 220.529,
+"end": 220.688
+},
+{
+"text": "scheduler",
+"start": 220.928,
+"end": 221.169
+},
+{
+"text": "through",
+"start": 221.248,
+"end": 221.328
+},
+{
+"text": "tomorrow,",
+"start": 221.449,
+"end": 222.101
+},
+{
+"text": "and",
+"start": 222.155,
+"end": 222.208
+},
+{
+"text": "keep",
+"start": 222.288,
+"end": 222.368
+},
+{
+"text": "a",
+"start": 222.449,
+"end": 222.528
+},
+{
+"text": "safety",
+"start": 222.608,
+"end": 222.928
+},
+{
+"text": "margin.",
+"start": 223.288,
+"end": 223.689
+},
+{
+"text": "That",
+"start": 223.729,
+"end": 223.888
+},
+{
+"text": "lets",
+"start": 224.009,
+"end": 224.128
+},
+{
+"text": "the",
+"start": 224.208,
+"end": 224.288
+},
+{
+"text": "fleet",
+"start": 224.408,
+"end": 224.528
+},
+{
+"text": "commit",
+"start": 224.689,
+"end": 224.848
+},
+{
+"text": "about",
+"start": 225.048,
+"end": 225.248
+},
+{
+"text": "ninety-one",
+"start": 225.289,
+"end": 225.728
+},
+{
+"text": "percent",
+"start": 225.808,
+"end": 226.208
+},
+{
+"text": "of",
+"start": 226.249,
+"end": 226.289
+},
+{
+"text": "its",
+"start": 226.368,
+"end": 226.448
+},
+{
+"text": "server-hours",
+"start": 226.528,
+"end": 227.168
+},
+{
+"text": "a",
+"start": 227.249,
+"end": 227.408
+},
+{
+"text": "day",
+"start": 227.488,
+"end": 227.569
+},
+{
+"text": "ahead.",
+"start": 227.728,
+"end": 228.449
+},
+{
+"text": "So,",
+"start": 228.728,
+"end": 229.048
+},
+{
+"text": "does",
+"start": 229.089,
+"end": 229.169
+},
+{
+"text": "it",
+"start": 229.208,
+"end": 229.248
+},
+{
+"text": "pay",
+"start": 229.328,
+"end": 229.489
+},
+{
+"text": "off?",
+"start": 229.568,
+"end": 230.262
+},
+{
+"text": "Equipping",
+"start": 230.463,
+"end": 230.783
+},
+{
+"text": "one",
+"start": 230.943,
+"end": 231.103
+},
+{
+"text": "home",
+"start": 231.303,
+"end": 231.503
+},
+{
+"text": "costs",
+"start": 231.623,
+"end": 231.783
+},
+{
+"text": "about",
+"start": 231.823,
+"end": 232.143
+},
+{
+"text": "two",
+"start": 232.223,
+"end": 232.303
+},
+{
+"text": "hundred",
+"start": 232.383,
+"end": 232.623
+},
+{
+"text": "and",
+"start": 232.703,
+"end": 232.783
+},
+{
+"text": "ninety",
+"start": 232.863,
+"end": 233.183
+},
+{
+"text": "thousand",
+"start": 233.263,
+"end": 233.663
+},
+{
+"text": "Swiss",
+"start": 233.743,
+"end": 233.983
+},
+{
+"text": "francs,",
+"start": 234.063,
+"end": 234.65
+},
+{
+"text": "and",
+"start": 234.676,
+"end": 234.703
+},
+{
+"text": "the",
+"start": 234.743,
+"end": 234.783
+},
+{
+"text": "household",
+"start": 234.903,
+"end": 235.263
+},
+{
+"text": "gets",
+"start": 235.343,
+"end": 235.503
+},
+{
+"text": "the",
+"start": 235.543,
+"end": 235.583
+},
+{
+"text": "heat",
+"start": 235.663,
+"end": 235.823
+},
+{
+"text": "for",
+"start": 235.903,
+"end": 236.063
+},
+{
+"text": "free.",
+"start": 236.463,
+"end": 236.903
+},
+{
+"text": "If",
+"start": 236.928,
+"end": 237.088
+},
+{
+"text": "every",
+"start": 237.168,
+"end": 237.408
+},
+{
+"text": "hour",
+"start": 237.488,
+"end": 237.728
+},
+{
+"text": "sells",
+"start": 237.808,
+"end": 238.048
+},
+{
+"text": "at",
+"start": 238.128,
+"end": 238.168
+},
+{
+"text": "our",
+"start": 238.208,
+"end": 238.368
+},
+{
+"text": "target",
+"start": 238.528,
+"end": 238.688
+},
+{
+"text": "prices,",
+"start": 238.768,
+"end": 239.408
+},
+{
+"text": "DigitalHeat",
+"start": 239.488,
+"end": 240.128
+},
+{
+"text": "earns",
+"start": 240.168,
+"end": 240.368
+},
+{
+"text": "about",
+"start": 240.528,
+"end": 240.688
+},
+{
+"text": "thirty-five",
+"start": 240.768,
+"end": 241.248
+},
+{
+"text": "thousand",
+"start": 241.488,
+"end": 241.808
+},
+{
+"text": "Swiss",
+"start": 241.888,
+"end": 242.128
+},
+{
+"text": "francs",
+"start": 242.208,
+"end": 242.528
+},
+{
+"text": "per",
+"start": 242.608,
+"end": 242.768
+},
+{
+"text": "home",
+"start": 242.848,
+"end": 243.088
+},
+{
+"text": "a",
+"start": 243.168,
+"end": 243.248
+},
+{
+"text": "year,",
+"start": 243.408,
+"end": 243.888
+},
+{
+"text": "after",
+"start": 244.048,
+"end": 244.208
+},
+{
+"text": "costs,",
+"start": 244.288,
+"end": 244.848
+},
+{
+"text": "tax",
+"start": 245.048,
+"end": 245.248
+},
+{
+"text": "and",
+"start": 245.328,
+"end": 245.408
+},
+{
+"text": "interest.",
+"start": 245.488,
+"end": 245.968
+},
+{
+"text": "With",
+"start": 246.368,
+"end": 246.448
+},
+{
+"text": "interest",
+"start": 246.528,
+"end": 246.768
+},
+{
+"text": "included,",
+"start": 246.848,
+"end": 247.568
+},
+{
+"text": "the",
+"start": 247.608,
+"end": 247.648
+},
+{
+"text": "investment",
+"start": 247.888,
+"end": 248.128
+},
+{
+"text": "pays",
+"start": 248.208,
+"end": 248.448
+},
+{
+"text": "for",
+"start": 248.488,
+"end": 248.528
+},
+{
+"text": "itself",
+"start": 248.608,
+"end": 249.008
+},
+{
+"text": "in",
+"start": 249.128,
+"end": 249.248
+},
+{
+"text": "three",
+"start": 249.328,
+"end": 249.408
+},
+{
+"text": "point",
+"start": 249.568,
+"end": 249.808
+},
+{
+"text": "three",
+"start": 249.888,
+"end": 250.048
+},
+{
+"text": "years.",
+"start": 250.208,
+"end": 251.008
+},
+{
+"text": "After",
+"start": 251.168,
+"end": 251.328
+},
+{
+"text": "five",
+"start": 251.448,
+"end": 251.568
+},
+{
+"text": "years,",
+"start": 251.648,
+"end": 252.048
+},
+{
+"text": "we're",
+"start": 252.128,
+"end": 252.208
+},
+{
+"text": "about",
+"start": 252.288,
+"end": 252.528
+},
+{
+"text": "one",
+"start": 252.688,
+"end": 252.768
+},
+{
+"text": "hundred",
+"start": 252.848,
+"end": 253.088
+},
+{
+"text": "and",
+"start": 253.168,
+"end": 253.328
+},
+{
+"text": "ninety",
+"start": 253.408,
+"end": 253.568
+},
+{
+"text": "thousand",
+"start": 253.808,
+"end": 254.128
+},
+{
+"text": "Swiss",
+"start": 254.208,
+"end": 254.448
+},
+{
+"text": "francs",
+"start": 254.528,
+"end": 254.808
+},
+{
+"text": "ahead,",
+"start": 254.848,
+"end": 255.328
+},
+{
+"text": "including",
+"start": 255.608,
+"end": 255.888
+},
+{
+"text": "server",
+"start": 255.968,
+"end": 256.208
+},
+{
+"text": "resale.",
+"start": 256.288,
+"end": 256.768
+},
+{
+"text": "With",
+"start": 257.168,
+"end": 257.328
+},
+{
+"text": "only",
+"start": 257.448,
+"end": 257.568
+},
+{
+"text": "an",
+"start": 257.648,
+"end": 257.728
+},
+{
+"text": "anchor",
+"start": 257.808,
+"end": 258.048
+},
+{
+"text": "customer,",
+"start": 258.128,
+"end": 258.688
+},
+{
+"text": "we",
+"start": 258.768,
+"end": 258.848
+},
+{
+"text": "lose",
+"start": 259.008,
+"end": 259.408
+},
+{
+"text": "six",
+"start": 259.488,
+"end": 259.568
+},
+{
+"text": "thousand",
+"start": 259.728,
+"end": 259.968
+},
+{
+"text": "four",
+"start": 260.128,
+"end": 260.288
+},
+{
+"text": "hundred",
+"start": 260.368,
+"end": 260.528
+},
+{
+"text": "a",
+"start": 260.608,
+"end": 260.688
+},
+{
+"text": "year.",
+"start": 260.848,
+"end": 261.328
+},
+{
+"text": "We",
+"start": 261.553,
+"end": 261.633
+},
+{
+"text": "need",
+"start": 261.712,
+"end": 261.792
+},
+{
+"text": "to",
+"start": 261.873,
+"end": 261.953
+},
+{
+"text": "sell",
+"start": 262.072,
+"end": 262.193
+},
+{
+"text": "at",
+"start": 262.273,
+"end": 262.432
+},
+{
+"text": "least",
+"start": 262.513,
+"end": 262.913
+},
+{
+"text": "sixty-six",
+"start": 262.992,
+"end": 263.632
+},
+{
+"text": "percent",
+"start": 263.833,
+"end": 264.032
+},
+{
+"text": "of",
+"start": 264.072,
+"end": 264.113
+},
+{
+"text": "the",
+"start": 264.193,
+"end": 264.272
+},
+{
+"text": "hours.",
+"start": 264.352,
+"end": 265.153
+},
+{
+"text": "Heat",
+"start": 265.312,
+"end": 265.473
+},
+{
+"text": "isn't",
+"start": 265.552,
+"end": 265.713
+},
+{
+"text": "the",
+"start": 265.753,
+"end": 265.793
+},
+{
+"text": "bottleneck,",
+"start": 265.872,
+"end": 266.633
+},
+{
+"text": "paying",
+"start": 266.673,
+"end": 266.993
+},
+{
+"text": "demand",
+"start": 267.192,
+"end": 267.393
+},
+{
+"text": "is,",
+"start": 267.472,
+"end": 267.953
+},
+{
+"text": "and",
+"start": 268.033,
+"end": 268.112
+},
+{
+"text": "no",
+"start": 268.233,
+"end": 268.353
+},
+{
+"text": "customer",
+"start": 268.553,
+"end": 268.752
+},
+{
+"text": "has",
+"start": 268.832,
+"end": 268.913
+},
+{
+"text": "confirmed",
+"start": 269.152,
+"end": 269.392
+},
+{
+"text": "our",
+"start": 269.472,
+"end": 269.553
+},
+{
+"text": "prices",
+"start": 269.752,
+"end": 269.953
+},
+{
+"text": "yet.",
+"start": 270.273,
+"end": 270.632
+},
+{
+"text": "That's",
+"start": 270.672,
+"end": 270.833
+},
+{
+"text": "why",
+"start": 270.913,
+"end": 270.992
+},
+{
+"text": "we're",
+"start": 271.032,
+"end": 271.153
+},
+{
+"text": "open",
+"start": 271.233,
+"end": 271.473
+},
+{
+"text": "about",
+"start": 271.553,
+"end": 271.712
+},
+{
+"text": "what",
+"start": 271.793,
+"end": 271.873
+},
+{
+"text": "you've",
+"start": 271.925,
+"end": 272.032
+},
+{
+"text": "just",
+"start": 272.113,
+"end": 272.272
+},
+{
+"text": "seen.",
+"start": 272.352,
+"end": 273.019
+},
+{
+"text": "The",
+"start": 273.046,
+"end": 273.073
+},
+{
+"text": "docking",
+"start": 273.113,
+"end": 273.473
+},
+{
+"text": "process,",
+"start": 273.793,
+"end": 274.152
+},
+{
+"text": "the",
+"start": 274.192,
+"end": 274.353
+},
+{
+"text": "pause,",
+"start": 274.593,
+"end": 274.872
+},
+{
+"text": "and",
+"start": 274.913,
+"end": 275.073
+},
+{
+"text": "the",
+"start": 275.152,
+"end": 275.233
+},
+{
+"text": "checkpoint",
+"start": 275.472,
+"end": 275.713
+},
+{
+"text": "transfer",
+"start": 275.993,
+"end": 276.273
+},
+{
+"text": "are",
+"start": 276.392,
+"end": 276.513
+},
+{
+"text": "real.",
+"start": 276.833,
+"end": 277.193
+},
+{
+"text": "The",
+"start": 277.233,
+"end": 277.312
+},
+{
+"text": "scores",
+"start": 277.392,
+"end": 277.712
+},
+{
+"text": "and",
+"start": 277.793,
+"end": 277.873
+},
+{
+"text": "routing",
+"start": 277.952,
+"end": 278.193
+},
+{
+"text": "in",
+"start": 278.272,
+"end": 278.352
+},
+{
+"text": "that",
+"start": 278.433,
+"end": 278.513
+},
+{
+"text": "handover",
+"start": 278.592,
+"end": 279.153
+},
+{
+"text": "are",
+"start": 279.232,
+"end": 279.312
+},
+{
+"text": "replayed.",
+"start": 279.433,
+"end": 280.272
+},
+{
+"text": "Homes,",
+"start": 280.353,
+"end": 280.952
+},
+{
+"text": "servers,",
+"start": 280.993,
+"end": 281.552
+},
+{
+"text": "heat",
+"start": 281.633,
+"end": 281.872
+},
+{
+"text": "and",
+"start": 281.953,
+"end": 282.112
+},
+{
+"text": "revenue",
+"start": 282.192,
+"end": 282.593
+},
+{
+"text": "are",
+"start": 282.673,
+"end": 282.832
+},
+{
+"text": "simulated,",
+"start": 282.913,
+"end": 283.593
+},
+{
+"text": "on",
+"start": 283.633,
+"end": 283.873
+},
+{
+"text": "real",
+"start": 284.072,
+"end": 284.273
+},
+{
+"text": "Basel",
+"start": 284.392,
+"end": 284.672
+},
+{
+"text": "weather.",
+"start": 284.992,
+"end": 285.352
+},
+{
+"text": "Our",
+"start": 285.542,
+"end": 285.702
+},
+{
+"text": "next",
+"start": 285.822,
+"end": 285.942
+},
+{
+"text": "step",
+"start": 286.022,
+"end": 286.262
+},
+{
+"text": "is",
+"start": 286.342,
+"end": 286.422
+},
+{
+"text": "a",
+"start": 286.582,
+"end": 286.609
+},
+{
+"text": "pilot:",
+"start": 286.635,
+"end": 287.502
+},
+{
+"text": "one",
+"start": 287.542,
+"end": 287.702
+},
+{
+"text": "home,",
+"start": 287.982,
+"end": 288.302
+},
+{
+"text": "two",
+"start": 288.342,
+"end": 288.502
+},
+{
+"text": "servers,",
+"start": 288.582,
+"end": 289.262
+},
+{
+"text": "one",
+"start": 289.302,
+"end": 289.462
+},
+{
+"text": "winter,",
+"start": 289.542,
+"end": 290.102
+},
+{
+"text": "for",
+"start": 290.182,
+"end": 290.262
+},
+{
+"text": "eighty-one",
+"start": 290.342,
+"end": 290.662
+},
+{
+"text": "thousand",
+"start": 290.742,
+"end": 291.222
+},
+{
+"text": "five",
+"start": 291.302,
+"end": 291.462
+},
+{
+"text": "hundred",
+"start": 291.502,
+"end": 291.782
+},
+{
+"text": "Swiss",
+"start": 291.862,
+"end": 292.102
+},
+{
+"text": "francs.",
+"start": 292.182,
+"end": 293.009
+},
+{
+"text": "We'll",
+"start": 292.915,
+"end": 293.074
+},
+{
+"text": "measure",
+"start": 293.275,
+"end": 293.474
+},
+{
+"text": "sales,",
+"start": 293.714,
+"end": 294.034
+},
+{
+"text": "prices,",
+"start": 294.114,
+"end": 294.714
+},
+{
+"text": "hardware",
+"start": 294.754,
+"end": 295.155
+},
+{
+"text": "costs,",
+"start": 295.235,
+"end": 295.755
+},
+{
+"text": "idle",
+"start": 295.795,
+"end": 296.034
+},
+{
+"text": "power,",
+"start": 296.115,
+"end": 296.555
+},
+{
+"text": "and",
+"start": 296.594,
+"end": 296.675
+},
+{
+"text": "the",
+"start": 296.755,
+"end": 296.835
+},
+{
+"text": "reliability",
+"start": 296.914,
+"end": 297.554
+},
+{
+"text": "of",
+"start": 297.594,
+"end": 297.635
+},
+{
+"text": "our",
+"start": 297.715,
+"end": 297.795
+},
+{
+"text": "commitments,",
+"start": 297.955,
+"end": 298.635
+},
+{
+"text": "each",
+"start": 298.675,
+"end": 298.915
+},
+{
+"text": "against",
+"start": 299.075,
+"end": 299.235
+},
+{
+"text": "a",
+"start": 299.315,
+"end": 299.395
+},
+{
+"text": "threshold",
+"start": 299.635,
+"end": 299.875
+},
+{
+"text": "we've",
+"start": 299.955,
+"end": 300.114
+},
+{
+"text": "set",
+"start": 300.195,
+"end": 300.355
+},
+{
+"text": "in",
+"start": 300.434,
+"end": 300.474
+},
+{
+"text": "advance.",
+"start": 300.515,
+"end": 301.422
+},
+{
+"text": "If",
+"start": 301.448,
+"end": 301.475
+},
+{
+"text": "they",
+"start": 301.555,
+"end": 301.635
+},
+{
+"text": "all",
+"start": 301.714,
+"end": 301.875
+},
+{
+"text": "hold,",
+"start": 301.955,
+"end": 302.567
+},
+{
+"text": "we",
+"start": 302.622,
+"end": 302.674
+},
+{
+"text": "scale",
+"start": 302.755,
+"end": 303.075
+},
+{
+"text": "to",
+"start": 303.155,
+"end": 303.314
+},
+{
+"text": "twenty",
+"start": 303.475,
+"end": 303.634
+},
+{
+"text": "homes.",
+"start": 303.715,
+"end": 304.395
+},
+{
+"text": "If",
+"start": 304.435,
+"end": 304.594
+},
+{
+"text": "not,",
+"start": 304.874,
+"end": 305.208
+},
+{
+"text": "we",
+"start": 305.261,
+"end": 305.315
+},
+{
+"text": "stop",
+"start": 305.554,
+"end": 305.794
+},
+{
+"text": "or",
+"start": 305.834,
+"end": 305.874
+},
+{
+"text": "adapt,",
+"start": 305.955,
+"end": 306.595
+},
+{
+"text": "and",
+"start": 306.675,
+"end": 306.754
+},
+{
+"text": "move",
+"start": 306.915,
+"end": 307.074
+},
+{
+"text": "or",
+"start": 307.154,
+"end": 307.315
+},
+{
+"text": "resell",
+"start": 307.474,
+"end": 307.794
+},
+{
+"text": "the",
+"start": 307.835,
+"end": 307.875
+},
+{
+"text": "servers.",
+"start": 307.955,
+"end": 308.714
+},
+{
+"text": "The",
+"start": 308.754,
+"end": 308.915
+},
+{
+"text": "world",
+"start": 309.115,
+"end": 309.314
+},
+{
+"text": "will",
+"start": 309.435,
+"end": 309.555
+},
+{
+"text": "keep",
+"start": 309.674,
+"end": 309.795
+},
+{
+"text": "on",
+"start": 309.875,
+"end": 310.034
+},
+{
+"text": "computing.",
+"start": 310.235,
+"end": 311.021
+},
+{
+"text": "We",
+"start": 311.048,
+"end": 311.075
+},
+{
+"text": "just",
+"start": 311.155,
+"end": 311.314
+},
+{
+"text": "think",
+"start": 311.395,
+"end": 311.475
+},
+{
+"text": "it",
+"start": 311.515,
+"end": 311.554
+},
+{
+"text": "should",
+"start": 311.634,
+"end": 311.715
+},
+{
+"text": "happen",
+"start": 311.795,
+"end": 312.035
+},
+{
+"text": "where",
+"start": 312.115,
+"end": 312.194
+},
+{
+"text": "someone",
+"start": 312.274,
+"end": 312.595
+},
+{
+"text": "needs",
+"start": 312.715,
+"end": 312.834
+},
+{
+"text": "the",
+"start": 312.915,
+"end": 312.995
+},
+{
+"text": "heat.",
+"start": 313.355,
+"end": 313.875
+},
+{
+"text": "DigitalHeat:",
+"start": 314.035,
+"end": 314.875
+},
+{
+"text": "useful",
+"start": 314.915,
+"end": 315.235
+},
+{
+"text": "computing,",
+"start": 315.315,
+"end": 316.275
+},
+{
+"text": "useful",
+"start": 316.354,
+"end": 316.674
+},
+{
+"text": "heat.",
+"start": 316.755,
+"end": 317.235
+}
+]

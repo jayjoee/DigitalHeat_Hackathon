@@ -720,8 +720,8 @@ function annahmenKurz() {
   const gruppen = [
     ["Basel reference house", [
       `Hourly Basel weather in 2025 ${s("Open-Meteo")}`,
-      `Space heating ${s("max(0, 10 kW × (20 − T) ÷ 25.6), on 206 heating days")} = 26'851 kWh/Jahr`,
-      `Hot water: 12 kWh per day, distributed evenly = 4'380 kWh/Jahr`,
+      `Space heating ${s("max(0, 10 kW × (20 − T) ÷ 25.6), on 206 heating days")} = 26'851 kWh/year`,
+      `Hot water: 12 kWh per day, distributed evenly = 4'380 kWh/year`,
       `Water tank ${fmt(a("speicher_kwh"))} kWh, <b>no losses</b>`,
       `A wood stove supplies backup heat separately`]],
     ["Server", [
@@ -750,12 +750,13 @@ function annahmenKurz() {
       `${a("abschreibung_jahre")} years, discount rate ${pct(a("zins"), 1)}, residual value ${pct(a("restwert_anteil"), 0)}, profit tax ${pct(a("gewinnsteuer"), 1)}`,
       `Operating costs: parts, visits, maintenance, monitoring, internet, insurance ${pct(a("versicherung_anteil"), 1)}, allocated overhead ${s("KOSTEN_DH.md")}`]],
     ["Workloads", [
-      `A: ${fmt(M.texte_pro_kwh / 1e6, 1)} million texts embedded per kWh, one job = ${fmt(JA.einheiten_pro_job / 1e6)} million texts ` +
-        `= ${fmt(a("job_a_kwh"), 3)} kWh ≈ ${fmt(JA.laufzeit_min_1kw, 1)} min at 1 kW, pausable, deadline ${a("job_a_frist_h")} h`,
-      `Measured on a laptop: ${fmt(M.texte)} texts in ${fmt(M.rechenzeit_s, 1)} s = ${fmt(M.durchsatz_laptop_texte_s, 1)} texts/s ` +
+      `<b>A: molecular docking</b>, pausable, one batch = ${fmt(a("job_a_kwh"), 3)} kWh ≈ ${fmt(JA.laufzeit_min_1kw, 1)} min at 1 kW. ` +
+        `No deadline with plentiful work, ${a("job_a_frist_h")} h with limited demand`,
+      `Docking energy is unmeasured. The batch uses a proxy: embedding ${fmt(JA.einheiten_pro_job / 1e6)} million texts, ` +
+        `measured on a laptop with ${fmt(M.texte)} texts in ${fmt(M.rechenzeit_s, 1)} s = ${fmt(M.durchsatz_laptop_texte_s, 1)} texts/s ` +
         `at ${fmt(M.leistung_w, 1)} W ${s("powermetrics CPU + GPU + ANE; uses total chip power")}`,
-      `B: one job = ${fmt(JB.einheiten_pro_job / 1e6)} million images = ${fmt(a("job_b_kwh"), 3)} kWh ≈ ${fmt(JB.laufzeit_min_1kw, 1)} min, ` +
-        `non-interruptible, deadline ${a("job_b_frist_h")} h ${s("MLPerf v5.0: 11'106 images/s at 4'849 W")}`,
+      `<b>B: microscopy image analysis</b>, non-interruptible, one batch = ${fmt(JB.einheiten_pro_job / 1e6)} million images = ${fmt(a("job_b_kwh"), 3)} kWh ` +
+        `≈ ${fmt(JB.laufzeit_min_1kw, 1)} min, deadline ${a("job_b_frist_h")} h ${s("Energy proxy: general object-detection benchmark, MLPerf v5.0: 11'106 images/s at 4'849 W")}`,
       `Scaling to 1 kW assumes the measured work per kWh`,
       `Deadlines and batch sizes are model assumptions`]],
     ["Compute demand", [

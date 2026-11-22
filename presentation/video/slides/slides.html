@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>DigitalHeat pitch slides</title>
+<style>
+  /* Format of "DigitalHeat Pitch.pdf", at 1920x1080 */
+  :root { --navy:#051c2c; --blue:#2251ff; --cyan:#00a9f4; --grey:#595959; --ink:#222; --soft:#f2f2f2; --tint:#e6ebf5; --rule:#cfcfcf; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:Arial,Helvetica,sans-serif; color:var(--ink); }
+  section { width:1920px; height:1080px; position:relative; overflow:hidden; background:#fff; }
+  section > * { position:absolute; left:128px; width:1664px; margin:0; }
+  .tag { top:61px; text-align:right; font-size:24px; color:var(--grey); }
+  h1 { top:121px; height:140px; border-bottom:2px solid var(--navy); font:400 52px/60px Georgia,serif; color:var(--navy); }
+  .main { top:294px; height:514px; }
+  .label { font-size:28px; font-weight:700; color:var(--navy); margin:0 0 4px; }
+  .small { font-size:24px; color:var(--grey); margin:0; }
+  .kpi { border-top:2px solid var(--navy); padding-top:20px; }
+  .kpi b { display:block; color:var(--blue); font-size:64px; line-height:72px; white-space:nowrap; }
+  .kpi span { display:block; margin-top:12px; color:var(--grey); font-size:25px; line-height:32px; }
+  table { border-collapse:collapse; width:100%; font-size:24px; }
+  th, td { border:2px solid var(--rule); height:39px; padding:0 12px; text-align:left; }
+  th { background:#ededed; }
+  tr.sum td { background:var(--tint); }
+  .band { top:832px; height:92px; background:var(--soft); border-top:2px solid var(--navy); display:flex; align-items:center; justify-content:center; padding-top:14px; font-size:28px; text-align:center; }
+  .band::before { content:""; position:absolute; top:0; left:50%; transform:translateX(-50%); border-left:45px solid transparent; border-right:45px solid transparent; border-top:26px solid var(--navy); }
+  .band b { margin-right:8px; }
+  .foot { top:952px; width:1480px; font-size:24px; line-height:31px; color:var(--grey); }
+
+  .flow { display:flex; justify-content:center; gap:34px; align-items:flex-start; padding-top:8px; }
+  .node { width:280px; text-align:center; font-size:29px; font-weight:700; color:var(--navy); }
+  .node i { display:flex; align-items:center; justify-content:center; width:112px; height:112px; margin:0 auto 16px; border-radius:50%; background:var(--navy); }
+  .node.mid i { background:var(--blue); }
+  .node small { display:block; font-weight:400; font-size:24px; color:var(--grey); margin-top:6px; }
+  .node svg { width:56px; height:56px; fill:none; stroke:#fff; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+  .dots { width:126px; margin-top:54px; border-top:4px dotted var(--blue); }
+  .six { display:grid; grid-template-columns:repeat(6,1fr); gap:24px; margin-top:56px; }
+  .split { display:grid; grid-template-columns:760px 832px; gap:72px; }
+  .four { display:grid; grid-template-columns:1fr 1fr; gap:22px 32px; margin-top:22px; }
+  .four .kpi b.neg { color:var(--grey); }
+  .four .kpi { padding-top:14px; }
+  .three { display:grid; grid-template-columns:repeat(3,1fr); gap:30px; padding-top:6px; }
+  .col h2 { margin:0; padding:20px 24px; font-size:30px; color:#fff; background:var(--navy); }
+  .col:nth-child(2) h2 { background:var(--blue); }
+  .col:nth-child(3) h2 { background:#595959; }
+  .col ul { margin:0; height:394px; padding:22px 28px 22px 54px; background:var(--soft); font-size:29px; line-height:38px; }
+  .col li { margin-bottom:24px; }
+  table.timeline { font-size:25px; }
+  table.timeline th, table.timeline td { height:61px; }
+  table.timeline td:nth-child(n+2), table.timeline th:nth-child(n+2) { text-align:right; }
+  table.timeline td.minus { color:var(--grey); }
+  table.timeline td.plus { color:var(--blue); font-weight:700; }
+  .tnote { margin:10px 0 0; font-size:21px; color:var(--grey); }
+  .scope { font-size:28px; line-height:38px; margin:0 0 24px; }
+  table.pilot { font-size:26px; }
+  table.pilot th, table.pilot td { height:62px; padding:0 14px; }
+
+  .end { background:var(--navy); color:#fff; }
+  .end .kicker { top:328px; font-size:28px; color:#c3cbd3; }
+  .end .big { top:382px; font:400 113px/132px Georgia,serif; }
+  .end .line { top:548px; width:124px; border-top:6px solid var(--cyan); }
+  .end .say { top:598px; font-size:40px; color:#dfe4e8; }
+  .end .repo { top:962px; font-size:24px; color:#c3cbd3; }
+</style></head><body>
+
+<section id="01-key-figures">
+  <p class="tag">DigitalHeat · Key figures</p>
+  <h1>Eight servers cover 93% of a home’s heat – a heat router sends the computing work to where the heat is needed</h1>
+  <div class="main">
+    <div class="flow">
+      <div class="node"><i><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v10h-6v-6H9v6H3z"/></svg></i>Homes<small>use the heat</small></div>
+      <span class="dots"></span>
+      <div class="node mid"><i><svg viewBox="0 0 24 24"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg></i>Heat router<small>matches work to heat</small></div>
+      <span class="dots"></span>
+      <div class="node"><i><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-4 3-6 6-6s6 2 6 6"/><circle cx="17" cy="9" r="2.4"/><path d="M17 14c3 0 4.500 2 4.500 5"/></svg></i>Customers<small>pay for the compute</small></div>
+    </div>
+    <div class="six">
+      <div class="kpi"><b>8</b><span>servers per home, 8 NVIDIA L4 each</span></div>
+      <div class="kpi"><b>93%</b><span>of heat demand covered</span></div>
+      <div class="kpi"><b>5 kWh</b><span>of heat dumped per year</span></div>
+      <div class="kpi"><b>52%</b><span>server utilisation over the year</span></div>
+      <div class="kpi"><b>0%</b><span>missed deadlines across 14,390 urgent microscopy jobs</span></div>
+      <div class="kpi"><b>0.23</b><span>Swiss francs (CHF) per server-hour break-even, energy only</span></div>
+    </div>
+  </div>
+  <p class="band"><span><b>Conclusion:</b> heat is not the problem – with unlimited docking work, almost none of it is wasted</span></p>
+  <p class="foot">Basel reference home 2025, idealised case model (0 W when paused) with unlimited docking work without deadlines; with power-down and 230 W idle: 90.5% coverage. Source: DigitalHeat annual simulation</p>
+</section>
+
+<section id="08-economics">
+  <p class="tag">DigitalHeat · Costs and sales</p>
+  <h1>Each installation pays for itself in 3.3 years if all compute hours are sold – the household gets the heat for free</h1>
+  <div class="main split">
+    <div>
+      <p class="label">What DigitalHeat earns per home</p>
+      <p class="small">Swiss francs (CHF), after costs, tax and 4.5% interest</p>
+      <div class="four">
+        <div class="kpi"><b>+35,000</b><span>per year on average,<br>all hours sold</span></div>
+        <div class="kpi"><b>3.3 years</b><span>payback on the<br>290,000 investment</span></div>
+        <div class="kpi"><b>+190,000</b><span>after five years,<br>including server resale</span></div>
+        <div class="kpi"><b class="neg">−6,400</b><span>per year with the anchor<br>customer only</span></div>
+      </div>
+    </div>
+    <div>
+      <table class="timeline">
+        <tr><th>All hours sold, CHF</th><th>Revenue</th><th>Cash after costs and tax</th><th>Position incl. interest</th></tr>
+        <tr><td>Investment</td><td>–</td><td>−290,120</td><td class="minus">−290,120</td></tr>
+        <tr><td>Year 1</td><td>135,435</td><td>105,676</td><td class="minus">−197,499</td></tr>
+        <tr><td>Year 2</td><td>129,705</td><td>97,461</td><td class="minus">−108,926</td></tr>
+        <tr><td>Year 3</td><td>124,548</td><td>92,471</td><td class="minus">−21,357</td></tr>
+        <tr class="sum"><td>Year 4</td><td>119,907</td><td>81,904</td><td class="plus">+59,586</td></tr>
+        <tr><td>Year 5</td><td>115,730</td><td>129,041*</td><td class="plus">+188,627</td></tr>
+      </table>
+      <p class="tnote">* including 51,592 from the assumed resale of the servers</p>
+    </div>
+  </div>
+  <p class="band"><span><b>Conclusion:</b> demand is the bottleneck – below 66% of hours sold, the model does not pay off</span></p>
+  <p class="foot">Power-down model (230 W idle, assumed). Anchor: 60% of hours at a fixed price; other prices fall 10% a year. No customer has confirmed prices or volumes. Source: DigitalHeat cost model</p>
+</section>
+
+<section id="09-evidence">
+  <p class="tag">DigitalHeat · Real vs. simulated</p>
+  <h1>The computing process and its control are real – homes, heat and demand are simulated</h1>
+  <div class="main three">
+    <div class="col"><h2>Real</h2><ul>
+      <li>Molecular docking on a laptop with AutoDock Vina</li>
+      <li>Pause and resume by the same scheduler code as the annual balance</li>
+      <li>Checkpoint handover over TLS between two processes on the same laptop</li></ul></div>
+    <div class="col"><h2>Replayed</h2><ul>
+      <li>Vina scores in the home-to-pool demo, computed in an earlier run</li>
+      <li>Router decision of 25 May 2025 that triggers the handover</li></ul></div>
+    <div class="col"><h2>Simulated</h2><ul>
+      <li>Homes, tank and pool, using real 2025 Basel weather</li>
+      <li>NVIDIA L4 servers, their power draw and annual jobs</li>
+      <li>Customers, prices, sales and costs</li></ul></div>
+  </div>
+  <p class="band"><span><b>Conclusion:</b> the control works today – physical heat and paying demand are questions for the pilot</span></p>
+  <p class="foot">Our assumptions are written down, with sources or marked as estimates</p>
+</section>
+
+<section id="10-pilot">
+  <p class="tag">DigitalHeat · Pilot</p>
+  <h1>A one-winter pilot in one home decides whether DigitalHeat scales to 20&nbsp;homes</h1>
+  <div class="main">
+    <p class="scope"><b>Scope:</b> one former oil-heated home in Basel-Stadt, 2 liquid-cooled servers, October to March, 81,500 Swiss francs (CHF). The servers move to the next home afterwards.</p>
+    <table class="pilot">
+      <tr><th>Measured</th><th>Assumption today</th><th>Continue if</th></tr>
+      <tr><td>Compute hours sold</td><td>100%</td><td>at least 66%</td></tr>
+      <tr><td>Anchor customer price</td><td>0.50 CHF per L4-h</td><td>at least 0.38 CHF (if the rest only gets spot)</td></tr>
+      <tr><td>Server price in Switzerland</td><td>CHF 32,245</td><td>at most CHF 55,800</td></tr>
+      <tr><td>Idle draw per server</td><td>230 W</td><td>at most 350 W</td></tr>
+      <tr><td>Day-ahead commitment</td><td>shortfall on ~2% of days</td><td>shortfall on at most 5% of days</td></tr>
+    </table>
+  </div>
+  <p class="band"><span><b>Next step:</b> scale only if all thresholds hold – otherwise stop or adapt, and move or resell the servers</span></p>
+  <p class="foot">Source: DigitalHeat pilot plan; thresholds from our cost model and the day-ahead calibration</p>
+</section>
+
+<section id="11-end" class="end">
+  <p class="kicker">DIGITALHEAT · BASEL</p>
+  <p class="big">Computing that heats</p>
+  <p class="line"></p>
+  <p class="say">Useful computing, useful heat.</p>
+  <p class="repo">Holyhackers</p>
+</section>
+</body></html>

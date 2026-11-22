@@ -22,16 +22,17 @@ def typ_a():
     kwh = texte / e["texte_pro_kwh"]
     return {
         "id": "A",
-        "name": "Archiv-Embedding",
-        "inhalt": f"{texte:,} Texte einbetten (Suchindex eines Dokumentenarchivs)".replace(",", "'"),
+        "name": "Molecular docking",
+        "inhalt": ("Virtual screening campaign, scheduled in energy batches. Energy proxy: one batch uses the measured "
+                   + f"energy of embedding {texte:,} texts. Docking energy has not been measured.".replace(",", "'")),
         "einheit": "Texte", "einheiten_pro_job": texte,
         "einheiten_pro_kwh": e["texte_pro_kwh"],
         "energie_kwh": round(kwh, 4),
         "laufzeit_min_1kw": round(kwh / SERVER_KW * 60, 1),
         "unterbrechbar": True,
-        "unterbrechung": "Pause (SIGSTOP/SIGCONT) jederzeit, Stopp am Checkpoint alle 128 Texte",
+        "unterbrechung": "Pause (SIGSTOP/SIGCONT) jederzeit, Docking-Checkpoint nach jedem Molekül",
         "frist_h": 24,
-        "quelle_energie": f"eigene Messung, {e['leistung_quelle']}",
+        "quelle_energie": f"Stellvertreter für Docking: eigene Embedding-Messung, {e['leistung_quelle']}",
         "quelle_frist": "Annahme: nächtliche Neuberechnung; 74 % wiederkehrende Jobs im Alibaba-Trace",
         "real_lauffaehig": True,
     }
@@ -47,8 +48,9 @@ def typ_b():
     kwh = bilder / pro_kwh
     return {
         "id": "B",
-        "name": "Bildanalyse-Batch",
-        "inhalt": "1'000'000 Bilder auf Objekte prüfen (z. B. Inspektions- oder Kamerabilder eines Tages)",
+        "name": "Microscopy image analysis",
+        "inhalt": ("1'000'000 microscopy images. Energy proxy: general RetinaNet object-detection benchmark, "
+                   "not measured on microscopy images."),
         "einheit": "Bilder", "einheiten_pro_job": bilder,
         "einheiten_pro_kwh": round(pro_kwh),
         "energie_kwh": round(kwh, 4),

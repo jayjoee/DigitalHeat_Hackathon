@@ -38,3 +38,10 @@ tools/
 messungen/docking_job/
 messungen/docking_test/
 messungen/live_*.log
+
+# Presentation: the film sources live in a tools/ folder
+!presentation/video/tools/
+presentation/video/tools/film/encode
+presentation/video/tools/mux
+presentation/video/slides/*.png
+node_modules/

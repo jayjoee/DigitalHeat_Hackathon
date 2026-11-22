@@ -17,9 +17,11 @@ The 5 kWh figure assumes 0 W when a server is paused. With demand-based shutdown
 
 ## How the heat router works
 
+The main workload is **molecular docking**: pausable, without a deadline in the plentiful-work scenario, and 95% of server-hours in the case model. The second is **urgent microscopy image analysis**, due within two hours. Both use energy proxies, as [documented here](../../daten/JOBTYPEN.md).
+
 The router checks heat demand and available storage each hour. It schedules flexible jobs while the heat is useful and pauses or moves them when it cannot be used. Short, non-interruptible jobs have a deadline. The policy decides whether to complete them locally, even if heat is rejected, or send them outside the site.
 
-In the 20-house scenario, houses have priority. The heated St. Jakob sports pool can take jobs during its outdoor season. The model estimates its seasonal heat demand at roughly 650'000 kWh with an uncertainty band of ±30%. With limited demand, adding 50 pool servers reduces external transfers from about 195'000 to 30'000 server-hours, but the modelled fleet remains loss-making at that demand level. The day-ahead commitment uses only forecasts available by noon on the previous day. It covers about 93% of reference-house server-hours in the tested scenario. [Fleet data](../../daten/ergebnisse/flotte_abschalten.json) · [Day-ahead data](../../daten/ergebnisse/zusage_8_spot.json)
+In the 20-house scenario, houses have priority. The heated St. Jakob sports pool can take jobs during its outdoor season. The model estimates its seasonal heat demand at roughly 650'000 kWh with an uncertainty band of ±30%. With limited demand, adding 50 pool servers reduces external transfers from about 195'000 to 30'000 server-hours, but the modelled fleet remains loss-making at that demand level. The day-ahead commitment uses only forecasts available by noon on the previous day. It covers about 93% of reference-house server-hours over 2025, and 92% in the held-out July–December period. For the fleet with the pool the figures are 91% and 90%. [Fleet data](../../daten/ergebnisse/flotte_abschalten.json) · [Day-ahead data](../../daten/ergebnisse/zusage_8_spot.json)
 
 ## What the business model assumes
 
@@ -36,6 +38,6 @@ The hypothetical anchor customer buys 60% of hours at CHF 0.50 per L4-hour. Othe
 
 ## What the demos establish
 
-- A real local text-embedding or molecular docking process responds to heat decisions from the scheduler used for the annual balance.
+- A real local molecular docking process, or optionally a text-embedding process, responds to heat decisions from the scheduler used for the annual balance.
 - In the two-laptop docking demo, the checkpoint and route changes are live. The standard screens replay earlier Vina results while simulating the tank, heat demand and model clock.
-- The laptop embedding measurements document throughput and chip power. Physical heating performance, L4 operating power, actual workloads and customer willingness to pay remain pilot questions. [Workload definitions and measurement methods](../../daten/JOBTYPEN.md)
+- The laptop embedding measurements document throughput and chip power and serve as the energy proxy for docking, whose energy has not been measured. Physical heating performance, L4 operating power, actual workloads and customer willingness to pay remain pilot questions. [Workload definitions and measurement methods](../../daten/JOBTYPEN.md)

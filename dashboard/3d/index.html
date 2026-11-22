@@ -173,14 +173,14 @@
   <div class="zeile"><span>Wood stove (backup)</span><span id="j-oel">–</span></div>
   <div class="zeile"><span>Heat storage</span><span id="j-sp">–</span></div>
   <div class="balken"><i id="j-sp-b" style="background:linear-gradient(90deg,var(--cold),var(--heat))"></i></div>
-  <div class="zeile"><span>Server</span><span id="j-on">–</span></div>
+  <div class="zeile"><span>Servers</span><span id="j-on">–</span></div>
   <div class="punkte" id="j-punkte"></div>
   <div class="trenn"></div>
   <h2 class="k">House 02</h2>
-  <div class="zeile"><span>Server</span><span id="j2-on">–</span></div>
+  <div class="zeile"><span>Servers</span><span id="j2-on">–</span></div>
   <div class="punkte" id="j2-punkte"></div>
   <div class="trenn"></div>
-  <h2 class="k">Sportbad St. Jakob</h2>
+  <h2 class="k">St. Jakob sports pool</h2>
   <div class="zeile"><span id="j-bad-z">–</span><span id="j-bad-on">–</span></div>
   <div class="balken"><i id="j-bad-b" style="background:var(--compute)"></i></div>
   <div class="zeile"><span>Servers computing across the fleet</span><span id="j-flotte">–</span></div>
@@ -603,7 +603,7 @@ for (let i = 0; i < dampfN; i++) dampfSeed.push([Math.random() * 11.4 - 5.7, Mat
 dampfGeo.setAttribute('position', new THREE.BufferAttribute(dampfPos, 3));
 const dampf = new THREE.Points(dampfGeo, new THREE.PointsMaterial({ color: '#cfefff', size: 0.35, transparent: true, opacity: 0.25, depthWrite: false }));
 scene.add(dampf);
-const badLabel = label('Sportbad St. Jakob', BAD.x, 2.4, BAD.z + 3.6);
+const badLabel = label('St. Jakob sports pool', BAD.x, 2.4, BAD.z + 3.6);
 mesh(new THREE.BoxGeometry(8.6, 0.15, 4.2), mat('#3a4152'), TR.x, 0.08, TR.z);
 mesh(new THREE.BoxGeometry(8.6, 3.2, 0.2), wandMat, TR.x, 1.6, TR.z - 2.05);
 mesh(new THREE.BoxGeometry(0.2, 3.2, 4.2), wandMat, TR.x - 4.3, 1.6, TR.z);
@@ -611,7 +611,7 @@ mesh(new THREE.BoxGeometry(0.2, 3.2, 4.2), glasMat, TR.x + 4.3, 1.6, TR.z, scene
 mesh(new THREE.BoxGeometry(8.8, 0.2, 4.4), mat('#4a5163'), TR.x, 3.25, TR.z - 0.6);
 const badRacks = [];
 for (let r = 0; r < 5; r++) badRacks.push(baueRack(TR.x - 3.2 + r * 1.6, 0.15, TR.z - 1.2, 10, { art: 'badrack', r }));
-label('Technikraum Bad <small>· 50 Server</small>', TR.x, 3.9, TR.z);
+label('Pool plant room <small>· 50 servers</small>', TR.x, 3.9, TR.z);
 
 // ---------- Pharma-Kunde: Turm, der Rechenaufträge schickt ----------
 const TURM = { x: -13.5, z: 1.6 };
@@ -876,7 +876,7 @@ function wende(i, frac) {
     });
     dampfGeo.attributes.position.needsUpdate = true;
   }
-  const badText = 'Sportbad St. Jakob <small>· ' + (offen ? 'open, heating the 50 m pool' : 'closed for the season, pool drained') + '</small>';
+  const badText = 'St. Jakob sports pool <small>· ' + (offen ? 'open, heating the 50 m pool' : 'closed for the season, pool drained') + '</small>';
   if (badLabel.innerHTML !== badText) badLabel.innerHTML = badText;
   const rest = S.rest_on[i] / NH;
   nachbarKeller.forEach(n => n.m.material.emissiveIntensity = rest > 0.02 ? 0.4 + 1.6 * rest * (0.85 + 0.15 * Math.sin(now / 400 + n.phase * 10)) : 0.05);
@@ -950,7 +950,7 @@ function panelJetzt(i) {
   el('j-co2').textContent = `${fmt(oelSpar[0][i] * W.co2_kg_l / 1000, 1)} t · wood ${fmt(el('j-co2').dataset.holz / HOLZ_KWH_STER / HOLZ_ETA, 1)} stacked m³`;
   // Zusage: heute 12 Uhr für morgen
   const morgen = Math.min(Z.tag.length - 1, Math.floor(i / 24) + 1), zt = Z.tag[morgen];
-  el('z-titel').textContent = `Day-ahead commitment, ${parseInt(zt.slice(3))}. ${MONATE[parseInt(zt.slice(0, 2)) - 1].slice(0, 3)}`;
+  el('z-titel').textContent = `Day-ahead commitment, ${parseInt(zt.slice(3))} ${MONATE[parseInt(zt.slice(0, 2)) - 1].slice(0, 3)}`;
   el('z-temp').textContent = `${fmt(Z.prognose_temp[morgen], 1)} °C (ECMWF)`;
   const zu = Z.zugesagt[morgen], ge = Z.geliefert[morgen];
   el('z-zu').textContent = zu === null ? 'no commitment' : `${fmt(zu)} server-h`;
@@ -990,7 +990,7 @@ function wolkenKarten(i) {
   const flotteAn = pause ? flotteGesamt : S.h_on[i] + S.h2_on[i] + S.b_on[i] + Math.round(S.rest_on[i] * 18);
   wk('w-pool').innerHTML = z('Current jobs', `${fmt(S.flotte_lauf[i])} server-h`) + z('Average price', `${fmt(MISCHPREIS, 2)} CHF/server-h`);
   wk('w-router').innerHTML = z('Servers on', `${fmt(flotteAn)} of ${flotteGesamt}`)
-    + z('Sports pool', S.b_bed[i] > 0 ? `${fmt(S.b_lauf[i], 1)} Server` : 'Pause') + z('Transfers per hour', fmt(S.mig[i]));
+    + z('Sports pool', S.b_bed[i] > 0 ? `${fmt(S.b_lauf[i], 1)} servers` : 'Closed') + z('Transfers per hour', fmt(S.mig[i]));
   if (CL.ml) {
     const naechste = ML_PUNKTE.filter(p => p.i >= i && p.i <= i + 24);
     wk('w-ml').innerHTML = z('ML error', `${fmt(CL.ml.mae_ml, 2)} kWh`) + z('Previous-day baseline', `${fmt(CL.ml.mae_persistenz, 2)} kWh`)
@@ -1103,9 +1103,9 @@ function zeigeDetail(info, fliegen = true) {
   } else {
     const ri = info.art === 'badrack' ? info.r : null, offen = S.b_bed[i] > 0;
     const fl = K.flotte, mit = fl['spot|Sportbad 50 (nach Nachfrage)'], ohne = fl['spot|0 Senken'];
-    box.innerHTML = detailHtml('Summer heat sink', ri === null ? 'Sportbad St. Jakob' : `Pool rack ${ri + 1} · Server ${ri * 10 + 1}–${ri * 10 + 10}`,
+    box.innerHTML = detailHtml('Summer heat sink', ri === null ? 'St. Jakob sports pool' : `Pool rack ${ri + 1} · Servers ${ri * 10 + 1}–${ri * 10 + 10}`,
       offen ? 'open' : 'Closed for the season', offen ? 'var(--compute)' : '#8ea0c2', [
-        ['Heat demand now', fmt(S.b_bed[i]) + ' kWh'], ['Servers on', `${S.b_on[i]} / ${NB}`], ['Computing now', fmt(S.b_lauf[i], 1) + ' Server'],
+        ['Heat demand now', fmt(S.b_bed[i]) + ' kWh'], ['Servers on', `${S.b_on[i]} / ${NB}`], ['Computing now', fmt(S.b_lauf[i], 1) + ' servers'],
         ['Pool as heat storage', fmt(S.b_sp[i]) + " / 1'200 kWh"], ['Fleet without pool', fmt(ohne.ergebnis_chf) + ' CHF/year'], ['Fleet with pool', fmt(mit.ergebnis_chf) + ' CHF/year'],
       ], 'Open from 26 April to 5 October 2025. Houses have priority, and only jobs whose heat they cannot use are routed to the pool. Modelled heat demand varies by ±30%. This view assumes plentiful work.');
     miniChart(fenster(n => S.b_lauf[n]), NB, '#3ee0c0');
@@ -1259,7 +1259,7 @@ async function pruefeLive() {
     if (!(L.aktiv && L.aktualisiert && (Date.now() / 1000 - L.aktualisiert) < 20)) throw 0;
     const ort = (L.standort || '').toLowerCase().includes('bad') ? 'bad' : 'haus', laeuft = L.prozess === 'läuft';
     const art = L.auftrag === 'docking' ? 'docking process (Abl kinase)' : 'embedding process';
-    const einheit = L.auftrag === 'docking' ? 'molecules' : 'texts';
+    const einheit = L.auftrag === 'docking' ? (L.texte_fertig === 1 ? 'molecule' : 'molecules') : 'texts';
     liveJob = { ort, laeuft, text: `real ${art} ${laeuft ? 'running' : 'paused'}, ${fmt(L.texte_fertig || 0)} ${einheit}` };
     el('live').classList.add('an');
     el('live-text').textContent = `LIVE · job ${laeuft ? 'running' : 'paused'} · ${ort === 'bad' ? 'at the sports pool' : 'House 01, server ' + (L.echter_server || 8)} · ${fmt(L.texte_fertig || 0)} ${einheit}`;

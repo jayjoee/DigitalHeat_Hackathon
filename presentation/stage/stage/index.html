@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>DigitalHeat stage</title>
+<link rel="icon" href="data:,">
+<style>
+  html, body { margin:0; height:100%; overflow:hidden; background:#051c2c; cursor:none; font-family:Arial,sans-serif; }
+  #screen { position:absolute; left:0; top:0; width:1920px; height:1080px; transform-origin:0 0; overflow:hidden; }
+  #screen > * { position:absolute; left:0; top:0; width:1920px; height:1080px; border:0; }
+  .layer { opacity:0; visibility:hidden; transition:opacity .45s, visibility .45s; pointer-events:none; background:#051c2c; }
+  .layer.on { opacity:1; visibility:visible; }
+  video, img { object-fit:contain; }
+  #card p { position:absolute; left:128px; top:390px; width:1664px; margin:0; font:400 88px/104px Georgia,serif; color:#fff; }
+  #card small { position:absolute; left:128px; top:618px; width:1664px; font-size:40px; color:#c3cbd3; }
+  #note { width:auto; height:auto; left:50%; top:auto; bottom:145px; transform:translateX(-50%); padding:14px 28px; color:#fff;
+    background:rgba(5,28,44,.94); border-left:5px solid #00a9f4; font-size:28px; white-space:nowrap; display:none; z-index:9; }
+</style></head>
+<body>
+<div id="screen">
+  <img id="cover" class="layer on" src="../media/slides/00-cover.png" alt="">
+  <img id="figures" class="layer" src="../media/slides/01-key-figures.png" alt="">
+  <video id="film" class="layer" src="../media/stage-video.mp4" preload="auto" playsinline></video>
+  <iframe id="model" class="layer" tabindex="-1" title="Live model"></iframe>
+  <video id="recording" class="layer" src="../media/demo-recording.mp4" preload="auto" muted playsinline></video>
+  <img id="pilot" class="layer" src="../media/slides/10-pilot.png" alt="">
+  <img id="end" class="layer" src="../media/slides/11-end.png" alt="">
+  <div id="card" class="layer"><p></p><small></small></div>
+  <div id="note"></div>
+</div>
+<script>
+// Keys: Right / Space / PageDown = next, Left / PageUp = back, B = recording of the demo, F = full screen.
+const $ = id => document.getElementById(id);
+const OFFLINE = location.protocol === 'file:';
+const STEPS = OFFLINE
+  ? ['cover', 'figures', 'film', 'recording', 'pilot', 'end']
+  : ['cover', 'figures', 'film', 'january', 'july', 'march', 'pilot', 'end'];
+const SCENES = {
+  january: { title: '15 January: heat around the clock', evidence: 'Live model. Simulation with real 2025 Basel weather',
+    hour: '01-15T03', speed: 1, at: [0.9, -0.6, 6], from: [0.2, 2.2, 14.5] },
+  july: { title: '15 July: one server is enough', evidence: 'Live model. Simulation with real 2025 Basel weather',
+    hour: '07-15T09', speed: 0.5, at: [0.9, -0.6, 6], from: [0.2, 2.2, 14.5] },
+  march: { title: '7 March: the scheduler controls a real job', evidence: 'Real: AutoDock Vina process, pause and resume. Simulated: heat and tank',
+    hour: '03-07T00', speed: 0, at: [1, -0.9, 6], from: [0.3, 2, 14.5] },
+};
+const MARCH_AT = 15; // second in the recording at which 7 March begins
+let step = 0, showing = 'cover', run = 0, lastKey = -1e9, armed = -1e9, mayLeave = false, noteTimer;
+
+function fit() {
+  const s = Math.min(innerWidth / 1920, innerHeight / 1080);
+  $('screen').style.transform = `translate(${(innerWidth - 1920 * s) / 2}px, ${(innerHeight - 1080 * s) / 2}px) scale(${s})`;
+}
+addEventListener('resize', fit); fit();
+
+function note(text, ms) {
+  clearTimeout(noteTimer); $('note').textContent = text || ''; $('note').style.display = text ? 'block' : 'none';
+  if (text && ms) noteTimer = setTimeout(() => note(''), ms);
+}
+function layer(id) {
+  for (const e of document.querySelectorAll('.layer')) e.classList.toggle('on', e.id === id);
+}
+function card(title, text) {
+  document.querySelector('#card p').textContent = title; document.querySelector('#card small').textContent = text;
+  layer('card');
+}
+function api(action) {
+  return OFFLINE ? Promise.resolve() : fetch('/api/' + action, { method: 'POST', headers: { 'X-Stage': window.STAGE_TOKEN } })
+    .then(r => { if (!r.ok) throw new Error(action); });
+}
+function recording() {
+  const fromMarch = showing === 'march';
+  run++; showing = 'recording'; mayLeave = false; note('');
+  $('film').pause(); api('stop').catch(() => {});
+  const v = $('recording'); v.currentTime = fromMarch ? MARCH_AT : 0; layer('recording');
+  v.play().catch(() => note('Press B again to play the recording'));
+  const i = STEPS.indexOf(OFFLINE ? 'recording' : 'march'); if (i >= 0) step = i;
+}
+
+async function watchJob(id, v, starting) {
+  const began = performance.now();
+  let paused = false, seen = false;
+  try { await starting; } catch (e) {
+    if (id === run) note('Live demo unavailable. Press B for the recording');
+    return;
+  }
+  while (id === run) {
+    try {
+      const { exit, live } = await (await fetch('/api/state')).json();
+      if (id !== run) return;
+      if (live && live.aktiv) {
+        // The job is reporting: only now show the house, so the tank never jumps.
+        if (!seen) { note(''); await new Promise(r => setTimeout(r, 550)); if (id !== run) return; layer('model'); }
+        seen = true;
+        if (live.phase === 'pausiert') paused = true;
+        if (paused && Number(live.jetzt.zeit.slice(11, 13)) >= 22) mayLeave = true;
+      }
+      if (exit !== null) {
+        if (exit !== 0) return note('Live demo stopped. Press B for the recording');
+        mayLeave = true;
+        return card('One real job: paused, resumed, saved.', `Checkpoint saved after ${live ? live.texte_fertig : ''} molecules. The next run can continue from here.`);
+      }
+      if (!seen && performance.now() - began > 9000) note('Live demo did not start. Press B for the recording');
+    } catch (e) {
+      if (id === run) note('Live demo lost its connection. Press B for the recording');
+    }
+    await new Promise(r => setTimeout(r, 500));
+  }
+}
+
+function go(next) {
+  next = Math.max(0, Math.min(STEPS.length - 1, next));
+  const name = STEPS[next], wasJob = showing === 'march';
+  if (name === 'recording') { step = next; return recording(); }
+  step = next; showing = name; run++; mayLeave = false; note('');
+  $('film').pause(); $('recording').pause();
+  const scene = SCENES[name];
+  if (wasJob && name !== 'march') api('stop').catch(() => {});
+  if (!scene) {
+    layer(name);
+    if (name === 'film') {
+      $('film').currentTime = 0;
+      $('film').play().catch(() => note('Press the left key, then the right key, to play the video'));
+    }
+    return;
+  }
+  const v = $('model').contentWindow && $('model').contentWindow.__v;
+  if (!v) { layer('model'); return note('Live model unavailable. Press B for the recording'); }
+  v.title(scene.title, scene.evidence); v.start(scene.hour, scene.speed); v.groups([0]); v.fly(scene.at, scene.from, 1);
+  if (name !== 'march') layer('model');
+  else {
+    card('7 March 2025', 'Starting the real docking job on this laptop');
+    watchJob(run, v, api('start'));
+  }
+}
+
+function forward() {
+  const guarded = (showing === 'film' && !$('film').ended && !$('film').error) ||
+                  (showing === 'recording' && !$('recording').ended && !$('recording').error) ||
+                  (showing === 'march' && !mayLeave);
+  const now = performance.now();
+  if (guarded && now - armed > 2500) { armed = now; return note('Still running. Press again to skip', 2000); }
+  armed = -1e9;
+  if (step < STEPS.length - 1) go(step + 1);
+}
+
+addEventListener('keydown', e => {
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  const next = [' ', 'ArrowRight', 'PageDown', 'Enter'].includes(e.key), back = ['ArrowLeft', 'PageUp'].includes(e.key);
+  const b = e.key.toLowerCase() === 'b', f = e.key.toLowerCase() === 'f';
+  if (!(next || back || b || f)) return;
+  e.preventDefault();
+  if (e.repeat) return;
+  if (f) return document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen().catch(() => {});
+  const now = performance.now();
+  if (now - lastKey < 450) return; // ignores an accidental double press
+  lastKey = now;
+  if (b) return recording();
+  if (back) return go(step - 1);
+  if (step === 0 && !document.fullscreenElement) document.documentElement.requestFullscreen().catch(() => {});
+  forward();
+});
+$('film').addEventListener('ended', () => { if (showing === 'film') go(step + 1); });
+
+if (!OFFLINE) {
+  const s = document.createElement('script');
+  s.src = '/api/token.js'; s.onload = () => api('stop').catch(() => {});
+  document.head.append(s);
+  $('model').addEventListener('load', () => window.focus());
+  $('model').src = '/dashboard/3d/index.html';
+}
+</script>
+</body></html>
