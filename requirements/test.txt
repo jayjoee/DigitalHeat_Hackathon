@@ -1,0 +1,3 @@
+# Everything the test suite imports: python -m pip install -r requirements/test.txt
+-r ml.txt
+-r confidential.txt
