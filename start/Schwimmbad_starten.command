@@ -1,5 +1,5 @@
 #!/bin/bash
-# Doppelklicken. Blister-Demo auf zwei Laptops: Schwimmbad.
+# Double-click to start the sports pool screen for the docking demo.
 cd "$(dirname "$0")/.."
 python3 prototyp/schwimmbad.py
 echo

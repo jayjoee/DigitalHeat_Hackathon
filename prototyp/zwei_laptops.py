@@ -1,19 +1,14 @@
-"""Blister-Demo auf zwei Laptops ohne Handarbeit.
+"""Pair two laptops for the virtual screening demo.
 
-Laptop B:  python3 prototyp/schwimmbad.py   → zeigt einen 6-stelligen Code
-Laptop A:  python3 prototyp/haus.py         → findet das Schwimmbad im WLAN, fragt nach dem Code, los
+Laptop B: python3 prototyp/schwimmbad.py  — shows a six-digit pairing code
+Laptop A: python3 prototyp/haus.py        — discovers the pool and prompts for the code
 
-Ablauf:
-- Das Schwimmbad erzeugt bei jedem Start frische Zugangsdaten (Zertifikat für seine WLAN-Adresse und
-  Token) in einem temporären Ordner. Nichts landet im Repo, beim Beenden ist alles weg.
-- Es ruft jede Sekunde «hier bin ich» ins lokale Netz (UDP-Broadcast, Port 8447).
-- Das Haus hört zu, nimmt das gefundene Schwimmbad und holt mit dem Code einmal Zertifikat und Token
-  ab (TLS 1.3, Port 8446). Nach 10 falschen Codes sperrt das Schwimmbad die Paarung.
-- Danach laufen die bestehenden Prozesse aus blister_demo.py: Empfänger im Bad, Sender im Haus.
+The sports pool creates temporary credentials and announces its address on UDP port
+8447. The house uses TLS 1.3 on port 8446 to pair, then uses the pinned certificate
+for checkpoint handoffs. The pairing endpoint locks after ten invalid codes.
 
-Grenze: Die Paarung prüft den Code, aber das Haus kennt das Zertifikat vorher nicht (wie beim ersten
-Bluetooth-Pairing). Gegen jemanden, der im selben WLAN genau im Moment der Paarung aktiv dazwischen-
-geht, schützt das nicht. Für die Demo mit synthetischen Bildern reicht das; für echte Daten nicht.
+Use a trusted local network. The first pairing trusts the presented certificate,
+so it does not protect against an active intermediary during that exchange.
 """
 import argparse
 import hmac
@@ -35,8 +30,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from digitalheat import APIError, Handler, init_credentials, private_write, tls_context  # noqa: E402
 
-DEMOS = {"blister": Path(__file__).resolve().with_name("blister_demo.py"),
-         "docking": Path(__file__).resolve().with_name("docking_demo.py")}
+DOCKING_DEMO = Path(__file__).resolve().with_name("docking_demo.py")
 PORT_UEBERGABE, PORT_PAARUNG, PORT_SUCHE = 8445, 8446, 8447
 BILDSCHIRM_HAUS, BILDSCHIRM_BAD = 8082, 8092
 KENNUNG = b"DIGITALHEAT-SCHWIMMBAD"
@@ -62,9 +56,9 @@ def kasten(*zeilen):
     print("█" * breite + "\n", flush=True)
 
 
-def starte(demo, rolle, *argumente):
-    """Die gewählte Demo (blister_demo.py oder docking_demo.py) als Kindprozess starten und auf «bereit» warten."""
-    p = subprocess.Popen([sys.executable, str(demo), rolle, *argumente], stdout=subprocess.PIPE, text=True)
+def starte(rolle, *argumente):
+    """Start the docking demo subprocess and wait until its screen is ready."""
+    p = subprocess.Popen([sys.executable, str(DOCKING_DEMO), rolle, *argumente], stdout=subprocess.PIPE, text=True)
     if not p.stdout.readline():
         raise SystemExit(f"Could not start {rolle}. Is a demo already running? Check ports 8082, 8092 and 8445.")
     return p
@@ -119,7 +113,7 @@ def ankuendigen(adresse, stopp):
 def schwimmbad(args):
     adresse = args.ip or wlan_adresse()
     with tempfile.TemporaryDirectory() as ordner:
-        zugang = Path(ordner) / "blister"
+        zugang = Path(ordner) / "docking"
         init_credentials(adresse, zugang)
         code = f"{secrets.randbelow(10 ** 6):06d}"
         tls = tls_context(str(zugang / "worker" / "worker-cert.pem"), str(zugang / "worker" / "worker-key.pem"))
@@ -132,7 +126,7 @@ def schwimmbad(args):
         stopp = threading.Event()
         threading.Thread(target=ankuendigen, args=(adresse, stopp), daemon=True).start()
 
-        prozess = starte(DEMOS[args.job], "worker", "--credentials", str(zugang / "worker"),
+        prozess = starte("worker", "--credentials", str(zugang / "worker"),
                          "--port", str(PORT_UEBERGABE), "--screen-port", str(BILDSCHIRM_BAD))
         kasten("SPORTS POOL ready (laptop B)",
                f"Code for the house:   {code[:3]} {code[3:]}",
@@ -222,13 +216,12 @@ def haus(args):
         zugang.mkdir(mode=0o700)
         private_write(zugang / "worker-cert.pem", daten["cert"].encode())
         private_write(zugang / "token.txt", daten["token"].encode())
-        prozess = starte(DEMOS[args.job], "sender", "--credentials", str(zugang),
+        prozess = starte("sender", "--credentials", str(zugang),
                          "--target", f"https://{adresse}:{PORT_UEBERGABE}", "--screen-port", str(BILDSCHIRM_HAUS))
-        start_button = "Start batch" if args.job == "blister" else "Start screening"
         kasten("HOUSE ready (laptop A)",
                f"Connected to sports pool {adresse}",
                f"Screen: http://127.0.0.1:{BILDSCHIRM_HAUS}",
-               f"Click {start_button}. The sports pool takes over automatically.",
+               "Click Start screening. The sports pool takes over automatically.",
                "Stop with Ctrl+C")
         if not args.kein_browser:
             webbrowser.open(f"http://127.0.0.1:{BILDSCHIRM_HAUS}")
@@ -240,8 +233,7 @@ def main(rolle=None):
     if rolle is None:
         p.add_argument("rolle", choices=("haus", "schwimmbad"))
     p.add_argument("--kein-browser", action="store_true", help="Leinwand nicht automatisch öffnen")
-    p.add_argument("--job", choices=("blister", "docking"), default="docking",
-                   help="Was gerechnet wird: docking (virtuelles Screening, Standard) oder blister")
+    p.add_argument("--job", choices=("docking",), help=argparse.SUPPRESS)
     if rolle in (None, "haus"):
         p.add_argument("--bad", help="Adresse des Schwimmbads, falls die Suche nichts findet")
         p.add_argument("--code", help="Code vom Schwimmbad-Laptop (sonst wird gefragt)")

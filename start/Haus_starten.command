@@ -1,5 +1,5 @@
 #!/bin/bash
-# Doppelklicken. Blister-Demo auf zwei Laptops: Haus.
+# Double-click to start the house screen for the docking demo.
 cd "$(dirname "$0")/.."
 python3 prototyp/haus.py
 echo

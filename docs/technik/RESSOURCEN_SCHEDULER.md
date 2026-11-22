@@ -1,6 +1,6 @@
 # Ressourcen-Scheduler: Recherche, Umsetzung und Annahmen
 
-Stand: 21. November 2026. Der Scheduler ist in die getrennte Pharma-/Host-Demo eingebunden. Er ergänzt den bisherigen Wärme-Jahres-Scheduler und die ML-Serviceplanung. Die separate animierte Blister-Demo verwendet weiterhin ihren bisherigen Ablauf.
+Stand: 21. November 2026. Der Scheduler ist in die getrennte Pharma-/Host-Demo eingebunden. Er ergänzt den bisherigen Wärme-Jahres-Scheduler und die ML-Serviceplanung.
 
 ## Welche Verfahren wir übernehmen
 
@@ -75,7 +75,7 @@ Der Kern `src/scheduler/resource_queue.py` benötigt keine Oberfläche. Die Einb
 Optional lässt sich der bestehende Zugang starten:
 
 ```sh
-python3 prototyp/digitalheat.py demo --pharma --open
+python3 prototyp/digitalheat.py demo --open
 ```
 
 CPU-Aufträge laufen tatsächlich. GPU-Aufträge bleiben mit sichtbarer Begründung in der Warteschlange: Es ist noch kein NVIDIA-Ausführungsagent angeschlossen. Eine konfigurierte GPU-Kapazität allein bewirkt keine GPU-Ausführung.

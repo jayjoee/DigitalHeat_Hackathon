@@ -39,7 +39,7 @@ The screens exchange checkpoints over TLS and show the job moving **house → sp
 python3 prototyp/docking_demo.py demo --open
 ```
 
-For the separate image inspection demo, append `--job blister` to both two-laptop commands. See the [blister inspection guide](prototyp/blister/README.md) and the [application prototype guide](prototyp/README.md).
+See the [application prototype guide](prototyp/README.md) for the separate customer and host interfaces.
 
 ### Guided demo with local text embeddings
 

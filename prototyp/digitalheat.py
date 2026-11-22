@@ -678,8 +678,9 @@ def main():
     sender.add_argument("--port", type=int, default=8080)
     sender.add_argument("--credentials", default="credentials/sender")
     sender.add_argument("--open", action="store_true", help="Kundenseite im Browser öffnen")
-    demo = commands.add_parser("demo", help="Animierte Blisterprüfung lokal starten")
-    demo.add_argument("--pharma", action="store_true", help="Klassischen Pharma-Prototyp öffnen")
+    demo = commands.add_parser("demo", help="Run the Pharma and host interfaces locally")
+    # Keep the old explicit option valid for existing launch commands.
+    demo.add_argument("--pharma", action="store_true", help=argparse.SUPPRESS)
     demo.add_argument("--host-port", type=int, default=8090)
     demo.add_argument("--worker-port", type=int, default=8443)
     demo.add_argument("--port", type=int, default=8080)
@@ -725,9 +726,6 @@ def main():
             if args.open:
                 webbrowser.open(url)
             serve(server)
-        elif not args.pharma:
-            from blister_demo import local_demo
-            local_demo(args.open, args.port, args.host_port, args.worker_port)
         else:
             directory = Path(args.credentials)
             if not directory.exists():

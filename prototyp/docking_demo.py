@@ -1,11 +1,7 @@
-"""Docking auf zwei Leinwänden mit TLS-Checkpoint-Übergabe (wie blister_demo.py, aber virtuelles Screening).
+"""Virtual screening on two screens, with checkpoint handoffs over TLS.
 
-Jedes «Stück» ist ein Molekül (Schlüssel), das an die Abl-Kinase (Schloss) gedockt wird. Die Bindungsenergien
-stammen aus einem echten AutoDock-Vina-Lauf (daten/docking/ergebnis.json, exhaustiveness 8) und werden Molekül
-für Molekül abgespielt; mit --live und installiertem Vina wird jedes Molekül stattdessen live gedockt.
-
-Übergabe, Paarung, TLS und Wärmeverlauf sind identisch mit der Blister-Demo. Nur das gerechnete Stück und die
-Leinwand unterscheiden sich.
+By default the demo replays AutoDock Vina scores from daten/docking/ergebnis.json.
+With Vina installed, --live runs the docking calculation as the demo progresses.
 """
 import argparse
 from collections import deque

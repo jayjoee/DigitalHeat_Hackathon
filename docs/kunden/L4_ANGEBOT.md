@@ -35,7 +35,7 @@ Beispiel für einen bereits freigegebenen anonymisierten Workflow:
 }
 ```
 
-Die öffentliche/synthetische CPU-Demo läuft wie bisher. Die Beispiel-L4-Konfiguration ist ein Inventarschema, keine erkannte Hardware. Der reale NVIDIA-Ausführungsagent ist weiterhin anzubinden; eine deklarierte GPU führt noch keinen GPU-Auftrag aus. Blister-Demo und die Forschungsdateien zur Confidential-Computing-Option sind erhalten, aber nicht die gewählte Produktarchitektur.
+Die öffentliche/synthetische CPU-Demo läuft wie bisher. Die Beispiel-L4-Konfiguration ist ein Inventarschema, keine erkannte Hardware. Der reale NVIDIA-Ausführungsagent ist weiterhin anzubinden; eine deklarierte GPU führt noch keinen GPU-Auftrag aus. Confidential Computing ist als Forschungsoption dokumentiert.
 
 ## Auswirkung auf die Rechnung
 

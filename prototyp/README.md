@@ -18,17 +18,7 @@ python3 prototyp/schwimmbad.py     # Laptop B: get the pairing code
 python3 prototyp/haus.py           # Laptop A: enter the code, then click Start screening
 ```
 
-Run from the repository root. To try both screens on one laptop, run `python3 prototyp/docking_demo.py demo --open`. Append `--job blister` to both two-device commands to switch to image inspection.
-
-## Animated blister inspection
-
-From the `prototyp` directory:
-
-```sh
-python3 digitalheat.py demo --port 8081 --host-port 8091 --worker-port 8444 --open
-```
-
-Click **Start batch** on [the house screen](http://127.0.0.1:8081). When the job transfers, it continues at the next image on [the sports pool screen](http://127.0.0.1:8091). See the [two-device blister demo](blister/README.md).
+Run from the repository root. To try both screens on one laptop, run `python3 prototyp/docking_demo.py demo --open`.
 
 ## Pharma workspace
 
@@ -37,10 +27,10 @@ Use Python 3.10 or later with TLS 1.3 and OpenSSL for certificate setup. The pro
 From the `prototyp` directory:
 
 ```sh
-python3 digitalheat.py demo --pharma --open
+python3 digitalheat.py demo --open
 ```
 
-The command opens the [Pharma workspace](http://127.0.0.1:8080). Open [My home](http://127.0.0.1:8090) in a second window. Both services run on the same machine and communicate over the encrypted interface used for two devices. On macOS, double-click `Demo_starten.command` to launch the separate animated blister demo.
+The command opens the [Pharma workspace](http://127.0.0.1:8080). Open [My home](http://127.0.0.1:8090) in a second window. Both services run on the same machine and communicate over the encrypted interface used for two devices.
 
 1. In the Pharma workspace, choose **Virtual screening**, name a project and submit it.
 2. Open the completed job to see the synthetic ranking.
@@ -55,7 +45,7 @@ Press `Ctrl+C` to stop. The worker keeps jobs and results in memory. They are lo
 If the default ports are in use, select all three explicitly:
 
 ```sh
-python3 digitalheat.py demo --pharma --port 8081 --host-port 8091 --worker-port 8444
+python3 digitalheat.py demo --port 8081 --host-port 8091 --worker-port 8444
 ```
 
 ## Separate devices on the same network
