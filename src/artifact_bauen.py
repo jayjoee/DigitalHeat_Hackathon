@@ -3,7 +3,7 @@
 - Daten (dashboard/daten.js) direkt eingebettet
 - Live-Panel zeigt den aufgezeichneten Flottenlauf aus dem Repo (Wechsel Haus → Sportbad).
   Die lokale, nicht eingecheckte dashboard/live.json nur mit --lokal, damit der Build reproduzierbar bleibt.
-- Ohne doctype/html/head/body (die Veröffentlichung legt sie selbst an)
+- Ohne doctype/html/head/body (die Veröffentlichung legt sie selbst an), mit charset für das direkte Öffnen
 
 Aufruf: python3 src/artifact_bauen.py  -> dashboard/artifact/index.html
 """
@@ -37,7 +37,7 @@ def main():
                           json.dumps(live, ensure_ascii=False) + ";\n</script>")
     aus = D / "artifact" / "index.html"
     aus.parent.mkdir(exist_ok=True)
-    aus.write_text(kopf.strip() + "\n" + rumpf.strip() + "\n")
+    aus.write_text('<meta charset="utf-8">\n' + kopf.strip() + "\n" + rumpf.strip() + "\n")
     print(f"{aus.relative_to(ROOT)}: {aus.stat().st_size / 1e3:.0f} kB")
 
 
