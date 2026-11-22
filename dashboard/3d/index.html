@@ -283,6 +283,10 @@ const HD = [1, 2].map(n => {
     srv: S[p + '_srv'], ns: n === 1 ? M.server_haus : M.server_haus2 };
 });
 const NS2 = M.server_haus2;
+// HD is what the houses show now. MODELL is the precomputed series for totals and charts. The HD arrays of House 01 are copies,
+// so a live hour changes neither MODELL nor S, which the fleet, the forecast and the timeline read.
+const MODELL = HD.map(hd => ({ ...hd }));
+for (const feld of ['bed', 'gen', 'sp', 'on', 'lauf', 'srv']) HD[0][feld] = HD[0][feld].slice();
 // While src/scheduler/live.py runs, House 01 shows that scheduler's values (case model, 0 W when paused) for the reported hour,
 // not those of the shutdown model. Otherwise the tank looks almost empty while the live job pauses because it is full.
 let liveStand = null;
@@ -311,7 +315,7 @@ function srvZustand(hd, i, k) {
   if (istLive(hd, i)) return hd.srv[i][k] > 0.02 ? 'rechnet' : 'standby';
   const on = modus === 'pausieren' ? hd.ns : hd.on[i];
   if (k >= on) return 'standby';
-  if (modus !== 'pausieren' && i > 0 && k >= hd.on[i - 1]) return 'start';   // in dieser Stunde eingeschaltet
+  if (modus !== 'pausieren' && i > 0 && k >= MODELL[HD.indexOf(hd)].on[i - 1]) return 'start';   // in dieser Stunde eingeschaltet
   return hd.srv[i][k] > 0.02 ? 'rechnet' : 'bereit';
 }
 const srvLast = (hd, i, k) => hd.srv[i][k] || 0;
@@ -358,7 +362,7 @@ const jahrCache = {};
 function jahrServer(haus, k) {
   const key = haus + '-' + k;
   if (jahrCache[key]) return jahrCache[key];
-  const hd = HD[haus - 1];
+  const hd = MODELL[haus - 1];
   let anH = 0, rechenH = 0;
   for (let i = 0; i < N; i++) { if (hd.on[i] > k) anH++; rechenH += srvLast(hd, i, k); }
   return (jahrCache[key] = { anH, rechenH });
@@ -849,7 +853,7 @@ function wende(i, frac) {
       lauf = p.nServer; on = Math.ceil(p.nServer - 0.01); tRaum = p.tin; kw = p.qKessel;
       zk = k => ({ z: serverZustand(lauf, on, k), l: serverLast(lauf, on, k) });
     }
-    const weg = modus === 'pausieren' && hd.sp[i] >= 0.85 * M.speicher_haus_kwh && on - lauf > 0.2;
+    const weg = modus === 'pausieren' && !istLive(hd, i) && hd.sp[i] >= 0.85 * M.speicher_haus_kwh && on - lauf > 0.2;
     wendeHaus(o, zk, on, lauf, L(hd.sp), L(hd.bed), L(hd.gen), kw, tRaum, weg);
   });
   const bOn = modus === 'pausieren' ? NB : S.b_on[i], bLauf = S.b_lauf[i];
@@ -942,7 +946,7 @@ function panelJetzt(i) {
   el('j-flotte').textContent = `${fmt(S.flotte_lauf[i])} servers`;
   el('j-mig').textContent = `${S.mig[i]} this hour`;
   el('j-oelspar').textContent = `${fmt(oelSpar[0][i])} litres`;
-  { let holz = 0; for (let n = 0; n <= i; n++) holz += kessel(HD[0], n); el('j-co2').dataset.holz = holz; }
+  { let holz = 0; for (let n = 0; n <= i; n++) holz += kessel(MODELL[0], n); el('j-co2').dataset.holz = holz; }
   el('j-co2').textContent = `${fmt(oelSpar[0][i] * W.co2_kg_l / 1000, 1)} t · wood ${fmt(el('j-co2').dataset.holz / HOLZ_KWH_STER / HOLZ_ETA, 1)} stacked m³`;
   // Zusage: heute 12 Uhr für morgen
   const morgen = Math.min(Z.tag.length - 1, Math.floor(i / 24) + 1), zt = Z.tag[morgen];
@@ -1057,7 +1061,7 @@ function zeigeDetail(info, fliegen = true) {
       ], (info.haus === 1 && k === NH - 1 ? (echt ? `Live: ${liveJob.text}. ` : 'In the live demo this server represents the real job running on the laptop. ') : '')
         + 'Server status and hourly load come from the scheduler. It switches on servers in order. Server 1 runs longest, and the last servers run on the coldest days.',
       ablaufHtml(hd, i, k) + (info.haus === 1 ? serviceHtml(k) : ''));
-    miniChart(fenster(n => srvLast(hd, n, k)), 1, '#3ee0c0');
+    miniChart(fenster(n => srvLast(MODELL[info.haus - 1], n, k)), 1, '#3ee0c0');
     if (fliegen) fliegeZu(HAUS[info.haus - 1].racks[k].g.position.clone().add(V(0, 1, 0)), V(1.4, 0.25, 3.6));
   } else if (info.art === 'speicher') {
     const o = HAUS[info.haus - 1], hd = HD[info.haus - 1], f = hd.sp[i] / M.speicher_haus_kwh;
@@ -1066,7 +1070,7 @@ function zeigeDetail(info, fliegen = true) {
         ['Water', "1,000 L, 30 K temperature difference"], ['Heat demand now', fmt(hd.bed[i], 1) + ' kWh'],
         ['From server heat', hd.bed[i] > 0.01 ? fmt(100 * Math.min(1, hd.gen[i] / hd.bed[i])) + ' %' : '–'],
       ], 'Below 35%, servers start charging the tank. They stop charging at 85%. When the tank is full and the house needs no heat, jobs move elsewhere.');
-    miniChart(fenster(n => hd.sp[n]), M.speicher_haus_kwh, '#ff8a3d');
+    miniChart(fenster(n => MODELL[info.haus - 1].sp[n]), M.speicher_haus_kwh, '#ff8a3d');
     if (fliegen) fliegeZu(V(o.tank.x, KBODEN + 1.4, o.tank.z), V(1.6, 0.3, 4.2));
   } else if (info.art === 'kuehler') {
     const o = HAUS[info.haus - 1], laeuft = o.kuehlerLabel._obj.visible;
@@ -1075,7 +1079,7 @@ function zeigeDetail(info, fliegen = true) {
         ['Heat rejected in pause mode', fmt(CL.pausieren.abgefuehrt_kwh) + ' kWh/year'], ['Heat rejected in shutdown mode', fmt(CL.abschalten.abgefuehrt_kwh) + ' kWh/year'],
         ['Electricity in pause mode', fmt(CL.pausieren.strom_kwh) + ' kWh/year'], ['Electricity in shutdown mode', fmt(CL.abschalten.strom_kwh) + ' kWh/year'],
       ] : [], 'When idle servers stay powered on and the tank is full, the cooler rejects their heat. In shutdown mode, the cooler rarely runs in the reference-house simulation (230 W idle power).');
-    miniChart(fenster(n => stromJetzt(modus === 'pausieren' ? NH : HD[info.haus - 1].on[n], HD[info.haus - 1].lauf[n], NH)), NH, '#ff5d4a');
+    miniChart(fenster(n => stromJetzt(modus === 'pausieren' ? NH : MODELL[info.haus - 1].on[n], MODELL[info.haus - 1].lauf[n], NH)), NH, '#ff5d4a');
     if (fliegen) fliegeZu(V(o.h.x1 + 1.05, 0.6, 10.6), V(2.5, 2.5, 6));
   } else if (info.art === 'kunde') {
     box.innerHTML = detailHtml('Example customer', 'Pharma customer in Basel', 'submits jobs', '#ffe2b8', [
@@ -1087,14 +1091,14 @@ function zeigeDetail(info, fliegen = true) {
     if (fliegen) fliegeZu(V(TURM.x, 9, TURM.z), V(12, 2, 18));
   } else if (info.art === 'kessel') {
     const o = HAUS[info.haus - 1], hd = HD[info.haus - 1], kw = kessel(hd, i);
-    let jahr = 0; for (let n = 0; n < N; n++) jahr += kessel(hd, n);
+    let jahr = 0; for (let n = 0; n < N; n++) jahr += kessel(MODELL[info.haus - 1], n);
     const ster = kwh => kwh / HOLZ_KWH_STER / HOLZ_ETA;
     box.innerHTML = detailHtml(`Wood stove · House 0${info.haus}`, kw > 0.05 ? `${fmt(kw, 1)} kWh this hour` : 'aus',
       kw > 0.05 ? 'burning' : 'off', kw > 0.05 ? 'var(--oil)' : '#8ea0c2', [
         ['Wood heat in 2025', fmt(jahr) + ' kWh'], ['Firewood in 2025', fmt(ster(jahr), 1) + ' stacked m³ of beech'],
         ['Wood cost (≈ CHF 250 per stacked m³)', fmt(ster(jahr) * 250) + ' CHF'], ['Heating oil displaced', fmt(oelSpar[info.haus - 1][N - 1]) + ' l'],
       ], 'The model replaces the oil boiler and tank. An existing wood stove provides backup on the coldest days. The model assumes an existing stove and estimates the cost and heating value of the wood.');
-    miniChart(fenster(n => kessel(hd, n)), 4, '#ff5d4a');
+    miniChart(fenster(n => kessel(MODELL[info.haus - 1], n)), 4, '#ff5d4a');
     if (fliegen) fliegeZu(V(o.kessel.x, 0.9, o.kessel.z), V(2.6, 1.0, 4.8));
   } else {
     const ri = info.art === 'badrack' ? info.r : null, offen = S.b_bed[i] > 0;
@@ -1179,7 +1183,7 @@ function zeichneJahr() {
   const tage = Math.ceil(N / 24), bed = [], gen = [], bad = [], oel = [];
   for (let d = 0; d < tage; d++) {
     let a = 0, b = 0, c = 0, o = 0;
-    for (let s = d * 24; s < Math.min(N, d * 24 + 24); s++) { a += S.h_bed[s]; b += S.h_gen[s]; c += S.b_lauf[s]; o += kessel(HD[0], s); }
+    for (let s = d * 24; s < Math.min(N, d * 24 + 24); s++) { a += S.h_bed[s]; b += S.h_gen[s]; c += S.b_lauf[s]; o += kessel(MODELL[0], s); }
     bed.push(a); gen.push(b); bad.push(c); oel.push(o);
   }
   const mb = Math.max(...bed), mc = Math.max(...bad), bw = w / tage, H = h - 14;
